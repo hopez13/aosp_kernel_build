@@ -512,6 +512,10 @@ cc_binary(
     name = "arg_wrapper",
     srcs = ["arg_wrapper.cpp"],
     visibility = ["//build/kernel:__pkg__"],
+    linkstatic = False,
+    deps = [
+        "//prebuilts/build-tools/sysroots/x86_64-unknown-linux-musl:libc_musl",
+    ]
 )
 
 prebuilt_transitioned_tool(
