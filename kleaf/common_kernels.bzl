@@ -918,7 +918,7 @@ def _define_common_kernel(
 
     kernel_compile_commands(
         name = name + "_compile_commands",
-        kernel_build = name,
+        deps = [name],
     )
 
     kernel_kythe(
