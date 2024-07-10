@@ -36,8 +36,6 @@ _SRCS = [
     "//build/kernel/kleaf:key_value_repo.bzl",
     "//build/kernel/kleaf:print_debug.bzl",
     "//build/kernel/kleaf:update_source_file.bzl",
-    "//build/kernel/kleaf:workspace.bzl",
-    "//build/kernel/kleaf:workspace_epilog.bzl",
 ]
 
 bzl_library(
