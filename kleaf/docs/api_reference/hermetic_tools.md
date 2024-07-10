@@ -57,7 +57,7 @@ register a different hermetic toolchain.
 ## hermetic_genrule
 
 <pre>
-hermetic_genrule(<a href="#hermetic_genrule-name">name</a>, <a href="#hermetic_genrule-cmd">cmd</a>, <a href="#hermetic_genrule-tools">tools</a>, <a href="#hermetic_genrule-kwargs">kwargs</a>)
+hermetic_genrule(<a href="#hermetic_genrule-name">name</a>, <a href="#hermetic_genrule-cmd">cmd</a>, <a href="#hermetic_genrule-tools">tools</a>, <a href="#hermetic_genrule-use_cc_toolchain">use_cc_toolchain</a>, <a href="#hermetic_genrule-kwargs">kwargs</a>)
 </pre>
 
 A genrule that uses hermetic tools.
@@ -77,6 +77,7 @@ ignored.
 | <a id="hermetic_genrule-name"></a>name |  name of the target   |  none |
 | <a id="hermetic_genrule-cmd"></a>cmd |  See [genrule.cmd](https://bazel.build/reference/be/general#genrule.cmd)   |  none |
 | <a id="hermetic_genrule-tools"></a>tools |  See [genrule.tools](https://bazel.build/reference/be/general#genrule.tools)   |  `None` |
+| <a id="hermetic_genrule-use_cc_toolchain"></a>use_cc_toolchain |  When set to `True` resolved CC toolchain is accessible from the genrule.   |  `None` |
 | <a id="hermetic_genrule-kwargs"></a>kwargs |  See [genrule](https://bazel.build/reference/be/general#genrule)   |  none |
 
 
