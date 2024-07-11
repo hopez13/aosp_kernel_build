@@ -17,6 +17,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load(":common_providers.bzl", "DdkIncludeInfo")
+load(":ddk/ddk_config_subrule.bzl", "ddk_config_subrule")
 
 visibility("//build/kernel/kleaf/...")
 
@@ -146,9 +147,17 @@ def _ddk_headers_impl(ctx):
         ctx.attr.includes,
         ctx.attr.linux_includes,
     )
+
+    ddk_config_info = ddk_config_subrule(
+        kconfig_targets = ctx.attr.kconfigs,
+        defconfig_targets = ctx.attr.defconfigs,
+        deps = ctx.attr.hdrs + ctx.attr.textual_hdrs,
+    )
+
     return [
         DefaultInfo(files = ddk_headers_info.files),
         ddk_headers_info,
+        ddk_config_info,
     ]
 
 ddk_headers = rule(
@@ -214,5 +223,33 @@ in [`ddk_module`](#ddk_module) for details.
 Like `includes`, `linux_includes` is applied to dependent `ddk_module`s.
 """,
         ),
+        "kconfigs": attr.label_list(
+            allow_files = True,
+            doc = """Kconfig files.
+
+                See
+                [`Documentation/kbuild/kconfig-language.rst`](https://www.kernel.org/doc/html/latest/kbuild/kconfig.html)
+                for its format.
+
+                Kconfig is optional for a `ddk_module`. The final Kconfig known by
+                this module consists of the following:
+
+                - Kconfig from `kernel_build`
+                - Kconfig from dependent modules, if any
+                - Kconfig of this module, if any
+          """,
+        ),
+        "defconfigs": attr.label_list(
+            allow_files = True,
+            doc = """`defconfig` files.
+
+                Items must already be declared in `kconfigs`. An item not declared
+                in Kconfig and inherited Kconfig files is silently dropped.
+
+                An item declared in `kconfigs` without a specific value in `defconfigs`
+                uses default value specified in `kconfigs`.
+            """,
+        ),
     },
+    subrules = [ddk_config_subrule],
 )
