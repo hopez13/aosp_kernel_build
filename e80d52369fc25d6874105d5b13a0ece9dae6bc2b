@@ -35,6 +35,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "535be17f_1b0b0745",
+        "filename": "kleaf/impl/BUILD.bazel",
+        "patchSetId": 1
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T18:21:57Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "aaae5d2a_e278106a",
+      "revId": "e80d52369fc25d6874105d5b13a0ece9dae6bc2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49adb24b_8f96b8d3",
@@ -58,6 +76,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e4e7e4b_077fb7ab",
+        "filename": "kleaf/impl/hermetic_genrule.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T18:21:57Z",
+      "side": 1,
+      "message": "Not needed with the new approach.",
+      "parentUuid": "49adb24b_8f96b8d3",
+      "range": {
+        "startLine": 43,
+        "startChar": 17,
+        "endLine": 43,
+        "endChar": 40
+      },
+      "revId": "e80d52369fc25d6874105d5b13a0ece9dae6bc2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2f8af68_d76b7b1f",
@@ -71,6 +113,30 @@
       "writtenOn": "2024-07-10T21:53:35Z",
       "side": 1,
       "message": "nit: this makes the boolean non-configurable. Either document this in L81, or unconditionally define _resolved_toolchain_setup(use_cc_toolchain\u003duse_cc_toolchain), then read the value ctx.attr.use_cc_toolchain in _resolved_toolchain_setup_impl\n\nAlso, if you do the latter, _resolved_toolchain_setup can be merged into _hermetic_genrule_toolchain_setup and _resolved_toolchain_deps can be merged into _hermetic_genrule_toolchain_deps",
+      "range": {
+        "startLine": 96,
+        "startChar": 7,
+        "endLine": 96,
+        "endChar": 23
+      },
+      "revId": "e80d52369fc25d6874105d5b13a0ece9dae6bc2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6ca40f2_baa10773",
+        "filename": "kleaf/impl/hermetic_genrule.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T18:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2f8af68_d76b7b1f",
       "range": {
         "startLine": 96,
         "startChar": 7,
@@ -118,6 +184,30 @@
       "side": 1,
       "message": "In other words, instead of using kernel_toolchain_utils directly, it should probably use this (untested):\n\n```\n\n\ndef _attrs():\n    return {\n        \"_toolchains\": attr.label(\n            default \u003d \"//build/kernel/kleaf/impl:kernel_toolchains\",\n            providers \u003d [KernelEnvToolchainsInfo],\n            cfg \u003d \"exec\", # NOTE EXEC TRANSITION HERE\n        ),\n    }\n\ndef _get_toolchains(ctx):\n    return ctx.attr._toolchains[0][KernelEnvToolchainsInfo]\n\ntoolchains_utils \u003d struct(\n    attrs \u003d _attrs,\n    get \u003d _get_toolchains,\n)\n```",
       "parentUuid": "6064e0c6_2ee51926",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 69
+      },
+      "revId": "e80d52369fc25d6874105d5b13a0ece9dae6bc2b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc23034f_4beb1204",
+        "filename": "kleaf/impl/hermetic_genrule.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T18:21:57Z",
+      "side": 1,
+      "message": "Thanks for the suggestion.\n\nDone",
+      "parentUuid": "6f061e8d_d5233588",
       "range": {
         "startLine": 100,
         "startChar": 0,
