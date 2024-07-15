@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c1383fe_db10855c",
+        "filename": "kleaf/impl/hermetic_genrule.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-15T18:36:33Z",
+      "side": 1,
+      "message": "why partial?\n\nAlso please mention that this is a CC toolchain (not rust, not Java, not Python) (Python is already there)",
+      "range": {
+        "startLine": 93,
+        "startChar": 31,
+        "endLine": 93,
+        "endChar": 38
+      },
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cb9cbc1_7617e00e",
+        "filename": "kleaf/impl/hermetic_genrule.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-15T18:36:33Z",
+      "side": 1,
+      "message": "nit: don\u0027t forget to update docs! (you can do it in a follow up)",
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
