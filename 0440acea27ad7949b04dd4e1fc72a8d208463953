@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e17c453f_1e0b15fd",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-15T18:43:22Z",
+      "side": 1,
+      "message": "Follow up: Please mention use_cc_toolchain here (and recommend them to use `Custom rules` for complicated scripts after the edit below)",
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a87a60b_bbb8d106",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-15T18:43:22Z",
+      "side": 1,
+      "message": "Follow up: **Without using KernelEnvToolchainsInfo**, please add a code snippet on how an external rule can find binaries from the CC toolchain.\n\nSee https://cs.android.com/android/kernel/superproject/+/common-android-mainline:build/kernel/kleaf/impl/kernel_platform_toolchain.bzl;l\u003d104;drc\u003d080b40e4f2374e0a3a8313d1f4972347131ae0e4 for an example.\n\nOr we should provide some helper macros/targets so they can refer to clang/readelf/objcopy etc. easily",
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c1383fe_db10855c",
         "filename": "kleaf/impl/hermetic_genrule.bzl",
         "patchSetId": 3
