@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29176c52_d5197c9a",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T21:40:48Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e17c453f_1e0b15fd",
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a87a60b_bbb8d106",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-15T18:43:22Z",
       "side": 1,
       "message": "Follow up: **Without using KernelEnvToolchainsInfo**, please add a code snippet on how an external rule can find binaries from the CC toolchain.\n\nSee https://cs.android.com/android/kernel/superproject/+/common-android-mainline:build/kernel/kleaf/impl/kernel_platform_toolchain.bzl;l\u003d104;drc\u003d080b40e4f2374e0a3a8313d1f4972347131ae0e4 for an example.\n\nOr we should provide some helper macros/targets so they can refer to clang/readelf/objcopy etc. easily",
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61ec8ce4_fd331f58",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T21:40:48Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7a87a60b_bbb8d106",
       "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -71,6 +107,48 @@
       "writtenOn": "2024-07-15T18:36:33Z",
       "side": 1,
       "message": "nit: don\u0027t forget to update docs! (you can do it in a follow up)",
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8749f0b3_8f56596e",
+        "filename": "kleaf/impl/hermetic_genrule.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T21:40:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cb9cbc1_7617e00e",
+      "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d35f2901_9c33ecd3",
+        "filename": "kleaf/impl/hermetic_genrule.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-15T21:40:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c1383fe_db10855c",
+      "range": {
+        "startLine": 93,
+        "startChar": 31,
+        "endLine": 93,
+        "endChar": 38
+      },
       "revId": "0440acea27ad7949b04dd4e1fc72a8d208463953",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
