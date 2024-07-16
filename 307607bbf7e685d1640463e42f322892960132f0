@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e68110eb_e0ffc7ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-16T16:03:07Z",
+      "side": 1,
+      "message": "should this be CP\u0027ed to main-build-kernel-2024?",
+      "revId": "307607bbf7e685d1640463e42f322892960132f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
