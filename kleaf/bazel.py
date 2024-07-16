@@ -574,6 +574,8 @@ class BazelWrapper(KleafHelpPrinter):
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/network.bazelrc",
             # Experimental bzlmod support
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/bzlmod.bazelrc",
+            # Config for building documentation.
+            self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/docs.bazelrc",
 
             # Canary goes to the end because it uses flags / configs from elsewhere.
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/canary.bazelrc",
