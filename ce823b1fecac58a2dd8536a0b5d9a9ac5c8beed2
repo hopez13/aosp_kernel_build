@@ -16,6 +16,23 @@
       "message": "need test",
       "revId": "ce823b1fecac58a2dd8536a0b5d9a9ac5c8beed2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12a07a25_5a480f7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-16T10:25:49Z",
+      "side": 1,
+      "message": "Could you elaborate on why is this needed? (in the description)  is it part of b/353373093?",
+      "revId": "ce823b1fecac58a2dd8536a0b5d9a9ac5c8beed2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
