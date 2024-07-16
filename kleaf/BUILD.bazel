@@ -805,8 +805,6 @@ exports_files(
         "key_value_repo.bzl",
         "print_debug.bzl",
         "update_source_file.bzl",
-        "workspace.bzl",
-        "workspace_epilog.bzl",
     ],
     visibility = ["//build/kernel/kleaf/docs:__pkg__"],
 )
