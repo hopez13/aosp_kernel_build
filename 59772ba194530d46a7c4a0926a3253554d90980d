@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfe95c84_69315c91",
+        "filename": "kleaf/impl/ddk/ddk_config.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-16T13:41:47Z",
+      "side": 0,
+      "message": "is this step not needed anymore?",
+      "range": {
+        "startLine": 242,
+        "startChar": 17,
+        "endLine": 242,
+        "endChar": 90
+      },
+      "revId": "59772ba194530d46a7c4a0926a3253554d90980d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
