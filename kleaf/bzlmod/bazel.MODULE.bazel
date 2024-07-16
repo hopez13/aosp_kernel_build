@@ -139,11 +139,6 @@ local_path_override(
 )
 
 local_path_override(
-    module_name = "rules_java",
-    path = "external/bazelbuild-rules_java",
-)
-
-local_path_override(
     module_name = "rules_license",
     path = "external/bazelbuild-rules_license",
 )
