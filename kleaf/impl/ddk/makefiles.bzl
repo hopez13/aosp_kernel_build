@@ -25,6 +25,7 @@ load(
     ":ddk/ddk_headers.bzl",
     "DdkHeadersInfo",
     "ddk_headers_common_impl",
+    "get_extra_include_bases",
     "get_headers_depset",
     "get_include_depset",
 )
@@ -154,19 +155,39 @@ def _check_submodule_same_package(module_label, submodule_deps):
 
 def _handle_module_srcs(ctx):
     srcs_json_list = []
+    gen_srcs_depsets = []
+    gen_hdrs_depsets = []
     for target in ctx.attr.module_srcs:
         # TODO avoid depset expansion
-        files = target.files.to_list()
+        target_files = target.files.to_list()
+        srcs_json_dict = {}
+
+        source_files = []
+        generated_sources = []
+        generated_headers = []
+
+        for file in target_files:
+            if file.is_source:
+                source_files.append(file)
+            elif file.extension == ".h":
+                generated_headers.append(file)
+            else:
+                generated_sources.append(file)
+
+        if source_files:
+            srcs_json_dict["files"] = [file.path for file in source_files]
+
+        generated_sources = [file for file in target_files if not file.is_source]
+        if generated_sources:
+            srcs_json_dict["gen"] = {file.short_path: file.path for file in generated_sources}
+
         if DdkConditionalFilegroupInfo in target:
-            srcs_json_list.append(dict(
-                config = target[DdkConditionalFilegroupInfo].config,
-                value = target[DdkConditionalFilegroupInfo].value,
-                files = [file.path for file in files],
-            ))
-        else:
-            srcs_json_list.append(dict(
-                files = [file.path for file in files],
-            ))
+            srcs_json_dict["config"] = target[DdkConditionalFilegroupInfo].config
+            srcs_json_dict["value"] = target[DdkConditionalFilegroupInfo].value
+
+        srcs_json_list.append(srcs_json_dict)
+        gen_srcs_depsets.append(depset(generated_sources))
+        gen_hdrs_depsets.append(depset(generated_headers))
 
     srcs_json = ctx.actions.declare_file("{}/srcs.json".format(ctx.attr.name))
     ctx.actions.write(
@@ -174,7 +195,11 @@ def _handle_module_srcs(ctx):
         content = json.encode_indent(srcs_json_list, indent = "  "),
     )
 
-    return srcs_json
+    return struct(
+        srcs_json = srcs_json,
+        gen_srcs_depset = depset(transitive = gen_srcs_depsets),
+        gen_hdrs_depset = depset(transitive = gen_hdrs_depsets),
+    )
 
 def _makefiles_impl(ctx):
     module_label = Label(str(ctx.label).removesuffix("_makefiles"))
@@ -196,26 +221,55 @@ def _makefiles_impl(ctx):
 
     _check_submodule_same_package(module_label, submodule_deps)
 
+    module_srcs_ret = _handle_module_srcs(ctx)
+
+    # Applies to headers of this target only but not headers/include_dirs
+    # inherited from dependencies.
+    # TODO avoid depset expansion
+    extra_local_include_bases = get_extra_include_bases(module_srcs_ret.gen_hdrs_depset.to_list())
+
+    # -I that are applied to this target and dependent modules
     include_dirs = get_include_depset(
         module_label,
         ctx.attr.module_deps + ctx.attr.module_hdrs,
         ctx.attr.module_includes,
+        [],
         "includes",
     )
 
+    # Extra -I due to generated files in srcs.
+    # Because they are in srcs, they apply to this target only.
+    extra_local_include_dirs = get_include_depset(
+        module_label,
+        [],
+        ctx.attr.module_includes,
+        extra_local_include_bases,
+        "includes",
+    )
+
+    # LINUXINCLUDE that are applied to this target and dependent modules
     linux_include_dirs = get_include_depset(
         module_label,
         ctx.attr.module_deps + ctx.attr.module_hdrs,
         ctx.attr.module_linux_includes,
+        [],
         "linux_includes",
+    )
+
+    # Extra LINUXINCLUDE due to generated files in srcs.
+    # Because they are in srcs, they apply to this target only.
+    extra_local_linux_include_dirs = get_include_depset(
+        module_label,
+        [],
+        ctx.attr.module_linux_includes,
+        extra_local_include_bases,
+        "includes",
     )
 
     module_symvers_depset = depset(transitive = [
         target[ModuleSymversInfo].restore_paths
         for target in module_symvers_deps
     ])
-
-    module_srcs_json = _handle_module_srcs(ctx)
 
     args = ctx.actions.args()
 
@@ -231,7 +285,7 @@ def _makefiles_impl(ctx):
     args.set_param_file_format("multiline")
     args.use_param_file("--flagfile=%s")
 
-    args.add("--kernel-module-srcs-json", module_srcs_json)
+    args.add("--kernel-module-srcs-json", module_srcs_ret.srcs_json)
     if ctx.attr.module_out:
         args.add("--kernel-module-out", ctx.attr.module_out)
     args.add("--output-makefiles", output_makefiles.path)
@@ -240,8 +294,20 @@ def _makefiles_impl(ctx):
     if ctx.attr.top_level_makefile:
         args.add("--produce-top-level-makefile")
 
-    args.add_all("--linux-include-dirs", linux_include_dirs, uniquify = True)
-    args.add_all("--include-dirs", include_dirs, uniquify = True)
+    args.add_all("--linux-include-dirs", depset(transitive = [
+        linux_include_dirs,
+        extra_local_linux_include_dirs,
+    ]), uniquify = True)
+    args.add_all("--include-dirs", depset(transitive = [
+        include_dirs,
+        extra_local_include_dirs,
+    ]), uniquify = True)
+    # args.add_all(
+    #     "--extra-include-bases",
+    #     module_srcs_ret.gen_hdrs_depset,
+    #     uniquify = True,
+    #     map_each = get_extra_include_base,
+    # )
 
     if ctx.attr.top_level_makefile:
         args.add_all("--module-symvers-list", module_symvers_depset)
@@ -261,8 +327,8 @@ def _makefiles_impl(ctx):
         mnemonic = "DdkMakefiles",
         inputs = depset([
             copt_file,
-            module_srcs_json,
-        ], transitive = [submodule_makefiles]),
+            module_srcs_ret.srcs_json,
+        ], transitive = [submodule_makefiles, module_srcs_ret.gen_srcs_depset]),
         outputs = [output_makefiles],
         executable = ctx.executable._gen_makefile,
         arguments = [args],

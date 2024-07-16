@@ -15,6 +15,7 @@
 """Headers target for DDK."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//lib:sets.bzl", "sets")
 
 visibility("//build/kernel/kleaf/...")
 
@@ -27,7 +28,36 @@ DdkHeadersInfo = provider(
     },
 )
 
-def get_include_depset(label, deps, includes, info_attr_name):
+def _remove_trailing(path, trailing):
+    if path == trailing:
+        return "."
+    if path.endswith("/" + trailing):
+        return path.removesuffix("/" + trailing)
+    fail("{} does not end with {}".format(path, trailing))
+
+def get_extra_include_base(header):
+    if header.extension != "h":
+        fail("{} is not a header".format(header))
+    return _remove_trailing(header.path, header.short_path)
+
+def get_extra_include_bases(headers):
+    """Given a list of headers, return a list of include bases.
+
+    For each header in headers, drop short_path from path to get an include_base.
+    Then return all include_bases.
+
+    Args:
+        headers: A list of headers.
+    Returns:
+        include bases to be prepended to include_dirs.
+    """
+
+    ret = sets.make()
+    for header in headers:
+        sets.insert(ret, get_extra_include_base(header))
+    return sets.to_list(ret)
+
+def get_include_depset(label, deps, includes, include_bases, info_attr_name):
     """Returns a depset containing include directories from the list of dependencies and direct includes.
 
     Args:
@@ -35,23 +65,31 @@ def get_include_depset(label, deps, includes, info_attr_name):
         deps: A list of depended targets. If [`DdkHeadersInfo`](#DdkHeadersInfo) is in the target,
           their `includes` are included in the returned depset.
         includes: A list of local include directories included in the returned depset.
+        include_bases: prepended to includes (cross product). If empty, assume `./`.
         info_attr_name: corresponding field name in `DdkHeadersInfo`.
     Returns:
         A depset containing include directories from the list of dependencies and direct includes.
     """
-    for include_dir in includes:
-        if paths.normalize(include_dir) != include_dir:
-            fail(
-                "{}: include directory {} is not normalized to {}".format(
-                    label,
-                    include_dir,
-                    paths.normalize(include_dir),
-                ),
-            )
-        if paths.is_absolute(include_dir):
-            fail("{}: Absolute directories not allowed in includes: {}".format(label, include_dir))
-        if include_dir == ".." or include_dir.startswith("../"):
-            fail("{}: Invalid include directory: {}".format(label, include_dir))
+    if not include_bases:
+        include_bases = ["."]
+
+    for include_base in include_bases:
+        for rel_include_dir in includes:
+            # Do not prepend "." because we check for path normalization below.
+            include_dir = paths.join(include_base, rel_include_dir) if include_base != "." else rel_include_dir
+
+            if paths.normalize(include_dir) != include_dir:
+                fail(
+                    "{}: include directory {} is not normalized to {}".format(
+                        label,
+                        include_dir,
+                        paths.normalize(include_dir),
+                    ),
+                )
+            if paths.is_absolute(include_dir):
+                fail("{}: Absolute directories not allowed in includes: {}".format(label, include_dir))
+            if include_dir == ".." or include_dir.startswith("../"):
+                fail("{}: Invalid include directory: {}".format(label, include_dir))
 
     transitive_includes = []
     for dep in deps:
@@ -98,8 +136,9 @@ def ddk_headers_common_impl(label, hdrs, includes, linux_includes):
 
     return DdkHeadersInfo(
         files = get_headers_depset(hdrs),
-        includes = get_include_depset(label, hdrs, includes, "includes"),
-        linux_includes = get_include_depset(label, hdrs, linux_includes, "linux_includes"),
+        # TODO set extra_include_bases
+        includes = get_include_depset(label, hdrs, includes, [], "includes"),
+        linux_includes = get_include_depset(label, hdrs, linux_includes, [], "linux_includes"),
     )
 
 def _ddk_headers_impl(ctx):
