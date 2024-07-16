@@ -22,6 +22,30 @@
       },
       "revId": "59772ba194530d46a7c4a0926a3253554d90980d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a68541c4_6ff1fcab",
+        "filename": "kleaf/impl/ddk/ddk_config.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T20:29:33Z",
+      "side": 0,
+      "message": "Yes. This is replaced by the list comprehension within ddk_config_subrule.",
+      "parentUuid": "cfe95c84_69315c91",
+      "range": {
+        "startLine": 242,
+        "startChar": 17,
+        "endLine": 242,
+        "endChar": 90
+      },
+      "revId": "59772ba194530d46a7c4a0926a3253554d90980d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
