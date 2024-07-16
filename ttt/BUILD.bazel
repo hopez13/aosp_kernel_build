@@ -1,0 +1,16 @@
+load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_genrule")
+
+_LINUX_X86_64 = [
+    "@platforms//os:linux",
+    "@platforms//cpu:x86_64",
+]
+
+hermetic_genrule(
+    name = "genrule_sample",
+    outs = ["rversion.txt"],
+    cmd = "llvm-readelf --version > $@ 2>&1",
+    tags = ["manual"],
+    # use_cc_toolchain = True,
+    # target_compatible_with = _LINUX_X86_64,
+)
+
