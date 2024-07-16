@@ -42,6 +42,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "718c73f8_85ec1e28",
+        "filename": "kleaf/docs/compile_commands.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T20:04:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe1a9e53_7ea7ee87",
+      "range": {
+        "startLine": 27,
+        "startChar": 33,
+        "endLine": 27,
+        "endChar": 40
+      },
+      "revId": "85c2865207daaba06087acae1575fae68075580b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b33a5854_07a76611",
@@ -65,6 +89,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73082233_9eb2862e",
+        "filename": "kleaf/impl/kernel_compile_commands.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T20:04:03Z",
+      "side": 1,
+      "message": "ack, it is kinda hard to fit it in. I reduce the line a bit.",
+      "parentUuid": "b33a5854_07a76611",
+      "range": {
+        "startLine": 49,
+        "startChar": 109,
+        "endLine": 49,
+        "endChar": 110
+      },
+      "revId": "85c2865207daaba06087acae1575fae68075580b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18990a47_7e300f23",
@@ -78,6 +126,30 @@
       "writtenOn": "2024-07-16T10:48:41Z",
       "side": 1,
       "message": "is this still valid if the condition in L73 evaluates to `True`?",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 29
+      },
+      "revId": "85c2865207daaba06087acae1575fae68075580b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dba62569_290d7144",
+        "filename": "kleaf/impl/kernel_compile_commands.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T20:04:03Z",
+      "side": 1,
+      "message": "Good point. I changed it so that if deps is empty, then it emits `[]`. PTAL.",
+      "parentUuid": "18990a47_7e300f23",
       "range": {
         "startLine": 89,
         "startChar": 8,
