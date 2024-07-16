@@ -350,10 +350,12 @@ class KleafProjectSetterTest(parameterized.TestCase):
 
             repo_manifest = ddk_workspace / ".repo/manifests/default.xml"
             repo_manifest.parent.mkdir(parents=True, exist_ok=True)
-            repo_manifest.write_text(textwrap.dedent("""\
-                <?xml version="1.0" encoding="UTF-8"?>
-                <manifest />
-            """))
+            repo_manifest.write_text(
+                '<?xml version="1.0" encoding="UTF-8"?>\n'
+                '<manifest>\n'
+                '    <useless                    garbage="true" />'
+                '</manifest>\n'
+            )
 
             remote_prebuilts_dir = tmp / "remote_prebuilts_dir"
             remote_prebuilts_dir.mkdir(parents=True, exist_ok=True)
