@@ -16,6 +16,24 @@
       "message": "should this be CP\u0027ed to main-build-kernel-2024?",
       "revId": "307607bbf7e685d1640463e42f322892960132f0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e786be_972f44fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T19:59:59Z",
+      "side": 1,
+      "message": "no, workspace.bzl are not deleted there",
+      "parentUuid": "e68110eb_e0ffc7ab",
+      "revId": "307607bbf7e685d1640463e42f322892960132f0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
