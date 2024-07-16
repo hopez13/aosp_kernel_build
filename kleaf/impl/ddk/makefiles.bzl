@@ -154,19 +154,26 @@ def _check_submodule_same_package(module_label, submodule_deps):
 
 def _handle_module_srcs(ctx):
     srcs_json_list = []
+    generated_depsets = []
     for target in ctx.attr.module_srcs:
         # TODO avoid depset expansion
-        files = target.files.to_list()
+        target_files = target.files.to_list()
+        srcs_json_dict = {}
+
+        sources = [file for file in target_files if file.is_source]
+        if sources:
+            srcs_json_dict["files"] = [file.path for file in sources]
+
+        generated = [file for file in target_files if not file.is_source]
+        if generated:
+            srcs_json_dict["gen"] = {file.short_path: file.path for file in generated}
+
         if DdkConditionalFilegroupInfo in target:
-            srcs_json_list.append(dict(
-                config = target[DdkConditionalFilegroupInfo].config,
-                value = target[DdkConditionalFilegroupInfo].value,
-                files = [file.path for file in files],
-            ))
-        else:
-            srcs_json_list.append(dict(
-                files = [file.path for file in files],
-            ))
+            srcs_json_dict["config"] = target[DdkConditionalFilegroupInfo].config
+            srcs_json_dict["value"] = target[DdkConditionalFilegroupInfo].value
+
+        srcs_json_list.append(srcs_json_dict)
+        generated_depsets.append(depset(generated))
 
     srcs_json = ctx.actions.declare_file("{}/srcs.json".format(ctx.attr.name))
     ctx.actions.write(
@@ -174,7 +181,10 @@ def _handle_module_srcs(ctx):
         content = json.encode_indent(srcs_json_list, indent = "  "),
     )
 
-    return srcs_json
+    return struct(
+        srcs_json = srcs_json,
+        generated = depset(transitive = generated_depsets),
+    )
 
 def _makefiles_impl(ctx):
     module_label = Label(str(ctx.label).removesuffix("_makefiles"))
@@ -215,7 +225,7 @@ def _makefiles_impl(ctx):
         for target in module_symvers_deps
     ])
 
-    module_srcs_json = _handle_module_srcs(ctx)
+    module_srcs_ret = _handle_module_srcs(ctx)
 
     args = ctx.actions.args()
 
@@ -231,7 +241,7 @@ def _makefiles_impl(ctx):
     args.set_param_file_format("multiline")
     args.use_param_file("--flagfile=%s")
 
-    args.add("--kernel-module-srcs-json", module_srcs_json)
+    args.add("--kernel-module-srcs-json", module_srcs_ret.srcs_json)
     if ctx.attr.module_out:
         args.add("--kernel-module-out", ctx.attr.module_out)
     args.add("--output-makefiles", output_makefiles.path)
@@ -261,8 +271,8 @@ def _makefiles_impl(ctx):
         mnemonic = "DdkMakefiles",
         inputs = depset([
             copt_file,
-            module_srcs_json,
-        ], transitive = [submodule_makefiles]),
+            module_srcs_ret.srcs_json,
+        ], transitive = [submodule_makefiles, module_srcs_ret.generated]),
         outputs = [output_makefiles],
         executable = ctx.executable._gen_makefile,
         arguments = [args],
