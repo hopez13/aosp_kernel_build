@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "928f48ec_a02e68b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T19:13:18Z",
+      "side": 1,
+      "message": "Please fix the integration test as well",
+      "revId": "c4b2377b0f647bd6b5972792a768e05061c6b1af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e6e24d_36181aae",
+        "filename": "kleaf/common.bazelrc",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T19:13:18Z",
+      "side": 1,
+      "message": "@pcloudy@google.com\n\nDoes --override_module NOT override local_module_override()? I thought they are essentially the same, with --override_module having higher priority.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 78
+      },
+      "revId": "c4b2377b0f647bd6b5972792a768e05061c6b1af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
