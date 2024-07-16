@@ -1,0 +1,91 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe1a9e53_7ea7ee87",
+        "filename": "kleaf/docs/compile_commands.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-16T10:48:41Z",
+      "side": 1,
+      "message": "this accepts `kernel_module_group` too right?",
+      "range": {
+        "startLine": 27,
+        "startChar": 33,
+        "endLine": 27,
+        "endChar": 40
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "61db807a_c20d0e18",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/compile_commands.md",
+              "range": {
+                "startLine": 27,
+                "startChar": 0,
+                "endLine": 28,
+                "endChar": 0
+              },
+              "replacement": "`kernel_module`, `ddk_module` and `kernel_module_group` targets, then\n`tools/bazel run` the target.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "85c2865207daaba06087acae1575fae68075580b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b33a5854_07a76611",
+        "filename": "kleaf/impl/kernel_compile_commands.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-16T10:48:41Z",
+      "side": 1,
+      "message": "nit: line length",
+      "range": {
+        "startLine": 49,
+        "startChar": 109,
+        "endLine": 49,
+        "endChar": 110
+      },
+      "revId": "85c2865207daaba06087acae1575fae68075580b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18990a47_7e300f23",
+        "filename": "kleaf/impl/kernel_compile_commands.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-16T10:48:41Z",
+      "side": 1,
+      "message": "is this still valid if the condition in L73 evaluates to `True`?",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 29
+      },
+      "revId": "85c2865207daaba06087acae1575fae68075580b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
