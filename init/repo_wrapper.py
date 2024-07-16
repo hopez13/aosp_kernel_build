@@ -153,6 +153,7 @@ class RepoWrapper:
 
                     manifest.seek(0)
                     dom.writexml(manifest)
+                    manifest.truncate()
         except FileNotFoundError as err:
             raise KleafProjectSetterError(
                 f"Unable to modify repo manifest {manifest_path}. "
