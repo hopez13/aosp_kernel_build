@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0cccba88_d73b87c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-16T19:14:51Z",
+      "side": 1,
+      "message": "I think we should prefer https://android-review.git.corp.google.com/q/topic:%22rules_java_bazel_features%22",
+      "revId": "c4b2377b0f647bd6b5972792a768e05061c6b1af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d4e6e24d_36181aae",
         "filename": "kleaf/common.bazelrc",
         "patchSetId": 5
