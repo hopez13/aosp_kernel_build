@@ -31,6 +31,10 @@ build --experimental_writable_outputs
 # build --java_runtime_version=local_jdk
 build --tool_java_runtime_version=local_jdk
 
+# Local module override; It is set here so it could be
+#  unset via --override_module=rules_java= 
+common --override_module=rules_java=%workspace%/external/bazelbuild-rules_java
+
 # Always dump full test results
 test --test_output=errors --test_summary=terse
 
