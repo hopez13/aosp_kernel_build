@@ -317,7 +317,9 @@ local_path_override(
             repo_manifest.parent.mkdir(parents=True, exist_ok=True)
             repo_manifest.write_text(textwrap.dedent("""\
                 <?xml version="1.0" encoding="UTF-8"?>
-                <manifest />
+                <manifest>
+                    <useless                    garbage="true" />
+                </manifest>
             """))
 
             remote_prebuilts_dir = tmp / "remote_prebuilts_dir"
