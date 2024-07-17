@@ -56,8 +56,20 @@ def get_include_depset(label, deps, includes, include_roots, info_attr_name):
     Returns:
         A depset containing include directories from the list of dependencies and direct includes.
     """
+    file_deps = []
+    transitive_includes = []
+    for dep in deps:
+        if DdkHeadersInfo in dep:
+            transitive_includes.append(getattr(dep[DdkHeadersInfo], info_attr_name))
+        else:
+            file_deps.append(dep.files)
+
+    # Generated files in hdrs results in extra include bases
+    # TODO(b/353811700): avoid depset expansion
+    extra_include_roots = get_extra_include_roots(depset(transitive = file_deps).to_list())
+
     direct_includes = []
-    for include_root in include_roots:
+    for include_root in include_roots + extra_include_roots:
         for include_dir in includes:
             if paths.normalize(include_dir) != include_dir:
                 fail(
@@ -72,11 +84,6 @@ def get_include_depset(label, deps, includes, include_roots, info_attr_name):
             if include_dir == ".." or include_dir.startswith("../"):
                 fail("{}: Invalid include directory: {}".format(label, include_dir))
             direct_includes.append(paths.normalize(paths.join(include_root, label.workspace_root, label.package, include_dir)))
-
-    transitive_includes = []
-    for dep in deps:
-        if DdkHeadersInfo in dep:
-            transitive_includes.append(getattr(dep[DdkHeadersInfo], info_attr_name))
 
     return depset(
         direct_includes,
