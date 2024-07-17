@@ -42,9 +42,7 @@
 
 [Building against downloaded prebuilts](docs/download_prebuilt.md)
 
-[Customize workspace](docs/workspace.md)
-
-[Bzlmod support for Kleaf](docs/bzlmod.md)
+[Bzlmod support (also: setting up workspace)](docs/bzlmod.md)
 
 [Building `compile_commands.json`](docs/compile_commands.md)
 
