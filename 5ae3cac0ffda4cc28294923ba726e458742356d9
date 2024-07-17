@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d021f9cc_621e8b77",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-17T00:00:17Z",
+      "side": 1,
+      "message": "Perhaps I shouldn\u0027t copy headers. Headers should be handled separately (with -I set properly \u0026 exported properly)",
+      "revId": "5ae3cac0ffda4cc28294923ba726e458742356d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
