@@ -196,7 +196,6 @@ def _default_target_configs():
 
 # buildifier: disable=unnamed-macro
 def define_common_kernels(
-        branch = None,
         target_configs = None,
         toolchain_version = None,
         visibility = None):
@@ -439,19 +438,6 @@ def define_common_kernels(
     of the unsigned one. This requires `--use_prebuilt_gki` to be set to a signed build.
 
     Args:
-      branch: **Deprecated**. This attribute is ignored.
-
-        This used to be used to calculate the default `--dist_dir`, which was
-        `out/{branch}/dist`. This was expected to be
-        the value of `BRANCH` in `build.config`. If not set, it was loaded
-        from `common/build.config.constants` **in `//{common_kernel_package}`**
-        where `common_kernel_package` was supplied to `define_kleaf_workspace()`
-        in the `WORKSPACE` file. Usually, `common_kernel_package = "common"`.
-        Hence, if `define_common_kernels()` was called in a different package, it
-        was required to be supplied.
-
-        Now, the default value of `--dist_dir` is `out/{name}/dist`, so the value
-        of `branch` has no effect. Hence, the attribute is ignored.
       target_configs: A dictionary, where keys are target names, and
         values are a dictionary of configurations to override the default
         configuration for this target.
@@ -462,14 +448,6 @@ def define_common_kernels(
 
         See [`visibility`](https://docs.bazel.build/versions/main/visibility.html).
     """
-
-    if branch != None:
-        # buildifier: disable=print
-        print(("\nWARNING: {package}: define_common_kernels() no longer uses the branch " +
-               "attribute. Default value of --dist_dir has been changed to out/{{name}}/dist. " +
-               "Please remove the branch attribute from define_common_kernels().").format(
-            package = str(native.package_relative_label(":x")).removesuffix(":x"),
-        ))
 
     if visibility == None:
         visibility = ["//visibility:public"]
