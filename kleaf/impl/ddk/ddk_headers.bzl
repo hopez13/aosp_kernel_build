@@ -120,14 +120,20 @@ def ddk_headers_common_impl(label, hdrs, includes, linux_includes):
 
     direct_include_infos = []
     if includes or linux_includes:
-        direct_include_infos.append(DdkIncludeInfo(
-            prefix = paths.join(label.workspace_root, label.package),
+        file_deps = [target.files for target in hdrs if DdkHeadersInfo not in target]
+        # Generated files in hdrs results in extra include bases
+        # TODO(b/353811700): avoid depset expansion
+        extra_include_roots = get_extra_include_roots(depset(transitive = file_deps).to_list())
 
-            # Turn lists into tuples because lists are mutable, making DdkIncludeInfo
-            # mutable and unable to be placed in a depset.
-            includes = tuple(includes),
-            linux_includes = tuple(linux_includes),
-        ))
+        for include_root in [""] + extra_include_roots:
+            direct_include_infos.append(DdkIncludeInfo(
+                prefix = paths.join(include_root, label.workspace_root, label.package),
+
+                # Turn lists into tuples because lists are mutable, making DdkIncludeInfo
+                # mutable and unable to be placed in a depset.
+                includes = tuple(includes),
+                linux_includes = tuple(linux_includes),
+            ))
 
     return DdkHeadersInfo(
         files = get_headers_depset(hdrs),
