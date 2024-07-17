@@ -120,9 +120,10 @@ def ddk_headers_common_impl(label, hdrs, includes, linux_includes):
 
     direct_include_infos = []
     if includes or linux_includes:
+        file_deps = [target.files for target in hdrs if DdkHeadersInfo not in target]
         direct_include_infos.append(DdkIncludeInfo(
             prefix = paths.join(label.workspace_root, label.package),
-            direct_files = depset(),
+            direct_files = depset(transitive = file_deps),
 
             # Turn lists into tuples because lists are mutable, making DdkIncludeInfo
             # mutable and unable to be placed in a depset.
