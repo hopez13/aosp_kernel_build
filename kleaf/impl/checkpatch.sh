@@ -222,6 +222,13 @@ if [[ $CHECKPATCH_RC -ne 0 ]]; then
   CLEANUP_CHECKPATCH_RESULTS=0
 fi
 
+# Suppress checkpatch errors if Ignore-Checkpatch: is in commit message.
+if "${GIT}" -C "${ABS_DIR}" log --format="%B" -1 ${GIT_SHA1} | \
+   grep -q "^Ignore-Checkpatch:\s*\S\+"; then
+  echo "Suppressing checkpatch errors due to \"Ignore-Checkpatch:\"".
+  CHECKPATCH_RC=0
+fi
+
 # Append my results to --log
 if [[ "${MY_RESULTS_PATH}" != "${RESULTS_PATH}" ]]; then
   cat "${MY_RESULTS_PATH}" >> "${RESULTS_PATH}"
