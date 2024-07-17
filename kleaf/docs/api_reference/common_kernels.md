@@ -7,7 +7,7 @@ Functions that are useful in the common kernel package (usually `//common`).
 ## define_common_kernels
 
 <pre>
-define_common_kernels(<a href="#define_common_kernels-branch">branch</a>, <a href="#define_common_kernels-target_configs">target_configs</a>, <a href="#define_common_kernels-toolchain_version">toolchain_version</a>, <a href="#define_common_kernels-visibility">visibility</a>)
+define_common_kernels(<a href="#define_common_kernels-target_configs">target_configs</a>, <a href="#define_common_kernels-toolchain_version">toolchain_version</a>, <a href="#define_common_kernels-visibility">visibility</a>)
 </pre>
 
 Defines common build targets for Android Common Kernels.
@@ -254,7 +254,6 @@ of the unsigned one. This requires `--use_prebuilt_gki` to be set to a signed bu
 
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
-| <a id="define_common_kernels-branch"></a>branch |  **Deprecated**. This attribute is ignored.<br><br>This used to be used to calculate the default `--dist_dir`, which was `out/{branch}/dist`. This was expected to be the value of `BRANCH` in `build.config`. If not set, it was loaded from `common/build.config.constants` **in `//{common_kernel_package}`** where `common_kernel_package` was supplied to `define_kleaf_workspace()` in the `WORKSPACE` file. Usually, `common_kernel_package = "common"`. Hence, if `define_common_kernels()` was called in a different package, it was required to be supplied.<br><br>Now, the default value of `--dist_dir` is `out/{name}/dist`, so the value of `branch` has no effect. Hence, the attribute is ignored.   |  `None` |
 | <a id="define_common_kernels-target_configs"></a>target_configs |  A dictionary, where keys are target names, and values are a dictionary of configurations to override the default configuration for this target.   |  `None` |
 | <a id="define_common_kernels-toolchain_version"></a>toolchain_version |  If not set, use default value in `kernel_build`.   |  `None` |
 | <a id="define_common_kernels-visibility"></a>visibility |  visibility of the `kernel_build` and targets defined for downloaded prebuilts. If unspecified, its value is `["//visibility:public"]`.<br><br>See [`visibility`](https://docs.bazel.build/versions/main/visibility.html).   |  `None` |
