@@ -73,6 +73,19 @@ def get_include_depset(label, deps, includes, include_bases, info_attr_name):
     if not include_bases:
         include_bases = ["."]
 
+    file_deps = []
+    transitive_includes = []
+    for dep in deps:
+        if DdkHeadersInfo in dep:
+            transitive_includes.append(getattr(dep[DdkHeadersInfo], info_attr_name))
+        else:
+            file_deps.append(dep.files)
+
+    # Generated files in hdrs results in extra include bases
+    # TODO avoid depset expansion
+    include_bases += get_extra_include_bases(depset(transitive = file_deps).to_list())
+
+    direct_includes = []
     for include_base in include_bases:
         for rel_include_dir in includes:
             # Do not prepend "." because we check for path normalization below.
@@ -91,18 +104,16 @@ def get_include_depset(label, deps, includes, include_bases, info_attr_name):
             if include_dir == ".." or include_dir.startswith("../"):
                 fail("{}: Invalid include directory: {}".format(label, include_dir))
 
-    transitive_includes = []
-    for dep in deps:
-        if DdkHeadersInfo in dep:
-            transitive_includes.append(getattr(dep[DdkHeadersInfo], info_attr_name))
+            direct_includes.append(paths.normalize(paths.join(include_base, label.workspace_root, label.package, rel_include_dir)))
 
-    return depset(
-        [paths.normalize(paths.join(label.workspace_root, label.package, d)) for d in includes],
+    ret = depset(
+        direct_includes,
         transitive = transitive_includes,
         # At this time of writing (2022-11-01), this is what cc_library does;
         # includes of this target, then includes of deps
         order = "preorder",
     )
+    return ret
 
 def get_headers_depset(deps):
     """Returns a depset containing headers from the list of dependencies
@@ -136,7 +147,6 @@ def ddk_headers_common_impl(label, hdrs, includes, linux_includes):
 
     return DdkHeadersInfo(
         files = get_headers_depset(hdrs),
-        # TODO set extra_include_bases
         includes = get_include_depset(label, hdrs, includes, [], "includes"),
         linux_includes = get_include_depset(label, hdrs, linux_includes, [], "linux_includes"),
     )
