@@ -109,11 +109,8 @@ see [documentation for all rules](../api_reference.md) and click on the
 ### Generated files
 
 For `ddk_module` and `ddk_submodule`, you may use generated source and header
-files for `srcs`. For generated headers, `includes` may be set
+files for `srcs` and `hdrs`. For generated headers, `includes` may be set
 accordingly like non-generated headers.
-
-Exporting generated headers via `hdrs` are not yet supported.
-<!-- TODO(b/349420132): Support exporting generated headers. -->
 
 Example:
 
