@@ -3,6 +3,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f0ac860_665bcbf5",
+        "filename": "kleaf/docs/ddk/rules.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-17T16:24:58Z",
+      "side": 1,
+      "message": "nit: is the architecture mixing intentional?",
+      "range": {
+        "startLine": 142,
+        "startChar": 34,
+        "endLine": 142,
+        "endChar": 40
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "fb9ef8c7_55303418",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/ddk/rules.md",
+              "range": {
+                "startLine": 142,
+                "startChar": 0,
+                "endLine": 143,
+                "endChar": 0
+              },
+              "replacement": "    deps \u003d [\"//common:all_headers_aarch64\"],\n"
+            }
+          ]
+        }
+      ],
+      "revId": "5ae3cac0ffda4cc28294923ba726e458742356d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d021f9cc_621e8b77",
         "filename": "kleaf/impl/ddk/gen_makefiles.py",
         "patchSetId": 2
