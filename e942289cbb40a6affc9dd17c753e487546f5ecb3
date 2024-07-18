@@ -1,0 +1,291 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "609ae601_b9c9c5e6",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-18T20:54:09Z",
+      "side": 1,
+      "message": "makes",
+      "range": {
+        "startLine": 74,
+        "startChar": 60,
+        "endLine": 74,
+        "endChar": 69
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "f6842b0a_3e95eb61",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 74,
+                "startChar": 0,
+                "endLine": 75,
+                "endChar": 0
+              },
+              "replacement": "Setting `use_cc_toolchain` to `True`, in `hermetic_genrule` makes C/C++\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e942289cbb40a6affc9dd17c753e487546f5ecb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd8d9b0b_9d3bec97",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-18T20:54:09Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 74,
+        "startChar": 36,
+        "endLine": 74,
+        "endChar": 37
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "401b0c7f_bea3c2b3",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 74,
+                "startChar": 0,
+                "endLine": 75,
+                "endChar": 0
+              },
+              "replacement": "Setting `use_cc_toolchain` to `True` in `hermetic_genrule` will make C/C++\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e942289cbb40a6affc9dd17c753e487546f5ecb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae512692_3b26bc25",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-18T20:54:09Z",
+      "side": 1,
+      "message": ". For example:",
+      "range": {
+        "startLine": 75,
+        "startChar": 28,
+        "endLine": 75,
+        "endChar": 59
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "1838e7da_a6a73073",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 75,
+                "startChar": 0,
+                "endLine": 76,
+                "endChar": 0
+              },
+              "replacement": "tools and binaries available. For example:\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e942289cbb40a6affc9dd17c753e487546f5ecb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da37d032_aefab7df",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-18T20:54:09Z",
+      "side": 1,
+      "message": ". T\n\nhttps://www.google.com/search?q\u003drun+on+sentence",
+      "range": {
+        "startLine": 176,
+        "startChar": 55,
+        "endLine": 176,
+        "endChar": 58
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "61913119_e51799c2",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 176,
+                "startChar": 0,
+                "endLine": 177,
+                "endChar": 0
+              },
+              "replacement": "Accessing the CC tools is possible for custom rules too. The following shows an\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e942289cbb40a6affc9dd17c753e487546f5ecb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21122382_1d1a5817",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-18T20:54:09Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 1
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "dd361cfd_43110091",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 177,
+                "startChar": 0,
+                "endLine": 178,
+                "endChar": 0
+              },
+              "replacement": "example on how to access the `objcopy` tool from the resolved toolchain.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e942289cbb40a6affc9dd17c753e487546f5ecb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f8d456d_523ec23c",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-18T20:54:09Z",
+      "side": 1,
+      "message": "nit: Set up PATH for hermetic tools",
+      "range": {
+        "startLine": 187,
+        "startChar": 6,
+        "endLine": 187,
+        "endChar": 31
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "54cb1043_d2f862ce",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 187,
+                "startChar": 0,
+                "endLine": 188,
+                "endChar": 0
+              },
+              "replacement": "    # Set up PATH for hermetic tools\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e942289cbb40a6affc9dd17c753e487546f5ecb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3570b9d1_4063e695",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-18T20:54:09Z",
+      "side": 1,
+      "message": "This is a bad example because it is not in ACTION_NAMES. We should encourage people to use ACTION_NAMES if possible (but objcopy is not one of them). Could you please change the example to something else and use ACTION_NAMES?\n\nAnd at the end of the document, you can point people to prebuilts/clang/host/linux-x86/kleaf/common.bzl to look up name -\u003e tool mapping.",
+      "range": {
+        "startLine": 200,
+        "startChar": 23,
+        "endLine": 200,
+        "endChar": 41
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "710b41c2_d16676a3",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 200,
+                "startChar": 0,
+                "endLine": 201,
+                "endChar": 0
+              },
+              "replacement": "        action_name \u003d \"objcopy_embed_data\",  # Not in ACTION_NAMES.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "e942289cbb40a6affc9dd17c753e487546f5ecb3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
