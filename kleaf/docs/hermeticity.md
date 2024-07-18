@@ -48,7 +48,7 @@ machine.
 Example:
 
 ```python
-load("//build/kernel:hermetic_tools.bzl", "hermetic_genrule")
+load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_genrule")
 hermetic_genrule(
     name = "generated_source",
     srcs = ["in.template"],
@@ -62,12 +62,30 @@ To make the change more transparent, you may use an alias in the `load`
 statement:
 
 ```python
-load("//build/kernel:hermetic_tools.bzl", genrule = "hermetic_genrule")
+load("//build/kernel/kleaf:hermetic_tools.bzl", genrule = "hermetic_genrule")
 genrule(
     name = "generated_source",
     ...
 )
 ```
+
+### Accessing CC toolchain
+
+Setting `use_cc_toolchain` to `True`, in `hermetic_genrule` will make C/C++
+tools and binaries available, like in the following example:
+
+```python
+hermetic_genrule(
+    name = "readelf_version",
+    outs = ["version.txt"],
+    # llvm-readelf comes from the resolved CC toolchain.
+    cmd = "llvm-readelf --version > $@",
+    use_cc_toolchain = True,
+)
+```
+
+**NOTE**: This is recommended for very simple use cases, for complex ones,
+prefer to use [custom rules](#custom-rules).
 
 ## Use hermetic\_exec and hermetic\_exec\_test
 
@@ -150,6 +168,54 @@ rename = rule(
     toolchains = [
         hermetic_toolchain.type,
     ],
+)
+```
+
+### Accessing CC toolchain
+
+Accessing the CC tools is possible for custom rules too, the following shows an
+ example on how to access the `objcopy` tool from the resolved toolchain.
+
+```python
+load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
+
+def _objcopy_version_impl(ctx):
+    # Output
+    version = ctx.actions.declare_file("{}/objcopy_version.txt".format(ctx.attr.name))
+
+    # Retrieve default resolved CC toolchain
+    cc_toolchain = find_cpp_toolchain(ctx, mandatory = False)
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+    )
+    objcopy_path = cc_common.get_tool_for_action(
+        feature_configuration = feature_configuration,
+        # Customize this according to the tool needed.
+        action_name = "objcopy_embed_data",
+    )
+    command = """
+        {objcopy} --version > {version}
+    """.format(
+        version = version.path,
+        objcopy = objcopy_path,
+    )
+    ctx.actions.run_shell(
+        tools = [cc_toolchain.all_files],
+        outputs = [version],
+        command = command,
+    )
+    return DefaultInfo(files = depset([version]))
+
+objcopy_version = rule(
+    implementation = _objcopy_version_impl,
+    attrs = {
+        "_cc_toolchain": attr.label(default = "//build/kernel/kleaf/impl:kernel_toolchains"),
+    },
+    toolchains = use_cpp_toolchain(mandatory = False),
+    fragments = ["cpp"],
 )
 ```
 
