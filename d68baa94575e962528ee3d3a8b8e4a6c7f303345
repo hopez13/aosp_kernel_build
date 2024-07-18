@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4f4a4d1_3bb4c54f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161174
+      },
+      "writtenOn": "2024-07-18T18:37:07Z",
+      "side": 1,
+      "message": "Cherry pick from https://android-review.git.corp.google.com/3180424 .",
+      "revId": "d68baa94575e962528ee3d3a8b8e4a6c7f303345",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
