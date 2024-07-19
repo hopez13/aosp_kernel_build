@@ -274,7 +274,7 @@ def _makefiles_impl(ctx):
         ))
     include_infos = depset(
         direct_include_infos,
-        transitive = get_ddk_transitive_include_infos(ctx.attr.module_deps + ctx.attr.module_hdrs),
+        transitive = get_ddk_transitive_include_infos(ctx.attr.module_deps + ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs),
         order = DDK_INCLUDE_INFO_ORDER,
     )
 
