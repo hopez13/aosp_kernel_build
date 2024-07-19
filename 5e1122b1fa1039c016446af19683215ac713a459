@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa8545e2_b0709e7e",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-19T03:24:01Z",
+      "side": 1,
+      "message": "Comment is wrong; returned DdkHeadersInfo does not use this list",
+      "range": {
+        "startLine": 251,
+        "startChar": 41,
+        "endLine": 251,
+        "endChar": 44
+      },
+      "revId": "5e1122b1fa1039c016446af19683215ac713a459",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a796447_62f16dce",
         "filename": "kleaf/impl/ddk/makefiles.bzl",
         "patchSetId": 6
