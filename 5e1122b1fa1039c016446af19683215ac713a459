@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98d89629_2818b4ea",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-19T21:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa8545e2_b0709e7e",
+      "range": {
+        "startLine": 251,
+        "startChar": 41,
+        "endLine": 251,
+        "endChar": 44
+      },
+      "revId": "5e1122b1fa1039c016446af19683215ac713a459",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a796447_62f16dce",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-19T03:22:01Z",
       "side": 1,
       "message": "missing textual_hdrs",
+      "range": {
+        "startLine": 254,
+        "startChar": 40,
+        "endLine": 254,
+        "endChar": 51
+      },
+      "revId": "5e1122b1fa1039c016446af19683215ac713a459",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ff02f3_56c6a9d9",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-19T21:28:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a796447_62f16dce",
       "range": {
         "startLine": 254,
         "startChar": 40,
