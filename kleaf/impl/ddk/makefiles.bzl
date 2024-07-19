@@ -198,14 +198,14 @@ def _makefiles_impl(ctx):
 
     include_dirs = get_include_depset(
         module_label,
-        ctx.attr.module_deps + ctx.attr.module_hdrs,
+        ctx.attr.module_deps + ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs,
         ctx.attr.module_includes,
         "includes",
     )
 
     linux_include_dirs = get_include_depset(
         module_label,
-        ctx.attr.module_deps + ctx.attr.module_hdrs,
+        ctx.attr.module_deps + ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs,
         ctx.attr.module_linux_includes,
         "linux_includes",
     )
