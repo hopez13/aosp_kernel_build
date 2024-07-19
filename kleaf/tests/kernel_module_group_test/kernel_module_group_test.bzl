@@ -76,7 +76,7 @@ def _kernel_module_group_test_impl(ctx):
 
         # check that DdkHeadersInfo is merged
         _check_info_field_depset_merged(env, target, src, DdkHeadersInfo, "files")
-        _check_info_field_depset_merged(env, target, src, DdkHeadersInfo, "includes")
+        _check_info_field_depset_merged(env, target, src, DdkHeadersInfo, "include_infos")
 
         # check that KernelModuleInfo is merged
         _check_info_field_depset_merged(env, target, src, KernelModuleInfo, "modules_staging_dws_depset")
