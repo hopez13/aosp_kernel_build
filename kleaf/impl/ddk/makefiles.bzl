@@ -17,21 +17,37 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load(
     ":common_providers.bzl",
+    "DdkIncludeInfo",
     "DdkSubmoduleInfo",
     "ModuleSymversInfo",
 )
 load(":ddk/ddk_conditional_filegroup.bzl", "DdkConditionalFilegroupInfo")
 load(
     ":ddk/ddk_headers.bzl",
+    "DDK_INCLUDE_INFO_ORDER",
     "DdkHeadersInfo",
     "ddk_headers_common_impl",
+    "get_ddk_transitive_include_infos",
     "get_extra_include_roots",
     "get_headers_depset",
-    "get_include_depset",
 )
 load(":utils.bzl", "kernel_utils")
 
 visibility("//build/kernel/kleaf/...")
+
+def _gather_prefixed_includes_common(ddk_include_info, info_attr_name):
+    ret = []
+    for include_dir in getattr(ddk_include_info, info_attr_name):
+        ret.append(paths.normalize(paths.join(ddk_include_info.prefix, include_dir)))
+    return ret
+
+def gather_prefixed_includes(ddk_include_info):
+    """Returns a list of ddk_include_info.includes prefixed with ddk_include_info.prefix"""
+    return _gather_prefixed_includes_common(ddk_include_info, "includes")
+
+def _gather_prefixed_linux_includes(ddk_include_info):
+    """Returns a list of ddk_include_info.linux_includes prefixed with ddk_include_info.prefix"""
+    return _gather_prefixed_includes_common(ddk_include_info, "linux_includes")
 
 def _handle_copt(ctx):
     # copt values contains prefixing "-", so we must use --copt=-x --copt=-y to avoid confusion.
@@ -248,42 +264,17 @@ def _makefiles_impl(ctx):
     # TODO(b/353811700): avoid depset expansion
     extra_local_include_roots = get_extra_include_roots(module_srcs_ret.gen_hdrs_depset.to_list())
 
-    # -I that are applied to this target and dependent modules
-    include_dirs = get_include_depset(
-        module_label,
-        ctx.attr.module_deps + ctx.attr.module_hdrs,
-        ctx.attr.module_includes,
-        [""],
-        "includes",
-    )
-
-    # Extra -I due to generated files in srcs.
-    # Because they are in srcs, they apply to this target only.
-    extra_local_include_dirs = get_include_depset(
-        module_label,
-        [],
-        ctx.attr.module_includes,
-        extra_local_include_roots,
-        "includes",
-    )
-
-    # LINUXINCLUDE that are applied to this target and dependent modules
-    linux_include_dirs = get_include_depset(
-        module_label,
-        ctx.attr.module_deps + ctx.attr.module_hdrs,
-        ctx.attr.module_linux_includes,
-        [""],
-        "linux_includes",
-    )
-
-    # Extra LINUXINCLUDE due to generated files in srcs.
-    # Because they are in srcs, they apply to this target only.
-    extra_local_linux_include_dirs = get_include_depset(
-        module_label,
-        [],
-        ctx.attr.module_linux_includes,
-        extra_local_include_roots,
-        "includes",
+    direct_include_infos = []
+    for root in [""] + extra_local_include_roots:
+        direct_include_infos.append(DdkIncludeInfo(
+            prefix = paths.join(root, module_label.workspace_root, module_label.package),
+            includes = ctx.attr.module_includes,
+            linux_includes = ctx.attr.module_linux_includes,
+        ))
+    include_infos = depset(
+        direct_include_infos,
+        transitive = get_ddk_transitive_include_infos(ctx.attr.module_deps + ctx.attr.module_hdrs),
+        order = DDK_INCLUDE_INFO_ORDER,
     )
 
     module_symvers_depset = depset(transitive = [
@@ -314,14 +305,18 @@ def _makefiles_impl(ctx):
     if ctx.attr.top_level_makefile:
         args.add("--produce-top-level-makefile")
 
-    args.add_all("--linux-include-dirs", depset(transitive = [
-        linux_include_dirs,
-        extra_local_linux_include_dirs,
-    ]), uniquify = True)
-    args.add_all("--include-dirs", depset(transitive = [
-        include_dirs,
-        extra_local_include_dirs,
-    ]), uniquify = True)
+    args.add_all(
+        "--linux-include-dirs",
+        include_infos,
+        map_each = _gather_prefixed_linux_includes,
+        uniquify = True,
+    )
+    args.add_all(
+        "--include-dirs",
+        include_infos,
+        map_each = gather_prefixed_includes,
+        uniquify = True,
+    )
 
     if ctx.attr.top_level_makefile:
         args.add_all("--module-symvers-list", module_symvers_depset)

@@ -433,6 +433,16 @@ DdkConfigInfo = provider(
     },
 )
 
+DdkIncludeInfo = provider(
+    """Describes include info of current target, exluding dependencies.""",
+    fields = {
+        "prefix": """When prepended to an item in `includes` or `linux_includes`,
+            the item becomes the path below execroot.""",
+        "includes": "A list of `includes` attribute of this target. Not prefixed.",
+        "linux_includes": "Like `includes` but added to `LINUXINCLUDE`. Not prefixed.",
+    },
+)
+
 ImagesInfo = provider(
     doc = "Provider from individual *_image rule to [`kernel_images`](kernel.md#kernel_images) rule",
     fields = {
