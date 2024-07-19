@@ -609,11 +609,7 @@ def _kernel_module_impl(ctx):
     if ctx.attr.internal_ddk_makefiles_dir:
         ddk_headers_info = ctx.attr.internal_ddk_makefiles_dir[DdkHeadersInfo]
     else:
-        ddk_headers_info = DdkHeadersInfo(
-            files = depset(),
-            includes = depset(),
-            linux_includes = depset(),
-        )
+        ddk_headers_info = DdkHeadersInfo(include_infos = depset(), files = depset())
 
     if ctx.attr.internal_ddk_config:
         ddk_config_info = ctx.attr.internal_ddk_config[DdkConfigInfo]

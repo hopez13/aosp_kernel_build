@@ -420,6 +420,32 @@ DdkConfigInfo = provider(
     },
 )
 
+DdkIncludeInfo = provider(
+    """Describes include info of current target, excluding dependencies.
+
+    This info represents a list of include paths relative to execroot. It is
+    interpreted as follows:
+
+    ```
+    [prefix + include for include in includes]
+    ```
+
+    If there are generated files in `direct_files`, the list further expands to:
+
+    ```
+    [root + prefix + include for include in includes for root in
+        [file.root for file in <generated .h files in direct_files>]]
+    ```
+    """,
+    fields = {
+        "prefix": """When prepended to an item in `includes` or `linux_includes`,
+            the item becomes the path below execroot.""",
+        "direct_files": "depset of direct file dependencies of this target.",
+        "includes": "A list of `includes` attribute of this target. Not prefixed.",
+        "linux_includes": "Like `includes` but added to `LINUXINCLUDE`. Not prefixed.",
+    },
+)
+
 ImagesInfo = provider(
     doc = "Provider from individual *_image rule to [`kernel_images`](kernel.md#kernel_images) rule",
     fields = {
