@@ -1,0 +1,86 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00e51302_650d2e02",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-19T20:30:11Z",
+      "side": 1,
+      "message": "strip",
+      "range": {
+        "startLine": 177,
+        "startChar": 30,
+        "endLine": 177,
+        "endChar": 37
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "2f85af84_43037d77",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 177,
+                "startChar": 0,
+                "endLine": 178,
+                "endChar": 0
+              },
+              "replacement": "example on how to access the `strip` tool from the resolved toolchain.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "021f91eb139e473ac7d95eafdd46ce838f9478ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "724fcd45_dda6deff",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-19T20:30:11Z",
+      "side": 1,
+      "message": "wrap line",
+      "range": {
+        "startLine": 228,
+        "startChar": 53,
+        "endLine": 228,
+        "endChar": 102
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "11acaec9_890a1759",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/hermeticity.md",
+              "range": {
+                "startLine": 228,
+                "startChar": 0,
+                "endLine": 229,
+                "endChar": 0
+              },
+              "replacement": "For more action names mapping to tool names refer to\n`prebuilts/clang/host/linux-x86/kleaf/common.bzl`.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "021f91eb139e473ac7d95eafdd46ce838f9478ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
