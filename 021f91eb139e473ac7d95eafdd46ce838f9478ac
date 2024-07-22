@@ -42,6 +42,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fef8f4be_8b61c373",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-22T08:39:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00e51302_650d2e02",
+      "range": {
+        "startLine": 177,
+        "startChar": 30,
+        "endLine": 177,
+        "endChar": 37
+      },
+      "revId": "021f91eb139e473ac7d95eafdd46ce838f9478ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "724fcd45_dda6deff",
@@ -79,6 +103,30 @@
           ]
         }
       ],
+      "revId": "021f91eb139e473ac7d95eafdd46ce838f9478ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c32bed_a00770d7",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-22T08:39:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "724fcd45_dda6deff",
+      "range": {
+        "startLine": 228,
+        "startChar": 53,
+        "endLine": 228,
+        "endChar": 102
+      },
       "revId": "021f91eb139e473ac7d95eafdd46ce838f9478ac",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
