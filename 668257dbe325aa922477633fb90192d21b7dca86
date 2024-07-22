@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7389f865_62b2aa68",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-22T18:49:45Z",
+      "side": 1,
+      "message": "Please fix this ERROR reported by Buildifier: File is not formatted. Run `buildifier kleaf/impl/ddk/makefiles.bzl` to format the file, or apply the suggested fix.\n\nAnalyzer Description: Check formats of Bazel definitions.\nOwner: kleaf@google.com\n\nFile is not formatted. Run `buildifier kleaf/impl/ddk/makefiles.bzl` to format the file, or apply the suggested fix.",
+      "range": {
+        "startLine": 0,
+        "startChar": 0,
+        "endLine": 0,
+        "endChar": 0
+      },
+      "revId": "668257dbe325aa922477633fb90192d21b7dca86",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
