@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a33ca1_e17796ff",
+        "filename": "kleaf/impl/kernel_module.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-07-22T15:20:50Z",
+      "side": 1,
+      "message": "Is that the only location that needs adjusting?",
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
