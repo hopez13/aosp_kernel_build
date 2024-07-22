@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e26d344_87b8494d",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1625880
+      },
+      "writtenOn": "2024-07-22T08:57:01Z",
+      "side": 1,
+      "message": "```suggestion\n\nFor more action names mapping to tool names, refer to\n```",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 3
+      },
+      "revId": "a770d76fb7bf2839c9f50c49c05668ddbe75f156",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
