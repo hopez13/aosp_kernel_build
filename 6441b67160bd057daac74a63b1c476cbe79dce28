@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a70ee7aa_d611f3e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-22T19:03:56Z",
+      "side": 1,
+      "message": "Is using relative path \"officially supported\" and set to relative to O\u003d now? If so, (2) makes sense. Otherwise (2) is also fragile.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 38
+      },
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b70e12be_154a7cfa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-22T19:03:56Z",
+      "side": 1,
+      "message": "I think this change would be adequate as a short term solution. What do you suggest we do in the long term? Please leave b/354687198 open if you decide to submit this so we find a way that\u0027s more future proof.\n\nIn the long term, we could have ddk_module()\u0027s adjust M\u003d based on O\u003d. But that won\u0027t fix regular builds.\n\nWe could also create one (1) symlink from M\u003d to O/M.",
+      "range": {
+        "startLine": 43,
+        "startChar": 66,
+        "endLine": 44,
+        "endChar": 45
+      },
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "badbbb6e_e90576bc",
         "filename": "kleaf/impl/ddk/gen_makefiles.py",
         "patchSetId": 1
