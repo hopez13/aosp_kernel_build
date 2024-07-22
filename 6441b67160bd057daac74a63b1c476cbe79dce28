@@ -16,6 +16,24 @@
       "message": "Is that the only location that needs adjusting?",
       "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6753f602_145f74e7",
+        "filename": "kleaf/impl/kernel_module.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1981286
+      },
+      "writtenOn": "2024-07-22T15:26:39Z",
+      "side": 1,
+      "message": "There are lots of other changes (outside kbuild) that prevent me from obtaining a full working build at this point in time, but this gets me further. I\u0027ll confirm once I can boot. I wanted to get your input on this approach early :-)",
+      "parentUuid": "b6a33ca1_e17796ff",
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
