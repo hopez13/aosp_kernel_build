@@ -49,6 +49,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce4e40b5_624e0772",
+        "filename": "kleaf/impl/ddk/ddk_headers_archive.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-22T18:49:33Z",
+      "side": 1,
+      "message": "the child CL presubmit is complaining about this one:\n\n`Error: \u0027DdkHeadersInfo\u0027 value has no field or method \u0027includes\u0027`\n\nand I guess L79 as well.",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 37
+      },
+      "revId": "af3c08fafcc86d7a4d972b90da7d94e9e65abc8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f80804d_754322c5",
         "filename": "kleaf/impl/ddk/makefiles.bzl",
         "patchSetId": 4
