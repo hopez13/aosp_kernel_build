@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55d6f3b9_d3bcf0fc",
+        "filename": "kleaf/impl/common_providers.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-22T18:53:54Z",
+      "side": 1,
+      "message": "They are not included as they are not a public API. We still write the docs for our future references.",
+      "parentUuid": "be3fcb14_1f4501f7",
+      "range": {
+        "startLine": 436,
+        "startChar": 17,
+        "endLine": 436,
+        "endChar": 25
+      },
+      "revId": "af3c08fafcc86d7a4d972b90da7d94e9e65abc8c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac890df2_71058b35",
