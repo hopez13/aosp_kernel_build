@@ -22,6 +22,30 @@
       },
       "revId": "a770d76fb7bf2839c9f50c49c05668ddbe75f156",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c2ce0be_a5817b56",
+        "filename": "kleaf/docs/hermeticity.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-22T08:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e26d344_87b8494d",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 3
+      },
+      "revId": "a770d76fb7bf2839c9f50c49c05668ddbe75f156",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
