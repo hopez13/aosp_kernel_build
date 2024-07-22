@@ -64,6 +64,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50496068_b0130140",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-22T19:04:57Z",
+      "side": 1,
+      "message": "This inherits O\u003d from kernel_module.bzl in the last $@",
+      "parentUuid": "badbbb6e_e90576bc",
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6a33ca1_e17796ff",
