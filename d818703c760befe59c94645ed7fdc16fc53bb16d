@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d509c55c_33e1d300",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-23T20:04:48Z",
+      "side": 1,
+      "message": "bypass lint because load order is not enforced on this branch",
+      "revId": "d818703c760befe59c94645ed7fdc16fc53bb16d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
