@@ -22,6 +22,30 @@
       },
       "revId": "3319ca3085f1a8fd83dca4c877b5aca610f924c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ffb79f_a95e4921",
+        "filename": "kleaf/common.bazelrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-24T19:35:37Z",
+      "side": 1,
+      "message": "right, this should\u0027ve been common. \n\nTo your question: It includes test but not query.",
+      "parentUuid": "aaa61a50_7921ff56",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 5
+      },
+      "revId": "3319ca3085f1a8fd83dca4c877b5aca610f924c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
