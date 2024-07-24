@@ -119,7 +119,7 @@ Early ones in the list takes higher priority.""")
   parser.add_argument("--dstdir", required=True, help="destination directory")
   parser.add_argument(
       "outputs",
-      nargs="+",
+      nargs="*",
       metavar="output_file_name",
       help="A list of output file names. Must not contain slashes.")
   args = parser.parse_args()
