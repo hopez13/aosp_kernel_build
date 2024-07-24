@@ -110,11 +110,21 @@ def ddk_module(
         1. All `linux_includes` of this target, in the specified order
         2. All `linux_includes` of `deps`, in the specified order (recursively apply #1.3 on each target)
         3. All `linux_includes` of `hdrs`, in the specified order (recursively apply #1.3 on each target)
+        4. All `linux_includes` from kernel_build:
+           1. All `linux_includes` from `ddk_module_headers` of the `base_kernel` of the
+              `kernel_build` of this `ddk_mdoule`;
+           2. All `linux_includes` from `ddk_module_headers` of the `kernel_build` of this
+              `ddk_mdoule`;
     2. `LINUXINCLUDE` (See `${KERNEL_DIR}/Makefile`)
     3. Traverse depedencies for `includes`:
         1. All `includes` of this target, in the specified order
         2. All `includes` of `deps`, in the specified order (recursively apply #3.1 and #3.3 on each target)
         3. All `includes` of `hdrs`, in the specified order (recursively apply #3.1 and #3.3 on each target)
+        4. All `includes` from kernel_build:
+           1. All `includes` from `ddk_module_headers` of the `base_kernel` of the
+              `kernel_build` of this `ddk_mdoule`;
+           2. All `includes` from `ddk_module_headers` of the `kernel_build` of this
+              `ddk_mdoule`;
 
     In other words, #1 and #3 uses the `preorder` of
     [depset](https://bazel.build/rules/lib/depset).
@@ -135,6 +145,19 @@ def ddk_module(
     For example:
 
     ```
+    ddk_headers(name = "base_ddk_headers", includes = ["base"], linux_includes = ["uapi/base"])
+    ddk_headers(name = "device_ddk_headers", includes = ["device"], linux_includes = ["uapi/device"])
+
+    kernel_build(
+        name = "kernel_aarch64",
+        ddk_module_headers = [":base_ddk_headers"],
+    )
+    kernel_build(
+        name = "device",
+        base_kernel = ":kernel_aarch64",
+        ddk_module_headers = [":device_ddk_headers"],
+    )
+
     ddk_headers(name = "dep_a", includes = ["dep_a"], linux_includes = ["uapi/dep_a"])
     ddk_headers(name = "dep_b", includes = ["dep_b"])
     ddk_headers(name = "dep_c", includes = ["dep_c"], hdrs = ["dep_a"])
@@ -144,6 +167,7 @@ def ddk_module(
 
     ddk_module(
         name = "module",
+        kernel_build = ":device",
         deps = [":dep_b", ":x", ":dep_c"],
         hdrs = [":hdrs_a", ":x", ":hdrs_b"],
         linux_includes = ["uapi/module"],
@@ -163,6 +187,10 @@ def ddk_module(
     # 1.3 hdrs, linux_includes, recursively
     -Iuapi/hdrs_a
 
+    # 1.4 linux_includes from kernel_build and base_kernel
+    -Iuapi/device
+    -Iuapi/base
+
     # 2.
     $(LINUXINCLUDE)
 
@@ -180,6 +208,10 @@ def ddk_module(
     -Ihdrs_a
     # x is already included, skip
     -Ihdrs_b
+
+    # 3.4. includes from kernel_build and base_kernel
+    -Idevice
+    -Ibase
     ```
 
     A dependent module automatically gets #1.1, #1.3, #3.1, #3.3, in this order. For example:
@@ -187,6 +219,7 @@ def ddk_module(
     ```
     ddk_module(
         name = "child",
+        kernel_build = ":device",
         deps = [":module"],
         # ...
     )
@@ -199,6 +232,10 @@ def ddk_module(
     -Iuapi/module
     -Iuapi/hdrs_a
 
+    # 1.4 linux_includes from kernel_build and base_kernel
+    -Iuapi/device
+    -Iuapi/base
+
     # 2.
     $(LINUXINCLUDE)
 
@@ -208,6 +245,10 @@ def ddk_module(
     -Ihdrs_a
     -Ix
     -Ihdrs_b
+
+    # 3.4. includes from kernel_build and base_kernel
+    -Idevice
+    -Ibase
     ```
 
     Args:
@@ -421,6 +462,7 @@ def ddk_module(
 
     makefiles(
         name = name + "_makefiles",
+        kernel_build = kernel_build,
         module_srcs = (srcs or []) + flattened_conditional_srcs,
         module_hdrs = hdrs,
         module_textual_hdrs = textual_hdrs,
