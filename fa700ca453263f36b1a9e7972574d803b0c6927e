@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "621050b2_9553638c",
+        "filename": "kleaf/impl/ddk/ddk_headers.bzl",
+        "patchSetId": 11
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-24T15:19:11Z",
+      "side": 1,
+      "message": "is this because generated headers don\u0027t come from a `ddk_headers` rule?",
+      "range": {
+        "startLine": 123,
+        "startChar": 71,
+        "endLine": 123,
+        "endChar": 77
+      },
+      "revId": "fa700ca453263f36b1a9e7972574d803b0c6927e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
