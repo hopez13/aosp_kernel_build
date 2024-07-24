@@ -35,6 +35,7 @@ load(
     "MODULES_STAGING_ARCHIVE",
     "UNSTRIPPED_MODULES_ARCHIVE",
 )
+load(":ddk/ddk_headers.bzl", "DdkHeadersInfo", "ddk_headers_common_impl")
 load(":debug.bzl", "debug")
 load(":hermetic_toolchain.bzl", "hermetic_toolchain")
 load(":kernel_build.bzl", "create_serialized_env_info")
@@ -324,6 +325,13 @@ def _kernel_filegroup_impl(ctx):
         strip_modules = ctx.attr.strip_modules,
     )
 
+    ddk_headers_info = ddk_headers_common_impl(
+        ctx.label,
+        ctx.attr.ddk_module_headers,
+        [],
+        [],
+    )
+
     kernel_uapi_depsets = []
     if ctx.attr.kernel_uapi_headers:
         kernel_uapi_depsets.append(ctx.attr.kernel_uapi_headers.files)
@@ -407,6 +415,7 @@ def _kernel_filegroup_impl(ctx):
         KernelBuildMixedTreeInfo(files = mixed_tree_files),
         KernelBuildUnameInfo(kernel_release = kernel_release),
         kernel_module_dev_info,
+        ddk_headers_info,
         uapi_info,
         unstripped_modules_info,
         abi_info,
@@ -572,6 +581,10 @@ default, which in turn sets `collect_unstripped_modules` to `True` by default.
             doc = "Additional defconfig fragments for dependant DDK modules.",
             allow_empty = True,
             allow_files = True,
+        ),
+        "ddk_module_headers": attr.label_list(
+            doc = "Additional `ddk_headers` for dependant DDK modules.",
+            providers = [DdkHeadersInfo],
         ),
     } | _kernel_filegroup_additional_attrs(),
     toolchains = [hermetic_toolchain.type],

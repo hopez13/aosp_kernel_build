@@ -271,11 +271,16 @@ def _makefiles_impl(ctx):
         includes = ctx.attr.module_includes,
         linux_includes = ctx.attr.module_linux_includes,
     )]
+
+    # Because of left-to-right ordering (DDK_INCLUDE_INFO_ORDER), kernel_build with
+    # lowest priority is placed at the end of the list.
+    transitive_include_info_targets = ctx.attr.module_deps + ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs
+    if ctx.attr.kernel_build:
+        transitive_include_info_targets.append(ctx.attr.kernel_build)
+
     include_infos = depset(
         direct_include_infos,
-        transitive = get_ddk_transitive_include_infos(
-            ctx.attr.module_deps + ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs,
-        ),
+        transitive = get_ddk_transitive_include_infos(transitive_include_info_targets),
         order = DDK_INCLUDE_INFO_ORDER,
     )
 
@@ -361,13 +366,17 @@ def _makefiles_impl(ctx):
 
     # Add all files from hdrs and textual_hdrs (use DdkHeadersInfo if available,
     #  otherwise use default files).
-    srcs_depset_transitive.append(get_headers_depset(
-        ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs,
-    ))
+    srcs_depset_transitive.append(get_headers_depset(ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs))
+
+    # Add ddk_module_headers files from kernel_build
+    if ctx.attr.kernel_build:
+        srcs_depset_transitive.append(ctx.attr.kernel_build[DdkHeadersInfo].files)
 
     ddk_headers_info = ddk_headers_common_impl(
         ctx.label,
-        # hdrs of the ddk_module + hdrs of submodules
+        # hdrs of the ddk_module + hdrs of submodules.
+        # Don't export kernel_build[DdkHeadersInfo] to avoid raising its priority;
+        # dependent makefiles() target will put kernel_build[DdkHeadersInfo] at the end.
         ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs + submodule_deps,
         # includes of the ddk_module. The includes of submodules are handled by adding
         # them to hdrs.
@@ -396,6 +405,11 @@ makefiles = rule(
     implementation = _makefiles_impl,
     doc = "Generate `Makefile` and `Kbuild` files for `ddk_module`",
     attrs = {
+        "kernel_build": attr.label(
+            providers = [DdkHeadersInfo],
+            # This is not set on ddk_submodule, but only on the overarching ddk_module.
+            mandatory = False,
+        ),
         # module_X is the X attribute of the ddk_module. Prefixed with `module_`
         # because they aren't real srcs / hdrs / deps to the makefiles rule.
         "module_srcs": attr.label_list(allow_files = [".c", ".h", ".S", ".rs"]),

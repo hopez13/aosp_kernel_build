@@ -191,6 +191,7 @@ def _create_makefiles_artifact_test(
         deps = None,
         hdrs = None,
         top_level_makefile = None,
+        kernel_build = None,
         cflags_file_name = None,
         expected_lines = None,
         expected_makefile_lines = None,
@@ -199,6 +200,7 @@ def _create_makefiles_artifact_test(
 
     makefiles(
         name = name + "_module_makefiles",
+        kernel_build = kernel_build,
         module_out = out,
         module_srcs = srcs,
         module_local_defines = local_defines,
@@ -547,12 +549,38 @@ def _makefiles_include_ordering_artifacts_test(name):
         tags = ["manual"],
     )
 
+    ddk_headers(
+        name = name + "_kernel_build_ddk_headers",
+        includes = ["include/kernel_build"],
+        linux_includes = ["linux_include/kernel_build"],
+        tags = ["manual"],
+    )
+
+    kernel_build(
+        name = name + "_kernel_build",
+        build_config = "build.config.fake",
+        outs = [],
+        ddk_module_headers = [name + "_kernel_build_ddk_headers"],
+        tags = ["manual"],
+    )
+
+    ddk_module(
+        name = name + "_dep_module",
+        kernel_build = name + "_kernel_build",
+        out = name + "_dep_module.ko",
+        srcs = ["base.c"],
+        includes = ["include/dep_module"],
+        linux_includes = ["linux_include/dep_module"],
+        tags = ["manual"],
+    )
+
     prefix = "$(ROOT_DIR)/{}".format(
         native.package_name(),
     )
 
     _create_makefiles_artifact_test(
         name = name + "_include_ordering",
+        kernel_build = name + "_kernel_build",
         srcs = ["base.c"],
         out = name + "_base.ko",
         includes = [
@@ -572,6 +600,7 @@ def _makefiles_include_ordering_artifacts_test(name):
             name + "_dep_c_headers",
             name + "_dep_b_headers",
             name + "_dep_a_headers",
+            name + "_dep_module",
         ],
         hdrs = [
             # do not sort
@@ -592,11 +621,14 @@ def _makefiles_include_ordering_artifacts_test(name):
             "-I{}/linux_include/dep_a \\".format(prefix),  # c includes a
             "-I{}/linux_include/dep_b \\".format(prefix),
             # linux_include/dep_a is already specified, so dropping
+            # linux_includes from dep_module is not exported
             # linux_includes of hdrs
             "-I{}/linux_include/hdrs_c \\".format(prefix),
             "-I{}/linux_include/hdrs_a \\".format(prefix),  # c includes a
             "-I{}/linux_include/hdrs_b \\".format(prefix),
             # linux_include/hdrs_a is already specified, so dropping
+            # kernel_build at the end, even though dep_module also depend on it
+            "-I{}/linux_include/kernel_build \\".format(prefix),
             "$(LINUXINCLUDE)",
             "CFLAGS_base.o += @{}/{}_base.cflags".format(prefix, name),
         ],
@@ -610,11 +642,14 @@ def _makefiles_include_ordering_artifacts_test(name):
             "-I{}/include/dep_a".format(prefix),  # c includes a
             "-I{}/include/dep_b".format(prefix),
             # dep_a is already specified, so dropping
+            "-I{}/include/dep_module".format(prefix),
             # hdrs, recursively
             "-I{}/include/hdrs_c".format(prefix),
             "-I{}/include/hdrs_a".format(prefix),  # c includes a
             "-I{}/include/hdrs_b".format(prefix),
             # hdrs_a is already specified, so dropping
+            # kernel_build at the end, even though dep_module also depend on it
+            "-I{}/include/kernel_build".format(prefix),
         ],
     )
     tests.append(name + "_include_ordering")
