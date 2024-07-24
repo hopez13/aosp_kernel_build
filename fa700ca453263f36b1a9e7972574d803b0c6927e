@@ -22,6 +22,30 @@
       },
       "revId": "fa700ca453263f36b1a9e7972574d803b0c6927e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62741549_6bb98ad2",
+        "filename": "kleaf/impl/ddk/ddk_headers.bzl",
+        "patchSetId": 11
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-24T22:48:11Z",
+      "side": 1,
+      "message": "tl;dr: \"yes\"\n\nLong answer: if a target does not provide DdkHeadersInfo, it means it is an arbitrary rule (a genrule, hermetic_genrule, sh_binary, whatever) that generates files (or have source files). In that case we want to include file.root for those generated file into consideration.\n\nIf a target does provide DdkHeadersInfo, L138 `transitive \u003d get_ddk_transitive_include_infos(hdrs),` will handle it properly. So if one puts a generated header in `ddk_headers`, makefile\u0027s that depend on the ddk_headers will still transitively include the DdkIncludeInfo of the ddk_headers target.",
+      "parentUuid": "621050b2_9553638c",
+      "range": {
+        "startLine": 123,
+        "startChar": 71,
+        "endLine": 123,
+        "endChar": 77
+      },
+      "revId": "fa700ca453263f36b1a9e7972574d803b0c6927e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
