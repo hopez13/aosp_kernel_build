@@ -87,6 +87,30 @@
       },
       "revId": "ef4a851fa81043f5ee1971b65f8d2473101bf245",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f12436a_bcc5404c",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 15
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-24T19:30:06Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "d1b904f1_be8d7a58",
+      "range": {
+        "startLine": 49,
+        "startChar": 25,
+        "endLine": 49,
+        "endChar": 27
+      },
+      "revId": "ef4a851fa81043f5ee1971b65f8d2473101bf245",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
