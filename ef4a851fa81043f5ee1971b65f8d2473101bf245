@@ -1,0 +1,68 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1414527_ebbc3c22",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-24T15:10:55Z",
+      "side": 1,
+      "message": "nit: Maybe a log here would be helpful, but maybe a bit spammy tho.",
+      "range": {
+        "startLine": 181,
+        "startChar": 16,
+        "endLine": 181,
+        "endChar": 17
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "bb55a021_0708e942",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/impl/ddk/gen_makefiles.py",
+              "range": {
+                "startLine": 181,
+                "startChar": 0,
+                "endLine": 181,
+                "endChar": 0
+              },
+              "replacement": "                logging.warning(\"Ignoring generated file %s because it is not under %s\",\n                                path, package)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "ef4a851fa81043f5ee1971b65f8d2473101bf245",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51d51019_badc3851",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 15
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-24T15:10:55Z",
+      "side": 1,
+      "message": "why is this needed?",
+      "range": {
+        "startLine": 49,
+        "startChar": 25,
+        "endLine": 49,
+        "endChar": 27
+      },
+      "revId": "ef4a851fa81043f5ee1971b65f8d2473101bf245",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
