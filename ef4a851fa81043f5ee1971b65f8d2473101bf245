@@ -63,6 +63,30 @@
       },
       "revId": "ef4a851fa81043f5ee1971b65f8d2473101bf245",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1b904f1_be8d7a58",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 15
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-24T19:28:30Z",
+      "side": 1,
+      "message": "This is so that the original include_dirs below the source tree is added and is the highest priority.\n\nFor example, if `generated_roots` is `bazel-out/k8-fastbuild` and `includes \u003d [a]`, then `ret` is `[package/a, bazel-out/k8-fastbuild/package/a]`\n\nIOW this is the same as\n\n```\n    for include_dir in getattr(ddk_include_info, info_attr_name):\n        ret.append(paths.normalize(paths.join(ddk_include_info.prefix, include_dir)))\n\n    for include_root in sets.to_list(generated_roots):\n        for include_dir in getattr(ddk_include_info, info_attr_name):\n            ret.append(paths.normalize(\n                paths.join(include_root, ddk_include_info.prefix, include_dir),\n            ))\n```",
+      "parentUuid": "51d51019_badc3851",
+      "range": {
+        "startLine": 49,
+        "startChar": 25,
+        "endLine": 49,
+        "endChar": 27
+      },
+      "revId": "ef4a851fa81043f5ee1971b65f8d2473101bf245",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
