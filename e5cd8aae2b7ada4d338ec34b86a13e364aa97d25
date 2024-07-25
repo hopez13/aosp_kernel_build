@@ -22,6 +22,30 @@
       },
       "revId": "e5cd8aae2b7ada4d338ec34b86a13e364aa97d25",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f6585d_2f1932be",
+        "filename": "kleaf/impl/ddk/ddk_config.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-25T17:06:20Z",
+      "side": 1,
+      "message": "In ddk_config_subrule, L241~245\n\nI could say `Needed by ddk_config_subrule` here, if that makes more sense to you",
+      "parentUuid": "d1f36715_2ec82bf1",
+      "range": {
+        "startLine": 277,
+        "startChar": 8,
+        "endLine": 277,
+        "endChar": 41
+      },
+      "revId": "e5cd8aae2b7ada4d338ec34b86a13e364aa97d25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
