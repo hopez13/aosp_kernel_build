@@ -27,7 +27,7 @@ Populate DDK workspace against a local, full
 checkout of ACK source tree at `/path/to/ddk/workspace/external/kleaf`:
 
 ```shell
-$ python init.py --local \
+$ python3 init.py --local \
     --ddk_workspace /path/to/ddk/workspace \
     --kleaf_repo /path/to/ddk/workspace/external/kleaf
 ```
@@ -39,7 +39,7 @@ Kleaf projects at `/path/to/ddk/workspace/external/kleaf` and prebuilts at
 `/path/to/ddk/workspace/prebuilts/kernel`:
 
 ```shell
-$ python init.py --local \
+$ python3 init.py --local \
     --ddk_workspace /path/to/ddk/workspace \
     --kleaf_repo /path/to/ddk/workspace/external/kleaf \
     --prebuilts_dir /path/to/ddk/workspace/prebuilts/kernel
@@ -59,7 +59,7 @@ from ci.android.com:
 
 ```shell
 $ ( cd /path/to/ddk/workspace && repo init ... )
-$ python init.py --build_id 123456 \
+$ python3 init.py --build_id 123456 \
     --ddk_workspace /path/to/ddk/workspace \
     --kleaf_repo /path/to/ddk/workspace/external/kleaf \
     --prebuilts_dir /path/to/ddk/workspace/prebuilts/kernel
@@ -70,7 +70,7 @@ branch, `common-android15-6.6`:
 
 ```shell
 $ ( cd /path/to/ddk/workspace && repo init ... )
-$ python init.py --branch aosp_kernel-common-android15-6.6 \
+$ python3 init.py --branch aosp_kernel-common-android15-6.6 \
     --ddk_workspace /path/to/ddk/workspace \
     --kleaf_repo /path/to/ddk/workspace/external/kleaf \
     --prebuilts_dir /path/to/ddk/workspace/prebuilts/kernel
@@ -78,6 +78,15 @@ $ python init.py --branch aosp_kernel-common-android15-6.6 \
 
 `init.py` will run `repo sync` as part of the process. To skip this so you
 can run `repo sync` manually, add the `--nosync` flag to `init.py`.
+
+See [workspace_example.sh](workspace_example.sh) for a complete example.
+
+If you need to refresh the prebuilts and the source tree for Kleaf tooling
+to point to the latest build on `common-android15-6.6`, simply re-run the
+`init.py` script with the exact same arguments.
+
+If you need to use a different branch or build ID, simply re-run the `init.py`
+script with the exact same arguments and modified `--branch` or `--build_id`.
 
 ## Root MODULE.bazel
 
