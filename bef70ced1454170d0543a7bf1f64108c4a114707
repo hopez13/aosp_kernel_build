@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4e33710_1e7cbe8d",
+        "filename": "kleaf/docs/ddk/workspace_example.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-25T17:04:59Z",
+      "side": 1,
+      "message": "Technically this is part of documentation. I think it is fine to leave out the license header here.",
+      "parentUuid": "b44624a5_65270809",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "bef70ced1454170d0543a7bf1f64108c4a114707",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f640928_900ad0b7",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-25T16:46:47Z",
       "side": 1,
       "message": "nit: space here or is it intentional?",
+      "range": {
+        "startLine": 29,
+        "startChar": 43,
+        "endLine": 29,
+        "endChar": 44
+      },
+      "revId": "bef70ced1454170d0543a7bf1f64108c4a114707",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4fa07ee_39be1f96",
+        "filename": "kleaf/docs/ddk/workspace_example.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-25T17:04:59Z",
+      "side": 1,
+      "message": "It\u0027s fine to leave the space out here.",
+      "parentUuid": "1f640928_900ad0b7",
       "range": {
         "startLine": 29,
         "startChar": 43,
