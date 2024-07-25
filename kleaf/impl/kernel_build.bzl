@@ -1239,7 +1239,7 @@ def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
         # embedded in vmlinux. This file just makes such ir-reproducibility more explicit.
         grab_gcno_cmd = """
             rsync -a --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {src_dir}/ {gcno_dir}/
-            {print_gcno_mapping} {extra_args} {src_dir}:{gcno_dir} > {gcno_mapping}
+            {print_gcno_mapping} {extra_args} {src_dir}/{package}:{gcno_dir} > {gcno_mapping}
             # Archive gcno_dir + gcno_mapping + base_kernel_gcno_dir
             {base_kernel_gcno_cmd}
             cp {gcno_mapping} {gcno_dir}
@@ -1252,6 +1252,7 @@ def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
             extra_args = extra_args,
             gcno_archive = gcno_archive.path,
             base_kernel_gcno_cmd = base_kernel_gcno_dir_cmd,
+            package = ctx.label.package,
         )
     return struct(
         inputs = inputs,
