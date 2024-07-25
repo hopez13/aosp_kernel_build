@@ -230,7 +230,7 @@ def _reconfig(ctx):
             {apply_defconfig_fragments_cmd}
 
             if [[ -n "${{need_olddefconfig}}" ]]; then
-                make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} olddefconfig
+                KCONFIG_WERROR=1 make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} olddefconfig
             fi
 
             {check_defconfig_fragments_cmd}
@@ -304,7 +304,7 @@ def _kernel_config_impl(ctx):
         # Pre-defconfig commands
           eval ${{PRE_DEFCONFIG_CMDS}}
         # Actual defconfig
-          make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{DEFCONFIG}}
+          KCONFIG_WERROR=1 make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{DEFCONFIG}}
         # Post-defconfig commands
           eval ${{POST_DEFCONFIG_CMDS}}
         # Re-config
@@ -427,7 +427,7 @@ def _get_config_script(ctx, inputs):
             eval ${PRE_DEFCONFIG_CMDS}
             set +x
             # Actual defconfig
-            make -C ${KERNEL_DIR} ${TOOL_ARGS} O=${OUT_DIR} ${DEFCONFIG}
+            KCONFIG_WERROR=1 make -C ${KERNEL_DIR} ${TOOL_ARGS} O=${OUT_DIR} ${DEFCONFIG}
 
             # Show UI
             menuconfig ${menucommand}
