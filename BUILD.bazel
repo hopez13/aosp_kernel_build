@@ -29,6 +29,14 @@ filegroup(
     ],
 )
 
+filegroup(
+    name = "sysroot_dir",
+    srcs = ["build-tools/sysroot"],
+    visibility = [
+        "@kleaf_clang_toolchain//:__subpackages__",
+    ],
+)
+
 alias(
     name = "toybox",
     actual = select({
