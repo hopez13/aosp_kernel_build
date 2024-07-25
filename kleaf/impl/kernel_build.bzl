@@ -1190,12 +1190,13 @@ def _get_grab_symtypes_step(ctx):
         outputs = outputs,
     )
 
-def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
+def get_grab_gcno_step(ctx, src_dir, rel_dir, is_kernel_build):
     """Returns a step for grabbing the `*.gcno`files from `src_dir`.
 
     Args:
         ctx: Context from the rule.
         src_dir: Source directory.
+        rel_dir: Relative source directory.
         is_kernel_build: The flag to indicate whether the rule is `kernel_build`.
 
     Returns:
@@ -1239,7 +1240,7 @@ def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
         # embedded in vmlinux. This file just makes such ir-reproducibility more explicit.
         grab_gcno_cmd = """
             rsync -a --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {src_dir}/ {gcno_dir}/
-            {print_gcno_mapping} {extra_args} {src_dir}:{gcno_dir} > {gcno_mapping}
+            {print_gcno_mapping} {extra_args} {src_dir}/{rel_dir}:{gcno_dir} > {gcno_mapping}
             # Archive gcno_dir + gcno_mapping + base_kernel_gcno_dir
             {base_kernel_gcno_cmd}
             cp {gcno_mapping} {gcno_dir}
@@ -1252,6 +1253,7 @@ def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
             extra_args = extra_args,
             gcno_archive = gcno_archive.path,
             base_kernel_gcno_cmd = base_kernel_gcno_dir_cmd,
+            rel_dir = rel_dir,
         )
     return struct(
         inputs = inputs,
@@ -1485,7 +1487,7 @@ def _build_main_action(
         all_module_basenames_file = all_module_basenames_file,
     )
     grab_symtypes_step = _get_grab_symtypes_step(ctx)
-    grab_gcno_step = get_grab_gcno_step(ctx, "${COMMON_OUT_DIR}", is_kernel_build = True)
+    grab_gcno_step = get_grab_gcno_step(ctx, "${COMMON_OUT_DIR}", "${KERNEL_DIR}", is_kernel_build = True)
     grab_cmd_step = get_grab_cmd_step(ctx, "${OUT_DIR}")
     compile_commands_step = compile_commands_utils.get_step(ctx, "${OUT_DIR}")
     grab_gdb_scripts_step = kgdb.get_grab_gdb_scripts_step(ctx)
