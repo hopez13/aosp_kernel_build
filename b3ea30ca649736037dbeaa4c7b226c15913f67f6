@@ -34,6 +34,24 @@
       "parentUuid": "6d8fad80_b97e72b2",
       "revId": "b3ea30ca649736037dbeaa4c7b226c15913f67f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df287ae4_eb060214",
+        "filename": "kleaf/impl/ddk/ddk_config_subrule.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-25T17:09:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "000a0eb3_13a46d82",
+      "revId": "b3ea30ca649736037dbeaa4c7b226c15913f67f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
