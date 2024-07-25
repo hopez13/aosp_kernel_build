@@ -21,12 +21,12 @@ cc_library(
 cc_library(
     name = "libcap-ng",
     srcs = [
-        "libcap-ng-0.7/src/cap-ng.c",
-        "libcap-ng-0.7/src/lookup_table.c",
+        "src/cap-ng.c",
+        "src/lookup_table.c",
     ],
     hdrs = [
-        "libcap-ng-0.7/src/cap-ng.h",
-        "libcap-ng-0.7/src/captab.h",
+        "src/cap-ng.h",
+        "src/captab.h",
     ],
     copts = [
         "-Wall",
@@ -34,7 +34,7 @@ cc_library(
         "-Wno-enum-conversion",
         "-Wno-unused-parameter",
     ],
-    strip_include_prefix = "libcap-ng-0.7/src",
+    strip_include_prefix = "src",
     visibility = ["//visibility:public"],
     deps = [":libcap-ng-config"],
 )
