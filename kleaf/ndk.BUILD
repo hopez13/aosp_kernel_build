@@ -12,14 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
+
+_TRIPLES = [paths.basename(path) for path in glob(
+    ["toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/*"],
+    include_directories = True,
+)]
+
+_SYSROOT_TRIPLE_COMMON_FILES = [
+    "libc.a",
+    "libdl.a",
+    "libm.a",
+]
+
+_SYSROOT_TRIPLE_LEVEL_FILES = [
+    "libc.so",
+    "libdl.so",
+    "libm.so",
+    "crtbegin_dynamic.o",
+    "crtend_android.o",
+]
+
+# TODO(b/228099181): Delete
 filegroup(
     name = "sysroot",
     srcs = glob(
         [
-            "toolchains/llvm/prebuilt/linux-x86_64/sysroot/**",
+            "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/**",
         ],
         allow_empty = False,
-    ),
+    ) + [
+        ":sysroot_include"
+    ],
     visibility = ["//visibility:public"],
 )
 
@@ -28,3 +52,41 @@ filegroup(
     srcs = ["toolchains/llvm/prebuilt/linux-x86_64/sysroot"],
     visibility = ["//visibility:public"],
 )
+
+filegroup(
+    name = "sysroot_include",
+    srcs = glob(
+        ["toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/**"],
+        allow_empty = False,
+    ),
+    visibility = ["//visibility:private"],
+)
+
+[filegroup(
+    name = "sysroot_{}_common".format(triple),
+    srcs = [
+        "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/{}/{}".format(triple, filename)
+        for filename in _SYSROOT_TRIPLE_COMMON_FILES
+    ],
+    visibility = ["//visibility:private"],
+) for triple in _TRIPLES]
+
+[[
+    filegroup(
+        name = "sysroot_{}{}_files".format(triple, level),
+        srcs = [
+            "toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/{}/{}/{}".format(triple, level, filename)
+            for filename in _SYSROOT_TRIPLE_LEVEL_FILES
+        ] + [
+            ":sysroot_{}_common".format(triple),
+            ":sysroot_include",
+        ],
+        visibility = ["//visibility:public"],
+    ),
+] for triple in triples for level in [
+    paths.basename(path)
+    for path in glob(
+        ["toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/{}".format(triple)],
+        include_directories = True,
+    )
+]]
