@@ -69,7 +69,11 @@ new_kleaf_local_repository(
 new_kleaf_local_repository(
     name = "prebuilt_ndk",
     build_file = "build/kernel/kleaf/ndk.BUILD",
-    path = "prebuilts/ndk-r26",
+    path_candidates = [
+        # do not sort
+        "prebuilts/ndk-r27",
+        "prebuilts/ndk-r26",
+    ],
 )
 
 kernel_toolchain_ext = use_extension("//build/kernel/kleaf:kernel_toolchain_ext.bzl", "kernel_toolchain_ext")
