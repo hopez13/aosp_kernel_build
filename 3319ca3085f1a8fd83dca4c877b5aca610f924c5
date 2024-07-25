@@ -46,6 +46,30 @@
       },
       "revId": "3319ca3085f1a8fd83dca4c877b5aca610f924c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38e0a5cb_fffadd03",
+        "filename": "kleaf/common.bazelrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-25T00:15:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86ffb79f_a95e4921",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 5
+      },
+      "revId": "3319ca3085f1a8fd83dca4c877b5aca610f924c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
