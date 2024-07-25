@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-package(default_visibility = ["//visibility:public"])
-
 filegroup(
     name = "sysroot",
     srcs = glob(
@@ -22,4 +20,11 @@ filegroup(
         ],
         allow_empty = False,
     ),
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "sysroot_dir",
+    srcs = ["toolchains/llvm/prebuilt/linux-x86_64/sysroot"],
+    visibility = ["//visibility:public"],
 )
