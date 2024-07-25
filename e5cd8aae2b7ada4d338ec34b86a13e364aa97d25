@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1f36715_2ec82bf1",
+        "filename": "kleaf/impl/ddk/ddk_config.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-25T13:09:12Z",
+      "side": 1,
+      "message": "Where? I could not find where are these used.",
+      "range": {
+        "startLine": 277,
+        "startChar": 8,
+        "endLine": 277,
+        "endChar": 41
+      },
+      "revId": "e5cd8aae2b7ada4d338ec34b86a13e364aa97d25",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
