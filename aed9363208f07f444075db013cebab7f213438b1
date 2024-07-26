@@ -22,6 +22,30 @@
       },
       "revId": "aed9363208f07f444075db013cebab7f213438b1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61667160_46649c18",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-26T00:31:24Z",
+      "side": 1,
+      "message": "Never mind, it is not the reverse of CL:3047655; we are including more files in the line above. But I think it should be something like\n\n```\nget_grab_gcno_step(ctx, src_dir, src_rel, is_kernel_build)\n```\n\nthen in the two call sites:\n\n```\nget_grab_gcno_step(ctx, COMMON_OUT_DIR, KERNEL_DIR, true)\nget_grab_gcno_step(ctx, COMMON_OUT_DIR, ext_mod, false)\n```",
+      "parentUuid": "f8ed4d27_87a22172",
+      "range": {
+        "startLine": 1242,
+        "startChar": 56,
+        "endLine": 1242,
+        "endChar": 65
+      },
+      "revId": "aed9363208f07f444075db013cebab7f213438b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
