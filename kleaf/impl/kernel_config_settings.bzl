@@ -98,6 +98,7 @@ def _kernel_config_config_settings_raw():
             "kasan_sw_tags": "//build/kernel/kleaf:kasan_sw_tags",
             "kasan_generic": "//build/kernel/kleaf:kasan_generic",
             "kcsan": "//build/kernel/kleaf:kcsan",
+            "kconfig_werror": "//build/kernel/kleaf:kconfig_werror",
         },
     )
 

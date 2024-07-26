@@ -215,6 +215,8 @@ def _reconfig(ctx):
             " ".join(defconfig_fragments_paths),
         )
 
+    kconfig_additional_vars = _get_kconfig_additional_vars(ctx)
+
     cmd = """
         (
             need_olddefconfig=
@@ -230,7 +232,7 @@ def _reconfig(ctx):
             {apply_defconfig_fragments_cmd}
 
             if [[ -n "${{need_olddefconfig}}" ]]; then
-                make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} olddefconfig
+                {kconfig_additional_vars} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} olddefconfig
             fi
 
             {check_defconfig_fragments_cmd}
@@ -239,12 +241,18 @@ def _reconfig(ctx):
         configs = " ".join(configs),
         apply_defconfig_fragments_cmd = apply_defconfig_fragments_cmd,
         check_defconfig_fragments_cmd = check_defconfig_fragments_cmd,
+        kconfig_additional_vars = kconfig_additional_vars,
     )
 
     return struct(
         cmd = cmd,
         deps = depset(transitive = transitive_deps),
     )
+
+def _get_kconfig_additional_vars(ctx):
+    if not ctx.attr.kconfig_werror[BuildSettingInfo].value:
+        return ""
+    return "KCONFIG_WERROR=1"
 
 def _kernel_config_impl(ctx):
     localversion_file = stamp.write_localversion(ctx)
@@ -296,6 +304,8 @@ def _kernel_config_impl(ctx):
         )
         inputs += ctx.files.raw_kmi_symbol_list
 
+    kconfig_additional_vars = _get_kconfig_additional_vars(ctx)
+
     # exclude keys in out_dir to avoid accidentally including them
     # in the distribution.
 
@@ -304,7 +314,7 @@ def _kernel_config_impl(ctx):
         # Pre-defconfig commands
           eval ${{PRE_DEFCONFIG_CMDS}}
         # Actual defconfig
-          make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{DEFCONFIG}}
+         {kconfig_additional_vars} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{DEFCONFIG}}
         # Post-defconfig commands
           eval ${{POST_DEFCONFIG_CMDS}}
         # Re-config
@@ -332,6 +342,7 @@ def _kernel_config_impl(ctx):
         reconfig_cmd = reconfig.cmd,
         localversion_file = localversion_file.path,
         sync_raw_kmi_symbol_list_cmd = sync_raw_kmi_symbol_list_cmd,
+        kconfig_additional_vars = kconfig_additional_vars,
     )
 
     debug.print_scripts(ctx, command)
