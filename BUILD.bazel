@@ -258,7 +258,6 @@ hermetic_tools(
         "//build/kernel/kleaf/impl:python_runtime_files",
         "//prebuilts/build-tools:linux-x86",
         "//prebuilts/kernel-build-tools:linux-x86",
-        "@prebuilt_ndk//:sysroot",
     ],
 )
 
