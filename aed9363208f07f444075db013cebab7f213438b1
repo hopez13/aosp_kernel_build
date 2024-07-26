@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ed4d27_87a22172",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-26T00:29:03Z",
+      "side": 1,
+      "message": "This should be KERNEL_DIR for kernel_build and ext_mod (which is usually package but it could be something else too) for kernel_module, I think?\n\nKERNEL_DIR doesn\u0027t necessary equals package.\n\nAlso, this is effectively the reverse of CL:3047655 so you might as well just drop CL:3047655 directly if it doesn\u0027t make sense.",
+      "range": {
+        "startLine": 1242,
+        "startChar": 56,
+        "endLine": 1242,
+        "endChar": 65
+      },
+      "revId": "aed9363208f07f444075db013cebab7f213438b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
