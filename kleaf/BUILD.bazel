@@ -261,6 +261,13 @@ config_setting(
     visibility = ["//visibility:public"],
 )
 
+# If set, Kconfig treats warnings as errors.
+bool_flag(
+    name = "kconfig_werror",
+    build_setting_default = False,
+    visibility = ["//visibility:public"],
+)
+
 # If true, allow modules to be undeclared in kernel_build.
 bool_flag(
     name = "allow_undeclared_modules",

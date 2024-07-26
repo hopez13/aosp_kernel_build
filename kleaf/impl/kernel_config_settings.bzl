@@ -116,6 +116,7 @@ def _kernel_env_config_settings_raw():
         compile_commands_utils.config_settings_raw(),
         {
             "_kbuild_symtypes_flag": "//build/kernel/kleaf:kbuild_symtypes",
+            "_kconfig_werror": "//build/kernel/kleaf:kconfig_werror",
         },
     )
 
