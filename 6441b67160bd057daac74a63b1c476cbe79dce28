@@ -102,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "733df28d_290c3cad",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1981286
+      },
+      "writtenOn": "2024-07-26T16:22:37Z",
+      "side": 1,
+      "message": "I don\u0027t know enough about kleaf to give an educated answer here, I don\u0027t know how to trigger these code paths and I ran out of time to investigate this week. We can look at this next week.",
+      "parentUuid": "f0c85eaf_1f55b74c",
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b6a33ca1_e17796ff",
         "filename": "kleaf/impl/kernel_module.bzl",
         "patchSetId": 1
@@ -131,6 +149,24 @@
       "side": 1,
       "message": "There are lots of other changes (outside kbuild) that prevent me from obtaining a full working build at this point in time, but this gets me further. I\u0027ll confirm once I can boot. I wanted to get your input on this approach early :-)",
       "parentUuid": "b6a33ca1_e17796ff",
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c410d551_3001e2a6",
+        "filename": "kleaf/impl/kernel_module.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1981286
+      },
+      "writtenOn": "2024-07-26T16:22:37Z",
+      "side": 1,
+      "message": "Just to confirm, in the end this patch alone was enough to build a bootable image for Pixel (together with relevant driver changes). I am not sure how to test other kleaf use-cases (DDK?), if any.\n\nWe can also see from the previous successful presubmit run that this patch appears to be compatible with both kernel versions, before and after the kbuild changes. Injecting the extra VPATH into the older kbuild should not have any negative side-effects I believe. From my PoV, it could probably be merged early (before the kbuild merge to gki) to reduce friction.",
+      "parentUuid": "6753f602_145f74e7",
       "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
