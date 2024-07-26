@@ -112,6 +112,11 @@ def _get_make_goals_deprecation_warning(ctx):
     )
     return msg
 
+def _get_kconfig_werror_setup(ctx):
+    if not ctx.attr._kconfig_werror[BuildSettingInfo].value:
+        return ""
+    return "export KCONFIG_WERROR=1"
+
 def _kernel_env_impl(ctx):
     srcs = [
         s
@@ -198,6 +203,8 @@ def _kernel_env_impl(ctx):
     make_goals = _get_make_goals(ctx)
     make_goals_deprecation_warning = _get_make_goals_deprecation_warning(ctx)
 
+    kconfig_werror_setup = _get_kconfig_werror_setup(ctx)
+
     if ctx.attr._rust_tools:
         rustc = utils.find_file("rustc", ctx.files._rust_tools, "rust tools", required = True)
         bindgen = utils.find_file("bindgen", ctx.files._rust_tools, "rust tools", required = True)
@@ -233,6 +240,8 @@ def _kernel_env_impl(ctx):
           {toolchains_setup_env_var_cmd}
         # TODO(b/236012223) Remove the warning after deprecation.
           {make_goals_deprecation_warning}
+        # Enforce check configs.
+          {kconfig_werror_setup}
         # Identify the build user as 'kleaf' to recognize a kleaf-built kernel
           export KBUILD_BUILD_USER=kleaf
         # Add a comment with config_tags for debugging
@@ -275,6 +284,7 @@ def _kernel_env_impl(ctx):
         check_arch_cmd = _get_check_arch_cmd(ctx),
         toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
         make_goals_deprecation_warning = make_goals_deprecation_warning,
+        kconfig_werror_setup = kconfig_werror_setup,
         out = out_file.path,
         config_tags_comment_file = config_tags_out.env.path,
         pre_env_script = pre_env_script.path,
