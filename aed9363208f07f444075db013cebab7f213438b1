@@ -46,6 +46,30 @@
       },
       "revId": "aed9363208f07f444075db013cebab7f213438b1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cccca83_ce0eccb0",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-26T00:32:54Z",
+      "side": 1,
+      "message": "On a second thought, why would you need this change? L1241 copies files from src_dir to gcno_dir, so the mapping should also be src_dir:gcno_dir. Am I missing something?",
+      "parentUuid": "61667160_46649c18",
+      "range": {
+        "startLine": 1242,
+        "startChar": 56,
+        "endLine": 1242,
+        "endChar": 65
+      },
+      "revId": "aed9363208f07f444075db013cebab7f213438b1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
