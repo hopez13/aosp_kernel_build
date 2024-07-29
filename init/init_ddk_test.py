@@ -104,6 +104,19 @@ class KleafProjectSetterTest(parameterized.TestCase):
                     got.read(),
                 )
 
+    def test_update_file_symlink(self):
+        """Tests updating a file does not remove the symlink."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_file = pathlib.Path(tmp) / "some_file"
+            tmp_file.write_text("Hello world!")
+            tmp_link = pathlib.Path(tmp) / "some_link"
+            tmp_link.symlink_to(tmp_file)
+            init_ddk.KleafProjectSetter._update_file(tmp_link, "\n")
+            self.assertTrue(tmp_file.exists())
+            self.assertTrue(tmp_link.exists())
+            self.assertTrue(tmp_link.is_symlink())
+            self.assertEqual(tmp_link.resolve(), tmp_file.resolve())
+
     def test_relevant_directories_created(self):
         """Tests corresponding directories are created if they don't exist."""
         with tempfile.TemporaryDirectory() as temp_dir:
