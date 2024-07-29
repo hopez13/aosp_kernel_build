@@ -417,7 +417,7 @@ class KleafProjectSetterTest(parameterized.TestCase):
                 # Check <linkfile> is fixed
                 # pylint: disable=line-too-long
                 self.assertEqual(links, {
-                    pathlib.Path("external/kleaf/tools/bazel"): pathlib.Path("external/kleaf/build/kernel/kleaf/bazel.sh"),
+                    pathlib.Path("tools/bazel"): pathlib.Path("external/kleaf/build/kernel/kleaf/bazel.sh"),
                     pathlib.Path("external/kleaf/MODULE.bazel"): pathlib.Path("external/kleaf/build/kernel/kleaf/bzlmod/bazel.MODULE.bazel")
                 })
 
