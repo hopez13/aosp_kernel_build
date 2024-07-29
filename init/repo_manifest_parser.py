@@ -23,6 +23,8 @@ from typing import TextIO
 
 from init.init_errors import KleafProjectSetterError
 
+_TOOLS_BAZEL = "tools/bazel"
+
 
 @dataclasses.dataclass(frozen=True)
 class ProjectState:
@@ -105,7 +107,11 @@ class RepoManifestParser:
             project.setAttribute("path", str(path_below_repo))
 
             for link in project.getElementsByTagName("linkfile"):
-                orig_dest = pathlib.Path(link.getAttribute("dest"))
+                orig_dest = link.getAttribute("dest")
+                # b/355523169 special case which should be in the top directory.
+                if orig_dest == _TOOLS_BAZEL:
+                    continue
+                orig_dest = pathlib.Path(orig_dest)
                 link.setAttribute("dest", str(self.project_prefix / orig_dest))
 
         # Avoid <superproject> and <default> in Kleaf manifest conflicting with
