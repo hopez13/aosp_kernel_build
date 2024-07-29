@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d77a3cd3_079090d0",
+        "filename": "kleaf/impl/kernel_config.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-29T08:40:25Z",
+      "side": 1,
+      "message": "This is an environment variable[0] for *config targets.\n\n[0] https://www.kernel.org/doc/html/next/kbuild/kconfig.html#environment-variables",
+      "parentUuid": "2ee46ac2_5adc741d",
+      "range": {
+        "startLine": 235,
+        "startChar": 17,
+        "endLine": 235,
+        "endChar": 40
+      },
+      "revId": "143a73ba95af73df8748c3eeade83e5af879515a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a9eead0_b9dc3b4d",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-29T06:57:17Z",
       "side": 1,
       "message": "as above",
+      "range": {
+        "startLine": 317,
+        "startChar": 10,
+        "endLine": 317,
+        "endChar": 33
+      },
+      "revId": "143a73ba95af73df8748c3eeade83e5af879515a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b6b181c_862189ce",
+        "filename": "kleaf/impl/kernel_config.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-29T08:40:25Z",
+      "side": 1,
+      "message": "ditto.",
+      "parentUuid": "1a9eead0_b9dc3b4d",
       "range": {
         "startLine": 317,
         "startChar": 10,
