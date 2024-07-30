@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3869979c_d97be675",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-30T17:48:03Z",
+      "side": 1,
+      "message": "We could also invent a new attribute instead of a flag (kernel_build.kconfig_kerror) so people can adopt it on a per-target basis.",
+      "revId": "143a73ba95af73df8748c3eeade83e5af879515a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ee46ac2_5adc741d",
         "filename": "kleaf/impl/kernel_config.bzl",
         "patchSetId": 1
@@ -134,6 +151,30 @@
       "side": 1,
       "message": "unresolving",
       "parentUuid": "c30e6ca6_c060774a",
+      "range": {
+        "startLine": 235,
+        "startChar": 17,
+        "endLine": 235,
+        "endChar": 40
+      },
+      "revId": "143a73ba95af73df8748c3eeade83e5af879515a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71422863_e83fcaec",
+        "filename": "kleaf/impl/kernel_config.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-30T17:48:03Z",
+      "side": 1,
+      "message": "If you put it on the right of `make`, I believe make will make it an environment variable when invoking the sub commands. So for consistency it should go on to the right of `make`, perhaps at TOOL_ARGS.\n\nkernel_env is an even better option -- makes people\u0027s build clean.",
+      "parentUuid": "df27cf3a_0479710d",
       "range": {
         "startLine": 235,
         "startChar": 17,
