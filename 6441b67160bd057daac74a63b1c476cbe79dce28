@@ -169,6 +169,24 @@
       "parentUuid": "6753f602_145f74e7",
       "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e500e0_d6d67d6e",
+        "filename": "kleaf/impl/kernel_module.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-30T18:07:54Z",
+      "side": 1,
+      "message": "\u003e I am not sure how to test other kleaf use-cases (DDK?), if any.\n\nPresubmit is sufficient. We build DDK modules for cuttlefish and do cf boot tests.",
+      "parentUuid": "c410d551_3001e2a6",
+      "revId": "6441b67160bd057daac74a63b1c476cbe79dce28",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
