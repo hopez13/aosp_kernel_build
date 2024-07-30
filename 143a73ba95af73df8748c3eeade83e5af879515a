@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c5bf921_6f34f479",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-30T17:51:02Z",
+      "side": 1,
+      "message": "just a nit though; adding a flag is also fine with me. It is also easier to deprecate once the migration is complete because people only need to change their build commands, not static files.",
+      "parentUuid": "3869979c_d97be675",
+      "revId": "143a73ba95af73df8748c3eeade83e5af879515a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ee46ac2_5adc741d",
         "filename": "kleaf/impl/kernel_config.bzl",
         "patchSetId": 1
