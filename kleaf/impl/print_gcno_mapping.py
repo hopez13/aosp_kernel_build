@@ -16,14 +16,16 @@
 
 import argparse
 import json
+import pathlib
 from typing import TextIO, Optional
 
 
-def main(base: Optional[TextIO], mappings: list[str]):
+def main(extra_srcs: list[pathlib.Path] | None, mappings: list[str]):
     mappings_dict = {}
-    if base:
-        for mapping in json.load(base):
-            mappings_dict[mapping["from"]] = mapping["to"]
+    for src in extra_srcs:
+        with src.open() as src_content:
+            for mapping in json.load(src_content):
+                mappings_dict[mapping["from"]] = mapping["to"]
 
     for mapping in mappings:
         from_val, to_val = mapping.split(":")
@@ -36,9 +38,11 @@ def main(base: Optional[TextIO], mappings: list[str]):
 
     print(json.dumps(result, sort_keys=True, indent=2))
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--base", type=argparse.FileType())
+    parser.add_argument("--extra_srcs", type=pathlib.Path,
+                        nargs="*", default=[])
     parser.add_argument("mappings", nargs="*", metavar="FROM:TO")
-    main(**vars(parser.parse_args()))
-
+    args = parser.parse_args()
+    main(args.extra_srcs, args.mappings)
