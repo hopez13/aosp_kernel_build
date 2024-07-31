@@ -62,8 +62,6 @@ def _get_single_file(ctx, target):
     return files_list[0]
 
 def _handle_tool(ctx, tool_name, actual_target):
-    label = ctx.label.same_package_label(ctx.attr.outer_target_name)
-
     out = ctx.actions.declare_file("{}/{}".format(ctx.attr.outer_target_name, tool_name))
     target_file = _get_single_file(ctx, actual_target)
 
@@ -72,10 +70,7 @@ def _handle_tool(ctx, tool_name, actual_target):
             output = out,
             target_file = target_file,
             is_executable = True,
-            progress_message = "Creating symlink to in-tree tool {}/{}".format(
-                label,
-                tool_name,
-            ),
+            progress_message = "Creating symlink to in-tree tool {} %{{label}}".format(tool_name),
         )
         return [out]
 
@@ -84,20 +79,14 @@ def _handle_tool(ctx, tool_name, actual_target):
         output = internal_symlink,
         target_file = target_file,
         is_executable = True,
-        progress_message = "Creating internal symlink to in-tree tool {}/{}".format(
-            label,
-            tool_name,
-        ),
+        progress_message = "Creating internal symlink to in-tree tool {} %{{label}}".format(tool_name),
     )
 
     ctx.actions.symlink(
         output = out,
         target_file = ctx.executable._arg_wrapper,
         is_executable = True,
-        progress_message = "Creating symlink to in-tree tool {}/{}".format(
-            label,
-            tool_name,
-        ),
+        progress_message = "Creating symlink to in-tree tool {} %{{label}}".format(tool_name),
     )
     extra_args = "\n".join(ctx.attr.extra_args[tool_name])
     extra_args_file = ctx.actions.declare_file("{}/kleaf_internal_do_not_use/{}_args.txt".format(ctx.attr.outer_target_name, tool_name))
