@@ -88,7 +88,7 @@ def _create_build_frag_for_src(ctx, src):
         executable = ctx.executable._gen_ddk_headers_archive_build_file,
         arguments = [args],
         mnemonic = "DdkHeadersArchiveSrcBuildFile",
-        progress_message = "Generating BUILD.bazel for {} {}".format(src.label.name, ctx.label),
+        progress_message = "Generating BUILD.bazel for {} %{{label}}".format(src.label.name),
     )
     return build_file
 
@@ -159,7 +159,7 @@ load("//build/kernel/kleaf:kernel.bzl", "ddk_headers")
             command = cmd,
             arguments = [args],
             mnemonic = "DdkHeadersArchiveBuildFile",
-            progress_message = "Generating BUILD.bazel fragment for {} {}".format(ctx.label, package),
+            progress_message = "Generating BUILD.bazel fragment for {} %{{label}}".format(package),
         )
 
         package_files[package] = struct(
@@ -212,7 +212,7 @@ def _create_archive(ctx, package_files):
         tools = hermetic_tools.deps,
         command = cmd,
         mnemonic = "DdkHeadersArchive",
-        progress_message = "Creating archive {}".format(ctx.label),
+        progress_message = "Creating archive %{label}",
     )
     return out
 

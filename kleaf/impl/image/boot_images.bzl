@@ -217,7 +217,7 @@ def _boot_images_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = ctx.outputs.outs,
         tools = depset(tools, transitive = transitive_tools),
-        progress_message = "Building boot images {}".format(ctx.label),
+        progress_message = "Building boot images %{label}",
         command = command,
     )
 

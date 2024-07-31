@@ -50,7 +50,7 @@ def _kmi_symbol_list_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = outputs,
         tools = depset(tools, transitive = transitive_tools),
-        progress_message = "Creating abi_symbollist and report {}".format(ctx.label),
+        progress_message = "Creating abi_symbollist and report %{label}",
         command = command,
     )
 

@@ -68,7 +68,7 @@ def _get_config_file(ctx, kernel_build, filename):
         command = command,
         tools = hermetic_tools.deps,
         mnemonic = "GetConfigFile",
-        progress_message = "Getting .config {}".format(ctx.label),
+        progress_message = "Getting .config %{label}",
     )
 
     return out
@@ -378,7 +378,7 @@ def _combined_test_expected_impl(ctx):
         outputs = [ctx.outputs.out],
         tools = hermetic_tools.deps,
         command = command,
-        progress_message = "Creating expected config for {}".format(ctx.label),
+        progress_message = "Creating expected config for %{label}",
     )
     return DefaultInfo(
         files = depset([ctx.outputs.out]),

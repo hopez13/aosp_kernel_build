@@ -134,7 +134,7 @@ def _kernel_kythe_impl(ctx):
         outputs = [all_kzip],
         tools = depset(tools, transitive = transitive_tools),
         command = command,
-        progress_message = "Building Kythe source code index (kzip) {}".format(ctx.label),
+        progress_message = "Building Kythe source code index (kzip) %{label}",
     )
 
     return DefaultInfo(files = depset([

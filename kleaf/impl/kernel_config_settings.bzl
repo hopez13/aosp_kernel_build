@@ -164,7 +164,7 @@ def _kernel_env_get_config_tags(ctx, mnemonic_prefix, defconfig_fragments):
         executable = ctx.executable._cache_dir_config_tags,
         arguments = [args],
         mnemonic = "{}CommonConfigTags".format(mnemonic_prefix),
-        progress_message = "Creating common_config_tags {}".format(ctx.label),
+        progress_message = "Creating common_config_tags %{label}",
     )
 
     # env: common + label of this kernel_env, prefixed with #
@@ -180,7 +180,7 @@ def _kernel_env_get_config_tags(ctx, mnemonic_prefix, defconfig_fragments):
         executable = ctx.executable._cache_dir_config_tags,
         arguments = [args],
         mnemonic = "{}ConfigTags".format(mnemonic_prefix),
-        progress_message = "Creating config_tags {}".format(ctx.label),
+        progress_message = "Creating config_tags %{label}",
     )
 
     return struct(

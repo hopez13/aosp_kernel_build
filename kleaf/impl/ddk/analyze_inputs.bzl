@@ -63,9 +63,8 @@ def _analyze_to_raw_paths(ctx):
         outputs = [raw_output],
         executable = ctx.executable._analyze_inputs,
         arguments = [args],
-        progress_message = "Analyzing inputs for {}: {}".format(
+        progress_message = "Analyzing inputs for {} %{{label}}".format(
             [target.label for target in ctx.attr.deps],
-            ctx.label,
         ),
     )
 

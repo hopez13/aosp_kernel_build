@@ -70,7 +70,7 @@ def _kernel_unstripped_modules_archive_impl(ctx):
         inputs = srcs,
         outputs = [out_file],
         tools = hermetic_tools.deps,
-        progress_message = "Compressing unstripped modules {}".format(ctx.label),
+        progress_message = "Compressing unstripped modules %{label}",
         command = command,
         mnemonic = "KernelUnstrippedModulesArchive",
     )

@@ -207,7 +207,7 @@ file a bug.""")
         inputs = depset(inputs, transitive = transitive_inputs),
         tools = tools,
         outputs = command_outputs,
-        progress_message = "Building {} {}".format(what, ctx.label),
+        progress_message = "Building {} %{{label}}".format(what),
         command = command,
     )
     return DefaultInfo(files = depset(outputs))

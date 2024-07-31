@@ -46,7 +46,7 @@ def _merge_kzip_impl(ctx):
         outputs = [all_kzip],
         tools = depset(transitive = transitive_tools),
         command = command,
-        progress_message = "Merging Kythe source code index (kzip) {}".format(ctx.label),
+        progress_message = "Merging Kythe source code index (kzip) %{label}",
     )
 
     return DefaultInfo(files = depset([all_kzip]))

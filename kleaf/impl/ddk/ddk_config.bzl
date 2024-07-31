@@ -204,7 +204,7 @@ def _create_main_action(
         outputs = [out_dir],
         command = command,
         mnemonic = "DdkConfig",
-        progress_message = "Creating DDK module configuration {}".format(ctx.label),
+        progress_message = "Creating DDK module configuration %{label}",
     )
 
 def _create_serialized_env_info(ctx, out_dir):

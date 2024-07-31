@@ -103,7 +103,7 @@ def _abi_dump_full_stg(ctx):
         tools = hermetic_tools.deps,
         command = command,
         mnemonic = "AbiDumpFullStg",
-        progress_message = "[stg] Extracting ABI {}".format(ctx.label),
+        progress_message = "[stg] Extracting ABI %{label}",
     )
     return full_abi_out_file
 
@@ -142,7 +142,7 @@ def _abi_dump_filtered_stg(ctx, full_abi_out_file):
         tools = hermetic_tools.deps,
         command = command,
         mnemonic = "AbiDumpFilteredStg",
-        progress_message = "[stg] Filtering ABI dump {}".format(ctx.label),
+        progress_message = "[stg] Filtering ABI dump %{label}",
     )
     return abi_out_file
 

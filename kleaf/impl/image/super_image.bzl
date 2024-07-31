@@ -67,7 +67,7 @@ def _super_image_impl(ctx):
         inputs = depset(inputs),
         outputs = outputs,
         tools = depset(tools, transitive = transitive_tools),
-        progress_message = "Building super image %s" % ctx.attr.name,
+        progress_message = "Building super image %{label}",
         command = command,
     )
 
@@ -98,7 +98,7 @@ def _unsparsed_image_impl(ctx):
         inputs = depset(inputs),
         outputs = outputs,
         tools = hermetic_tools.deps,
-        progress_message = "Building unsparsed image %s" % ctx.attr.name,
+        progress_message = "Building unsparsed image %{label}",
         command = command,
     )
 

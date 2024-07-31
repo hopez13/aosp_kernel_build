@@ -55,7 +55,7 @@ def _out_headers_allowlist_archive_impl(ctx):
         inputs = [ctx.attr.kernel_build[KernelBuildInfo].out_dir_kernel_headers_tar],
         outputs = [out_file],
         tools = hermetic_tools.deps,
-        progress_message = "Creating headers archive {}".format(ctx.label),
+        progress_message = "Creating headers archive %{label}",
         command = command,
     )
 

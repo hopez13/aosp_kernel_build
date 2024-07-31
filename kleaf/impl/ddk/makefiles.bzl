@@ -345,7 +345,7 @@ def _makefiles_impl(ctx):
         outputs = [output_makefiles],
         executable = ctx.executable._gen_makefile,
         arguments = [args],
-        progress_message = "Generating Makefile {}".format(ctx.label),
+        progress_message = "Generating Makefile %{label}",
     )
 
     outs_depset_direct = []

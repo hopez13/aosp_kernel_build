@@ -213,7 +213,7 @@ def _write_depset(ctx, d, out):
         arguments = [args],
         outputs = [out_file],
         mnemonic = "WriteDepset",
-        progress_message = "Dumping depset to {}: {}".format(out, ctx.label),
+        progress_message = "Dumping depset to {} %{{label}}".format(out),
     )
     return struct(
         depset_file = out_file,

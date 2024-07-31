@@ -609,7 +609,7 @@ def _kernel_module_impl(ctx):
             ),
             outputs = cp_cmd_outputs,
             command = command,
-            progress_message = "Copying outputs {}".format(ctx.label),
+            progress_message = "Copying outputs %{label}",
         )
 
     module_symvers_restore_path = paths.join(ext_mod, ctx.attr.internal_module_symvers_name)
