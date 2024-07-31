@@ -22,6 +22,30 @@
       },
       "revId": "64df5668038577eceebd62b357533b9b48fbe7f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c846fa9_0d9d5c35",
+        "filename": "kleaf/ndk.BUILD",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-31T19:49:33Z",
+      "side": 1,
+      "message": "No, this is intentional. The NDK triple looks like `aarch64-linux-android31`; level `31` is attached right after the partial triple `aarch64-linux-android`.\n\nThe filesystem structure is this:\n\n```\n.\n├── aarch64-linux-android\n│   ├── 31\n```\n\nThis target name is `sysroot_aarch64-linux-android31_files`, exactly what we wanted in CL:3195359",
+      "parentUuid": "5563f4d6_d73fdc3c",
+      "range": {
+        "startLine": 62,
+        "startChar": 22,
+        "endLine": 62,
+        "endChar": 23
+      },
+      "revId": "64df5668038577eceebd62b357533b9b48fbe7f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
