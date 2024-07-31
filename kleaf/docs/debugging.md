@@ -71,6 +71,22 @@ symbol list and symbol list violations checks (`--notrim`, `--debug`, `--gcov`,
 Incremental build issues refers to issues where actions are executed in an
 incremental build, but you do not expect them to be executed, or the reverse.
 
+You can use the native Bazel command line flag `--explain=<file>` and
+`--verbose_explanations` to understand why an action is re-executed in an
+incremental build. For example:
+
+```shell
+tools/bazel build --explain=/tmp/explain.txt --verbose_explanations \
+   //common-modules/virtual-device:x86_64/goldfish_drivers/goldfish_pipe
+```
+
+This produces text like below in `explain.txt`:
+
+```
+Executing action 'Creating build environment (lto=default;notrim) @@//common:kernel_x86_64_env': One of the files has changed.
+```
+
+To understand which input files to the action has changed, see below.
 For example, if you are debugging why
 `//common-modules/virtual-device:x86_64/goldfish_drivers/goldfish_pipe` is
 rebuilt after you change a core kernel file, you may execute the following:
@@ -92,8 +108,9 @@ $ build/kernel/kleaf/analysis/inputs.py -- "${FLAGS}" \
 # Change a core kernel file, e.g.
 $ echo >> common/kernel/sched/core.c
 
-# Build again
-$ tools/bazel build "${FLAGS}" //common-modules/virtual-device:x86_64/goldfish_drivers/goldfish_pipe
+# Build again with explanations
+$ tools/bazel build "${FLAGS}" --explain=/tmp/explain.txt --verbose_explanations \
+  //common-modules/virtual-device:x86_64/goldfish_drivers/goldfish_pipe
 
 # Record hashes of all input files to the action
 $ build/kernel/kleaf/analysis/inputs.py -- "${FLAGS}" \
