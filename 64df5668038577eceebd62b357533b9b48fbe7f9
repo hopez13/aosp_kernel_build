@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5563f4d6_d73fdc3c",
+        "filename": "kleaf/ndk.BUILD",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-07-31T09:45:33Z",
+      "side": 1,
+      "message": "should there be an underscore between these values?",
+      "range": {
+        "startLine": 62,
+        "startChar": 22,
+        "endLine": 62,
+        "endChar": 23
+      },
+      "revId": "64df5668038577eceebd62b357533b9b48fbe7f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
