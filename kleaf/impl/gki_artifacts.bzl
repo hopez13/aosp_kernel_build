@@ -130,7 +130,7 @@ def _gki_artifacts_impl(ctx):
         outputs = outs,
         tools = depset(tools, transitive = transitive_tools),
         mnemonic = "GkiArtifacts",
-        progress_message = "Building GKI artifacts {}".format(ctx.label),
+        progress_message = "Building GKI artifacts %{label}",
     )
 
     return [
@@ -236,7 +236,7 @@ def _gki_artifacts_prebuilts_impl(ctx):
             outputs = missing_outs.values(),
             tools = depset([ctx.executable._search_and_cp_output], transitive = [hermetic_tools.deps]),
             command = cmd,
-            progress_message = "Extracting prebuilt boot-img.tar.gz {}".format(ctx.label),
+            progress_message = "Extracting prebuilt boot-img.tar.gz %{label}",
             mnemonic = "GkiArtifactsPrebuiltsExtract",
         )
 

@@ -34,7 +34,7 @@ def _kernel_unarchived_uapi_headers_impl(ctx):
         inputs = [input_tar],
         outputs = [out_dir],
         tools = hermetic_tools.deps,
-        progress_message = "Unpacking UAPI headers {}".format(ctx.label),
+        progress_message = "Unpacking UAPI headers %{label}",
         command = command,
     )
 

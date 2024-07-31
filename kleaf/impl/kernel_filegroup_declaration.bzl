@@ -273,7 +273,7 @@ def _create_archive(ctx, info, deps_files, kernel_uapi_headers, filegroup_decl_f
         outputs = [filegroup_decl_archive],
         command = command,
         arguments = [args],
-        progress_message = "Creating archive of kernel_filegroup declaration {}".format(ctx.label),
+        progress_message = "Creating archive of kernel_filegroup declaration %{label}",
         mnemonic = "KernelfilegroupDeclaration",
     )
     return filegroup_decl_archive

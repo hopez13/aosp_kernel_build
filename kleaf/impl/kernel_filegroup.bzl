@@ -91,7 +91,7 @@ def _get_kernel_release(ctx):
         inputs = [gki_info],
         outputs = [kernel_release],
         tools = hermetic_tools.deps,
-        progress_message = "Extracting kernel.release {}".format(ctx.label),
+        progress_message = "Extracting kernel.release %{label}",
         mnemonic = "KernelFilegroupKernelRelease",
     )
     return kernel_release
@@ -354,7 +354,7 @@ def _kernel_filegroup_impl(ctx):
             ],
             outputs = [unstripped_dir],
             tools = hermetic_tools.deps,
-            progress_message = "Extracting unstripped_modules_archive {}".format(ctx.label),
+            progress_message = "Extracting unstripped_modules_archive %{label}",
             mnemonic = "KernelFilegroupUnstrippedModulesArchive",
         )
         unstripped_modules_info = KernelUnstrippedModulesInfo(

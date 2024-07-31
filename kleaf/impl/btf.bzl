@@ -48,7 +48,7 @@ def _btf_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = [out_file],
         tools = tools,
-        progress_message = "Building vmlinux.btf {}".format(ctx.label),
+        progress_message = "Building vmlinux.btf %{label}",
         command = command,
     )
     return DefaultInfo(files = depset([out_file]))

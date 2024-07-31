@@ -45,7 +45,7 @@ def _get_config_impl(ctx):
         command = command,
         tools = hermetic_tools.deps,
         mnemonic = "GetDdkConfigFile",
-        progress_message = "Getting .config {}".format(ctx.label),
+        progress_message = "Getting .config %{label}",
     )
 
     return DefaultInfo(files = depset([out]))

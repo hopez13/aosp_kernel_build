@@ -84,7 +84,7 @@ def _merged_kernel_uapi_headers_impl(ctx):
         inputs = inputs,
         outputs = [out_file],
         tools = hermetic_tools.deps,
-        progress_message = "Merging kernel-uapi-headers.tar.gz {}".format(ctx.label),
+        progress_message = "Merging kernel-uapi-headers.tar.gz %{label}",
         command = command,
         mnemonic = "MergedKernelUapiHeaders",
     )

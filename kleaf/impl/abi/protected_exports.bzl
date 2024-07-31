@@ -82,7 +82,7 @@ def _protected_exports_impl(ctx):
         outputs = [out],
         command = command,
         tools = depset(tools, transitive = transitive_tools),
-        progress_message = "Extracting protected exports {}".format(ctx.label),
+        progress_message = "Extracting protected exports %{label}",
         mnemonic = "KernelProtectedExports",
     )
 

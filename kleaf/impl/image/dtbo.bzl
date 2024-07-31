@@ -63,7 +63,7 @@ def _dtbo_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = [output],
         tools = tools,
-        progress_message = "Building dtbo {}".format(ctx.label),
+        progress_message = "Building dtbo %{label}",
         command = command,
     )
     return DefaultInfo(files = depset([output]))

@@ -96,7 +96,7 @@ def _dependency_graph_extractor_impl(ctx):
         outputs = [out],
         command = command,
         tools = depset(tools, transitive = transitive_tools),
-        progress_message = "Obtaining dependency graph {}".format(ctx.label),
+        progress_message = "Obtaining dependency graph %{label}",
         mnemonic = "KernelDependencyGraphExtractor",
     )
 
@@ -166,7 +166,7 @@ def _dependency_graph_drawer_impl(ctx):
         outputs = [out],
         command = command,
         tools = depset([ctx.executable._dependency_graph_drawer]),
-        progress_message = "Drawing a dependency graph {}".format(ctx.label),
+        progress_message = "Drawing a dependency graph %{label}",
         mnemonic = "KernelDependencyGraphDrawer",
     )
 

@@ -55,7 +55,7 @@ def _kernel_uapi_headers_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         tools = tools,
         outputs = [out_file],
-        progress_message = "Building UAPI kernel headers %s" % ctx.attr.name,
+        progress_message = "Building UAPI kernel headers %{label}",
         command = command,
     )
 

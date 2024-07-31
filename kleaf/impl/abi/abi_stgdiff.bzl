@@ -108,7 +108,7 @@ EOF
         tools = hermetic_tools.deps,
         command = command,
         mnemonic = "KernelDiffAbiStg",
-        progress_message = "[stg] Comparing Kernel ABI {}".format(ctx.label),
+        progress_message = "[stg] Comparing Kernel ABI %{label}",
     )
 
     script = ctx.actions.declare_file("{}/print_results.sh".format(ctx.attr.name))

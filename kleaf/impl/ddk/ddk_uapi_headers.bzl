@@ -72,7 +72,7 @@ def _ddk_uapi_headers_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         tools = tools,
         outputs = [out_file],
-        progress_message = "Building DDK UAPI headers %s" % ctx.attr.name,
+        progress_message = "Building DDK UAPI headers %{label}",
         command = command,
         arguments = [args],
     )

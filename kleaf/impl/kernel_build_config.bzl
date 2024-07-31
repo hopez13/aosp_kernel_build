@@ -36,7 +36,7 @@ def _kernel_build_config_impl(ctx):
         tools = hermetic_tools.deps,
         outputs = [out_file],
         command = command,
-        progress_message = "Generating build config {}".format(ctx.label),
+        progress_message = "Generating build config %{label}",
     )
 
     deps_depset = depset(transitive = [target.files for target in ctx.attr.deps])

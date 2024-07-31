@@ -204,7 +204,7 @@ def _kernel_modules_install_impl(ctx):
         tools = depset(tools, transitive = transitive_tools),
         outputs = external_modules + dws.files(modules_staging_dws) + outs,
         command = command,
-        progress_message = "Running depmod {}".format(ctx.label),
+        progress_message = "Running depmod %{label}",
     )
 
     # Only analyze headers on external modules.

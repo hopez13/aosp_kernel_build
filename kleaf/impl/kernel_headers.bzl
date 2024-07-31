@@ -60,7 +60,7 @@ def _kernel_headers_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = [out_file],
         tools = tools,
-        progress_message = "Building kernel headers %s" % ctx.attr.name,
+        progress_message = "Building kernel headers %{label}",
         command = command,
     )
 

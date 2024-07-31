@@ -37,7 +37,7 @@ def _kernel_sbom_impl(ctx):
         outputs = [output_file],
         executable = ctx.executable._kernel_sbom,
         arguments = [args],
-        progress_message = "Generating Kernel SBOM {}".format(ctx.label),
+        progress_message = "Generating Kernel SBOM %{label}",
     )
 
     return [

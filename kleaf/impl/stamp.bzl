@@ -104,7 +104,7 @@ def _write_localversion(ctx):
         outputs = [out_file],
         tools = tools,
         command = cmd,
-        progress_message = "Determining scmversion {}".format(ctx.label),
+        progress_message = "Determining scmversion %{label}",
         mnemonic = "KernelConfigScmversion",
     )
     return out_file
@@ -145,7 +145,7 @@ def _ext_mod_write_localversion(ctx, ext_mod):
         outputs = [localversion_file],
         tools = hermetic_tools.deps,
         command = cmd,
-        progress_message = "Determining scmversion for module {}".format(ctx.label),
+        progress_message = "Determining scmversion for module %{label}",
         mnemonic = "KernelModuleScmversion",
     )
 
