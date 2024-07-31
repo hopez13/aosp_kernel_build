@@ -1,0 +1,172 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd16ba10_87f52c30",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-31T19:37:44Z",
+      "side": 1,
+      "message": "Glad that you figure it out.\n\nnit: You can also change this to `--mappings`, and in `print_gcno_mapping` change the argument name to `--mappings`.",
+      "range": {
+        "startLine": 1242,
+        "startChar": 46,
+        "endLine": 1242,
+        "endChar": 48
+      },
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "065db252_26dea615",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-31T19:37:44Z",
+      "side": 1,
+      "message": "delete",
+      "range": {
+        "startLine": 20,
+        "startChar": 27,
+        "endLine": 20,
+        "endChar": 35
+      },
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "001a40dd_b62abc19",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-31T19:37:44Z",
+      "side": 1,
+      "message": "not needed since you set `default\u003d` already. And you did not handle the None case in L25 either (you shouldn\u0027t need to in this case, but a static analyzer will complain if you said it is None-able but you don\u0027t handle it before accessing it).",
+      "range": {
+        "startLine": 23,
+        "startChar": 40,
+        "endLine": 23,
+        "endChar": 46
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "d0929835_c31ca6ad",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/impl/print_gcno_mapping.py",
+              "range": {
+                "startLine": 23,
+                "startChar": 0,
+                "endLine": 24,
+                "endChar": 0
+              },
+              "replacement": "def main(extra_srcs: list[pathlib.Path], mappings: list[str]):\n"
+            }
+          ]
+        }
+      ],
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1ffb0bf_95a55542",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-31T19:37:44Z",
+      "side": 1,
+      "message": "I agree this is cleaner because you close the resources sooner when it is not needed.",
+      "range": {
+        "startLine": 44,
+        "startChar": 45,
+        "endLine": 44,
+        "endChar": 57
+      },
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce5d5c39_c6d83a8f",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-31T19:37:44Z",
+      "side": 1,
+      "message": "unrelated to this CL, but this needs `default\u003d[]`",
+      "fixSuggestions": [
+        {
+          "fixId": "aa207b2e_6292b903",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/impl/print_gcno_mapping.py",
+              "range": {
+                "startLine": 46,
+                "startChar": 0,
+                "endLine": 47,
+                "endChar": 0
+              },
+              "replacement": "    parser.add_argument(\"mappings\", nargs\u003d\"*\", metavar\u003d\"FROM:TO\", default\u003d[])\n"
+            }
+          ]
+        }
+      ],
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb9b2cd_d76dd319",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-07-31T19:37:44Z",
+      "side": 1,
+      "message": "just keep `main(**vars(parser.parse_args()))`?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 40
+      },
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
