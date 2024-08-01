@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "153111ce_876b8e5f",
+        "filename": "kleaf/impl/ddk/ddk_headers_archive.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-01T10:20:19Z",
+      "side": 1,
+      "message": "Just out of curiosity, when does it need the double brackets `{{`? I see it twice in this file and in others as well?\n\nnvm: I see now that it\u0027s when the string has extra anchors used by `.format(`",
+      "range": {
+        "startLine": 91,
+        "startChar": 58,
+        "endLine": 91,
+        "endChar": 61
+      },
+      "revId": "0c0ef276c2b761f13315c736b47c433a17dd6e20",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
