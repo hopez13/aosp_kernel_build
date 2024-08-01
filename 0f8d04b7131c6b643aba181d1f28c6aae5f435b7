@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a609f2f6_86203aee",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-01T19:24:48Z",
+      "side": 1,
+      "message": "If this function is not used in kernel_build, consider moving it out (gcov_utils.bzl). It looks like it is used by kernel_modules_install and kernel_module_group.\n\nPerhaps the same goes for _gcno_common_impl and even get_grab_gcno_step.",
+      "range": {
+        "startLine": 1294,
+        "startChar": 4,
+        "endLine": 1294,
+        "endChar": 23
+      },
+      "revId": "0f8d04b7131c6b643aba181d1f28c6aae5f435b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e12054d_635a0809",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-01T19:24:48Z",
+      "side": 1,
+      "message": "nit: Consider flipping the condition here `if not ctx.attr._gcov[BuildSettingInfo].value` so you have less indentation. (I know I didn\u0027t do it for the other functions 😞; I should have)",
+      "range": {
+        "startLine": 1310,
+        "startChar": 0,
+        "endLine": 1310,
+        "endChar": 46
+      },
+      "revId": "0f8d04b7131c6b643aba181d1f28c6aae5f435b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a4123f_8402426c",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-01T19:24:48Z",
+      "side": 1,
+      "message": "When will this be hit?",
+      "range": {
+        "startLine": 1313,
+        "startChar": 0,
+        "endLine": 1314,
+        "endChar": 24
+      },
+      "revId": "0f8d04b7131c6b643aba181d1f28c6aae5f435b7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
