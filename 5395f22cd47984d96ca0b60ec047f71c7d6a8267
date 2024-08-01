@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9ba9373_0b9ba32d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-01T19:27:07Z",
+      "side": 1,
+      "message": "General comment: Did you try subrule()\u0027s? It is the new way Bazel enforces inputs/outputs of common utility functions that takes ctx and a bunch of arguments. The ctx is stripped down so only certain things can be accessed.\n\nFeel free to do this as a follow up; the change is good as-is. Subrule() is an experimental API anyways.",
+      "revId": "5395f22cd47984d96ca0b60ec047f71c7d6a8267",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cc7100aa_cb0f2e77",
         "filename": "kleaf/impl/kernel_build.bzl",
         "patchSetId": 4
