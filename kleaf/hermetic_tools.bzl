@@ -51,19 +51,22 @@ Path to hermetic tools relative to execroot""",
     },
 )
 
-def _get_single_file(ctx, target):
+def _get_single_executable(ctx, target):
     label = ctx.label.same_package_label(ctx.attr.outer_target_name)
     files_list = target.files.to_list()
+    if target[DefaultInfo].files_to_run.executable:
+        return target[DefaultInfo].files_to_run.executable
     if len(files_list) != 1:
-        fail("{}: {} does not contain a single file".format(
+        fail("{}: {} does not contain a single file: {}".format(
             label,
             target.label,
+            files_list,
         ))
     return files_list[0]
 
 def _handle_tool(ctx, tool_name, actual_target):
     out = ctx.actions.declare_file("{}/{}".format(ctx.attr.outer_target_name, tool_name))
-    target_file = _get_single_file(ctx, actual_target)
+    target_file = _get_single_executable(ctx, actual_target)
 
     if tool_name not in ctx.attr.extra_args:
         ctx.actions.symlink(
@@ -112,6 +115,10 @@ def _hermetic_tools_internal_impl(ctx):
 
     transitive_deps += [target.files for target in ctx.attr.deps]
     transitive_deps.append(ctx.attr._arg_wrapper.files)
+
+    for actual_target in ctx.attr.symlinks:
+        if actual_target.default_runfiles:
+            transitive_deps.append(actual_target.default_runfiles.files)
 
     fail_hard = """
          # error on failures
