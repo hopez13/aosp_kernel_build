@@ -21,7 +21,6 @@ load(":kernel_platform_toolchain.bzl", "kernel_platform_toolchain")
 load(":kernel_toolchains.bzl", "kernel_toolchains")
 load(
     ":python.bzl",
-    "python_interpreter_file",
     "python_runtime_files",
 )
 
@@ -485,11 +484,6 @@ platform(
         "@platforms//os:android",
         "@platforms//cpu:x86_64",
     ],
-)
-
-python_interpreter_file(
-    name = "python_interpreter_file",
-    visibility = ["//build/kernel:__pkg__"],
 )
 
 python_runtime_files(
