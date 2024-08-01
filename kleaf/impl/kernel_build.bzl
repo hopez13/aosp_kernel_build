@@ -867,9 +867,8 @@ def _uniq(lst):
 
 def _progress_message_suffix(ctx):
     """Returns suffix for all progress messages for kernel_build."""
-    return "{}{}".format(
+    return "{} %{{label}}".format(
         ctx.attr.config[KernelEnvAttrInfo].progress_message_note,
-        ctx.label,
     )
 
 def _create_kbuild_mixed_tree(ctx):
@@ -905,7 +904,7 @@ def _create_kbuild_mixed_tree(ctx):
             inputs = depset(transitive = [base_kernel_files]),
             outputs = [kbuild_mixed_tree],
             tools = hermetic_tools.deps,
-            progress_message = "Creating KBUILD_MIXED_TREE {}".format(_progress_message_suffix(ctx)),
+            progress_message = "Creating KBUILD_MIXED_TREE{}".format(_progress_message_suffix(ctx)),
             command = kbuild_mixed_tree_command,
         )
 
@@ -1628,7 +1627,7 @@ def _build_main_action(
         inputs = depset(_uniq(inputs), transitive = transitive_inputs),
         outputs = command_outputs,
         tools = depset(_uniq(tools), transitive = transitive_tools),
-        progress_message = "Building kernel {}".format(_progress_message_suffix(ctx)),
+        progress_message = "Building kernel{}".format(_progress_message_suffix(ctx)),
         command = command,
         execution_requirements = kernel_utils.local_exec_requirements(ctx),
     )
@@ -2268,7 +2267,7 @@ def _kmi_symbol_list_strict_mode(ctx, all_output_files, all_module_names):
         tools = depset(tools, transitive = transitive_tools),
         outputs = [out],
         command = command,
-        progress_message = "Checking for kmi_symbol_list_strict_mode {}".format(_progress_message_suffix(ctx)),
+        progress_message = "Checking for kmi_symbol_list_strict_mode{}".format(_progress_message_suffix(ctx)),
     )
     return out
 
@@ -2347,7 +2346,7 @@ def _kmi_symbol_list_violations_check(ctx, modules_staging_archive):
         tools = depset(tools, transitive = transitive_tools),
         outputs = [out],
         command = command,
-        progress_message = "Checking for kmi_symbol_list_violations {}".format(_progress_message_suffix(ctx)),
+        progress_message = "Checking for kmi_symbol_list_violations{}".format(_progress_message_suffix(ctx)),
     )
 
     return out
@@ -2414,7 +2413,7 @@ def _repack_modules_staging_archive(
         ],
         outputs = [modules_staging_archive],
         tools = hermetic_tools.deps,
-        progress_message = "Repackaging modules_staging_archive {}".format(_progress_message_suffix(ctx)),
+        progress_message = "Repackaging modules_staging_archive{}".format(_progress_message_suffix(ctx)),
         command = cmd,
     )
     return modules_staging_archive
@@ -2465,6 +2464,6 @@ def _create_module_scripts_archive(
         tools = hermetic_tools.deps,
         command = cmd,
         arguments = [args],
-        progress_message = "Archiving scripts/kconfig for ext module {}".format(_progress_message_suffix(ctx)),
+        progress_message = "Archiving scripts/kconfig for ext module{}".format(_progress_message_suffix(ctx)),
     )
     return out

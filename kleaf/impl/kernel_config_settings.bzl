@@ -285,7 +285,7 @@ def _get_progress_message_note(ctx, defconfig_fragments):
     ret = sorted(sets.to_list(sets.make(ret)))
     ret = ";".join(ret)
     if ret:
-        ret = "({}) ".format(ret)
+        ret = " ({})".format(ret)
     return ret
 
 kernel_config_settings = struct(

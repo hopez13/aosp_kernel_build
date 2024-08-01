@@ -340,9 +340,8 @@ def _kernel_config_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = outputs,
         tools = depset(tools, transitive = transitive_tools),
-        progress_message = "Creating kernel config {}{}".format(
+        progress_message = "Creating kernel config{} %{{label}}".format(
             ctx.attr.env[KernelEnvAttrInfo].progress_message_note,
-            ctx.label,
         ),
         command = command,
         execution_requirements = kernel_utils.local_exec_requirements(ctx),
