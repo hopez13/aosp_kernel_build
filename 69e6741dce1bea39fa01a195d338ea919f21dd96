@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "694c5389_cdf22c46",
+        "filename": "build_utils.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-01T01:04:04Z",
+      "side": 1,
+      "message": "do we need that here too?",
+      "range": {
+        "startLine": 882,
+        "startChar": 40,
+        "endLine": 882,
+        "endChar": 41
+      },
+      "revId": "69e6741dce1bea39fa01a195d338ea919f21dd96",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
