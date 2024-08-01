@@ -252,7 +252,7 @@ hermetic_tools(
         ]),
 
         # Python
-        "//build/kernel/kleaf/impl:python_interpreter_file": ":".join([
+        "//build/kernel/kleaf/impl:python_runtime_files": ":".join([
             # keep sorted
             "python",
             "python3",
@@ -263,7 +263,6 @@ hermetic_tools(
     },
     visibility = ["//visibility:public"],
     deps = [
-        "//build/kernel/kleaf/impl:python_runtime_files",
         "//prebuilts/build-tools:linux-x86",
         "//prebuilts/kernel-build-tools:linux-x86",
     ],
