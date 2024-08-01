@@ -41,7 +41,7 @@ alias(
     name = "toybox",
     actual = select({
         "//build/kernel/kleaf:toolchain_from_sources_is_true": "@toybox",
-        "//conditions:default": "//prebuilts/build-tools:linux-x86/bin/toybox",
+        "//conditions:default": "//prebuilts/build-tools:toybox",
     }),
     visibility = ["//visibility:private"],
 )
@@ -56,7 +56,7 @@ alias(
 
 bison_wrapper(
     name = "bison",
-    actual = "//prebuilts/build-tools:linux-x86/bin/bison",
+    actual = "//prebuilts/build-tools:bison",
     pkgdata_dir = "//prebuilts/build-tools:bison.runfiles_dir",
     pkgdata_files = "//prebuilts/build-tools:bison.runfiles",
     visibility = ["//visibility:private"],
@@ -65,13 +65,15 @@ bison_wrapper(
 _HERMETIC_TOOLS = [
     # keep sorted
     ":bison",
-    "//prebuilts/build-tools:linux-x86/bin/flex",
-    "//prebuilts/build-tools:linux-x86/bin/m4",
-    "//prebuilts/build-tools:linux-x86/bin/make",
-    "//prebuilts/build-tools:linux-x86/bin/openssl",
-    "//prebuilts/build-tools:linux-x86/bin/runextractor",
-    "//prebuilts/build-tools:path/linux-x86/awk",
-    "//prebuilts/build-tools:path/linux-x86/bc",
+    "//prebuilts/build-tools:bzip2",
+    "//prebuilts/build-tools:flex",
+    "//prebuilts/build-tools:m4",
+    "//prebuilts/build-tools:make",
+    "//prebuilts/build-tools:openssl",
+    "//prebuilts/build-tools:runextractor",
+    "//prebuilts/build-tools:xz",
+    "//prebuilts/build-tools:awk",
+    "//prebuilts/build-tools:bc",
     "//prebuilts/kernel-build-tools:linux-x86/bin/avbtool",
     "//prebuilts/kernel-build-tools:linux-x86/bin/blk_alloc_to_base_fs",
     "//prebuilts/kernel-build-tools:linux-x86/bin/build_image",
@@ -235,17 +237,17 @@ hermetic_tools(
             "depmod",
             "modinfo",
         ]),
-        "//prebuilts/build-tools:linux-x86/bin/bzip2": ":".join([
+        "//prebuilts/build-tools:bzip2": ":".join([
             # keep sorted
             "bzcat",
             "bzip2",
         ]),
-        "//prebuilts/build-tools:linux-x86/bin/xz": ":".join([
+        "//prebuilts/build-tools:xz": ":".join([
             # keep sorted
             "xz",
             "xzcat",
         ]),
-        "//prebuilts/build-tools:linux-x86/bin/ziptool": ":".join([
+        "//prebuilts/build-tools:ziptool": ":".join([
             # keep sorted
             "unzip",
             "zipinfo",
