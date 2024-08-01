@@ -17,6 +17,7 @@
 load(
     ":common_providers.bzl",
     "CompileCommandsInfo",
+    "GcovInfo",
     "KernelCmdsInfo",
     "KernelModuleInfo",
     "KernelModuleSetupInfo",
@@ -24,14 +25,31 @@ load(
     "ModuleSymversInfo",
 )
 load(":ddk/ddk_headers.bzl", "DdkHeadersInfo", "ddk_headers_common_impl")
+load(":kernel_build.bzl", "get_merge_gcno_step")
 load(":utils.bzl", "kernel_utils")
 
 visibility("//build/kernel/kleaf/...")
 
 def _kernel_module_group_impl(ctx):
     targets = ctx.attr.srcs
+    merge_gcno_step = get_merge_gcno_step(ctx, targets)
+
+    # As of Aug 2024, this is only needed to merge --gcov outputs.
+    # It can be generalized if needed later.
+    ctx.actions.run_shell(
+        mnemonic = "KernelModuleGroupOutputs",
+        inputs = merge_gcno_step.inputs,
+        tools = merge_gcno_step.tools,
+        outputs = merge_gcno_step.outputs,
+        command = merge_gcno_step.cmd,
+        progress_message = "Copying outputs %{label}",
+    )
+    gcov_info = GcovInfo(
+        gcno_mapping = merge_gcno_step.gcno_mapping,
+        gcno_dir = merge_gcno_step.gcno_dir,
+    )
     default_info = DefaultInfo(
-        files = depset(transitive = [target.files for target in targets]),
+        files = depset(merge_gcno_step.outputs, transitive = [target.files for target in targets]),
         runfiles = ctx.runfiles().merge_all([target[DefaultInfo].default_runfiles for target in targets]),
     )
 
@@ -112,6 +130,7 @@ def _kernel_module_group_impl(ctx):
         ddk_headers_info,
         cmds_info,
         compile_commands_info,
+        gcov_info,
     ]
 
 kernel_module_group = rule(
@@ -159,14 +178,21 @@ kernel_modules_install(
             doc = "List of [`kernel_module`](#kernel_module)s or [`ddk_module`](#ddk_module)s.",
             mandatory = True,
             providers = [
+                DdkHeadersInfo,
                 DefaultInfo,
+                GcovInfo,
                 KernelModuleSetupInfo,
                 KernelModuleInfo,
                 KernelUnstrippedModulesInfo,
                 ModuleSymversInfo,
-                DdkHeadersInfo,
                 KernelCmdsInfo,
             ],
+        ),
+        "_gcov": attr.label(default = "//build/kernel/kleaf:gcov"),
+        "_print_gcno_mapping": attr.label(
+            default = Label("//build/kernel/kleaf/impl:print_gcno_mapping"),
+            cfg = "exec",
+            executable = True,
         ),
     },
 )

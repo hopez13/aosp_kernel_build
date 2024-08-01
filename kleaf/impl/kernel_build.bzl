@@ -1291,6 +1291,43 @@ def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
 
     return _gcno_common_impl(ctx, file_mappings_cmd, rsync_cmd, mappings_cmd, inputs, gcno_dir)
 
+def get_merge_gcno_step(ctx, targets):
+    """Returns a step for merging `*.gcno`directories and their mappings.
+
+    Args:
+        ctx: Context from the rule.
+        targets: The input labels from where to get the directories and mappings.
+
+    Returns:
+      A struct with fields (inputs, tools, outputs, cmd, gcno_mapping, gcno_dir)
+    """
+    file_mappings_cmd = ""
+    gcno_dir = None
+    inputs = []
+    mappings_cmd = ""
+    rsync_cmd = ""
+
+    if ctx.attr._gcov[BuildSettingInfo].value:
+        gcno_dir = ctx.actions.declare_directory("{name}/{name}_gcno".format(name = ctx.label.name))
+        for target in targets:
+            if GcovInfo not in target:
+                continue
+            if target[GcovInfo].gcno_mapping:
+                inputs.append(target[GcovInfo].gcno_mapping)
+                if not file_mappings_cmd:
+                    file_mappings_cmd += "--file_mappings"
+                file_mappings_cmd += " {}".format(target[GcovInfo].gcno_mapping.path)
+            if target[GcovInfo].gcno_dir:
+                inputs.append(target[GcovInfo].gcno_dir)
+                rsync_cmd += """
+                    # Copy all *.gcno files and its subdirectories recursively.
+                    rsync -a -L --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {target_gcno_dir}/ {gcno_dir}/
+                """.format(
+                    target_gcno_dir = target[GcovInfo].gcno_dir.path,
+                    gcno_dir = gcno_dir.path,
+                )
+    return _gcno_common_impl(ctx, file_mappings_cmd, rsync_cmd, mappings_cmd, inputs, gcno_dir)
+
 def _get_grab_kbuild_output_step(ctx):
     """Returns a step for grabbing the `*`files from `OUT_DIR`.
 
