@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0601d82a_2a9ef327",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-01T11:02:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd16ba10_87f52c30",
+      "range": {
+        "startLine": 1242,
+        "startChar": 46,
+        "endLine": 1242,
+        "endChar": 48
+      },
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "065db252_26dea615",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-31T19:37:44Z",
       "side": 1,
       "message": "delete",
+      "range": {
+        "startLine": 20,
+        "startChar": 27,
+        "endLine": 20,
+        "endChar": 35
+      },
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee00252e_f614e168",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-01T11:02:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "065db252_26dea615",
       "range": {
         "startLine": 20,
         "startChar": 27,
@@ -84,6 +132,30 @@
           ]
         }
       ],
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4032991a_77833b4a",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-01T11:02:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "001a40dd_b62abc19",
+      "range": {
+        "startLine": 23,
+        "startChar": 40,
+        "endLine": 23,
+        "endChar": 46
+      },
       "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -146,6 +218,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e68c566_a0410ab5",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-01T11:02:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce5d5c39_c6d83a8f",
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2eb9b2cd_d76dd319",
@@ -159,6 +249,30 @@
       "writtenOn": "2024-07-31T19:37:44Z",
       "side": 1,
       "message": "just keep `main(**vars(parser.parse_args()))`?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 40
+      },
+      "revId": "9b8e7ed6054fb72ade35a7b53b929c7953f9932e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3daa6403_4705754d",
+        "filename": "kleaf/impl/print_gcno_mapping.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-01T11:02:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2eb9b2cd_d76dd319",
       "range": {
         "startLine": 47,
         "startChar": 0,
