@@ -19,6 +19,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//build/kernel/kleaf:directory_with_structure.bzl", dws = "directory_with_structure")
 load(
     ":common_providers.bzl",
+    "GcovInfo",
     "KernelBuildExtModuleInfo",
     "KernelBuildInfo",
     "KernelCmdsInfo",
@@ -27,6 +28,7 @@ load(
     "KernelSerializedEnvInfo",
 )
 load(":debug.bzl", "debug")
+load(":gcov_utils.bzl", "gcov_attrs", "get_merge_gcno_step")
 load(
     ":utils.bzl",
     "kernel_utils",
@@ -197,6 +199,13 @@ def _kernel_modules_install_impl(ctx):
 
     command += dws.record(modules_staging_dws)
 
+    # --gcov related step
+    merge_gcno_step = get_merge_gcno_step(ctx, ctx.attr.kernel_modules)
+    inputs += merge_gcno_step.inputs
+    outs += merge_gcno_step.outputs
+    tools += merge_gcno_step.tools
+    command += merge_gcno_step.cmd
+
     debug.print_scripts(ctx, command)
     ctx.actions.run_shell(
         mnemonic = "KernelModulesInstall",
@@ -231,6 +240,10 @@ def _kernel_modules_install_impl(ctx):
                 target[KernelModuleInfo].modules_order
                 for target in ctx.attr.kernel_modules
             ], order = "postorder"),
+        ),
+        GcovInfo(
+            gcno_mapping = merge_gcno_step.gcno_mapping,
+            gcno_dir = merge_gcno_step.gcno_dir,
         ),
         cmds_info,
     ]
@@ -269,7 +282,7 @@ In `foo_dist`, specifying `foo_modules_install` in `data` won't include
 """,
     attrs = {
         "kernel_modules": attr.label_list(
-            providers = [KernelModuleInfo],
+            providers = [KernelModuleInfo, GcovInfo],
             doc = "A list of labels referring to `kernel_module`s to install.",
         ),
         "kernel_build": attr.label(
@@ -319,5 +332,5 @@ kernel_modules_install(
 ```
 """.format(repr(_OUT_ALLOWLIST)),
         ),
-    },
+    } | gcov_attrs(),
 )
