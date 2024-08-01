@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72dae56d_f3e46af2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-01T19:20:53Z",
+      "side": 1,
+      "message": "See my comment in CL:3204191: Consider moving the two functions out into gcov_utils.bzl. This is so that kernel_build/kernel_module/kernel_module_group/kernel_modules_install use utilities from this extension./",
+      "revId": "5395f22cd47984d96ca0b60ec047f71c7d6a8267",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cc7100aa_cb0f2e77",
         "filename": "kleaf/impl/kernel_build.bzl",
         "patchSetId": 4
