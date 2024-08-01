@@ -43,7 +43,6 @@ bzl_library(
     srcs = [
         "//build/bazel_common_rules/dist",
         "//build/bazel_common_rules/exec",
-        "//build/bazel_common_rules/workspace",
         "//build/kernel/kleaf/artifact_tests",
         "//build/kernel/kleaf/impl",
         "//prebuilts/clang/host/linux-x86/kleaf:clang_toolchain_repository",
