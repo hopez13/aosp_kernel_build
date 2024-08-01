@@ -291,7 +291,7 @@ def _kernel_env_impl(ctx):
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = [out_file],
         tools = depset(tools, transitive = transitive_tools),
-        progress_message = "Creating build environment {}{}".format(progress_message_note, ctx.label),
+        progress_message = "Creating build environment{} %{{label}}".format(progress_message_note),
         command = command,
     )
 

@@ -565,7 +565,7 @@ def _kernel_module_impl(ctx):
         tools = depset(tools, transitive = transitive_tools),
         outputs = command_outputs,
         command = command,
-        progress_message = "Building external kernel module {}{}".format(
+        progress_message = "Building external kernel module{} %{{label}}".format(
             ctx.attr.kernel_build[KernelEnvAttrInfo].progress_message_note,
             ctx.label,
         ),
