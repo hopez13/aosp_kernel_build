@@ -72,17 +72,6 @@ _HERMETIC_TOOLS = [
     "//prebuilts/build-tools:linux-x86/bin/runextractor",
     "//prebuilts/build-tools:path/linux-x86/awk",
     "//prebuilts/build-tools:path/linux-x86/bc",
-    "//prebuilts/build-tools:path/linux-x86/bzcat",
-    "//prebuilts/build-tools:path/linux-x86/bzip2",
-    "//prebuilts/build-tools:path/linux-x86/od",
-    "//prebuilts/build-tools:path/linux-x86/paste",
-    "//prebuilts/build-tools:path/linux-x86/pgrep",
-    "//prebuilts/build-tools:path/linux-x86/pkill",
-    "//prebuilts/build-tools:path/linux-x86/ps",
-    "//prebuilts/build-tools:path/linux-x86/pwd",
-    "//prebuilts/build-tools:path/linux-x86/xz",
-    "//prebuilts/build-tools:path/linux-x86/xzcat",
-    "//prebuilts/build-tools:path/linux-x86/zipinfo",
     "//prebuilts/kernel-build-tools:linux-x86/bin/avbtool",
     "//prebuilts/kernel-build-tools:linux-x86/bin/blk_alloc_to_base_fs",
     "//prebuilts/kernel-build-tools:linux-x86/bin/build_image",
@@ -148,6 +137,12 @@ _TOYS = [
     "mount",
     "mv",
     "nproc",
+    "od",
+    "paste",
+    "pgrep",
+    "pkill",
+    "ps",
+    "pwd",
     "readlink",
     "realpath",
     "rm",
@@ -240,7 +235,21 @@ hermetic_tools(
             "depmod",
             "modinfo",
         ]),
-        "//prebuilts/build-tools:linux-x86/bin/ziptool": "unzip",
+        "//prebuilts/build-tools:linux-x86/bin/bzip2": ":".join([
+            # keep sorted
+            "bzcat",
+            "bzip2",
+        ]),
+        "//prebuilts/build-tools:linux-x86/bin/xz": ":".join([
+            # keep sorted
+            "xz",
+            "xzcat",
+        ]),
+        "//prebuilts/build-tools:linux-x86/bin/ziptool": ":".join([
+            # keep sorted
+            "unzip",
+            "zipinfo",
+        ]),
 
         # Python
         "//build/kernel/kleaf/impl:python_interpreter_file": ":".join([
