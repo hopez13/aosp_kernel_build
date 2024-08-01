@@ -1190,6 +1190,59 @@ def _get_grab_symtypes_step(ctx):
         outputs = outputs,
     )
 
+def _gcno_common_impl(ctx, file_mappings, rsync_cmd, mappings, extra_inputs, gcno_dir):
+    """Returns a step for grabbing the `*.gcno`files from `src_dir`.
+
+    Args:
+        ctx: Context from the rule.
+        file_mappings: Additional file mappings, separated by spaces.
+        rsync_cmd: All directories rsync commands.
+        mappings: SRC:DEST mappings, separated by spaces.
+        extra_inputs: inputs.
+        gcno_dir: Target destination.
+
+    Returns:
+      A struct with fields (inputs, tools, outputs, cmd, gcno_mapping, gcno_dir)
+    """
+    grab_gcno_cmd = ""
+    inputs = extra_inputs
+    outputs = []
+    tools = []
+    gcno_mapping = None
+    if ctx.attr._gcov[BuildSettingInfo].value:
+        gcno_mapping = ctx.actions.declare_file("{name}/gcno_mapping.{name}.json".format(name = ctx.label.name))
+        gcno_archive = ctx.actions.declare_file(
+            "{name}/{name}.gcno.tar.gz".format(name = ctx.label.name),
+        )
+        outputs += [gcno_dir, gcno_mapping, gcno_archive]
+        tools.append(ctx.executable._print_gcno_mapping)
+
+        grab_gcno_cmd = """
+            # Sync directories.
+            {rsync_cmd}
+            # Merge mappings.
+            {print_gcno_mapping} --file_mappings {file_mappings} --mappings {mappings} > {gcno_mapping}
+            # Archive gcno_dir + gcno_mapping + base_kernel_gcno_dir
+            cp {gcno_mapping} {gcno_dir}
+            tar czf {gcno_archive} -C {gcno_dir} .
+        """.format(
+            rsync_cmd = rsync_cmd,
+            gcno_dir = gcno_dir.path,
+            gcno_mapping = gcno_mapping.path,
+            print_gcno_mapping = ctx.executable._print_gcno_mapping.path,
+            file_mappings = file_mappings,
+            mappings = mappings,
+            gcno_archive = gcno_archive.path,
+        )
+    return struct(
+        inputs = inputs,
+        tools = tools,
+        cmd = grab_gcno_cmd,
+        outputs = outputs,
+        gcno_mapping = gcno_mapping,
+        gcno_dir = gcno_dir,
+    )
+
 def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
     """Returns a step for grabbing the `*.gcno`files from `src_dir`.
 
@@ -1201,32 +1254,23 @@ def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
     Returns:
       A struct with fields (inputs, tools, outputs, cmd, gcno_mapping, gcno_dir)
     """
-    grab_gcno_cmd = ""
-    inputs = []
-    outputs = []
-    tools = []
-    gcno_mapping = None
+    file_mappings = ""
     gcno_dir = None
+    inputs = []
+    mappings = ""
+    rsync_cmd = ""
+
     if ctx.attr._gcov[BuildSettingInfo].value:
         gcno_dir = ctx.actions.declare_directory("{name}/{name}_gcno".format(name = ctx.label.name))
-        gcno_mapping = ctx.actions.declare_file("{name}/gcno_mapping.{name}.json".format(name = ctx.label.name))
-        gcno_archive = ctx.actions.declare_file(
-            "{name}/{name}.gcno.tar.gz".format(name = ctx.label.name),
-        )
-        outputs += [gcno_dir, gcno_mapping, gcno_archive]
-        tools.append(ctx.executable._print_gcno_mapping)
-
-        extra_args = ""
         base_kernel = ""
         if is_kernel_build == True:
             base_kernel = base_kernel_utils.get_base_kernel(ctx)
-        base_kernel_gcno_dir_cmd = ""
         if base_kernel and base_kernel[GcovInfo].gcno_mapping:
-            extra_args = "--file_mappings {}".format(base_kernel[GcovInfo].gcno_mapping.path)
+            file_mappings = base_kernel[GcovInfo].gcno_mapping.path
             inputs.append(base_kernel[GcovInfo].gcno_mapping)
             if base_kernel[GcovInfo].gcno_dir:
                 inputs.append(base_kernel[GcovInfo].gcno_dir)
-                base_kernel_gcno_dir_cmd = """
+                rsync_cmd += """
                     # Copy all *.gcno files and its subdirectories recursively.
                     rsync -a -L --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {base_gcno_dir}/ {gcno_dir}/
                 """.format(
@@ -1237,30 +1281,15 @@ def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
         # Note: Emitting `src_dir` is one source of ir-reproducible output for sandbox actions.
         # However, note that these ir-reproducibility are tied to vmlinux, because these paths are already
         # embedded in vmlinux. This file just makes such ir-reproducibility more explicit.
-        grab_gcno_cmd = """
-            rsync -a --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {src_dir}/ {gcno_dir}/
-            {print_gcno_mapping} {extra_args} --mappings {src_dir}:{gcno_dir} > {gcno_mapping}
-            # Archive gcno_dir + gcno_mapping + base_kernel_gcno_dir
-            {base_kernel_gcno_cmd}
-            cp {gcno_mapping} {gcno_dir}
-            tar czf {gcno_archive} -C {gcno_dir} .
+        rsync_cmd += """
+            rsync -a -L --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {src_dir}/ {gcno_dir}/
         """.format(
             src_dir = src_dir,
             gcno_dir = gcno_dir.path,
-            gcno_mapping = gcno_mapping.path,
-            print_gcno_mapping = ctx.executable._print_gcno_mapping.path,
-            extra_args = extra_args,
-            gcno_archive = gcno_archive.path,
-            base_kernel_gcno_cmd = base_kernel_gcno_dir_cmd,
         )
-    return struct(
-        inputs = inputs,
-        tools = tools,
-        cmd = grab_gcno_cmd,
-        outputs = outputs,
-        gcno_mapping = gcno_mapping,
-        gcno_dir = gcno_dir,
-    )
+        mappings = "{src_dir}:{gcno_dir}".format(src_dir = src_dir, gcno_dir = gcno_dir.path)
+
+    return _gcno_common_impl(ctx, file_mappings, rsync_cmd, mappings, inputs, gcno_dir)
 
 def _get_grab_kbuild_output_step(ctx):
     """Returns a step for grabbing the `*`files from `OUT_DIR`.
