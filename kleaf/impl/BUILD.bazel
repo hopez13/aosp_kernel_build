@@ -66,6 +66,7 @@ bzl_library(
         "declare_toolchain_constants.bzl",
         "file.bzl",
         "file_selector.bzl",
+        "gcov_utils.bzl",
         "gki_artifacts.bzl",
         "image/boot_images.bzl",
         "image/dtbo.bzl",

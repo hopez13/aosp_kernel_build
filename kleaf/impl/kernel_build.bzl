@@ -59,6 +59,7 @@ load(
 load(":debug.bzl", "debug")
 load(":file.bzl", "file")
 load(":file_selector.bzl", "file_selector")
+load(":gcov_utils.bzl", "gcov_attrs", "get_grab_gcno_step")
 load(":hermetic_toolchain.bzl", "hermetic_toolchain")
 load(":kernel_config.bzl", "kernel_config")
 load(":kernel_config_settings.bzl", "kernel_config_settings")
@@ -1188,78 +1189,6 @@ def _get_grab_symtypes_step(ctx):
         outputs = outputs,
     )
 
-def get_grab_gcno_step(ctx, src_dir, is_kernel_build):
-    """Returns a step for grabbing the `*.gcno`files from `src_dir`.
-
-    Args:
-        ctx: Context from the rule.
-        src_dir: Source directory.
-        is_kernel_build: The flag to indicate whether the rule is `kernel_build`.
-
-    Returns:
-      A struct with fields (inputs, tools, outputs, cmd, gcno_mapping, gcno_dir)
-    """
-    grab_gcno_cmd = ""
-    inputs = []
-    outputs = []
-    tools = []
-    gcno_mapping = None
-    gcno_dir = None
-    if ctx.attr._gcov[BuildSettingInfo].value:
-        gcno_dir = ctx.actions.declare_directory("{name}/{name}_gcno".format(name = ctx.label.name))
-        gcno_mapping = ctx.actions.declare_file("{name}/gcno_mapping.{name}.json".format(name = ctx.label.name))
-        gcno_archive = ctx.actions.declare_file(
-            "{name}/{name}.gcno.tar.gz".format(name = ctx.label.name),
-        )
-        outputs += [gcno_dir, gcno_mapping, gcno_archive]
-        tools.append(ctx.executable._print_gcno_mapping)
-
-        extra_args = ""
-        base_kernel = ""
-        if is_kernel_build == True:
-            base_kernel = base_kernel_utils.get_base_kernel(ctx)
-        base_kernel_gcno_dir_cmd = ""
-        if base_kernel and base_kernel[GcovInfo].gcno_mapping:
-            extra_args = "--file_mappings {}".format(base_kernel[GcovInfo].gcno_mapping.path)
-            inputs.append(base_kernel[GcovInfo].gcno_mapping)
-            if base_kernel[GcovInfo].gcno_dir:
-                inputs.append(base_kernel[GcovInfo].gcno_dir)
-                base_kernel_gcno_dir_cmd = """
-                    # Copy all *.gcno files and its subdirectories recursively.
-                    rsync -a -L --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {base_gcno_dir}/ {gcno_dir}/
-                """.format(
-                    base_gcno_dir = base_kernel[GcovInfo].gcno_dir.path,
-                    gcno_dir = gcno_dir.path,
-                )
-
-        # Note: Emitting `src_dir` is one source of ir-reproducible output for sandbox actions.
-        # However, note that these ir-reproducibility are tied to vmlinux, because these paths are already
-        # embedded in vmlinux. This file just makes such ir-reproducibility more explicit.
-        grab_gcno_cmd = """
-            rsync -a --prune-empty-dirs --include '*/' --include '*.gcno' --exclude '*' {src_dir}/ {gcno_dir}/
-            {print_gcno_mapping} {extra_args} --mappings {src_dir}:{gcno_dir} > {gcno_mapping}
-            # Archive gcno_dir + gcno_mapping + base_kernel_gcno_dir
-            {base_kernel_gcno_cmd}
-            cp {gcno_mapping} {gcno_dir}
-            tar czf {gcno_archive} -C {gcno_dir} .
-        """.format(
-            src_dir = src_dir,
-            gcno_dir = gcno_dir.path,
-            gcno_mapping = gcno_mapping.path,
-            print_gcno_mapping = ctx.executable._print_gcno_mapping.path,
-            extra_args = extra_args,
-            gcno_archive = gcno_archive.path,
-            base_kernel_gcno_cmd = base_kernel_gcno_dir_cmd,
-        )
-    return struct(
-        inputs = inputs,
-        tools = tools,
-        cmd = grab_gcno_cmd,
-        outputs = outputs,
-        gcno_mapping = gcno_mapping,
-        gcno_dir = gcno_dir,
-    )
-
 def _get_grab_kbuild_output_step(ctx):
     """Returns a step for grabbing the `*`files from `OUT_DIR`.
 
@@ -2103,11 +2032,6 @@ _kernel_build = rule(
             executable = True,
             doc = "label referring to the script to process outputs",
         ),
-        "_print_gcno_mapping": attr.label(
-            default = Label("//build/kernel/kleaf/impl:print_gcno_mapping"),
-            cfg = "exec",
-            executable = True,
-        ),
         "deps": attr.label_list(
             allow_files = True,
         ),
@@ -2138,7 +2062,6 @@ _kernel_build = rule(
         "_warn_undeclared_modules": attr.label(default = "//build/kernel/kleaf:warn_undeclared_modules"),
         "_preserve_cmd": attr.label(default = "//build/kernel/kleaf/impl:preserve_cmd"),
         "_kmi_symbol_list_violations_check": attr.label(default = "//build/kernel/kleaf:kmi_symbol_list_violations_check"),
-        "_gcov": attr.label(default = "//build/kernel/kleaf:gcov"),
         # Though these rules are unrelated to the `_kernel_build` rule, they are added as fake
         # dependencies so KernelBuildExtModuleInfo and KernelBuildUapiInfo works.
         # There are no real dependencies. Bazel does not build these targets before building the
@@ -2165,7 +2088,7 @@ _kernel_build = rule(
             allow_files = True,
         ),
         "arch": attr.string(),
-    } | _kernel_build_additional_attrs(),
+    } | _kernel_build_additional_attrs() | gcov_attrs(),
     toolchains = [hermetic_toolchain.type],
 )
 
