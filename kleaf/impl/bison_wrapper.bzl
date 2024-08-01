@@ -29,9 +29,11 @@ def _bison_wrapper_impl(ctx):
 if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ]; then
     # When bazel run, I am at short_path
     KLEAF_REPO_DIR=${{0%/*}}/{short_root_from_base}
+    ACTUAL=${{KLEAF_REPO_DIR}}/{actual_short_path}
 else
     # When bazel build, I am at path
     KLEAF_REPO_DIR=${{0%/*}}/{root_from_base}
+    ACTUAL=${{KLEAF_REPO_DIR}}/{actual}
 fi
 
 export BISON_PKGDATADIR=${{KLEAF_REPO_DIR}}/{pkgdata_dir}
@@ -47,10 +49,11 @@ if [ ! -d "${{BISON_PKGDATADIR}}" ]; then
     exit 1
 fi
 
-${{KLEAF_REPO_DIR}}/{actual} $*
+"${{ACTUAL}}" $*
 """.format(
         pkgdata_dir = ctx.file.pkgdata_dir.path,
-        actual = ctx.file.actual.path,
+        actual = ctx.executable.actual.path,
+        actual_short_path = ctx.executable.actual.short_path,
         root_from_base = root_from_base,
         short_root_from_base = short_root_from_base,
     )
@@ -59,17 +62,24 @@ ${{KLEAF_REPO_DIR}}/{actual} $*
     return DefaultInfo(
         files = depset([file]),
         runfiles = ctx.runfiles(
-            files = [ctx.file.actual],
+            files = [ctx.executable.actual],
             transitive_files = ctx.attr.pkgdata_files.files,
-        ),
+        ).merge(ctx.attr.actual[DefaultInfo].default_runfiles),
+        executable = file,
     )
 
 bison_wrapper = rule(
     implementation = _bison_wrapper_impl,
     doc = "Creates a wrapper script over real `bison` binary.",
     attrs = {
-        "actual": attr.label(allow_single_file = True),
+        "actual": attr.label(
+            allow_files = True,
+            executable = True,
+            # Don't apply transitions; let hermetic_tools handle it.
+            cfg = "target",
+        ),
         "pkgdata_dir": attr.label(allow_single_file = True),
         "pkgdata_files": attr.label(allow_files = True),
     },
+    executable = True,
 )
