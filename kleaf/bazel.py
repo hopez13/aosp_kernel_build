@@ -545,6 +545,7 @@ class BazelWrapper(KleafHelpPrinter):
         self.transformed_startup_options += self._transform_bazelrc_files([
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/release.bazelrc",
             self.kleaf_repo_dir / FLAGS_BAZEL_RC,
+            self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/musl.bazelrc",
         ])
 
         cache_dir_bazelrc = self.gen_bazelrc_dir / "cache_dir.bazelrc"
