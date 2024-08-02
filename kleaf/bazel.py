@@ -385,7 +385,7 @@ class BazelWrapper(KleafHelpPrinter):
             "--incompatible_hermetic_actions",
             dest="hermetic_actions",
             action="store_true",
-            default=False,
+            default=True,
             help=textwrap.dedent("""\
                 For actions that does not explicitly use the hermetic toolchain,
                 only allow them to use a limited list of tools.
@@ -396,7 +396,6 @@ class BazelWrapper(KleafHelpPrinter):
             "--noincompatible_hermetic_actions",
             dest="hermetic_actions",
             action="store_false",
-            default=False,
             help="Equivalent to --incompatible_hermetic_actions=false",
         )
 
