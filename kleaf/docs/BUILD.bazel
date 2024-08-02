@@ -42,7 +42,7 @@ bzl_library(
     name = "deps",
     srcs = [
         "//build/bazel_common_rules/dist",
-        "//build/bazel_common_rules/exec",
+        "//build/bazel_common_rules/exec/impl:exec",
         "//build/kernel/kleaf/artifact_tests",
         "//build/kernel/kleaf/impl",
         "//prebuilts/clang/host/linux-x86/kleaf:clang_toolchain_repository",
