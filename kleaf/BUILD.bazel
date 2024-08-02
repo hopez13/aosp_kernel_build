@@ -656,6 +656,20 @@ config_setting(
     visibility = ["//build/kernel:__pkg__"],
 )
 
+# For prebuilt binaries, use musl variant.
+# Experimental: some prebuilt binaries may still be using the glibc variant.
+bool_flag(
+    name = "musl_prebuilts",
+    build_setting_default = False,
+    visibility = ["//visibility:private"],
+)
+
+config_setting(
+    name = "musl_prebuilts_is_true",
+    flag_values = {":musl_prebuilts": "1"},
+    visibility = ["//build/kernel:__subpackages__"],
+)
+
 # The values of --config, as passed by command line and bazelrc files.
 _config_values = (
     "local",
