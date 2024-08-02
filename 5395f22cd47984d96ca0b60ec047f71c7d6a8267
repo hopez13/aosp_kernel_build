@@ -35,6 +35,42 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3787b32_984a382c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-02T16:08:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72dae56d_f3e46af2",
+      "revId": "5395f22cd47984d96ca0b60ec047f71c7d6a8267",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62f9c79e_3fccb402",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-02T16:08:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f9ba9373_0b9ba32d",
+      "revId": "5395f22cd47984d96ca0b60ec047f71c7d6a8267",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc7100aa_cb0f2e77",
@@ -48,6 +84,30 @@
       "writtenOn": "2024-08-01T19:17:43Z",
       "side": 1,
       "message": "file_mappings_cmd and mappings_cmd are not full commands; they are arguments.\n\nPerhaps file_mappings_args/mappings_args?\n\nrsync_cmd is a full cmd, so I think its name is correct",
+      "range": {
+        "startLine": 1192,
+        "startChar": 27,
+        "endLine": 1192,
+        "endChar": 44
+      },
+      "revId": "5395f22cd47984d96ca0b60ec047f71c7d6a8267",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4007b781_cbbd1a33",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-02T16:08:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc7100aa_cb0f2e77",
       "range": {
         "startLine": 1192,
         "startChar": 27,
