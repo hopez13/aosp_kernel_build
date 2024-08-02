@@ -30,6 +30,8 @@ build --flag_alias=toolchain_from_sources=//build/kernel/kleaf:toolchain_from_so
 build --flag_alias=notoolchain_from_sources=no//build/kernel/kleaf:toolchain_from_sources
 build --flag_alias=remove_strings_from_hermetic_tools=//build/kernel/kleaf:remove_strings_from_hermetic_tools
 build --flag_alias=noremove_strings_from_hermetic_tools=no//build/kernel/kleaf:remove_strings_from_hermetic_tools
+build --flag_alias=musl_prebuilts=//build/kernel/kleaf:musl_prebuilts
+build --flag_alias=nomusl_prebuilts=no//build/kernel/kleaf:musl_prebuilts
 
 # flags that control kleaf integrity checking
 build --flag_alias=allow_ddk_unsafe_headers=//build/kernel/kleaf:allow_ddk_unsafe_headers
