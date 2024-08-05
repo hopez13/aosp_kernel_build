@@ -91,6 +91,11 @@ def _kernel_platform_toolchain_impl(ctx):
         action_name = CPP_LINK_EXECUTABLE_ACTION_NAME,
         variables = link_variables,
     )
+    # See kernel_toolchains.bzl on how RUNPATH_EXECROOT is interpreted.
+    ldexpr = "' '".join([
+        '"-Wl,-rpath,${{RUNPATH_EXECROOT}}/{}"'.format(directory)
+        for directory in library_search_directories
+    ])
 
     all_files = depset(transitive = [
         depset(cc_info.compilation_context.direct_headers),
@@ -113,6 +118,7 @@ def _kernel_platform_toolchain_impl(ctx):
         all_files = all_files,
         cflags = compile_command_line,
         ldflags = link_command_line,
+        ldexpr = ldexpr,
         bin_path = bin_path,
     )
 
