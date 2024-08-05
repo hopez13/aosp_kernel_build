@@ -40,7 +40,7 @@ filegroup(
 
 prebuilt_transitioned_tool(
     name = "prebuilt_toybox",
-    src = "//prebuilts/build-tools:linux-x86/bin/toybox",
+    src = "//prebuilts/build-tools:toybox",
     visibility = ["//visibility:private"],
 )
 
@@ -63,7 +63,7 @@ alias(
 
 prebuilt_transitioned_tool(
     name = "prebuilt_bison",
-    src = "//prebuilts/build-tools:linux-x86/bin/bison",
+    src = "//prebuilts/build-tools:bison",
     visibility = ["//visibility:private"],
 )
 
@@ -78,38 +78,38 @@ bison_wrapper(
 # List of prebuilt tools where label names are used as the tool names
 _PREBUILT_TOOLS = [
     # keep sorted
-    "//prebuilts/build-tools:linux-x86/bin/flex",
-    "//prebuilts/build-tools:linux-x86/bin/m4",
-    "//prebuilts/build-tools:linux-x86/bin/make",
-    "//prebuilts/build-tools:linux-x86/bin/openssl",
-    "//prebuilts/build-tools:linux-x86/bin/runextractor",
-    "//prebuilts/build-tools:path/linux-x86/awk",
-    "//prebuilts/build-tools:path/linux-x86/bc",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/avbtool",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/blk_alloc_to_base_fs",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/build_image",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/build_super_image",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/certify_bootimg",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/dtc",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/e2fsck",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/e2fsdroid",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/fec",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/img2simg",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/interceptor",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/interceptor_analysis",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/lpmake",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/mkbootfs",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/mkdtimg",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/mke2fs",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/mkfs.erofs",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/mkuserimg_mke2fs",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/pahole",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/simg2img",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/soong_zip",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/stgdiff",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/swig",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/tune2fs",
-    "//prebuilts/kernel-build-tools:linux-x86/bin/ufdt_apply_overlay",
+    "//prebuilts/build-tools:awk",
+    "//prebuilts/build-tools:bc",
+    "//prebuilts/build-tools:flex",
+    "//prebuilts/build-tools:m4",
+    "//prebuilts/build-tools:make",
+    "//prebuilts/build-tools:openssl",
+    "//prebuilts/build-tools:runextractor",
+    "//prebuilts/kernel-build-tools:avbtool",
+    "//prebuilts/kernel-build-tools:blk_alloc_to_base_fs",
+    "//prebuilts/kernel-build-tools:build_image",
+    "//prebuilts/kernel-build-tools:build_super_image",
+    "//prebuilts/kernel-build-tools:certify_bootimg",
+    "//prebuilts/kernel-build-tools:dtc",
+    "//prebuilts/kernel-build-tools:e2fsck",
+    "//prebuilts/kernel-build-tools:e2fsdroid",
+    "//prebuilts/kernel-build-tools:fec",
+    "//prebuilts/kernel-build-tools:img2simg",
+    "//prebuilts/kernel-build-tools:interceptor",
+    "//prebuilts/kernel-build-tools:interceptor_analysis",
+    "//prebuilts/kernel-build-tools:lpmake",
+    "//prebuilts/kernel-build-tools:mkbootfs",
+    "//prebuilts/kernel-build-tools:mkdtimg",
+    "//prebuilts/kernel-build-tools:mke2fs",
+    "//prebuilts/kernel-build-tools:mkfs.erofs",
+    "//prebuilts/kernel-build-tools:mkuserimg_mke2fs",
+    "//prebuilts/kernel-build-tools:pahole",
+    "//prebuilts/kernel-build-tools:simg2img",
+    "//prebuilts/kernel-build-tools:soong_zip",
+    "//prebuilts/kernel-build-tools:stgdiff",
+    "//prebuilts/kernel-build-tools:swig",
+    "//prebuilts/kernel-build-tools:tune2fs",
+    "//prebuilts/kernel-build-tools:ufdt_apply_overlay",
 ]
 
 [
@@ -119,11 +119,11 @@ _PREBUILT_TOOLS = [
         visibility = ["//visibility:private"],
     )
     for tool in _PREBUILT_TOOLS + [
-        "//prebuilts/kernel-build-tools:linux-x86/bin/lz4",
-        "//prebuilts/kernel-build-tools:linux-x86/bin/depmod",
-        "//prebuilts/build-tools:linux-x86/bin/bzip2",
-        "//prebuilts/build-tools:linux-x86/bin/xz",
-        "//prebuilts/build-tools:linux-x86/bin/ziptool",
+        "//prebuilts/kernel-build-tools:lz4",
+        "//prebuilts/kernel-build-tools:depmod",
+        "//prebuilts/build-tools:bzip2",
+        "//prebuilts/build-tools:xz",
+        "//prebuilts/build-tools:ziptool",
     ]
 ]
 
@@ -453,7 +453,7 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-_GKI_CERTIFICATION_BINARIES_PREFIX = "//prebuilts/kernel-build-tools:linux-x86/bin/"
+_GKI_CERTIFICATION_BINARIES_PREFIX = "//prebuilts/kernel-build-tools:"
 
 _GKI_CERTIFICATION_BINARIES = [
     "avbtool",
