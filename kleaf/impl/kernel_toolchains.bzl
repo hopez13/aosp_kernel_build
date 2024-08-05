@@ -156,16 +156,30 @@ def _kernel_toolchains_impl(ctx):
     )
 
     if ctx.attr._kernel_use_resolved_toolchains[BuildSettingInfo].value:
+        # RUNPATH_EXECROOT: A heuristic path to execroot expressed relative to $ORIGIN.
+        # RUNPATH_EXECROOT assumes that all binaries built by Kbuild are one level below OUT_DIR
+        #   e.g. $OUT_DIR/scripts/sign-file
+        # If this ever changes, do a cross-product on all RUNPATH_EXECROOT's and *ldexpr
         setup_env_var_cmd += """
             export HOSTCFLAGS={quoted_hostcflags}
             export USERCFLAGS={quoted_usercflags}
             export HOSTLDFLAGS={quoted_hostldflags}
             export USERLDFLAGS={quoted_userldflags}
+            # Append to *LDFLAGS based on the current settings of $OUT_DIR.
+            function kleaf_internal_eval_ldflags() {{
+                local RUNPATH_EXECROOT='$$$$\\{{ORIGIN\\}}/../'"$(realpath ${{ROOT_DIR}} --relative-to ${{OUT_DIR}})"
+                export HOSTLDFLAGS="${{HOSTLDFLAGS}} "{hostldexpr}
+                export USERLDFLAGS="${{USERLDFLAGS}} "{userldexpr}
+            }}
+            export -f kleaf_internal_eval_ldflags
+            kleaf_internal_eval_ldflags
         """.format(
             quoted_hostcflags = _quote_sanitize_flags(exec.cflags),
             quoted_usercflags = _quote_sanitize_flags(target.cflags),
             quoted_hostldflags = _quote_sanitize_flags(exec.ldflags),
+            hostldexpr = exec.ldexpr,
             quoted_userldflags = _quote_sanitize_flags(target.ldflags),
+            userldexpr = target.ldexpr,
         )
 
     # Kleaf clang bins are under kleaf/parent, so CLANG_PREBUILT_BIN in
