@@ -419,6 +419,9 @@ kernel_platform_toolchain(
 
 kernel_platform_toolchain(
     name = "kernel_toolchain_exec",
+    runpaths = [
+        "//prebuilts/kernel-build-tools:linux_x86_runpath",
+    ],
     visibility = ["//build/kernel/kleaf/tests:__subpackages__"],
     deps = [
         "//prebuilts/kernel-build-tools:linux_x86_imported_libs",
