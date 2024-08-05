@@ -157,7 +157,7 @@ abi_dump = rule(
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
         ),
         "_stg": attr.label(
-            default = "//prebuilts/kernel-build-tools:linux-x86/bin/stg",
+            default = "//prebuilts/kernel-build-tools:stg",
             allow_single_file = True,
             cfg = "exec",
             executable = True,

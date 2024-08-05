@@ -167,7 +167,7 @@ stgdiff = rule(
         "new": attr.label(allow_single_file = True),
         "kmi_enforced": attr.bool(),
         "_stgdiff": attr.label(
-            default = "//prebuilts/kernel-build-tools:linux-x86/bin/stgdiff",
+            default = "//prebuilts/kernel-build-tools:stgdiff",
             allow_single_file = True,
             cfg = "exec",
             executable = True,
