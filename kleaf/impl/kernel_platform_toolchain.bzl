@@ -67,7 +67,7 @@ def _kernel_platform_toolchain_impl(ctx):
         variables = compile_variables,
     )
 
-    # Handle "//prebuilts/kernel-build-tools:linux_x86_imported_libs",
+    # Handle "//prebuilts/kernel-build-tools:imported_libs",
     user_link_flags = []
     additional_libs = []
     library_search_directories = []
