@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8738b619_05d867e8",
+        "filename": "kleaf/impl/gcov_utils.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-05T11:13:04Z",
+      "side": 1,
+      "message": "Submitting again with this to fix the quick tests.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 10
+      },
+      "revId": "d87c3be349909fa9f3bfc950f7d4dd28fc66f682",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
