@@ -227,6 +227,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b4a2b1c_0a6050cf",
+        "filename": "kleaf/impl/kernel_config.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-05T12:36:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d7bbea3_7dd53275",
+      "range": {
+        "startLine": 235,
+        "startChar": 17,
+        "endLine": 235,
+        "endChar": 40
+      },
+      "revId": "143a73ba95af73df8748c3eeade83e5af879515a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a9eead0_b9dc3b4d",
