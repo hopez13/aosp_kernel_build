@@ -16,6 +16,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@kernel_toolchain_info//:dict.bzl", "VARS")
 load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_genrule", "hermetic_tools")
 load("//build/kernel/kleaf/impl:bison_wrapper.bzl", "bison_wrapper")
+load("//build/kernel/kleaf/impl:transitioned_tool.bzl", "prebuilt_transitioned_tool")
 
 filegroup(
     name = "sysroot",
@@ -37,11 +38,17 @@ filegroup(
     ],
 )
 
+prebuilt_transitioned_tool(
+    name = "prebuilt_toybox",
+    src = "//prebuilts/build-tools:linux-x86/bin/toybox",
+    visibility = ["//visibility:private"],
+)
+
 alias(
     name = "toybox",
     actual = select({
         "//build/kernel/kleaf:toolchain_from_sources_is_true": "@toybox",
-        "//conditions:default": "//prebuilts/build-tools:linux-x86/bin/toybox",
+        "//conditions:default": ":prebuilt_toybox",
     }),
     visibility = ["//visibility:private"],
 )
@@ -54,17 +61,23 @@ alias(
     visibility = ["//visibility:private"],
 ) for tool in ("find", "flock", "gzip")]
 
+prebuilt_transitioned_tool(
+    name = "prebuilt_bison",
+    src = "//prebuilts/build-tools:linux-x86/bin/bison",
+    visibility = ["//visibility:private"],
+)
+
 bison_wrapper(
     name = "bison",
-    actual = "//prebuilts/build-tools:linux-x86/bin/bison",
+    actual = ":prebuilt_bison",
     pkgdata_dir = "//prebuilts/build-tools:bison.runfiles_dir",
     pkgdata_files = "//prebuilts/build-tools:bison.runfiles",
     visibility = ["//visibility:private"],
 )
 
-_HERMETIC_TOOLS = [
+# List of prebuilt tools where label names are used as the tool names
+_PREBUILT_TOOLS = [
     # keep sorted
-    ":bison",
     "//prebuilts/build-tools:linux-x86/bin/flex",
     "//prebuilts/build-tools:linux-x86/bin/m4",
     "//prebuilts/build-tools:linux-x86/bin/make",
@@ -97,6 +110,26 @@ _HERMETIC_TOOLS = [
     "//prebuilts/kernel-build-tools:linux-x86/bin/swig",
     "//prebuilts/kernel-build-tools:linux-x86/bin/tune2fs",
     "//prebuilts/kernel-build-tools:linux-x86/bin/ufdt_apply_overlay",
+]
+
+[
+    prebuilt_transitioned_tool(
+        name = "prebuilt_" + paths.basename(package_relative_label(tool).name),
+        src = tool,
+        visibility = ["//visibility:private"],
+    )
+    for tool in _PREBUILT_TOOLS + [
+        "//prebuilts/kernel-build-tools:linux-x86/bin/lz4",
+        "//prebuilts/kernel-build-tools:linux-x86/bin/depmod",
+        "//prebuilts/build-tools:linux-x86/bin/bzip2",
+        "//prebuilts/build-tools:linux-x86/bin/xz",
+        "//prebuilts/build-tools:linux-x86/bin/ziptool",
+    ]
+]
+
+# List of hermetic tools where label names are used as the tool names
+_HERMETIC_TOOLS = [
+    ":bison",
 ] + glob([
     # Intentionally glob here to test for existance of alias destination
     # buildifier: disable=constant-glob
@@ -206,7 +239,7 @@ hermetic_tools(
             "@lz4": "lz4",
         },
         "//conditions:default": {
-            "//prebuilts/kernel-build-tools:linux-x86/bin/lz4": "lz4",
+            ":prebuilt_lz4": "lz4",
         },
     }) | select({
         "//build/kernel/kleaf:gzip_is_pigz_is_true": {
@@ -228,24 +261,22 @@ hermetic_tools(
         "@kleaf_host_tools//:sh": "sh",
         "@kleaf_host_tools//:perl": "perl",
         "@kleaf_host_tools//:rsync": "rsync",
-
-        # Additional symlinks other than in //prebuilts/build-tools
-        "//prebuilts/kernel-build-tools:linux-x86/bin/depmod": ":".join([
+        ":prebuilt_depmod": ":".join([
             # keep sorted
             "depmod",
             "modinfo",
         ]),
-        "//prebuilts/build-tools:linux-x86/bin/bzip2": ":".join([
+        ":prebuilt_bzip2": ":".join([
             # keep sorted
             "bzcat",
             "bzip2",
         ]),
-        "//prebuilts/build-tools:linux-x86/bin/xz": ":".join([
+        ":prebuilt_xz": ":".join([
             # keep sorted
             "xz",
             "xzcat",
         ]),
-        "//prebuilts/build-tools:linux-x86/bin/ziptool": ":".join([
+        ":prebuilt_ziptool": ":".join([
             # keep sorted
             "unzip",
             "zipinfo",
@@ -260,6 +291,9 @@ hermetic_tools(
     } | {
         tool: paths.basename(package_relative_label(tool).name)
         for tool in _HERMETIC_TOOLS
+    } | {
+        ":prebuilt_" + paths.basename(package_relative_label(tool).name): paths.basename(package_relative_label(tool).name)
+        for tool in _PREBUILT_TOOLS
     },
     visibility = ["//visibility:public"],
     deps = [
