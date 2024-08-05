@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffea50c1_2cbf422f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-05T14:50:13Z",
+      "side": 1,
+      "message": "Build error are not related to this series, probably handled in b/354917765.",
+      "revId": "a59ee7452012f831a251ffcff75162555908035e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
