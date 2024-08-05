@@ -297,8 +297,8 @@ hermetic_tools(
     },
     visibility = ["//visibility:public"],
     deps = [
-        "//prebuilts/build-tools:linux-x86",
-        "//prebuilts/kernel-build-tools:linux-x86",
+        "//prebuilts/build-tools:files",
+        "//prebuilts/kernel-build-tools:files",
     ],
 )
 

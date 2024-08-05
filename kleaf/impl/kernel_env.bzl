@@ -397,6 +397,8 @@ def _get_env_setup_cmds(ctx):
         kleaf_repo_workspace_root = kleaf_repo_workspace_root,
     )
 
+    print(ctx.files._prebuilt_libs[0].dirname)
+
     post_env = """
         # Increase parallelism # TODO(b/192655643): do not use -j anymore
         export MAKEFLAGS="${{MAKEFLAGS}} -j$(
@@ -413,7 +415,7 @@ def _get_env_setup_cmds(ctx):
             fi
         )"
         # setup LD_LIBRARY_PATH for prebuilts
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{ROOT_DIR}}/{linux_x86_libs_path}
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{ROOT_DIR}}/{prebuilt_libs_path}
         # Set up KCONFIG_EXT
         if [ -n "${{KCONFIG_EXT}}" ]; then
             export KCONFIG_EXT_PREFIX=$(realpath $(dirname ${{KCONFIG_EXT}}) --relative-to ${{ROOT_DIR}}/${{KERNEL_DIR}})/
@@ -457,7 +459,7 @@ def _get_env_setup_cmds(ctx):
     """.format(
         get_make_jobs_cmd = status.get_volatile_status_cmd(ctx, "MAKE_JOBS"),
         get_make_keep_going_cmd = status.get_volatile_status_cmd(ctx, "MAKE_KEEP_GOING"),
-        linux_x86_libs_path = ctx.files._linux_x86_libs[0].dirname,
+        prebuilt_libs_path = ctx.files._prebuilt_libs[0].dirname,
         kleaf_repo_workspace_root_slash = kleaf_repo_workspace_root_slash,
     )
     return struct(
@@ -527,13 +529,13 @@ def _get_run_env(ctx, srcs, toolchains):
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
         # setup LD_LIBRARY_PATH for prebuilts
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{KLEAF_REPO_DIR}}/{linux_x86_libs_path}
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{KLEAF_REPO_DIR}}/{prebuilt_libs_path}
     """.format(
         build_utils_sh = ctx.file._build_utils_sh.short_path,
         build_config = ctx.file.build_config.short_path,
         setup_env = ctx.file.setup_env.short_path,
         toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
-        linux_x86_libs_path = ctx.files._linux_x86_libs[0].dirname,
+        prebuilt_libs_path = ctx.files._prebuilt_libs[0].dirname,
     )
     setup += hermetic_tools.run_additional_setup
     tools = [
@@ -640,7 +642,7 @@ kernel_env = rule(
         "_config_is_local": attr.label(default = "//build/kernel/kleaf:config_local"),
         "_config_is_stamp": attr.label(default = "//build/kernel/kleaf:config_stamp"),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
-        "_linux_x86_libs": attr.label(default = "//prebuilts/kernel-build-tools:linux-x86-libs"),
+        "_prebuilt_libs": attr.label(default = "//prebuilts/kernel-build-tools:libs"),
         "_kernel_use_resolved_toolchains": attr.label(
             default = "//build/kernel/kleaf:incompatible_kernel_use_resolved_toolchains",
         ),
