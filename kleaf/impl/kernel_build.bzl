@@ -1522,6 +1522,11 @@ def _build_main_action(
     command += """
            {kbuild_mixed_tree_cmd}
          # Actual kernel build
+
+           _KLEAF_REL_PREBUILTS="$(realpath prebuilts/kernel-build-tools/linux-x86/lib64 --relative-to ${{OUT_DIR}})"
+
+           export HOSTLDFLAGS="${{HOSTLDFLAGS}} -Wl,-rpath,"'$$$$\\{{ORIGIN\\}}/../'"${{_KLEAF_REL_PREBUILTS}}"
+
            {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} {make_goals}
          # Install modules
            {modinst_cmd}
