@@ -64,7 +64,7 @@ cc_binary(
     ],
     target_compatible_with = _LINUX_X86_64,
     deps = [
-        "//prebuilts/kernel-build-tools:linux_x86_imported_libs",
+        "//prebuilts/kernel-build-tools:imported_libs",
     ],
 )
 
