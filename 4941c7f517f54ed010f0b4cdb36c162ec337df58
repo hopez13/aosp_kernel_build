@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "976c4848_4b135a91",
+        "filename": "BUILD.bazel",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T18:41:26Z",
+      "side": 1,
+      "message": "Yes. When tool is `//prebuilts/build-tools:toybox`, I believe basename() directly will give you `build-tools:toybox`",
+      "parentUuid": "c4368d09_5b2dc961",
+      "range": {
+        "startLine": 117,
+        "startChar": 44,
+        "endLine": 117,
+        "endChar": 66
+      },
+      "revId": "4941c7f517f54ed010f0b4cdb36c162ec337df58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcc13b83_645c1d39",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-08-06T11:11:19Z",
       "side": 1,
       "message": "Did this not complain for the case where L19 is returned?",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 11
+      },
+      "revId": "4941c7f517f54ed010f0b4cdb36c162ec337df58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45a22ee2_3988485f",
+        "filename": "kleaf/impl/transitioned_tool.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T18:41:26Z",
+      "side": 1,
+      "message": "Yeah: https://bazel.build/extending/config#no-op-transitions",
+      "parentUuid": "09272f71_96842aa0",
       "range": {
         "startLine": 25,
         "startChar": 4,
