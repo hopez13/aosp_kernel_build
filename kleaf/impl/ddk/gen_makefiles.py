@@ -388,11 +388,6 @@ def _handle_copts(out_cflags: TextIO,
 
 
 if __name__ == "__main__":
-    # argparse_flags.ArgumentParser only accepts --flagfile if there
-    # are some DEFINE'd flags
-    # https://github.com/abseil/abseil-py/issues/199
-    absl.flags.DEFINE_string("flagfile_hack_do_not_use", "", "")
-
     logging.basicConfig(level=logging.INFO,
                         format="%(levelname)s: %(message)s")
 
