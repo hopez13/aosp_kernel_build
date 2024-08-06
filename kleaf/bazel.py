@@ -50,6 +50,8 @@ _REPO_BOUNDARY_FILES = ("MODULE.bazel", "REPO.bazel", "WORKSPACE.bazel", "WORKSP
 _ACTION_HERMETIC_TOOLS = [
     # for copy_file
     "prebuilts/build-tools/path/linux-x86/cp",
+    # build_test uses touch
+    "prebuilts/build-tools/path/linux-x86/touch",
     # https://github.com/bazelbuild/bazel/issues/19355
     "prebuilts/build-tools/path/linux-x86/python3",
     # for rules_python toolchain resolution
