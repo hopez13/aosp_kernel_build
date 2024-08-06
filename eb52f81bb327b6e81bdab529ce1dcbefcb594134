@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ce7373_cf3186ef",
+        "filename": "kleaf/impl/abi/abi_dump.bzl",
+        "patchSetId": 14
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T18:59:38Z",
+      "side": 1,
+      "message": "fixme",
+      "revId": "eb52f81bb327b6e81bdab529ce1dcbefcb594134",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "582a785f_3c9a3f0c",
+        "filename": "kleaf/impl/abi/abi_stgdiff.bzl",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T18:59:38Z",
+      "side": 1,
+      "message": "fixme",
+      "revId": "eb52f81bb327b6e81bdab529ce1dcbefcb594134",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
