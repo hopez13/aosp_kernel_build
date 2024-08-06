@@ -110,6 +110,23 @@
       },
       "revId": "4941c7f517f54ed010f0b4cdb36c162ec337df58",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "469290dd_9478f5bf",
+        "filename": "kleaf/impl/transitioned_tool.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T18:41:48Z",
+      "side": 1,
+      "message": "delete",
+      "revId": "4941c7f517f54ed010f0b4cdb36c162ec337df58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
