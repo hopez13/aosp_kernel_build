@@ -179,16 +179,25 @@ _TOYS = [
 
 hermetic_tools(
     name = "hermetic-tools",
-    extra_args = {
-        "rsync": ["--no-group"],
-        "tar": [
-            "--mtime=@0",
-            "--owner=0",
-            "--group=0",
-            "--numeric-owner",
-            "--sort=name",
-        ],
-    },
+    extra_args = {"rsync": ["--no-group"]} | select({
+        "//build/kernel/kleaf:config_local_is_true": {
+            "tar": [
+                "--owner=0",
+                "--group=0",
+                "--numeric-owner",
+                "--sort=name",
+            ],
+        },
+        "//conditions:default": {
+            "tar": [
+                "--mtime=@0",
+                "--owner=0",
+                "--group=0",
+                "--numeric-owner",
+                "--sort=name",
+            ],
+        },
+    }),
     symlinks = select({
         "//build/kernel/kleaf:debug_cache_dir_conflict_needs_flock": {
             ":toybox_flock": "flock",
