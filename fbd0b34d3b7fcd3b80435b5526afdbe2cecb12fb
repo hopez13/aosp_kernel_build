@@ -22,6 +22,30 @@
       },
       "revId": "fbd0b34d3b7fcd3b80435b5526afdbe2cecb12fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da624ee6_1422d6d9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T17:55:18Z",
+      "side": 1,
+      "message": "ack, let me rewrite this a bit",
+      "parentUuid": "01b5c7a3_ec8646e3",
+      "range": {
+        "startLine": 9,
+        "startChar": 29,
+        "endLine": 10,
+        "endChar": 20
+      },
+      "revId": "fbd0b34d3b7fcd3b80435b5526afdbe2cecb12fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
