@@ -65,6 +65,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6be23a4d_6ed78b19",
+        "filename": "kleaf/impl/transitioned_tool.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T19:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcc13b83_645c1d39",
+      "revId": "4941c7f517f54ed010f0b4cdb36c162ec337df58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09272f71_96842aa0",
@@ -125,6 +143,24 @@
       "writtenOn": "2024-08-06T18:41:48Z",
       "side": 1,
       "message": "delete",
+      "revId": "4941c7f517f54ed010f0b4cdb36c162ec337df58",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab5617d_21c8eef7",
+        "filename": "kleaf/impl/transitioned_tool.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-06T19:00:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "469290dd_9478f5bf",
       "revId": "4941c7f517f54ed010f0b4cdb36c162ec337df58",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
