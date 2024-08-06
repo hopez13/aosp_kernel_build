@@ -71,6 +71,9 @@ _LTO_NONE = [
 # Handy arguments to build as fast as possible.
 _FASTEST = _LOCAL + _LTO_NONE
 
+# Workaround to avoid diffs due to sandbox numbers.
+_MODULES_PREPARE_STRATEGY = ["--strategy=ModulesPrepare=local"]
+
 
 def load_arguments():
     parser = argparse.ArgumentParser(
@@ -805,7 +808,7 @@ class QuickIntegrationTest(KleafIntegrationTestBase):
 
         # This also tests that fixdep is not needed.
         self._build(
-            [f"//{self._common()}:kernel_aarch64_modules_prepare"] + _FASTEST)
+            [f"//{self._common()}:kernel_aarch64_modules_prepare"] + _MODULES_PREPARE_STRATEGY)
         first_hash = self._sha256(modules_prepare_archive)
 
         old_modules_archive = tempfile.NamedTemporaryFile(delete=False)
@@ -814,7 +817,7 @@ class QuickIntegrationTest(KleafIntegrationTestBase):
         self._touch_core_kernel_file()
 
         self._build(
-            [f"//{self._common()}:kernel_aarch64_modules_prepare"] + _FASTEST)
+            [f"//{self._common()}:kernel_aarch64_modules_prepare"] + _MODULES_PREPARE_STRATEGY)
         second_hash = self._sha256(modules_prepare_archive)
 
         if first_hash == second_hash:

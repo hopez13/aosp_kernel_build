@@ -212,16 +212,28 @@ _TOYS = [
 
 hermetic_tools(
     name = "hermetic-tools",
-    extra_args = {
-        "rsync": ["--no-group"],
-        "tar": [
-            "--mtime=@0",
-            "--owner=0",
-            "--group=0",
-            "--numeric-owner",
-            "--sort=name",
-        ],
-    },
+    extra_args = select({
+        # TODO: https://github.com/bazelbuild/bazel/issues/23065 - Remove repeated entries.
+        "//build/kernel/kleaf:config_local_is_true": {
+            "rsync": ["--no-group"],
+            "tar": [
+                "--owner=0",
+                "--group=0",
+                "--numeric-owner",
+                "--sort=name",
+            ],
+        },
+        "//conditions:default": {
+            "rsync": ["--no-group"],
+            "tar": [
+                "--mtime=@0",
+                "--owner=0",
+                "--group=0",
+                "--numeric-owner",
+                "--sort=name",
+            ],
+        },
+    }),
     symlinks = select({
         "//build/kernel/kleaf:debug_cache_dir_conflict_needs_flock": {
             ":toybox_flock": "flock",
