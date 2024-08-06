@@ -726,7 +726,7 @@ class BazelWrapper(KleafHelpPrinter):
             all_tools.add(dst_path)
             src_path = shutil.which(tool)
             if src_path:
-                src_path = pathlib.Path(src_path)
+                src_path = pathlib.Path(src_path).resolve()
                 if dst_path.is_symlink():
                     if dst_path.resolve() == src_path:
                         continue
