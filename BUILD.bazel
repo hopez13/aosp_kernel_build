@@ -14,9 +14,13 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@kernel_toolchain_info//:dict.bzl", "VARS")
-load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_genrule", "hermetic_tools")
+load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_tools")
 load("//build/kernel/kleaf/impl:bison_wrapper.bzl", "bison_wrapper")
-load("//build/kernel/kleaf/impl:transitioned_tool.bzl", "prebuilt_transitioned_tool")
+load(
+    "//build/kernel/kleaf/impl:transitioned_tool.bzl",
+    "prebuilt_transitioned_files",
+    "prebuilt_transitioned_tool",
+)
 
 filegroup(
     name = "sysroot",
@@ -453,25 +457,8 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-_GKI_CERTIFICATION_BINARIES_PREFIX = "//prebuilts/kernel-build-tools:linux-x86/bin/"
-
-_GKI_CERTIFICATION_BINARIES = [
-    "avbtool",
-    "certify_bootimg",
-]
-
-hermetic_genrule(
+prebuilt_transitioned_files(
     name = "gki_certification_tools",
-    srcs = [_GKI_CERTIFICATION_BINARIES_PREFIX + tool for tool in _GKI_CERTIFICATION_BINARIES],
-    outs = ["gki_certification_tools.tar.gz"],
-    cmd = """
-        tar --mode=u=rwx,go=rx -czhf $@ \\
-            -C $$(dirname $$(dirname $(location {prefix}{first}))) \\
-            {files}
-    """.format(
-        files = " ".join(["bin/" + tool for tool in _GKI_CERTIFICATION_BINARIES]),
-        first = _GKI_CERTIFICATION_BINARIES[0],
-        prefix = _GKI_CERTIFICATION_BINARIES_PREFIX,
-    ),
+    srcs = ["//prebuilts/kernel-build-tools:gki_certification_tools"],
     visibility = ["//visibility:public"],
 )
