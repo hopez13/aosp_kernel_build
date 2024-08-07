@@ -129,9 +129,10 @@ class SingleCleaner(object):
 
 
 class DdkCleaner(SingleCleaner):
-    def __init__(self, cleaner: "BuildCleaner"):
+    def __init__(self, cleaner: "BuildCleaner", bazel_args: list[str] = None):
         super().__init__(cleaner)
 
+        self.bazel_args = bazel_args if bazel_args else []
         self.deps: dict[Label, list[Label]] = collections.defaultdict(list)
         self._calc()
 
@@ -144,10 +145,10 @@ class DdkCleaner(SingleCleaner):
         # Find all dependencies of kind kernel_module
         query_args = [
             self._bazel(),
-            "query",
+            "cquery",
             'kind("kernel_module rule", deps({}))'.format(
                 " union ".join(self._args.targets))
-        ]
+        ] + self.bazel_args
         if self._color:
             query_args.append("--color=yes")
         try:
@@ -159,7 +160,11 @@ class DdkCleaner(SingleCleaner):
             raise BuildCleanerError(
                 "Unable to query kernel_module deps for %s" % self._args.targets)
 
-        kernel_module_target_strs = query_out.splitlines()
+        # Remove the unique identifier from bazel cquery.
+        kernel_module_target_strs = []
+        for module_n_identifier in query_out.splitlines():
+            match = re.fullmatch(r'(.*) \(.*\)', module_n_identifier)
+            kernel_module_target_strs.append(match[1])
 
         # Build all these kernel_module's with --debug_modpost_warn
         try:
@@ -167,7 +172,7 @@ class DdkCleaner(SingleCleaner):
                 self._bazel(),
                 "build",
                 "--debug_modpost_warn",
-            ] + kernel_module_target_strs,
+            ] + kernel_module_target_strs + self.bazel_args,
                 stderr=self.stderr, env=self.environ,
                 stdout=self.stdout)
         except subprocess.CalledProcessError:
@@ -222,9 +227,9 @@ class DdkCleaner(SingleCleaner):
 
 
 class BuildCleaner(buildozer_command_builder.BuildozerCommandBuilder):
-    def __init__(self, *init_args, **init_kwargs):
+    def __init__(self, bazel_args: list[str] = None, *init_args, **init_kwargs):
         super().__init__(*init_args, **init_kwargs)
-        self._ddk_cleaner = DdkCleaner(self)
+        self._ddk_cleaner = DdkCleaner(self, bazel_args)
 
     def _bazel(self) -> str:
         return str(self._workspace_root() / "tools" / "bazel")
@@ -240,7 +245,9 @@ class BuildCleaner(buildozer_command_builder.BuildozerCommandBuilder):
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__,
-                                     formatter_class=argparse.RawTextHelpFormatter)
+                                     formatter_class=argparse.RawTextHelpFormatter,
+                                     epilog="""additional options:
+  bazel_args        rest unknown arguments will be passed to the bazel commands""")
     parser.add_argument("-v", "--verbose",
                         help="verbose mode", action="store_true")
     parser.add_argument("-k", "--keep-going",
@@ -254,14 +261,15 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
                         help="List of target patterns, of which rules for all"
                              "dependencies are fixed.")
 
-    return parser.parse_args(argv)
+    parser.usage = parser.format_usage()[len('usage: '):].rstrip() + ' [bazel_args ...]\n'
+    return parser.parse_known_args(argv)
 
 
 def main(argv: Sequence[str]):
-    args = parse_args(argv)
+    args, unknown_args = parse_args(argv)
     log_level = logging.INFO if args.verbose else logging.WARNING
     logging.basicConfig(level=log_level, format="%(levelname)s: %(message)s")
-    BuildCleaner(args=args).run()
+    BuildCleaner(args=args, bazel_args=unknown_args).run()
 
 
 if __name__ == "__main__":
