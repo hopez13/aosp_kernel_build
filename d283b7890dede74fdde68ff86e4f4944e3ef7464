@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b04c1a5e_ee5f438d",
+        "filename": "kleaf/build_cleaner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-07T11:50:35Z",
+      "side": 1,
+      "message": "nit: Does this need to be changed to `cquery`[0] when `configs_args` is not empty?\n\n[0] https://bazel.build/query/cquery",
+      "range": {
+        "startLine": 149,
+        "startChar": 13,
+        "endLine": 149,
+        "endChar": 18
+      },
+      "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
