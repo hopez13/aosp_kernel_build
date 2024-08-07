@@ -26,7 +26,7 @@ constraint_value(
     name = "glibc",
     constraint_setting = ":libc",
     visibility = [
-        "//build/kernel/kleaf:__subpackages__",
+        "//build/kernel:__subpackages__",
         "//prebuilts/build-tools:__subpackages__",
         "//prebuilts/kernel-build-tools:__subpackages__",
     ],
@@ -36,7 +36,7 @@ constraint_value(
     name = "musl",
     constraint_setting = ":libc",
     visibility = [
-        "//build/kernel/kleaf:__subpackages__",
+        "//build/kernel:__subpackages__",
         "//prebuilts/build-tools:__subpackages__",
         "//prebuilts/kernel-build-tools:__subpackages__",
     ],
