@@ -472,7 +472,7 @@ def _kernel_module_impl(ctx):
     # TODO(b/291955924): make the `make` invocations parallel
     for goal in compile_commands_utils.additional_make_goals(ctx):
         command += """
-                make -C {ext_mod} ${{TOOL_ARGS}} M=${{ext_mod_rel}} O=${{OUT_DIR}} KERNEL_SRC=${{ROOT_DIR}}/${{KERNEL_DIR}} {goal} {make_filter} {make_redirect}
+                make -C {ext_mod} ${{TOOL_ARGS}} M=${{ext_mod_rel}} VPATH=${{ROOT_DIR}}/${{KERNEL_DIR}} O=${{OUT_DIR}} KERNEL_SRC=${{ROOT_DIR}}/${{KERNEL_DIR}} {goal} {make_filter} {make_redirect}
         """.format(
             ext_mod = ext_mod,
             goal = goal,
