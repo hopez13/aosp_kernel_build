@@ -63,3 +63,41 @@ def prebuilt_transitioned_tool(name, src, **kwargs):
         }),
         **kwargs
     )
+
+def _transitioned_files_impl(ctx):
+    runfiles = ctx.runfiles().merge_all([
+        src[DefaultInfo].default_runfiles
+        for src in ctx.attr.srcs
+    ])
+    return DefaultInfo(
+        files = depset(transitive = [target.files for target in ctx.attr.srcs]),
+        runfiles = runfiles,
+    )
+
+_transitioned_files = rule(
+    implementation = _transitioned_files_impl,
+    attrs = {
+        "srcs": attr.label_list(
+            allow_files = True,
+            cfg = platform_transition,
+        ),
+        "target_platform": attr.label(),
+    },
+)
+
+def prebuilt_transitioned_files(name, srcs, **kwargs):
+    """Transition to the platform selected for prebuilts.
+
+    Args:
+        name: name of target
+        srcs: list of filegroup of prebuilts
+        **kwargs: common kwargs
+    """
+    _transitioned_files(
+        name = name,
+        srcs = srcs,
+        target_platform = select({
+            "//conditions:default": "@platforms//host",
+        }),
+        **kwargs
+    )
