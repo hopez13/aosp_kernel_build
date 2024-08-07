@@ -22,6 +22,61 @@
       },
       "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb85b21e_76fdce44",
+        "filename": "kleaf/build_cleaner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-07T23:13:13Z",
+      "side": 1,
+      "message": "Instead of doing this change, consider changing this to `parse_known_args`, and pass the unknown arguments to `tools/bazel` directly.\n\nIf you do that, please update the help message as well.",
+      "fixSuggestions": [
+        {
+          "fixId": "1713fcab_1a45c961",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/build_cleaner.py",
+              "range": {
+                "startLine": 266,
+                "startChar": 0,
+                "endLine": 267,
+                "endChar": 0
+              },
+              "replacement": "    return parser.parse_known_args(argv)\n"
+            },
+            {
+              "path": "kleaf/build_cleaner.py",
+              "range": {
+                "startLine": 270,
+                "startChar": 0,
+                "endLine": 271,
+                "endChar": 0
+              },
+              "replacement": "    args, unknown_args \u003d parse_args(argv)\n"
+            },
+            {
+              "path": "kleaf/build_cleaner.py",
+              "range": {
+                "startLine": 273,
+                "startChar": 0,
+                "endLine": 274,
+                "endChar": 0
+              },
+              "replacement": "    BuildCleaner(args\u003dargs, unknown_args\u003dunknown_args).run()\n"
+            }
+          ]
+        }
+      ],
+      "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
