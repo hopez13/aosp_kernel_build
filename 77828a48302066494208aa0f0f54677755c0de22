@@ -16,6 +16,24 @@
       "message": "need compression",
       "revId": "77828a48302066494208aa0f0f54677755c0de22",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd9ca053_17031b78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-07T03:53:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6790eae7_14456ab2",
+      "revId": "77828a48302066494208aa0f0f54677755c0de22",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
