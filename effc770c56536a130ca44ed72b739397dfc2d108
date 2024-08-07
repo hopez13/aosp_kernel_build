@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "908f5e52_a99f8820",
+        "filename": "kleaf/impl/BUILD.bazel",
+        "patchSetId": 7
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-07T02:26:08Z",
+      "side": 1,
+      "message": "This should be controlled by musl_kbuild, not covered in this CL",
+      "revId": "effc770c56536a130ca44ed72b739397dfc2d108",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cea86ff_07c01de6",
+        "filename": "kleaf/tests/cc_testing/BUILD.bazel",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-07T02:26:08Z",
+      "side": 1,
+      "message": "This should be controlled by --musl_cc_targets, not covered by this CL.",
+      "revId": "effc770c56536a130ca44ed72b739397dfc2d108",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d324d99_dcde722e",
+        "filename": "BUILD.bazel",
+        "patchSetId": 6
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-07T02:26:08Z",
+      "side": 1,
+      "message": "Should put this in runfiles of tools",
+      "range": {
+        "startLine": 300,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 47
+      },
+      "revId": "626d338c425b6d7986737c521f09e72b507cdffa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c78a9c_9f1e3a65",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-07T02:26:08Z",
+      "side": 1,
+      "message": "Fixed by other change",
+      "revId": "626d338c425b6d7986737c521f09e72b507cdffa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
