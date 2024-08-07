@@ -296,10 +296,6 @@ hermetic_tools(
         for tool in _PREBUILT_TOOLS
     },
     visibility = ["//visibility:public"],
-    deps = [
-        "//prebuilts/build-tools:linux-x86",
-        "//prebuilts/kernel-build-tools:linux-x86",
-    ],
 )
 
 toolchain_type(
