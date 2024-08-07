@@ -141,13 +141,15 @@ class DdkCleaner(SingleCleaner):
     def _calc(self):
         """Calculates the missing dependencies."""
 
+        configs_args = [f"--config={config}" for config in self._args.configs]
+
         # Find all dependencies of kind kernel_module
         query_args = [
             self._bazel(),
-            "query",
+            "cquery",
             'kind("kernel_module rule", deps({}))'.format(
                 " union ".join(self._args.targets))
-        ]
+        ] + configs_args
         if self._color:
             query_args.append("--color=yes")
         try:
@@ -159,7 +161,11 @@ class DdkCleaner(SingleCleaner):
             raise BuildCleanerError(
                 "Unable to query kernel_module deps for %s" % self._args.targets)
 
-        kernel_module_target_strs = query_out.splitlines()
+        # Remove the unique identifier from bazel cquery.
+        kernel_module_target_strs = []
+        for module_n_identifier in query_out.splitlines():
+            match = re.fullmatch(r'(.*) \(.*\)', module_n_identifier)
+            kernel_module_target_strs.append(match[1])
 
         # Build all these kernel_module's with --debug_modpost_warn
         try:
@@ -167,7 +173,7 @@ class DdkCleaner(SingleCleaner):
                 self._bazel(),
                 "build",
                 "--debug_modpost_warn",
-            ] + kernel_module_target_strs,
+            ] + kernel_module_target_strs + configs_args,
                 stderr=self.stderr, env=self.environ,
                 stdout=self.stdout)
         except subprocess.CalledProcessError:
@@ -253,6 +259,9 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser.add_argument("targets", nargs="+",
                         help="List of target patterns, of which rules for all"
                              "dependencies are fixed.")
+    parser.add_argument("-c", "--configs", nargs="*",
+                        help="List of configs to be appended to bazel"
+                             " commands.")
 
     return parser.parse_args(argv)
 
