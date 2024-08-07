@@ -14,9 +14,14 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@kernel_toolchain_info//:dict.bzl", "VARS")
-load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_genrule", "hermetic_tools")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_tools")
 load("//build/kernel/kleaf/impl:bison_wrapper.bzl", "bison_wrapper")
-load("//build/kernel/kleaf/impl:transitioned_tool.bzl", "prebuilt_transitioned_tool")
+load(
+    "//build/kernel/kleaf/impl:transitioned_tool.bzl",
+    "prebuilt_transitioned_files",
+    "prebuilt_transitioned_tool",
+)
 
 filegroup(
     name = "sysroot",
@@ -59,7 +64,16 @@ alias(
     name = "toybox_%s" % tool,
     actual = ":toybox",
     visibility = ["//visibility:private"],
-) for tool in ("find", "flock", "gzip")]
+) for tool in ("find", "flock")]
+
+alias(
+    name = "gzip",
+    actual = select({
+        "//build/kernel/kleaf:gzip_is_pigz_is_true": "@pigz",
+        "//conditions:default": ":toybox",
+    }),
+    visibility = ["//visibility:private"],
+)
 
 prebuilt_transitioned_tool(
     name = "prebuilt_bison",
@@ -130,6 +144,7 @@ _PREBUILT_TOOLS = [
 # List of hermetic tools where label names are used as the tool names
 _HERMETIC_TOOLS = [
     ":bison",
+    ":gzip",
 ] + glob([
     # Intentionally glob here to test for existance of alias destination
     # buildifier: disable=constant-glob
@@ -240,13 +255,6 @@ hermetic_tools(
         },
         "//conditions:default": {
             ":prebuilt_lz4": "lz4",
-        },
-    }) | select({
-        "//build/kernel/kleaf:gzip_is_pigz_is_true": {
-            "@pigz": "gzip",
-        },
-        "//conditions:default": {
-            ":toybox_gzip": "gzip",
         },
     }) | select({
         "//build/kernel/kleaf:remove_strings_from_hermetic_tools_is_true": {},
@@ -453,25 +461,16 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-_GKI_CERTIFICATION_BINARIES_PREFIX = "//prebuilts/kernel-build-tools:linux-x86/bin/"
+pkg_tar(
+    name = "gki_certification_tools_tar",
+    srcs = ["//prebuilts/kernel-build-tools:gki_certification_tools_pkg_files"],
+    out = "gki_certification_tools.tar.gz",
+    compressor = ":gzip",
+    visibility = ["//visibility:private"],
+)
 
-_GKI_CERTIFICATION_BINARIES = [
-    "avbtool",
-    "certify_bootimg",
-]
-
-hermetic_genrule(
+prebuilt_transitioned_files(
     name = "gki_certification_tools",
-    srcs = [_GKI_CERTIFICATION_BINARIES_PREFIX + tool for tool in _GKI_CERTIFICATION_BINARIES],
-    outs = ["gki_certification_tools.tar.gz"],
-    cmd = """
-        tar --mode=u=rwx,go=rx -czhf $@ \\
-            -C $$(dirname $$(dirname $(location {prefix}{first}))) \\
-            {files}
-    """.format(
-        files = " ".join(["bin/" + tool for tool in _GKI_CERTIFICATION_BINARIES]),
-        first = _GKI_CERTIFICATION_BINARIES[0],
-        prefix = _GKI_CERTIFICATION_BINARIES_PREFIX,
-    ),
+    srcs = [":gki_certification_tools_tar"],
     visibility = ["//visibility:public"],
 )
