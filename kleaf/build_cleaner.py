@@ -60,7 +60,7 @@ import sys
 import pathlib
 from typing import Sequence
 
-_MODULE_SYMBOL_PATTERN = r'^0x[0-9a-f]+\s+([_a-zA-Z][_a-zA-Z0-9]*)\s+(\S+)\s+EXPORT_SYMBOL\s*$'
+_MODULE_SYMBOL_PATTERN = r'^0x[0-9a-f]+\s+([_a-zA-Z][_a-zA-Z0-9]*)\s+(\S+)\s+EXPORT_SYMBOL(_GPL)?\s*$'
 _MODPOST_ERROR_PATTERN = r'modpost: "([_a-zA-Z][_a-zA-Z0-9]*)" \[(\S*)] undefined!'
 
 
