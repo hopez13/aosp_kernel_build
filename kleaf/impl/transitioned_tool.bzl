@@ -59,7 +59,7 @@ def prebuilt_transitioned_tool(name, src, **kwargs):
         name = name,
         src = src,
         target_platform = select({
-            "//conditions:default": "@platforms//host",
+            "//conditions:default": Label("//build/kernel/kleaf/impl:command_line_option_host_platform"),
         }),
         **kwargs
     )
@@ -97,7 +97,7 @@ def prebuilt_transitioned_files(name, srcs, **kwargs):
         name = name,
         srcs = srcs,
         target_platform = select({
-            "//conditions:default": "@platforms//host",
+            "//conditions:default": Label("//build/kernel/kleaf/impl:command_line_option_host_platform"),
         }),
         **kwargs
     )

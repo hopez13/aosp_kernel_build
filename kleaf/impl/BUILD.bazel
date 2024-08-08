@@ -520,3 +520,11 @@ prebuilt_transitioned_tool(
     # All kernel_abi() can see this
     visibility = ["//visibility:public"],
 )
+
+# Special value for platform_transition. When this value is set in attr.target_platform,
+# transition to --host_platform
+filegroup(
+    name = "command_line_option_host_platform",
+    srcs = [],
+    visibility = ["//build/kernel:__subpackages__"],
+)

@@ -12,17 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Transition into a given platform"""
+"""Transition into a given platform.
+
+Transition to attr.target_platform. If it is unset, do not apply any transitions.
+
+As a special case, if it is set to `"//build/kernel/kleaf/impl:command_line_option_host_platform"`,
+apply the transition to --host_platform (defaults to @platforms//host, but may be overridden in
+the command line or in --config=musl.)
+"""
 
 visibility("private")
 
-def _platform_transition_impl(_settings, attr):
+def _platform_transition_impl(settings, attr):
     if attr.target_platform == None:
         return None
+    if attr.target_platform == Label("//build/kernel/kleaf/impl:command_line_option_host_platform"):
+        return {"//command_line_option:platforms": str(settings["//command_line_option:host_platform"])}
     return {"//command_line_option:platforms": str(attr.target_platform)}
 
 platform_transition = transition(
     implementation = _platform_transition_impl,
-    inputs = [],
+    inputs = ["//command_line_option:host_platform"],
     outputs = ["//command_line_option:platforms"],
 )
