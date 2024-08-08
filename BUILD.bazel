@@ -120,7 +120,6 @@ _PREBUILT_TOOLS = [
     "//prebuilts/kernel-build-tools:pahole",
     "//prebuilts/kernel-build-tools:simg2img",
     "//prebuilts/kernel-build-tools:soong_zip",
-    "//prebuilts/kernel-build-tools:stgdiff",
     "//prebuilts/kernel-build-tools:swig",
     "//prebuilts/kernel-build-tools:tune2fs",
     "//prebuilts/kernel-build-tools:ufdt_apply_overlay",
@@ -145,6 +144,8 @@ _PREBUILT_TOOLS = [
 _HERMETIC_TOOLS = [
     ":bison",
     ":gzip",
+    # TODO: This is only used by abi_stgdiff. It should be fine to be removed from hermetic_tools.
+    "//build/kernel/kleaf/impl:stgdiff",
 ] + glob([
     # Intentionally glob here to test for existance of alias destination
     # buildifier: disable=constant-glob
