@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "656d2605_815b7f8b",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-08T22:03:27Z",
+      "side": 1,
+      "message": "I haven\u0027t figured out why I need this, but basically if I build the individual modules with the dtbs, then only one module is present in the output and I hit modpost errors. I wasn\u0027t able to reproduce this with the upstream kernel using make commands.",
+      "range": {
+        "startLine": 1464,
+        "startChar": 11,
+        "endLine": 1466,
+        "endChar": 13
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "671434bd_f70ec4f7",
         "filename": "kleaf/impl/kernel_build.bzl",
         "patchSetId": 1
