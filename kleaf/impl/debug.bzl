@@ -27,7 +27,7 @@ def _print_scripts(ctx, command, what = None):
         ctx: [ctx](https://bazel.build/rules/lib/ctx)
         command: The command passed to `ctx.actions.run_shell`
         what: an optional text to distinguish actions within a target.
-    """
+"""
     if ctx.attr._debug_print_scripts[BuildSettingInfo].value:
         # buildifier: disable=print
         print("""
@@ -63,8 +63,46 @@ def _modpost_warn(ctx):
         make_redirect = make_redirect,
     )
 
+def _target_platform_libc(ctx, _glibc, _musl):
+    val = ""
+    if ctx.target_platform_has_constraint(_glibc[platform_common.ConstraintValueInfo]):
+        val += "glibc"
+    if ctx.target_platform_has_constraint(_musl[platform_common.ConstraintValueInfo]):
+        val += "musl"
+    if not val:
+        val = "?"
+    return val
+
+# Note: It defeats the purpose of using a subrule by passing the whole ctx into
+# subrule implementation. But we need ctx.target_platform_has_constraint, and
+# this is for debugging only.
+def _print_platforms_impl(subrule_ctx, ctx, *, _should_print, _glibc, _musl):
+    """Prints platform information."""
+
+    if not _should_print[BuildSettingInfo].value:
+        return
+
+    # buildifier: disable=print
+    print("[DEBUG]{}: libc={}, plat={}, host={}".format(
+        subrule_ctx.label,
+        _target_platform_libc(ctx, _glibc, _musl),
+        subrule_ctx.fragments.platform.platform,
+        subrule_ctx.fragments.platform.host_platform,
+    ))
+
+_print_platforms = subrule(
+    implementation = _print_platforms_impl,
+    attrs = {
+        "_should_print": attr.label(default = "//build/kernel/kleaf:debug_print_platforms"),
+        "_glibc": attr.label(default = "//build/kernel/kleaf/platforms/libc:glibc"),
+        "_musl": attr.label(default = "//build/kernel/kleaf/platforms/libc:musl"),
+    },
+    fragments = ["platform"],
+)
+
 debug = struct(
     print_scripts = _print_scripts,
     trap = _trap,
     modpost_warn = _modpost_warn,
+    print_platforms = _print_platforms,
 )
