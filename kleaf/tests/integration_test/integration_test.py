@@ -179,7 +179,7 @@ class RepoProject:
     @classmethod
     def from_element(cls, element: xml.dom.minidom.Element) -> "RepoProject":
         path = pathlib.Path(
-                element.getAttribute("path") or element.getAttribute("name"))
+            element.getAttribute("path") or element.getAttribute("name"))
         project = cls(path=path)
         for link_element in element.getElementsByTagName("linkfile"):
             project.links.append(Link.from_element(link_element, path))
@@ -447,7 +447,7 @@ class KleafIntegrationTestBase(unittest.TestCase):
 
     def _get_project_mount_link_spec(self, mount_root: pathlib.Path,
                                      groups: list[str]) \
-        -> tuple[MountSpec, LinkSpec]:
+            -> tuple[MountSpec, LinkSpec]:
         """Returns MountSpec / LinkSpec for projects that matches any group.
 
         Args:
@@ -567,21 +567,24 @@ class KleafIntegrationTestShard1(KleafIntegrationTestBase):
         vmlinux = pathlib.Path(
             f"bazel-bin/{self._common()}/kernel_aarch64/vmlinux")
 
-        output = subprocess.check_output([extract_ikconfig, vmlinux], text=True)
+        output = subprocess.check_output(
+            [extract_ikconfig, vmlinux], text=True)
         self.assertIn("CONFIG_UAPI_HEADER_TEST=y", output.splitlines())
 
         self.filter_lines(gki_defconfig_path,
                           lambda x: "CONFIG_UAPI_HEADER_TEST" not in x)
         self._build([f"//{self._common()}:kernel_aarch64", "--config=fast"])
 
-        output = subprocess.check_output([extract_ikconfig, vmlinux], text=True)
+        output = subprocess.check_output(
+            [extract_ikconfig, vmlinux], text=True)
         self.assertIn("# CONFIG_UAPI_HEADER_TEST is not set",
                       output.splitlines())
 
         restore_defconfig()
         self._build([f"//{self._common()}:kernel_aarch64", "--config=fast"])
 
-        output = subprocess.check_output([extract_ikconfig, vmlinux], text=True)
+        output = subprocess.check_output(
+            [extract_ikconfig, vmlinux], text=True)
         self.assertIn("CONFIG_UAPI_HEADER_TEST=y", output.splitlines())
 
 
@@ -631,7 +634,8 @@ class DdkWorkspaceSetupTest(KleafIntegrationTestBase):
             mount_spec = {
                 self.real_kleaf_repo: kleaf_repo
             }
-            self._unshare_mount_run(mount_spec=mount_spec, link_spec=LinkSpec())
+            self._unshare_mount_run(
+                mount_spec=mount_spec, link_spec=LinkSpec())
             return
         self._run_ddk_workspace_setup_test(kleaf_repo, self.ddk_workspace)
 
@@ -800,8 +804,8 @@ class QuickIntegrationTest(KleafIntegrationTestBase):
             f"bazel-bin/{self._common()}/kernel_aarch64_modules_prepare/modules_prepare_outdir.tar.gz"
 
         # This also tests that fixdep is not needed.
-        self._build([f"//{self._common()}:kernel_aarch64_modules_prepare"] +
-                    _FASTEST)
+        self._build(
+            [f"//{self._common()}:kernel_aarch64_modules_prepare"] + _FASTEST)
         first_hash = self._sha256(modules_prepare_archive)
 
         old_modules_archive = tempfile.NamedTemporaryFile(delete=False)
@@ -809,8 +813,8 @@ class QuickIntegrationTest(KleafIntegrationTestBase):
 
         self._touch_core_kernel_file()
 
-        self._build([f"//{self._common()}:kernel_aarch64_modules_prepare"] +
-                    _FASTEST)
+        self._build(
+            [f"//{self._common()}:kernel_aarch64_modules_prepare"] + _FASTEST)
         second_hash = self._sha256(modules_prepare_archive)
 
         if first_hash == second_hash:
@@ -1084,6 +1088,7 @@ class QuickIntegrationTest(KleafIntegrationTestBase):
         )
         self.assertEqual(1, output.count("@pigz//:pigz"))
 
+
 class ScmversionIntegrationTest(KleafIntegrationTestBase):
 
     def setUp(self) -> None:
@@ -1136,7 +1141,7 @@ class ScmversionIntegrationTest(KleafIntegrationTestBase):
                            ["EXTRAVERSION ="])
 
     def _get_vmlinux_scmversion(self, workspace_root=pathlib.Path("."),
-                                package : str | pathlib.Path | None = None):
+                                package: str | pathlib.Path | None = None):
         if not package:
             package = self._common()
         strings_output = Exec.check_output([
@@ -1262,15 +1267,16 @@ class ScmversionIntegrationTest(KleafIntegrationTestBase):
 
         real_workspace_root = pathlib.Path(".").resolve()
         repo_root = (pathlib.Path(__file__).resolve().parent /
-                              "fake_repo_root")
+                     "fake_repo_root")
         workspace_root = repo_root / "fake_workspace_root"
 
         if not arguments.mount_spec:
             mount_spec = {
-                real_workspace_root : workspace_root
+                real_workspace_root: workspace_root
             }
 
-            self._unshare_mount_run(mount_spec=mount_spec, link_spec=LinkSpec())
+            self._unshare_mount_run(
+                mount_spec=mount_spec, link_spec=LinkSpec())
             return
 
         self._mount(workspace_root)
