@@ -25,3 +25,6 @@ build:canary --remove_strings_from_hermetic_tools
 
 # Set KCONFIG_WERROR=1 to treat kconfig warnings as errors.
 build:canary --kconfig_werror
+
+# Switch host platform to musl so we use musl for as many host things as possible.
+common:canary --host_platform=//build/kernel/kleaf/impl:host_musl
