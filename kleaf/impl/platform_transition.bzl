@@ -12,7 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Transition into a given platform"""
+"""Transition into a given platform.
+
+Transition to attr.target_platform. If it is unset, do not apply any transitions.
+
+As a special case, if it is set to `"//build/kernel/kleaf/impl:command_line_option_host_platform"`,
+apply the transition to --host_platform (defaults to @platforms//host, but may be overridden in
+the command line or in --config=musl.)
+"""
 
 visibility("private")
 
