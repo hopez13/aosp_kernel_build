@@ -1320,8 +1320,18 @@ def _get_modinst_step(ctx, modules_staging_dir):
          # Set variables and create dirs for modules
            mkdir -p {modules_staging_dir}
          # Install modules
-           if grep -q "\\bmodules\\b" <<< "{make_goals}" ; then
-               make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} DEPMOD=true O=${{OUT_DIR}} {module_strip_flag} INSTALL_MOD_PATH=$(realpath {modules_staging_dir}) modules_install
+           if grep -q -E -e "\\bmodules\\b|[.]ko\\b" <<< "{make_goals}" ; then
+               if grep -q -E -e "[.]ko\\b" <<< "{make_goals}" ; then
+                   # We need to generate our own modules.order since upstream
+                   # deletes this file, but it's needed for modules_install.
+                   rm -f ${{OUT_DIR}}/modules.order
+                   for module in {make_goals}; do
+                       if grep -q -E -e "[.]ko\\b" <<< "${{module}}" ; then
+                           echo ${{module}} | sed -n "s:\\([.]\\)ko\\>.*:\\1o:p"  >> ${{OUT_DIR}}/modules.order
+                       fi
+                   done
+               fi
+               make V=1 -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} DEPMOD=true O=${{OUT_DIR}} {module_strip_flag} INSTALL_MOD_PATH=$(realpath {modules_staging_dir}) modules_install
            else
                # Workaround as this file is required, hence just produce a placeholder.
                touch {internal_outs_under_out_dir}
@@ -1451,7 +1461,15 @@ def _build_main_action(
     command += """
            {kbuild_mixed_tree_cmd}
          # Actual kernel build
-           {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} {make_goals}
+           if grep -q "\\bdtbs\\b" <<< "{make_goals}" ; then
+               {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} dtbs
+           fi
+           make_subgoals=$(echo "{make_goals}" | sed "s:\"dtbs\"::" || true)
+           if grep -q -E -e "[.]ko\\b" <<< "${{make_subgoals}}" ; then
+               {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} KBUILD_MODPOST_WARN=1 ${{make_subgoals}}
+           else
+               {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{make_subgoals}}
+           fi
          # Install modules
            {modinst_cmd}
          # Archive headers in OUT_DIR
