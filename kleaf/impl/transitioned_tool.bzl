@@ -14,11 +14,13 @@
 
 """Helper macro to wrap prebuilt tools before adding to hermetic_tools."""
 
+load("//build/kernel/kleaf/impl:debug.bzl", "debug")
 load(":platform_transition.bzl", "platform_transition")
 
 visibility("//build/kernel/...")
 
 def _transitioned_tool_impl(ctx):
+    debug.print_platforms(ctx)
     out = ctx.actions.declare_file(ctx.attr.name)
     ctx.actions.symlink(
         target_file = ctx.executable.src,
@@ -26,7 +28,7 @@ def _transitioned_tool_impl(ctx):
         is_executable = True,
     )
     runfiles = ctx.runfiles().merge(
-        ctx.attr.src[0][DefaultInfo].default_runfiles,
+        ctx.attr.src[DefaultInfo].default_runfiles,
     )
     return DefaultInfo(
         executable = out,
@@ -41,10 +43,12 @@ _transitioned_tool = rule(
             executable = True,
             allow_files = True,
             mandatory = True,
-            cfg = platform_transition,
+            cfg = "target",  # no-op, because we have incoming-edge transition already
         ),
         "target_platform": attr.label(),
     },
+    cfg = platform_transition,
+    subrules = [debug.print_platforms],
 )
 
 def prebuilt_transitioned_tool(name, src, **kwargs):
@@ -65,6 +69,7 @@ def prebuilt_transitioned_tool(name, src, **kwargs):
     )
 
 def _transitioned_files_impl(ctx):
+    debug.print_platforms(ctx)
     runfiles = ctx.runfiles().merge_all([
         src[DefaultInfo].default_runfiles
         for src in ctx.attr.srcs
@@ -79,10 +84,11 @@ _transitioned_files = rule(
     attrs = {
         "srcs": attr.label_list(
             allow_files = True,
-            cfg = platform_transition,
         ),
         "target_platform": attr.label(),
     },
+    cfg = platform_transition,
+    subrules = [debug.print_platforms],
 )
 
 def prebuilt_transitioned_files(name, srcs, **kwargs):
