@@ -17,6 +17,7 @@ Provide tools for a hermetic build.
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
+load("//build/kernel/kleaf/impl:debug.bzl", "debug")
 load(
     "//build/kernel/kleaf/impl:hermetic_exec.bzl",
     _hermetic_exec = "hermetic_exec",
@@ -106,6 +107,8 @@ def _handle_hermetic_symlinks(ctx, symlinks_attr):
     return all_outputs
 
 def _hermetic_tools_internal_impl(ctx):
+    debug.print_platforms(ctx)
+
     all_outputs = _handle_hermetic_symlinks(ctx, ctx.attr.symlinks)
 
     if ctx.attr._disable_symlink_source[BuildSettingInfo].value:
@@ -193,9 +196,11 @@ _hermetic_tools_internal = rule(
             cfg = "target",
         ),
     },
+    subrules = [debug.print_platforms],
 )
 
 def _hermetic_tools_transition_wrapper_impl(ctx):
+    debug.print_platforms(ctx)
     actual = ctx.attr.actual
     return [
         actual[DefaultInfo],
@@ -209,6 +214,7 @@ _hermetic_tools_transition_wrapper = rule(
     attrs = {
         "actual": attr.label(cfg = "exec"),
     },
+    subrules = [debug.print_platforms],
 )
 
 def hermetic_tools(
