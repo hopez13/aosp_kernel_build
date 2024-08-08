@@ -14,6 +14,7 @@
 
 """Helper macro to wrap prebuilt tools before adding to hermetic_tools."""
 
+load(":debug.bzl", "debug")
 load(":platform_transition.bzl", "platform_transition")
 
 visibility("//build/kernel/...")
@@ -41,7 +42,10 @@ _transitioned_tool = rule(
             executable = True,
             allow_files = True,
             mandatory = True,
+            # We can't put platform_transition on the incoming edge
+            # because https://github.com/bazelbuild/bazel/issues/23278.
             cfg = platform_transition,
+            aspects = [debug.print_platforms_aspect],
         ),
         "target_platform": attr.label(),
     },
@@ -79,7 +83,10 @@ _transitioned_files = rule(
     attrs = {
         "srcs": attr.label_list(
             allow_files = True,
+            # We can't put platform_transition on the incoming edge
+            # because https://github.com/bazelbuild/bazel/issues/23278.
             cfg = platform_transition,
+            aspects = [debug.print_platforms_aspect],
         ),
         "target_platform": attr.label(),
     },
