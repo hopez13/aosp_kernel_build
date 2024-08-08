@@ -157,7 +157,7 @@ abi_dump = rule(
             default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
         ),
         "_stg": attr.label(
-            default = "//prebuilts/kernel-build-tools:stg",
+            default = "//build/kernel/kleaf/impl:stg",
             allow_single_file = True,
             cfg = "exec",
             executable = True,

@@ -23,6 +23,10 @@ load(
     ":python.bzl",
     "python_runtime_files",
 )
+load(
+    ":transitioned_tool.bzl",
+    "prebuilt_transitioned_tool",
+)
 
 bzl_library(
     name = "impl",
@@ -501,4 +505,18 @@ cc_binary(
     name = "arg_wrapper",
     srcs = ["arg_wrapper.cpp"],
     visibility = ["//build/kernel:__pkg__"],
+)
+
+prebuilt_transitioned_tool(
+    name = "stg",
+    src = "//prebuilts/kernel-build-tools:stg",
+    # All kernel_abi() can see this
+    visibility = ["//visibility:public"],
+)
+
+prebuilt_transitioned_tool(
+    name = "stgdiff",
+    src = "//prebuilts/kernel-build-tools:stgdiff",
+    # All kernel_abi() can see this
+    visibility = ["//visibility:public"],
 )
