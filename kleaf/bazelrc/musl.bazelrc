@@ -12,18 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# --config=canary: Enable future features for Kleaf.
-#
-# Some of the features are experimental, most of them will be default in future
-# releases and some of them might get discontinued.
+# --config=musl: Experimental: Enable musl.
 
-# Enable building the toolchain from sources.
-build:canary --toolchain_from_sources
-
-# Drop llvm-strings from hermetic tools.
-build:canary --remove_strings_from_hermetic_tools
-
-# Set KCONFIG_WERROR=1 to treat kconfig warnings as errors.
-build:canary --kconfig_werror
-
-common:canary --config=musl
+# Individually enable sub-features.
+build:musl --musl_prebuilts
