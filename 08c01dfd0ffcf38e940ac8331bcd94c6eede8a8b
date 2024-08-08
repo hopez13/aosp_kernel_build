@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "671434bd_f70ec4f7",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-08T21:50:20Z",
+      "side": 1,
+      "message": "This issue is present upstream as well and is a workaround for now.",
+      "range": {
+        "startLine": 1469,
+        "startChar": 98,
+        "endLine": 1469,
+        "endChar": 120
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
