@@ -17,7 +17,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "bool_setting")
-load("@platforms//host:constraints.bzl", "HOST_CONSTRAINTS")
 load(":kernel_platform_toolchain.bzl", "kernel_platform_toolchain")
 load(":kernel_toolchains.bzl", "kernel_toolchains")
 load(
@@ -424,13 +423,9 @@ kernel_platform_toolchain(
 
 kernel_platform_toolchain(
     name = "kernel_toolchain_exec",
-    runpaths = [
-        "//prebuilts/kernel-build-tools:linux_x86_runpath",
-    ],
+    runpaths = ["//prebuilts/kernel-build-tools:runpath"],
     visibility = ["//build/kernel/kleaf/tests:__subpackages__"],
-    deps = [
-        "//prebuilts/kernel-build-tools:linux_x86_imported_libs",
-    ],
+    deps = ["//prebuilts/kernel-build-tools:imported_libs"],
 )
 
 kernel_toolchains(
@@ -457,12 +452,22 @@ platform(
 ## host constraints + musl
 platform(
     name = "host_musl",
-    constraint_values = HOST_CONSTRAINTS + [
+    constraint_values = [
         "//build/kernel/kleaf/platforms/libc:musl",
     ],
-    visibility = [
-        "//build/kernel:__subpackages__",
-    ],
+    parents = ["@platforms//host"],
+    visibility = ["//visibility:public"],
+)
+
+# A better check would be to check if --host_platform has the constraint value
+# //build/kernel/kleaf/platforms/libc:musl. But we don't have a mechanism to do it for now.
+# This config_setting is a hack to cover the global flag case.
+config_setting(
+    name = "host_platform_is_musl",
+    values = {
+        "host_platform": str(package_relative_label(":host_musl")),
+    },
+    visibility = ["//visibility:public"],
 )
 
 # 32-bit

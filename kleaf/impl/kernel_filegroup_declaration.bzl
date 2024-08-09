@@ -87,9 +87,19 @@ platform(
 
 platform(
     name = {exec_platform_repr},
+    parents = ["@platforms//host"],
     constraint_values = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
+        # @kleaf//prebuilts/clang/host/linux-x86/kleaf:{toolchain_version}
+        package_relative_label(_CLANG_KLEAF_PKG).same_package_label({toolchain_version_repr}),
+    ],
+    visibility = ["//visibility:private"],
+)
+
+platform(
+    name = {exec_musl_platform_repr},
+    # @kleaf//build/kernel/kleaf/impl:host_musl
+    parents = [_HOST_MUSL],
+    constraint_values = [
         # @kleaf//prebuilts/clang/host/linux-x86/kleaf:{toolchain_version}
         package_relative_label(_CLANG_KLEAF_PKG).same_package_label({toolchain_version_repr}),
     ],
@@ -115,7 +125,11 @@ kernel_filegroup(
     outs = {outs_repr},
     internal_outs = {internal_outs_repr},
     target_platform = {target_platform_repr},
-    exec_platform = {exec_platform_repr},
+    exec_platform = select({
+        _MUSL_KBUILD_IS_TRUE: {exec_musl_platform_repr},
+        _HOST_PLATFORM_IS_MUSL: {exec_musl_platform_repr},
+        "//conditions:default": {exec_platform_repr},
+    }),
     visibility = ["//visibility:public"],
 )
 """
