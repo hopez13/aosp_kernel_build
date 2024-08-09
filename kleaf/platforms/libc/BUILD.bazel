@@ -14,11 +14,22 @@
 
 """Describes which libc a target is using."""
 
+# This may change after the migration.
+_DEFAULT = ":glibc"
+
 constraint_setting(
     name = "libc",
-    default_constraint_value = ":glibc",
+    default_constraint_value = _DEFAULT,
     visibility = [
         "//visibility:private",
+    ],
+)
+
+alias(
+    name = "default",
+    actual = _DEFAULT,
+    visibility = [
+        "//visibility:public",
     ],
 )
 
