@@ -161,10 +161,11 @@ def _kernel_toolchains_impl(ctx):
         #   below OUT_DIR,
         #   e.g. $OUT_DIR/scripts/sign-file, $OUT_DIR/tools/bpf/resolve_btfids/resolve_btfids
         # If this ever changes, edit kleaf_internal_eval_ldflags and add more levels.
+        # FIXME
         setup_env_var_cmd += """
             export HOSTCFLAGS={quoted_hostcflags}
             export USERCFLAGS={quoted_usercflags}
-            export HOSTLDFLAGS={quoted_hostldflags}
+            export HOSTLDFLAGS={quoted_hostldflags}' -lc_musl'
             export USERLDFLAGS={quoted_userldflags}
 
             # Append to *LDFLAGS based on the current settings of $OUT_DIR.

@@ -95,6 +95,16 @@ platform(
     visibility = ["//visibility:private"],
 )
 
+platform(
+    name = {exec_musl_platform_repr},
+    parents = [{exec_platform_repr}],
+    constraint_values = [
+        # @kleaf//build/kernel/kleaf/platforms/libc:musl
+        _MUSL,
+    ],
+    visibility = ["//visibility:private"],
+)
+
 kernel_filegroup(
     name = {name_repr},
     srcs = {srcs_repr},
@@ -114,7 +124,10 @@ kernel_filegroup(
     outs = {outs_repr},
     internal_outs = {internal_outs_repr},
     target_platform = {target_platform_repr},
-    exec_platform = {exec_platform_repr},
+    exec_platform = select({
+        _MUSL_KBUILD_IS_TRUE: {exec_musl_platform_repr},
+        "//conditions:default": {exec_platform_repr},
+    }),
     visibility = ["//visibility:public"],
 )
 """
