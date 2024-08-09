@@ -19,3 +19,4 @@ common:musl --host_platform=//build/kernel/kleaf/impl:host_musl
 
 # Individually enable sub-features.
 build:musl --musl_prebuilts
+build:musl --musl_kbuild

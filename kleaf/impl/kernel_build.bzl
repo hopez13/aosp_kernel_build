@@ -520,10 +520,15 @@ def kernel_build(
 
     native.platform(
         name = name + "_platform_exec",
-        constraint_values = [
-            Label("@platforms//os:linux"),
-            Label("@platforms//cpu:x86_64"),
-        ] + toolchain_constraints,
+        parents = ["@platforms//host"],
+        constraint_values = toolchain_constraints,
+        **internal_kwargs
+    )
+
+    native.platform(
+        name = name + "_platform_exec_musl",
+        parents = [Label("//build/kernel/kleaf/impl:host_musl")],
+        constraint_values = toolchain_constraints,
         **internal_kwargs
     )
 
@@ -538,7 +543,10 @@ def kernel_build(
         lto = lto,
         make_goals = make_goals,
         target_platform = name + "_platform_target",
-        exec_platform = name + "_platform_exec",
+        exec_platform = select({
+            Label("//build/kernel/kleaf:musl_kbuild_is_true"): name + "_platform_exec_musl",
+            "//conditions:default": name + "_platform_exec",
+        }),
         defconfig_fragments = defconfig_fragments,
         **internal_kwargs
     )
