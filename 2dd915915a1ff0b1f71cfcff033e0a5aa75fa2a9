@@ -22,6 +22,30 @@
       },
       "revId": "2dd915915a1ff0b1f71cfcff033e0a5aa75fa2a9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0501206_26b19a21",
+        "filename": "kleaf/impl/debug.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-09T18:09:32Z",
+      "side": 1,
+      "message": "No, it is not possible, unless there is a bug that allows two constraint values for a constraint setting. That being said, I\u0027m going to keep the code this way so that in case this bug indeed happens, we\u0027ll see it in the debug log.",
+      "parentUuid": "9b5df6c5_ab635114",
+      "range": {
+        "startLine": 71,
+        "startChar": 12,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "2dd915915a1ff0b1f71cfcff033e0a5aa75fa2a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
