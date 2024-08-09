@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a877c050_9f64d950",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-09T00:41:58Z",
+      "side": 1,
+      "message": "This needs to be cp\u0027ed to gbl/uboot.",
+      "revId": "06a8705dbb4acafde04114845d021cff52b30baa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
