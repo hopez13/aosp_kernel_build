@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b5df6c5_ab635114",
+        "filename": "kleaf/impl/debug.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-09T09:49:50Z",
+      "side": 1,
+      "message": "nit: is it possible to have both (glibc, musl)?",
+      "range": {
+        "startLine": 71,
+        "startChar": 12,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "2dd915915a1ff0b1f71cfcff033e0a5aa75fa2a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
