@@ -152,6 +152,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f193585_5440911d",
+        "filename": "kleaf/build_cleaner.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-09T22:59:26Z",
+      "side": 1,
+      "message": "The original code also didn\u0027t check for `if match`, so it could crash if it sees recognized lines. finditer won\u0027t have this issue; if there are no more matches, the loop stops.",
+      "parentUuid": "370410eb_f1f56b02",
+      "range": {
+        "startLine": 165,
+        "startChar": 35,
+        "endLine": 167,
+        "endChar": 54
+      },
+      "revId": "9d25644dc482036f30bcb10174d4aceeffed28a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e4fbbd30_5aff37ac",
         "filename": "kleaf/build_cleaner.py",
         "patchSetId": 6
