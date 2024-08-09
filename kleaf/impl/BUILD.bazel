@@ -425,11 +425,11 @@ kernel_platform_toolchain(
 kernel_platform_toolchain(
     name = "kernel_toolchain_exec",
     runpaths = [
-        "//prebuilts/kernel-build-tools:linux_x86_runpath",
+        "//prebuilts/kernel-build-tools:runpath",
     ],
     visibility = ["//build/kernel/kleaf/tests:__subpackages__"],
     deps = [
-        "//prebuilts/kernel-build-tools:linux_x86_imported_libs",
+        "//prebuilts/kernel-build-tools:imported_libs",
     ],
 )
 
@@ -437,6 +437,15 @@ kernel_toolchains(
     name = "kernel_toolchains",
     exec_toolchain = ":kernel_toolchain_exec",
     target_toolchain = "kernel_toolchain_target",
+    # All kernel_* from different packages can see this
+    visibility = ["//visibility:public"],
+)
+
+# Exposed for kernel_build()/kernel_filegroup(). Do not use it for other purposes; it is an
+# implementation detail and it may be deleted without notice.
+alias(
+    name = "musl",
+    actual = "//build/kernel/kleaf/platforms/libc:musl",
     # All kernel_* from different packages can see this
     visibility = ["//visibility:public"],
 )
