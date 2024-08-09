@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "864519b6_028f1a6b",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-09T00:50:20Z",
+      "side": 1,
+      "message": "This reminds me of https://b.corp.google.com/issues/266956564#comment38, where I need to separate the make steps as well. Could also be unrelated tho",
+      "parentUuid": "656d2605_815b7f8b",
+      "range": {
+        "startLine": 1464,
+        "startChar": 11,
+        "endLine": 1466,
+        "endChar": 13
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "671434bd_f70ec4f7",
         "filename": "kleaf/impl/kernel_build.bzl",
         "patchSetId": 1
