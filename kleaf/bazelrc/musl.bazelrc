@@ -16,3 +16,4 @@
 
 # Individually enable sub-features.
 build:musl --musl_prebuilts
+build:musl --musl_kbuild
