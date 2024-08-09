@@ -22,6 +22,30 @@
       },
       "revId": "d8dc15a0d4f9f27649f86fedfbebfcf2bf2b9729",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd494dd_e7a85dea",
+        "filename": "kleaf/bazelrc/canary.bazelrc",
+        "patchSetId": 17
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-09T18:13:36Z",
+      "side": 1,
+      "message": "I don\u0027t think this applies; the auto gen bazel help only looks at the first comment in the file.",
+      "parentUuid": "c4bf5521_e14ee3a0",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 1
+      },
+      "revId": "d8dc15a0d4f9f27649f86fedfbebfcf2bf2b9729",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
