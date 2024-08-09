@@ -1758,8 +1758,19 @@ def _create_infos(
             for dep in ext_mod_serialized_env_info_deps
         },
         fake_system_map = True,
-        extra_restore_outputs_cmd = "",
-        extra_inputs = depset(transitive = [module_srcs.module_scripts]),
+        # FIXME we only need Module.symvers
+        extra_restore_outputs_cmd = """
+            (
+                {kbuild_mixed_tree_cmd}
+                cp ${{KBUILD_MIXED_TREE}}/Module.symvers ${{OUT_DIR}}/Module.symvers.tmp
+                grep -v -e vmlinux ${{OUT_DIR}}/Module.symvers >> ${{OUT_DIR}}/Module.symvers.tmp
+                mv ${{OUT_DIR}}/Module.symvers.tmp ${{OUT_DIR}}/Module.symvers
+            )
+        """.format(
+            kbuild_mixed_tree_cmd = kbuild_mixed_tree_ret.cmd
+        ),
+        # FIXME we only need Module.symvers
+        extra_inputs = depset(kbuild_mixed_tree_ret.outputs, transitive = [module_srcs.module_scripts]),
     )
 
     # External modules do not need implicit_outs because they are unsigned.
@@ -1876,6 +1887,7 @@ def _create_infos(
     output_group_info = OutputGroupInfo(**output_group_kwargs)
 
     kbuild_mixed_tree_files = all_output_files["outs"].values() + all_output_files["module_outs"].values()
+    kbuild_mixed_tree_files.append(all_output_files["internal_outs"]["Module.symvers"])
     kbuild_mixed_tree_info = KernelBuildMixedTreeInfo(
         files = depset(kbuild_mixed_tree_files),
     )
