@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ce5f243_ccd38603",
+        "filename": "kleaf/build_cleaner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1931347
+      },
+      "writtenOn": "2024-08-09T10:16:52Z",
+      "side": 1,
+      "message": "Done. Thanks for correcting this. I removed the identifier from cquery later, so it should always be cquery even without configs.",
+      "parentUuid": "b04c1a5e_ee5f438d",
+      "range": {
+        "startLine": 149,
+        "startChar": 13,
+        "endLine": 149,
+        "endChar": 18
+      },
+      "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb85b21e_76fdce44",
@@ -75,6 +99,24 @@
           ]
         }
       ],
+      "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e56d6541_d27cd776",
+        "filename": "kleaf/build_cleaner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1931347
+      },
+      "writtenOn": "2024-08-09T10:16:52Z",
+      "side": 1,
+      "message": "Done. But I didn\u0027t find a clean solution to modify help message, so I modify the usage and add epilog directly.",
+      "parentUuid": "bb85b21e_76fdce44",
       "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
