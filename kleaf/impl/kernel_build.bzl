@@ -539,6 +539,15 @@ def kernel_build(
         **internal_kwargs
     )
 
+    native.platform(
+        name = name + "_platform_exec_musl",
+        parents = [name + "_platform_exec"],
+        constraint_values = [
+            Label("//build/kernel/kleaf/impl:musl"),
+        ],
+        **internal_kwargs
+    )
+
     kernel_env(
         name = env_target_name,
         build_config = build_config,
@@ -550,7 +559,10 @@ def kernel_build(
         lto = lto,
         make_goals = make_goals,
         target_platform = name + "_platform_target",
-        exec_platform = name + "_platform_exec",
+        exec_platform = select({
+            Label("//build/kernel/kleaf:musl_kbuild_is_true"): name + "_platform_exec_musl",
+            "//conditions:default": name + "_platform_exec",
+        }),
         defconfig_fragments = defconfig_fragments,
         **internal_kwargs
     )

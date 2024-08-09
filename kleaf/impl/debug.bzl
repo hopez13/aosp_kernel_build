@@ -77,10 +77,21 @@ def _target_platform_libc(ctx, _glibc, _musl):
 # subrule implementation. But we need ctx.target_platform_has_constraint, and
 # this is for debugging only.
 def _print_platforms_impl(subrule_ctx, ctx, *, _should_print, _glibc, _musl):
-    """Prints platform information."""
+    """Prints platform information.
+
+    Args:
+        subrule_ctx: with `fragments = ["platform"]`
+        ctx: with `target_platform_has_constraint`
+        _should_print: value of --debug_print_platforms
+        _glibc: glibc constraint value
+        _musl: musl constraint value
+
+    Returns:
+        whether debug platform information was printed.
+    """
 
     if not _should_print[BuildSettingInfo].value:
-        return
+        return False
 
     # buildifier: disable=print
     print("{}: libc={}, plat={}, host={}".format(
@@ -89,6 +100,7 @@ def _print_platforms_impl(subrule_ctx, ctx, *, _should_print, _glibc, _musl):
         subrule_ctx.fragments.platform.platform,
         subrule_ctx.fragments.platform.host_platform,
     ))
+    return True
 
 _print_platforms = subrule(
     implementation = _print_platforms_impl,
