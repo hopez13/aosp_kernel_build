@@ -119,6 +119,24 @@
       "parentUuid": "bb85b21e_76fdce44",
       "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c06aa47_ab113147",
+        "filename": "kleaf/build_cleaner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-09T22:57:04Z",
+      "side": 1,
+      "message": "I think just having the epilog is fine; you can leave `usage` alone",
+      "parentUuid": "e56d6541_d27cd776",
+      "revId": "d283b7890dede74fdde68ff86e4f4944e3ef7464",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
