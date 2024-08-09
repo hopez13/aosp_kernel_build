@@ -80,7 +80,7 @@ def _print_platforms_impl(subrule_ctx, ctx, *, _should_print, _glibc, _musl):
     """Prints platform information."""
 
     if not _should_print[BuildSettingInfo].value:
-        return
+        return False
 
     # buildifier: disable=print
     print("{}: libc={}, plat={}, host={}".format(
@@ -89,6 +89,7 @@ def _print_platforms_impl(subrule_ctx, ctx, *, _should_print, _glibc, _musl):
         subrule_ctx.fragments.platform.platform,
         subrule_ctx.fragments.platform.host_platform,
     ))
+    return True
 
 _print_platforms = subrule(
     implementation = _print_platforms_impl,
