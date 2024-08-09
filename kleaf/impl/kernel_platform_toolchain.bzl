@@ -22,10 +22,12 @@ load(
 )
 load("@bazel_tools//tools/cpp:toolchain_utils.bzl", "find_cpp_toolchain", "use_cpp_toolchain")
 load(":common_providers.bzl", "KernelPlatformToolchainInfo")
+load(":debug.bzl", "debug")
 
 visibility("//build/kernel/kleaf/...")
 
 def _kernel_platform_toolchain_impl(ctx):
+    debug.print_platforms(ctx)
     cc_info = cc_common.merge_cc_infos(
         cc_infos = [src[CcInfo] for src in ctx.attr.deps],
     )
@@ -137,4 +139,5 @@ kernel_platform_toolchain = rule(
     },
     toolchains = use_cpp_toolchain(mandatory = False),
     fragments = ["cpp"],
+    subrules = [debug.print_platforms]
 )

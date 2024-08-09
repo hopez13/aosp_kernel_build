@@ -278,11 +278,15 @@ workspace({})
 load({kernel_bzl_repr}, "kernel_filegroup")
 
 _CLANG_KLEAF_PKG = {clang_kleaf_pkg}
+_MUSL_KBUILD_IS_TRUE = {musl_kbuild_is_true_repr}
+_HOST_PLATFORM_IS_MUSL = {host_platform_is_musl_repr}
 
 {template_content}
 """.format(
         kernel_bzl_repr = repr(str(Label("//build/kernel/kleaf:kernel.bzl"))),
         clang_kleaf_pkg = repr(str(Label("//prebuilts/clang/host/linux-x86/kleaf"))),
+        musl_kbuild_is_true_repr = repr(str(Label("//build/kernel/kleaf:musl_kbuild_is_true"))),
+        host_platform_is_musl_repr = repr(str(Label("//build/kernel/kleaf/impl:host_platform_is_musl"))),
         template_content = template_content,
     ))
 
