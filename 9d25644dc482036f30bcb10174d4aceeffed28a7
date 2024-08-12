@@ -468,6 +468,30 @@
       },
       "revId": "9d25644dc482036f30bcb10174d4aceeffed28a7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32faf7d4_38f79968",
+        "filename": "kleaf/build_cleaner.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-12T19:54:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d7e76bbb_59bc973c",
+      "range": {
+        "startLine": 264,
+        "startChar": 4,
+        "endLine": 264,
+        "endChar": 90
+      },
+      "revId": "9d25644dc482036f30bcb10174d4aceeffed28a7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
