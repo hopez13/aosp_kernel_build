@@ -16,6 +16,24 @@
       "message": "This is causing issues. I\u0027ll revert this change for now.",
       "revId": "d6f888f8e7e4a38781e1b6ad3dcf0bb7390c75f5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "594c9ea3_c21ccbd0",
+        "filename": "kleaf/impl/transitioned_tool.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-12T23:33:26Z",
+      "side": 1,
+      "message": "Done, fixed by using aspects. Filed two bugs on Bazel.",
+      "parentUuid": "2c89482b_8e6b7e92",
+      "revId": "d6f888f8e7e4a38781e1b6ad3dcf0bb7390c75f5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
