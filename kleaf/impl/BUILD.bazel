@@ -26,6 +26,7 @@ load(
 load(
     ":transitioned_tool.bzl",
     "prebuilt_transitioned_tool",
+    "transitioned_tool_from_sources",
 )
 
 bzl_library(
