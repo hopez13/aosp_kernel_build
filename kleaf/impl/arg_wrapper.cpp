@@ -15,10 +15,9 @@
 // Helper wrapper for hermetic tools to wrap arguments.
 //
 // This roughly equivalent to:
-// 1. readlink /proc/self/exe, then dirname multiple times to determine the path
-//    internal_dir =
-//    <execroot>/build/kernel/hermetic-tools/kleaf_internal_do_not_use
-// 2. tool_name = basename($0)
+// 1. mypath = $(readlink /proc/self/exe)
+// 2. tool_name = basename(mypath)
+// 3. internal_dir = dirname(mypath)/kleaf_internal_do_not_use
 // 3. call <internal_dir>/<tool_name> $@ \\
 //      $(cat <internal_dir>/<tool_name>_args.txt)
 //
@@ -41,8 +40,8 @@
 
 namespace {
 
-// <execroot>/build/kernel/hermetic-tools/kleaf_internal_do_not_use
-std::filesystem::path get_kleaf_internal_dir() {
+// $(realpath /proc/self/exe)
+std::filesystem::path get_my_path() {
   std::error_code ec;
   auto my_path = std::filesystem::read_symlink("/proc/self/exe", ec);
   if (ec.value() != 0) {
@@ -50,8 +49,7 @@ std::filesystem::path get_kleaf_internal_dir() {
               << std::endl;
     exit(EX_SOFTWARE);
   }
-  return my_path.parent_path().parent_path().parent_path() / "hermetic-tools" /
-         "kleaf_internal_do_not_use";
+  return my_path;
 }
 
 // Loads <tool_name>_args.txt from hermetic_tools.extra_args
@@ -73,13 +71,10 @@ std::vector<std::string> load_arg_file(const std::filesystem::path& path) {
 }  // namespace
 
 int main(int argc, char* argv[]) {
-  auto internal_dir = get_kleaf_internal_dir();
+  auto my_path = get_my_path();
+  auto internal_dir = my_path.parent_path() / "kleaf_internal_do_not_use";
 
-  if (argc < 1) {
-    std::cerr << "ERROR: argc == " << argc << " < 1" << std::endl;
-    return EX_SOFTWARE;
-  }
-  std::string tool_name(std::filesystem::path(argv[0]).filename());
+  std::string tool_name(my_path.filename());
 
   // The actual executable we are going to call. Cast to string to use
   // in new_argv.
@@ -88,6 +83,10 @@ int main(int argc, char* argv[]) {
   std::vector<char*> new_argv;
   new_argv.push_back(real_executable.data());
 
+  if (argc < 1) {
+    std::cerr << "ERROR: argc == " << argc << " < 1" << std::endl;
+    return EX_SOFTWARE;
+  }
   for (int i = 1; i < argc; i++) {
     new_argv.push_back(argv[i]);
   }
