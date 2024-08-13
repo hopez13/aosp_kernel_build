@@ -16,6 +16,24 @@
       "message": "This needs to be cp\u0027ed to gbl/uboot.",
       "revId": "06a8705dbb4acafde04114845d021cff52b30baa",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cefe765_658331d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-13T04:11:55Z",
+      "side": 1,
+      "message": "CL:3216053",
+      "parentUuid": "a877c050_9f64d950",
+      "revId": "06a8705dbb4acafde04114845d021cff52b30baa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
