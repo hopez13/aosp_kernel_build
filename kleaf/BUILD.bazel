@@ -690,6 +690,20 @@ config_setting(
     visibility = ["//visibility:public"],
 )
 
+# For hermetic tools built from sources, use musl libc.
+# Experimental: some hermetic tools built from sources may still be using glibc.
+bool_flag(
+    name = "musl_tools_from_sources",
+    build_setting_default = False,
+    visibility = ["//visibility:private"],
+)
+
+config_setting(
+    name = "musl_tools_from_sources_is_true",
+    flag_values = {":musl_tools_from_sources": "1"},
+    visibility = ["//visibility:public"],
+)
+
 # The values of --config, as passed by command line and bazelrc files.
 _config_values = (
     "local",
