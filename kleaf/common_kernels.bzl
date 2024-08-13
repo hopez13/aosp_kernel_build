@@ -18,6 +18,7 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "string_flag")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
 load("//build/kernel/kleaf/artifact_tests:device_modules_test.bzl", "device_modules_test")
@@ -898,12 +899,23 @@ def _define_common_kernel(
         log = "info",
     )
 
+    # For ABI monitoring keep a copy of the baseline stg file, which could be
+    # different from the one checked-in when doing rebases during code-reviews.
+    abi_dist_targets = dist_targets
+    if abi_definition_stg:
+        copy_file(
+            name = name + "_stg_baseline",
+            src = abi_definition_stg,
+            out = name + "/abi_baseline.stg",
+        )
+        abi_dist_targets.append(name + "_stg_baseline")
+
     kernel_abi_dist_name = name + "_abi_dist"
     kernel_abi_dist(
         name = kernel_abi_dist_name,
         kernel_abi = name + "_abi",
         kernel_build_add_vmlinux = _GKI_ADD_VMLINUX,
-        data = dist_targets,
+        data = abi_dist_targets,
         flat = True,
         dist_dir = "out_abi/{name}/dist".format(name = name),
         log = "info",
@@ -913,7 +925,7 @@ def _define_common_kernel(
         name = name + "_abi_ignore_diff_dist",
         kernel_abi = name + "_abi",
         kernel_build_add_vmlinux = _GKI_ADD_VMLINUX,
-        data = dist_targets,
+        data = abi_dist_targets,
         flat = True,
         dist_dir = "out_abi/{name}/dist".format(name = name),
         log = "info",
