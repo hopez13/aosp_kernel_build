@@ -69,33 +69,13 @@ def _handle_tool(ctx, tool_name, actual_target):
     out = ctx.actions.declare_file("{}/{}".format(ctx.attr.outer_target_name, tool_name))
     target_file = _get_single_executable(ctx, actual_target)
 
-    if tool_name not in ctx.attr.extra_args:
-        ctx.actions.symlink(
-            output = out,
-            target_file = target_file,
-            is_executable = True,
-            progress_message = "Creating symlink to in-tree tool {} %{{label}}".format(tool_name),
-        )
-        return [out]
-
-    internal_symlink = ctx.actions.declare_file("{}/kleaf_internal_do_not_use/{}".format(ctx.attr.outer_target_name, tool_name))
-    ctx.actions.symlink(
-        output = internal_symlink,
-        target_file = target_file,
-        is_executable = True,
-        progress_message = "Creating internal symlink to in-tree tool {} %{{label}}".format(tool_name),
-    )
-
     ctx.actions.symlink(
         output = out,
-        target_file = ctx.executable._arg_wrapper,
+        target_file = target_file,
         is_executable = True,
         progress_message = "Creating symlink to in-tree tool {} %{{label}}".format(tool_name),
     )
-    extra_args = "\n".join(ctx.attr.extra_args[tool_name])
-    extra_args_file = ctx.actions.declare_file("{}/kleaf_internal_do_not_use/{}_args.txt".format(ctx.attr.outer_target_name, tool_name))
-    ctx.actions.write(extra_args_file, extra_args)
-    return [out, internal_symlink, extra_args_file]
+    return [out]
 
 def _handle_hermetic_symlinks(ctx, symlinks_attr):
     all_outputs = []
@@ -117,7 +97,6 @@ def _hermetic_tools_internal_impl(ctx):
         transitive_deps = [target.files for target in ctx.attr.symlinks]
 
     transitive_deps += [target.files for target in ctx.attr.deps]
-    transitive_deps.append(ctx.attr._arg_wrapper.files)
 
     for actual_target in ctx.attr.symlinks:
         if actual_target.default_runfiles:
@@ -183,17 +162,8 @@ _hermetic_tools_internal = rule(
         "outer_target_name": attr.string(),
         "deps": attr.label_list(allow_files = True),
         "symlinks": attr.label_keyed_string_dict(allow_files = True),
-        "extra_args": attr.string_list_dict(),
         "_disable_symlink_source": attr.label(
             default = "//build/kernel/kleaf:incompatible_disable_hermetic_tools_symlink_source",
-        ),
-        "_arg_wrapper": attr.label(
-            default = "//build/kernel/kleaf/impl:arg_wrapper",
-            executable = True,
-            # Prevent inadvertent exec transition that messes up the
-            # path calculation. Exec transition needs to be done on the whole
-            # hermetic_tools target.
-            cfg = "target",
         ),
     },
     subrules = [debug.print_platforms],
@@ -221,7 +191,6 @@ def hermetic_tools(
         name,
         deps = None,
         symlinks = None,
-        extra_args = None,
         **kwargs):
     """Provide tools for a hermetic build.
 
@@ -234,8 +203,6 @@ def hermetic_tools(
             ```
             {"//label/to:toybox": "cp:realpath"}
             ```
-        extra_args: Keys are names to the tool (see `symlinks`). Values are
-            extra arguments added to the tool at the end.
         **kwargs: Additional attributes to the internal rule, e.g.
           [`visibility`](https://docs.bazel.build/versions/main/visibility.html).
           See complete list
@@ -250,7 +217,6 @@ def hermetic_tools(
         outer_target_name = name,
         deps = deps,
         symlinks = symlinks,
-        extra_args = extra_args,
         **private_kwargs
     )
 
