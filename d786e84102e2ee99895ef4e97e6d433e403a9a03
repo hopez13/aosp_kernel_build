@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d8027ac_c6839cb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1625880
+      },
+      "writtenOn": "2024-08-13T14:18:59Z",
+      "side": 1,
+      "message": "This will not solve the problem for older branches. It may be better to recreate the build workspace ABI using knowledge of the relevant Git hashes and `diff3 -m`.",
+      "revId": "d786e84102e2ee99895ef4e97e6d433e403a9a03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4837ea2c_86de92ef",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1625880
+      },
+      "writtenOn": "2024-08-13T14:18:59Z",
+      "side": 1,
+      "message": "```\n# Keep a copy of the ABI file in the build workspace which may be the result of\n# cherry-picking pending commits on top of tip-of-tree or last known good build.\n```",
+      "range": {
+        "startLine": 902,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 79
+      },
+      "revId": "d786e84102e2ee99895ef4e97e6d433e403a9a03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
