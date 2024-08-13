@@ -180,6 +180,9 @@ def _kernel_toolchains_impl(ctx):
                 kleaf_internal_append_one_ldflags ../
                 kleaf_internal_append_one_ldflags ../../
                 kleaf_internal_append_one_ldflags ../../../
+                kleaf_internal_append_one_ldflags ../../../../
+                kleaf_internal_append_one_ldflags ../../../../../
+                kleaf_internal_append_one_ldflags ../../../../../../
             }}
             export -f kleaf_internal_eval_ldflags
 
