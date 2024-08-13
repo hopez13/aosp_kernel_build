@@ -898,12 +898,19 @@ def _define_common_kernel(
         log = "info",
     )
 
+    # For ABI monitoring keep a copy of the baseline stg file, which could be
+    # different from the one checked-in when doing rebases during code-reviews.
+    # TODO: Rename the file appropriately (e.g. "_baseline")
+    abi_dist_targets = dist_targets
+    if abi_definition_stg:
+        abi_dist_targets.append(abi_definition_stg)
+
     kernel_abi_dist_name = name + "_abi_dist"
     kernel_abi_dist(
         name = kernel_abi_dist_name,
         kernel_abi = name + "_abi",
         kernel_build_add_vmlinux = _GKI_ADD_VMLINUX,
-        data = dist_targets,
+        data = abi_dist_targets,
         flat = True,
         dist_dir = "out_abi/{name}/dist".format(name = name),
         log = "info",
@@ -913,7 +920,7 @@ def _define_common_kernel(
         name = name + "_abi_ignore_diff_dist",
         kernel_abi = name + "_abi",
         kernel_build_add_vmlinux = _GKI_ADD_VMLINUX,
-        data = dist_targets,
+        data = abi_dist_targets,
         flat = True,
         dist_dir = "out_abi/{name}/dist".format(name = name),
         log = "info",
