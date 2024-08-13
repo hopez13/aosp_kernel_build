@@ -45,6 +45,30 @@
       },
       "revId": "a003f44909372309c038388c4fd27c3b4d9ee225",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "344fcb22_6fb7da81",
+        "filename": "kleaf/impl/BUILD.bazel",
+        "patchSetId": 27
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-13T18:11:21Z",
+      "side": 1,
+      "message": "This is intentional, like markdown H2 headers (L444 is H1)",
+      "parentUuid": "4ceb9dbc_3f9e1c15",
+      "range": {
+        "startLine": 457,
+        "startChar": 1,
+        "endLine": 457,
+        "endChar": 2
+      },
+      "revId": "a003f44909372309c038388c4fd27c3b4d9ee225",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
