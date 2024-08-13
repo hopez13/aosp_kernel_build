@@ -17,6 +17,7 @@ load("@kernel_toolchain_info//:dict.bzl", "VARS")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_tools")
 load("//build/kernel/kleaf/impl:bison_wrapper.bzl", "bison_wrapper")
+load("//build/kernel/kleaf/impl:native_binary_with_arg.bzl", "native_binary_with_arg")
 load(
     "//build/kernel/kleaf/impl:transitioned_tool.bzl",
     "prebuilt_transitioned_files",
@@ -41,6 +42,13 @@ filegroup(
     visibility = [
         "@kleaf_clang_toolchain//:__subpackages__",
     ],
+)
+
+native_binary_with_arg(
+    name = "rsync",
+    src = "@kleaf_host_tools//:rsync",
+    args = ["--no-group"],
+    visibility = ["//visibility:private"],
 )
 
 prebuilt_transitioned_tool(
@@ -72,6 +80,19 @@ alias(
         "//build/kernel/kleaf:gzip_is_pigz_is_true": "@pigz",
         "//conditions:default": ":toybox",
     }),
+    visibility = ["//visibility:private"],
+)
+
+native_binary_with_arg(
+    name = "tar",
+    src = ":toybox",
+    args = [
+        "--mtime=@0",
+        "--owner=0",
+        "--group=0",
+        "--numeric-owner",
+        "--sort=name",
+    ],
     visibility = ["//visibility:private"],
 )
 
@@ -142,8 +163,10 @@ _PREBUILT_TOOLS = [
 
 # List of hermetic tools where label names are used as the tool names
 _HERMETIC_TOOLS = [
+    # keep sorted
     ":bison",
     ":gzip",
+    ":tar",
     # TODO: This is only used by abi_stgdiff. It should be fine to be removed from hermetic_tools.
     "//build/kernel/kleaf/impl:stgdiff",
 ] + glob([
@@ -206,7 +229,6 @@ _TOYS = [
     "sort",
     "stat",
     "tail",
-    "tar",
     "tee",
     "test",
     "timeout",
@@ -228,16 +250,6 @@ _TOYS = [
 
 hermetic_tools(
     name = "hermetic-tools",
-    extra_args = {
-        "rsync": ["--no-group"],
-        "tar": [
-            "--mtime=@0",
-            "--owner=0",
-            "--group=0",
-            "--numeric-owner",
-            "--sort=name",
-        ],
-    },
     symlinks = select({
         "//build/kernel/kleaf:debug_cache_dir_conflict_needs_flock": {
             ":toybox_flock": "flock",
@@ -269,7 +281,7 @@ hermetic_tools(
         "@kleaf_host_tools//:bash": "bash",
         "@kleaf_host_tools//:sh": "sh",
         "@kleaf_host_tools//:perl": "perl",
-        "@kleaf_host_tools//:rsync": "rsync",
+        ":rsync": "rsync",
         ":prebuilt_depmod": ":".join([
             # keep sorted
             "depmod",
