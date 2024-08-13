@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8113fbd3_3625b6a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 27
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-13T10:53:57Z",
+      "side": 1,
+      "message": "nit: `Binaries`",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 13,
+        "endChar": 49
+      },
+      "revId": "a003f44909372309c038388c4fd27c3b4d9ee225",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ceb9dbc_3f9e1c15",
+        "filename": "kleaf/impl/BUILD.bazel",
+        "patchSetId": 27
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-13T10:53:57Z",
+      "side": 1,
+      "message": "nit: Remove.",
+      "range": {
+        "startLine": 457,
+        "startChar": 1,
+        "endLine": 457,
+        "endChar": 2
+      },
+      "revId": "a003f44909372309c038388c4fd27c3b4d9ee225",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
