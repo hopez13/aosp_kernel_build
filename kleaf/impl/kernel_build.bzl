@@ -2347,9 +2347,25 @@ def _repack_modules_staging_archive(
           base_modules=$(echo "${{base_modules}}" | grep -v "${{module}}"'$' || true)
         done
 
+        # Remove the GKI modules from modules.order so that they get trimmed if
+        # unused.
         if [[ -n "${{base_modules}}" ]]; then
             tar xf {base_archive} -C {modules_staging_dir} ${{base_modules}}
+
+            modules_order_dirname=$(ls -d {modules_staging_dir}/lib/modules/*)
+            modules_order_file="${{modules_order_dirname}}/modules.order"
+            for module in ${{base_modules}}; do
+                mod_basename=$(basename ${{module}})
+                find ${{modules_order_dirname}}/kernel -name ${{mod_basename}} \\
+                    -printf "kernel/%P\\n" >> ${{modules_order_dirname}}/modules.order.gki
+            done
+            if [[ -f "${{modules_order_dirname}}/modules.order.gki" ]]; then
+                ! grep -x -v -F -f ${{modules_order_dirname}}/modules.order.gki \\
+                    ${{modules_order_file}} > ${{modules_order_dirname}}/modules.order.tmp
+                mv -f ${{modules_order_dirname}}/modules.order.tmp ${{modules_order_file}}
+            fi
         fi
+
         tar czf {out_archive} -C  {modules_staging_dir} .
         rm -rf {modules_staging_dir}
     """.format(
