@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "066b1354_cf453426",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-13T13:13:31Z",
+      "side": 1,
+      "message": "Review will go to CL:3217597 and then it will be cherry-picked here.",
+      "revId": "e61ac4311f05c064a250f56c151a5149c7240e3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
