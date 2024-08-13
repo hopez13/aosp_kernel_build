@@ -41,7 +41,7 @@
 
 namespace {
 
-// <execroot>/build/kernel/hermetic-tools/kleaf_internal_do_not_use
+// $(dirname $(realpath $0))/kleaf_internal_do_not_use
 std::filesystem::path get_kleaf_internal_dir() {
   std::error_code ec;
   auto my_path = std::filesystem::read_symlink("/proc/self/exe", ec);
@@ -50,8 +50,7 @@ std::filesystem::path get_kleaf_internal_dir() {
               << std::endl;
     exit(EX_SOFTWARE);
   }
-  return my_path.parent_path().parent_path().parent_path() / "hermetic-tools" /
-         "kleaf_internal_do_not_use";
+  return my_path.parent_path() / "kleaf_internal_do_not_use";
 }
 
 // Loads <tool_name>_args.txt from hermetic_tools.extra_args
