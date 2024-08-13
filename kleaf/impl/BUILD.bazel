@@ -110,6 +110,7 @@ bzl_library(
         "merge_kzip.bzl",
         "merged_kernel_uapi_headers.bzl",
         "modules_prepare.bzl",
+        "native_binary_with_arg.bzl",
         "out_headers_allowlist_archive.bzl",
         "platform_transition.bzl",
         "python.bzl",
@@ -514,12 +515,6 @@ python_runtime_files(
     visibility = ["//build/kernel:__pkg__"],
 )
 
-cc_binary(
-    name = "arg_wrapper",
-    srcs = ["arg_wrapper.cpp"],
-    visibility = ["//build/kernel:__pkg__"],
-)
-
 prebuilt_transitioned_tool(
     name = "stg",
     src = "//prebuilts/kernel-build-tools:stg",
@@ -532,4 +527,13 @@ prebuilt_transitioned_tool(
     src = "//prebuilts/kernel-build-tools:stgdiff",
     # All kernel_abi() can see this
     visibility = ["//visibility:public"],
+)
+
+exports_files(
+    [
+        "arg_wrapper.cpp",
+    ],
+    visibility = [
+        "//build/kernel:__subpackages__",
+    ],
 )
