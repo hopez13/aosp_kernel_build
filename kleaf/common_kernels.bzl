@@ -882,6 +882,11 @@ def _define_common_kernel(
         Label("//build/kernel:init_ddk_zip"),
     ]
 
+    # For ABI monitoring keep a copy of the baseline stg file, which could be
+    # different from the one checked-in when doing rebases during code-reviews.
+    if abi_definition_stg:
+        dist_targets.append(abi_definition_stg)
+
     kernel_sbom(
         name = name + "_sbom",
         srcs = dist_targets,
