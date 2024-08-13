@@ -39,6 +39,30 @@
       },
       "revId": "d786e84102e2ee99895ef4e97e6d433e403a9a03",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a4c074c_9d1d6c44",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-13T14:56:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4837ea2c_86de92ef",
+      "range": {
+        "startLine": 902,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 79
+      },
+      "revId": "d786e84102e2ee99895ef4e97e6d433e403a9a03",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
