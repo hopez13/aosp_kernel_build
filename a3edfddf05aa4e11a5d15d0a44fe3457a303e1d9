@@ -16,6 +16,52 @@
       "message": "should I review this?",
       "revId": "a3edfddf05aa4e11a5d15d0a44fe3457a303e1d9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2c8a222_56f96115",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-13T23:41:19Z",
+      "side": 1,
+      "message": "nit: Just `: \u003e ${{OUT_DIR}}/modules.order`? Then we have one less execvp.\n\nOr just `rm` it",
+      "range": {
+        "startLine": 1328,
+        "startChar": 19,
+        "endLine": 1328,
+        "endChar": 33
+      },
+      "revId": "a3edfddf05aa4e11a5d15d0a44fe3457a303e1d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3cb0234_d8c35bce",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-13T23:41:19Z",
+      "side": 1,
+      "message": "https://www.kernel.org/doc/Documentation/kbuild/kbuild.txt\n\n\n```\nmodules.order\n--------------------------------------------------\nThis file records the order in which modules appear in Makefiles. This\nis used by modprobe to deterministically resolve aliases that match\nmultiple modules.\n```\n\nSo technically, this is unordered. Do you know if we later rely on the fact that this file is ordered? Is it okay to drop the assumption that it is ordered?\nDoes `make modules_install` re-generate it? Do we discard the file after this Bazel action is finished?\n\nThe answers to these questions will affect how much impact is created by making `modules.order` unordered.",
+      "range": {
+        "startLine": 1330,
+        "startChar": 23,
+        "endLine": 1330,
+        "endChar": 107
+      },
+      "revId": "a3edfddf05aa4e11a5d15d0a44fe3457a303e1d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

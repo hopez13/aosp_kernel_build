@@ -117,6 +117,30 @@
       },
       "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cafb4315_60971b04",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-13T23:41:19Z",
+      "side": 1,
+      "message": "Can you put a link/TODO/bug here so we can keep track of when to remove this workaround?",
+      "parentUuid": "dcdfa404_65911791",
+      "range": {
+        "startLine": 1469,
+        "startChar": 98,
+        "endLine": 1469,
+        "endChar": 120
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
