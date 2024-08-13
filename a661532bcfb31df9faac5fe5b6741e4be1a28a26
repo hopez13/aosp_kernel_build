@@ -46,6 +46,30 @@
       },
       "revId": "a661532bcfb31df9faac5fe5b6741e4be1a28a26",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46a1585b_5b37c6e7",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-13T23:32:40Z",
+      "side": 1,
+      "message": "Ignore the golink. I can\u0027t find any documentation on this particular comment, but yeah we use it extensively (for debugging and warning purposes) in Kleaf.",
+      "parentUuid": "44e15ec2_44d8c216",
+      "range": {
+        "startLine": 44,
+        "startChar": 8,
+        "endLine": 44,
+        "endChar": 13
+      },
+      "revId": "a661532bcfb31df9faac5fe5b6741e4be1a28a26",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
