@@ -96,6 +96,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77735ca1_304d3a88",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-14T00:18:17Z",
+      "side": 1,
+      "message": "No, I didn\u0027t. Sure I can add a todo. Filed b/359683179",
+      "parentUuid": "3696e027_9accd761",
+      "range": {
+        "startLine": 1464,
+        "startChar": 11,
+        "endLine": 1466,
+        "endChar": 13
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "671434bd_f70ec4f7",
