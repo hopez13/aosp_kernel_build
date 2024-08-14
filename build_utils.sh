@@ -453,7 +453,7 @@ function build_vendor_dlkm() {
   local vendor_dlkm_archive=$1
 
   create_modules_staging "${VENDOR_DLKM_MODULES_LIST}" "${MODULES_STAGING_DIR}" \
-    "${VENDOR_DLKM_STAGING_DIR}" "${VENDOR_DLKM_MODULES_BLOCKLIST}" "" "" "" \
+    "${VENDOR_DLKM_STAGING_DIR}" "${VENDOR_DLKM_MODULES_BLOCKLIST}" "" "" "-e" \
     "${SYSTEM_DLKM_STAGING_DIR}"
 
   local vendor_dlkm_modules_root_dir=$(echo ${VENDOR_DLKM_STAGING_DIR}/lib/modules/*)
