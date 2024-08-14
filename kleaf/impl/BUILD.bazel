@@ -17,7 +17,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "bool_setting")
-load("@platforms//host:constraints.bzl", "HOST_CONSTRAINTS")
 load(":kernel_platform_toolchain.bzl", "kernel_platform_toolchain")
 load(":kernel_toolchains.bzl", "kernel_toolchains")
 load(
@@ -456,11 +455,13 @@ platform(
 )
 
 ## host constraints + musl
+## Note that this does not respect --host_platform.
 platform(
     name = "host_musl",
-    constraint_values = HOST_CONSTRAINTS + [
+    constraint_values = [
         "//build/kernel/kleaf/platforms/libc:musl",
     ],
+    parents = ["@platforms//host"],
     visibility = [
         "//build/kernel:__subpackages__",
     ],
