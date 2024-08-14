@@ -16,6 +16,24 @@
       "message": "This is problematic because ddk_submodule does NOT set kernel_build",
       "revId": "bde6aaddde282945b843081eb62340b69dcbf932",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f7c379_d67c8df4",
+        "filename": "kleaf/impl/ddk/makefiles.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T23:02:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f76812b8_d8bd51de",
+      "revId": "bde6aaddde282945b843081eb62340b69dcbf932",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
