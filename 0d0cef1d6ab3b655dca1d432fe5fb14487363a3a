@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2188e9d0_aae71eab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T22:20:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8252402f_8bef023e",
+      "range": {
+        "startLine": 9,
+        "startChar": 61,
+        "endLine": 9,
+        "endChar": 69
+      },
+      "revId": "0d0cef1d6ab3b655dca1d432fe5fb14487363a3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b7c4756_5989747f",
@@ -108,6 +132,30 @@
       "side": 1,
       "message": "It is possible to use a select here, because we aren\u0027t parsing the value in args. The only place it is used is `args + [\"\"]`, and `select() + [...]` is a valid expression.\n\nIf we were to do something like `for arg in args` in the macro impl, then I would make this nonconfigurable.\n\nI can add a test case for this",
       "parentUuid": "0b08409c_5294ac1c",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 12
+      },
+      "revId": "0d0cef1d6ab3b655dca1d432fe5fb14487363a3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c74313_abde2074",
+        "filename": "kleaf/impl/native_binary_with_arg.bzl",
+        "patchSetId": 11
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T22:20:47Z",
+      "side": 1,
+      "message": "in a follow up CL",
+      "parentUuid": "b99302a6_653f54c2",
       "range": {
         "startLine": 36,
         "startChar": 8,
