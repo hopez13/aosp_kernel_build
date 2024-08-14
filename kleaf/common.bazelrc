@@ -37,6 +37,9 @@ build --tool_java_runtime_version=local_jdk
 # Always dump full test results
 test --test_output=errors --test_summary=terse
 
+# Treat all Kconfig warnings as errors by default.
+build --kconfig_werror
+
 # Support a device-specific bazelrc file
 try-import %workspace%/device.bazelrc
 
