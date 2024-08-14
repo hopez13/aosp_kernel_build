@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b0841a9a_e58796e8",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-14T00:00:55Z",
+      "side": 1,
+      "message": "The file has to exist for the echo and sed commands below to work. Otherwise I hit the error \"modules.order\" doesn\u0027t exist. I\u0027ll try the `: \u003e ...` option.",
+      "parentUuid": "f2c8a222_56f96115",
+      "range": {
+        "startLine": 1328,
+        "startChar": 19,
+        "endLine": 1328,
+        "endChar": 33
+      },
+      "revId": "a3edfddf05aa4e11a5d15d0a44fe3457a303e1d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f3cb0234_d8c35bce",
         "filename": "kleaf/impl/kernel_build.bzl",
         "patchSetId": 5
@@ -78,6 +102,30 @@
       "side": 1,
       "message": "Also, how hard is it to let Kbuild generate it for us in the single-module build case? Is it a very invasive change in Kbuild?0",
       "parentUuid": "f3cb0234_d8c35bce",
+      "range": {
+        "startLine": 1330,
+        "startChar": 23,
+        "endLine": 1330,
+        "endChar": 107
+      },
+      "revId": "a3edfddf05aa4e11a5d15d0a44fe3457a303e1d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a6dd0e4_7a357ecf",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-14T00:00:55Z",
+      "side": 1,
+      "message": "Kbuild does generate a modules.order file (based on the command line order you provide), but then it deletes it at the end of the build claiming it\u0027s not the real one [1](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile?h\u003dv6.11-rc3#n1911). I need to check with the upstream maintainer to see if there\u0027s another command to generate a proper one. I would say that (1) module ordering is not used for single_module builds because kbuild will compile the modules in the order you provide them, and (2) I don\u0027t think Android really uses aliases to load kernel modules since we use `module.load` files that list all the modules we want to load instead of auto-loading modules via the device tree compatible strings and aliases.\n\nWith fw_devlink enabled in GKI, module load ordering should theoretically not matter (although there are still some edge cases here). If someone does run into issues with this, then you can re-order the modules in their `make_goals` to load them in a different order or they use a `modules_softdep` to change the load ordering.",
+      "parentUuid": "23169e42_3f51e9de",
       "range": {
         "startLine": 1330,
         "startChar": 23,

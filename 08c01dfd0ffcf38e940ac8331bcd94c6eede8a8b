@@ -141,6 +141,30 @@
       },
       "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59d1356b_2d28b7b0",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-14T00:00:55Z",
+      "side": 1,
+      "message": "Filed b/359681021. I\u0027ll add this in a comment.",
+      "parentUuid": "cafb4315_60971b04",
+      "range": {
+        "startLine": 1469,
+        "startChar": 98,
+        "endLine": 1469,
+        "endChar": 120
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
