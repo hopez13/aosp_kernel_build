@@ -117,6 +117,20 @@ def _get_kconfig_werror_setup(ctx):
         return ""
     return "export KCONFIG_WERROR=1"
 
+def _get_rust_env(ctx):
+    if ctx.attr._rust_tools:
+        rustc = utils.find_file("rustc", ctx.files._rust_tools, "rust tools", required = True)
+        bindgen = utils.find_file("bindgen", ctx.files._rust_tools, "rust tools", required = True)
+        return """
+            RUST_PREBUILT_BIN={quoted_rust_bin}
+            CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
+        """.format(
+            quoted_rust_bin = shell.quote(rustc.dirname),
+            quoted_clangtools_bin = shell.quote(bindgen.dirname),
+        )
+    else:
+        return ""
+
 def _kernel_env_impl(ctx):
     srcs = [
         s
@@ -205,16 +219,7 @@ def _kernel_env_impl(ctx):
 
     kconfig_werror_setup = _get_kconfig_werror_setup(ctx)
 
-    if ctx.attr._rust_tools:
-        rustc = utils.find_file("rustc", ctx.files._rust_tools, "rust tools", required = True)
-        bindgen = utils.find_file("bindgen", ctx.files._rust_tools, "rust tools", required = True)
-        command += """
-            RUST_PREBUILT_BIN={quoted_rust_bin}
-            CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
-        """.format(
-            quoted_rust_bin = shell.quote(rustc.dirname),
-            quoted_clangtools_bin = shell.quote(bindgen.dirname),
-        )
+    command += _get_rust_env(ctx)
 
     env_setup_cmds = _get_env_setup_cmds(ctx)
     pre_env_script = ctx.actions.declare_file("{}/pre_env.sh".format(ctx.attr.name))
@@ -522,6 +527,8 @@ def _get_run_env(ctx, srcs, toolchains):
     if ctx.attr._debug_annotate_scripts[BuildSettingInfo].value:
         setup += debug.trap()
     setup += _get_make_verbosity_command(ctx)
+    setup += _get_rust_env(ctx)
+
     setup += """
         # create a build environment
           source {build_utils_sh}
