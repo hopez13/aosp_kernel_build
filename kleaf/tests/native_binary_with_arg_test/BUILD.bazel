@@ -41,6 +41,15 @@ native_binary_with_arg_test(
 )
 
 native_binary_with_arg_test(
+    name = "echo_selected_arg",
+    src = ":echo",
+    args = select({
+        "@platforms//cpu:mips64": ["???"],
+        "//conditions:default": ["1"],
+    }) + ["2"],
+)
+
+native_binary_with_arg_test(
     name = "in_a_directory/echo",
     src = ":echo",
     args = ["1"],
