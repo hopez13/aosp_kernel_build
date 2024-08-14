@@ -87,9 +87,8 @@ platform(
 
 platform(
     name = {exec_platform_repr},
+    parents = ["@platforms//host"],
     constraint_values = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
         # @kleaf//prebuilts/clang/host/linux-x86/kleaf:{toolchain_version}
         package_relative_label(_CLANG_KLEAF_PKG).same_package_label({toolchain_version_repr}),
     ],

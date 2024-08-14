@@ -520,10 +520,9 @@ def kernel_build(
 
     native.platform(
         name = name + "_platform_exec",
-        constraint_values = [
-            Label("@platforms//os:linux"),
-            Label("@platforms//cpu:x86_64"),
-        ] + toolchain_constraints,
+        # Note that this does not respect --host_platform.
+        parents = [Label("@platforms//host")],
+        constraint_values = toolchain_constraints,
         **internal_kwargs
     )
 
