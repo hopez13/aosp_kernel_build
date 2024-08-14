@@ -314,6 +314,45 @@ function create_modules_staging() {
   fi
 }
 
+function build_flattened_dlkm_image() {
+  # $1 - image name - either vendor_dlkm.flattened.img or system_dlkm.flattened.img
+  # $2 - staging dir
+  # $3 - props file
+  # $4 - dist_dir
+
+  local image_name=$1
+  local staging_dir=$2
+  local props_file=$3
+  local dist_dir=$4
+  local image_type
+
+  if [[ "${image_name}" =~ "vendor" ]]; then
+    image_type="vendor"
+  elif [[ "${image_name}" =~ "system" ]]; then
+    image_type="system"
+  else
+    echo "ERROR: Unknown flattened image type: $1"
+    exit 1
+  fi
+
+  mkdir -p ${staging_dir}/flatten/lib/modules
+  cp $(find ${staging_dir} -type f -name "*.ko") ${staging_dir}/flatten/lib/modules
+  # Copy required depmod artifacts and scrub required files to correct paths
+  cp $(find ${staging_dir} -name "modules.dep") ${staging_dir}/flatten/lib/modules
+  # Copy modules aliases definitions
+  cp $(find ${staging_dir} -name "modules.alias") ${staging_dir}/flatten/lib/modules
+  # Remove existing paths leaving just basenames
+  sed -i 's/kernel[^:[:space:]]*\/\([^:[:space:]]*\.ko\)/\1/g' ${staging_dir}/flatten/lib/modules/modules.dep
+  # Prefix /system/lib/modules/ for every module
+  sed -i "s#\([^:[:space:]]*\.ko\)#/${image_type}/lib/modules/\1#g" ${staging_dir}/flatten/lib/modules/modules.dep
+  cp $(find ${staging_dir} -name "modules.load") ${staging_dir}/flatten/lib/modules
+  sed -i 's#.*/##' ${staging_dir}/flatten/lib/modules/modules.load
+
+  build_image "${staging_dir}/flatten" "${props_file}" \
+  "${dist_dir}/${image_name}" /dev/null
+
+}
+
 function build_system_dlkm() {
   rm -rf ${SYSTEM_DLKM_STAGING_DIR}
   # MODULES_[RECOVERY_LIST|CHARGER]_LIST should not influence system_dlkm, as
@@ -390,19 +429,10 @@ function build_system_dlkm() {
   # Build flatten image as /lib/modules/*.ko; if unset or null: default false
   if [[ ${SYSTEM_DLKM_GEN_FLATTEN_IMAGE:-0} == "1" ]]; then
     local system_dlkm_flatten_image_name="system_dlkm.flatten.${SYSTEM_DLKM_FS_TYPE}.img"
-    mkdir -p ${SYSTEM_DLKM_STAGING_DIR}/flatten/lib/modules
-    cp $(find ${SYSTEM_DLKM_STAGING_DIR} -type f -name "*.ko") ${SYSTEM_DLKM_STAGING_DIR}/flatten/lib/modules
-    # Copy required depmod artifacts and scrub required files to correct paths
-    cp $(find ${SYSTEM_DLKM_STAGING_DIR} -name "modules.dep") ${SYSTEM_DLKM_STAGING_DIR}/flatten/lib/modules
-    # Remove existing paths leaving just basenames
-    sed -i 's/kernel[^:[:space:]]*\/\([^:[:space:]]*\.ko\)/\1/g' ${SYSTEM_DLKM_STAGING_DIR}/flatten/lib/modules/modules.dep
-    # Prefix /system/lib/modules/ for every module
-    sed -i 's#\([^:[:space:]]*\.ko\)#/system/lib/modules/\1#g' ${SYSTEM_DLKM_STAGING_DIR}/flatten/lib/modules/modules.dep
-    cp $(find ${SYSTEM_DLKM_STAGING_DIR} -name "modules.load") ${SYSTEM_DLKM_STAGING_DIR}/flatten/lib/modules
-    sed -i 's#.*/##' ${SYSTEM_DLKM_STAGING_DIR}/flatten/lib/modules/modules.load
 
-    build_image "${SYSTEM_DLKM_STAGING_DIR}/flatten" "${system_dlkm_props_file}" \
-    "${DIST_DIR}/${system_dlkm_flatten_image_name}" /dev/null
+    build_flattened_dlkm_image "${system_dlkm_flatten_image_name}" "${SYSTEM_DLKM_STAGING_DIR}" \
+      "${system_dlkm_props_file}" "${DIST_DIR}"
+
     generated_images+=(${system_dlkm_flatten_image_name})
    fi
 
@@ -488,10 +518,33 @@ function build_vendor_dlkm() {
   build_image "${VENDOR_DLKM_STAGING_DIR}" "${vendor_dlkm_props_file}" \
     "${DIST_DIR}/vendor_dlkm.img" /dev/null
 
-  avbtool add_hashtree_footer \
-    --partition_name vendor_dlkm \
-    --hash_algorithm sha256 \
-    --image "${DIST_DIR}/vendor_dlkm.img"
+  if [ -z "${VENDOR_DLKM_IMAGE_NAME}" ]; then
+    VENDOR_DLKM_IMAGE_NAME="vendor_dlkm.img"
+  fi
+  local generated_images=(${VENDOR_DLKM_IMAGE_NAME})
+
+ # Build vendor_dlkm flatten image as /lib/modules/*.ko; if unset or null: default false
+  if [[ ${VENDOR_DLKM_GEN_FLATTEN_IMAGE:-0} == "1" ]]; then
+    local vendor_dlkm_flatten_image_name="vendor_dlkm.flatten.img"
+
+    if [ -z "${VENDOR_DLKM_PROPS}" ]; then
+      echo -e "fs_type=${VENDOR_DLKM_FS_TYPE}" >> ${vendor_dlkm_props_file}
+      echo -e "mount_point=vendor_dlkm\n" >> ${vendor_dlkm_props_file}
+    fi
+
+  build_flattened_dlkm_image "${vendor_dlkm_flatten_image_name}" "${VENDOR_DLKM_STAGING_DIR}" \
+    "${vendor_dlkm_props_file}" "${DIST_DIR}"
+ 
+  generated_images+=(${vendor_dlkm_flatten_image_name})
+  fi
+
+  for image in "${generated_images[@]}"
+  do
+    avbtool add_hashtree_footer \
+      --partition_name vendor_dlkm \
+      --hash_algorithm sha256 \
+      --image "${DIST_DIR}/${image}"
+  done
 
   if [ -n "${vendor_dlkm_archive}" ]; then
     # Archive vendor_dlkm_staging_dir
