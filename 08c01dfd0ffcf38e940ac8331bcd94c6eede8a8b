@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3696e027_9accd761",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T00:09:42Z",
+      "side": 1,
+      "message": "Did you figure out why it needs to build in a separate step? This could negatively impact build time. If not maybe put a TODO here and assign it to me",
+      "parentUuid": "cacb8464_372bc6e7",
+      "range": {
+        "startLine": 1464,
+        "startChar": 11,
+        "endLine": 1466,
+        "endChar": 13
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "671434bd_f70ec4f7",
         "filename": "kleaf/impl/kernel_build.bzl",
         "patchSetId": 1
@@ -157,6 +181,30 @@
       "side": 1,
       "message": "Filed b/359681021. I\u0027ll add this in a comment.",
       "parentUuid": "cafb4315_60971b04",
+      "range": {
+        "startLine": 1469,
+        "startChar": 98,
+        "endLine": 1469,
+        "endChar": 120
+      },
+      "revId": "08c01dfd0ffcf38e940ac8331bcd94c6eede8a8b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92bd8254_9c46087b",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T00:09:42Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "59d1356b_2d28b7b0",
       "range": {
         "startLine": 1469,
         "startChar": 98,

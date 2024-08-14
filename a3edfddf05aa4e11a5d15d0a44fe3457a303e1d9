@@ -134,6 +134,30 @@
       },
       "revId": "a3edfddf05aa4e11a5d15d0a44fe3457a303e1d9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4ab0254_0daba71a",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T00:09:42Z",
+      "side": 1,
+      "message": "Thanks for your explanation. For future reference, could you please provide a summary in the code next to the line where modules.order is generated?",
+      "parentUuid": "1a6dd0e4_7a357ecf",
+      "range": {
+        "startLine": 1330,
+        "startChar": 23,
+        "endLine": 1330,
+        "endChar": 107
+      },
+      "revId": "a3edfddf05aa4e11a5d15d0a44fe3457a303e1d9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
