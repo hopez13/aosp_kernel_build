@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8252402f_8bef023e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-14T19:42:56Z",
+      "side": 1,
+      "message": "nit: binaries",
+      "range": {
+        "startLine": 9,
+        "startChar": 61,
+        "endLine": 9,
+        "endChar": 69
+      },
+      "revId": "0d0cef1d6ab3b655dca1d432fe5fb14487363a3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b7c4756_5989747f",
+        "filename": "kleaf/impl/native_binary_with_arg.bzl",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-14T19:42:56Z",
+      "side": 1,
+      "message": "not blocking: is there a bug number?",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 16
+      },
+      "revId": "0d0cef1d6ab3b655dca1d432fe5fb14487363a3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b08409c_5294ac1c",
+        "filename": "kleaf/impl/native_binary_with_arg.bzl",
+        "patchSetId": 11
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-14T19:42:56Z",
+      "side": 1,
+      "message": "given this is now a macro it won\u0027t be possible to use a select for the value here right? I\u0027ll need to rework CL:3207771, but not a blocking here.",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 12
+      },
+      "revId": "0d0cef1d6ab3b655dca1d432fe5fb14487363a3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
