@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4d3c9bf_309e944d",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T01:25:33Z",
+      "side": 1,
+      "message": "You can delete `location of `. They were copy-pasted from build.sh where these variables are paths to files. But in Bazel we use Label to these files, and they don\u0027t have to be a source file at all. So stating `An optional file...` is fine.\n\nnit: you can also drop `optional`; because you specified `vendor_dlkm_gki_modules_list\u003dNone`, stardoc will generate the `Optional; default is None` in the documents.",
+      "range": {
+        "startLine": 268,
+        "startChar": 38,
+        "endLine": 268,
+        "endChar": 50
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1365baf3_a042445a",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T01:25:33Z",
+      "side": 1,
+      "message": "Try to use the term \"base kernel\" instead of GKI. e.g. \"The list of in-tree modules from the base kernel\"\n\nThis is a more generic and precise term; we don\u0027t force base_kernel to be from //common.\n\n(On the other hand, things like --gki_build_config_fragment has the term \"GKI\" because they are applied on //common kernels only, unless people port it to somewhere else.)",
+      "range": {
+        "startLine": 269,
+        "startChar": 33,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9ec4959_cb39f48a",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T01:25:33Z",
+      "side": 1,
+      "message": "Explain the default behavior when this is not specified.\n\nIIUC the existing behavior is that we put signed GKI modules in system_dlkm and unsigned (overridden unprotected GKI, or other) in-tree modules in vendor_dlkm. Please CMIIW. Can you explain (in the doc) why would people want to put GKI modules in vendor_dlkm?",
+      "range": {
+        "startLine": 268,
+        "startChar": 38,
+        "endLine": 270,
+        "endChar": 40
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0e61967_0c94222e",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T01:25:33Z",
+      "side": 1,
+      "message": "Please run \n\n```\nbazel run //build/kernel/kleaf/docs:docs_dist --config\u003dinternet\n```\n\nthen check in the markdown file changes in the same CL.",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 40
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "004ae594_4776ae04",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T01:25:33Z",
+      "side": 1,
+      "message": "nit delete",
+      "range": {
+        "startLine": 42,
+        "startChar": 34,
+        "endLine": 42,
+        "endChar": 42
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c66689d3_97de2c7b",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T01:25:33Z",
+      "side": 1,
+      "message": "nit: just `: \u003e`?",
+      "range": {
+        "startLine": 167,
+        "startChar": 16,
+        "endLine": 167,
+        "endChar": 29
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
