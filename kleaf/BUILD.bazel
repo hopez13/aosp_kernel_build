@@ -264,7 +264,7 @@ config_setting(
 # If set, Kconfig treats warnings as errors.
 bool_flag(
     name = "kconfig_werror",
-    build_setting_default = False,
+    build_setting_default = True,
     visibility = ["//visibility:public"],
 )
 
