@@ -732,15 +732,15 @@ class BazelWrapper(KleafHelpPrinter):
             src_path = shutil.which(tool)
             if src_path:
                 src_path = pathlib.Path(src_path).resolve()
-                if dst_path.is_symlink():
-                    if dst_path.resolve() == src_path:
+                if dst_path.is_symlink() and dst_path.resolve() == src_path:
                         continue
-                    dst_path.unlink()
+            # Delete broken symlinks or symlinks that is not correct
+            # We could use dst_path.exists(follow_symlinks=False) once updated to 3.12
+            if dst_path.is_symlink() or dst_path.exists():
+                dst_path.unlink()
+            if src_path:
                 dst_path.symlink_to(src_path)
                 continue
-            if dst_path.exists():
-                # Always unlink the file because it might be a symlink.
-                dst_path.unlink()
             dst_path.write_text(textwrap.dedent(f"""\
                 #!/bin/sh
                 echo "ERROR:Tool {tool} not found on host" >&2
