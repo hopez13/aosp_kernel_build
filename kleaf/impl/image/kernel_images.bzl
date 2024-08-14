@@ -35,6 +35,7 @@ def kernel_images(
         base_kernel_images = None,
         build_initramfs = None,
         build_vendor_dlkm = None,
+        build_vendor_dlkm_flatten = None,
         build_boot = None,
         build_vendor_boot = None,
         build_vendor_kernel_boot = None,
@@ -93,6 +94,7 @@ def kernel_images(
 
     Allowed strings in `filegroup.output_group`:
     * `vendor_dlkm.img`, if `build_vendor_dlkm` is set
+    * `vendor_dlkm_flatten.img` if `build_vendor_dlkm_flatten` is not empty
     * `system_dlkm.img`, if `build_system_dlkm` and `system_dlkm_fs_type` is set
     * `system_dlkm.<type>.img` for each of `system_dlkm_fs_types`, if
         `build_system_dlkm` is set and `system_dlkm_fs_types` is not empty.
@@ -155,6 +157,8 @@ def kernel_images(
           This image have directory structure as `/lib/modules/*.ko` i.e. no `uname -r` in the path.
         build_vendor_dlkm: Whether to build `vendor_dlkm` image. It must be set if
           `vendor_dlkm_modules_list` is set.
+        build_vendor_dlkm_flatten: Whether to build `vendor_dlkm_flatten` image. The image
+          have directory structure as `/lib/modules/*.ko` i.e. no `uname -r` in the path
 
           Note: at the time of writing (Jan 2022),
           `vendor_dlkm.modules.blocklist` is **always** created regardless of
@@ -447,6 +451,7 @@ def kernel_images(
             name = "{}_vendor_dlkm_image".format(name),
             kernel_modules_install = kernel_modules_install,
             vendor_boot_modules_load = vendor_boot_modules_load,
+            build_vendor_dlkm_flatten_image = build_vendor_dlkm_flatten,
             deps = deps,
             vendor_dlkm_archive = vendor_dlkm_archive,
             vendor_dlkm_etc_files = vendor_dlkm_etc_files,
