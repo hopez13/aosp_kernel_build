@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b4b6ea0_eaaa8459",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-14T17:49:00Z",
+      "side": 1,
+      "message": "+2 to this change on its own, but please fix the build errors in the same topic.",
+      "revId": "d5c8c2768ae8be8326ecf8b7b408d11482c689aa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
