@@ -49,6 +49,7 @@ _transitioned_tool = rule(
         ),
         "target_platform": attr.label(),
     },
+    executable = True,
 )
 
 def prebuilt_transitioned_tool(name, src, **kwargs):
