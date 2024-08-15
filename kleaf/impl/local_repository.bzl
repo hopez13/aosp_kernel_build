@@ -76,10 +76,12 @@ def _new_kleaf_local_repository_impl(repository_ctx):
     kleaf_repo_dir = _get_kleaf_repo_dir(repository_ctx)
 
     if repository_ctx.attr.build_file:
-        repository_ctx.symlink(
-            kleaf_repo_dir.get_child(repository_ctx.attr.build_file),
-            repository_ctx.path("BUILD.bazel"),
-        )
+        content = """
+load({}, "cc_binary_host_musl")
+        """.format(repr(str(Label(":cc_binary_host_musl.bzl"))))
+        content += repository_ctx.read(kleaf_repo_dir.get_child(repository_ctx.attr.build_file))
+        repository_ctx.file(repository_ctx.path("BUILD.bazel"), content)
+
     repository_ctx.file(repository_ctx.path("WORKSPACE.bazel"), """\
 workspace({name_repr})
 """.format(name_repr = repr(repository_ctx.attr.name)))
