@@ -85,7 +85,10 @@ alias(
 
 native_binary_with_arg(
     name = "tar",
-    src = ":toybox",
+    src = select({
+        "//build/kernel/kleaf:toolchain_from_sources_is_true": "@toybox",
+        "//conditions:default": ":prebuilt_toybox",
+    }),
     args = [
         "--mtime=@0",
         "--owner=0",
