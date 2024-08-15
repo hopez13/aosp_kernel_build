@@ -22,6 +22,7 @@ load(
     "//build/kernel/kleaf/impl:transitioned_tool.bzl",
     "prebuilt_transitioned_files",
     "prebuilt_transitioned_tool",
+    "transitioned_tool_from_sources",
 )
 
 filegroup(
@@ -74,10 +75,16 @@ alias(
     visibility = ["//visibility:private"],
 ) for tool in ("find", "flock")]
 
+transitioned_tool_from_sources(
+    name = "pigz",
+    src = "@pigz",
+    visibility = ["//visibility:private"],
+)
+
 alias(
     name = "gzip",
     actual = select({
-        "//build/kernel/kleaf:gzip_is_pigz_is_true": "@pigz",
+        "//build/kernel/kleaf:gzip_is_pigz_is_true": ":pigz",
         "//conditions:default": ":toybox",
     }),
     visibility = ["//visibility:private"],
@@ -107,6 +114,27 @@ bison_wrapper(
     actual = ":prebuilt_bison",
     pkgdata_dir = "//prebuilts/build-tools:bison.runfiles_dir",
     pkgdata_files = "//prebuilts/build-tools:bison.runfiles",
+    visibility = ["//visibility:private"],
+)
+
+prebuilt_transitioned_tool(
+    name = "prebuilt_lz4",
+    src = "//prebuilts/kernel-build-tools:lz4",
+    visibility = ["//visibility:private"],
+)
+
+transitioned_tool_from_sources(
+    name = "lz4_from_sources",
+    src = "@lz4",
+    visibility = ["//visibility:private"],
+)
+
+alias(
+    name = "lz4",
+    actual = select({
+        "//build/kernel/kleaf:toolchain_from_sources_is_true": ":lz4_from_sources",
+        "//conditions:default": ":prebuilt_lz4",
+    }),
     visibility = ["//visibility:private"],
 )
 
@@ -153,7 +181,6 @@ _PREBUILT_TOOLS = [
         visibility = ["//visibility:private"],
     )
     for tool in _PREBUILT_TOOLS + [
-        "//prebuilts/kernel-build-tools:lz4",
         "//prebuilts/kernel-build-tools:depmod",
         "//prebuilts/build-tools:bzip2",
         "//prebuilts/build-tools:xz",
@@ -166,6 +193,7 @@ _HERMETIC_TOOLS = [
     # keep sorted
     ":bison",
     ":gzip",
+    ":lz4",
     ":tar",
     # TODO: This is only used by abi_stgdiff. It should be fine to be removed from hermetic_tools.
     "//build/kernel/kleaf/impl:stgdiff",
@@ -261,13 +289,6 @@ hermetic_tools(
         },
         "//conditions:default": {
             ":toybox_find": "find",
-        },
-    }) | select({
-        "//build/kernel/kleaf:toolchain_from_sources_is_true": {
-            "@lz4": "lz4",
-        },
-        "//conditions:default": {
-            ":prebuilt_lz4": "lz4",
         },
     }) | select({
         "//build/kernel/kleaf:remove_strings_from_hermetic_tools_is_true": {},
