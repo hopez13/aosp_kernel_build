@@ -42,5 +42,6 @@ constraint_value(
         "//prebuilts/kernel-build-tools:__subpackages__",
         "@kleaf_clang_toolchain//:__subpackages__",
         "@lz4//:__subpackages__",
+        "@toybox//:__subpackages__",
     ],
 )
