@@ -17,6 +17,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load(":cc_binary_host_musl.bzl", "cc_binary_host_musl")
 
 visibility("//build/kernel/...")
 
@@ -26,6 +27,9 @@ def native_binary_with_arg(
         args,
         **kwargs):
     """Like `native_binary` but invoked with a given list of arguments.
+
+    Note: Internally `arg_wrapper` is built with `cc_binary_host_musl`, and hence
+    `arg_wrapper` is controlled by --musl_tools_from_sources.
 
     Known issues:
     - This may not work properly if `src` is a `py_binary`.
@@ -45,31 +49,32 @@ def native_binary_with_arg(
     )
 
     if "/" in name:
-        internal_dir = paths.join(paths.dirname(name), "kleaf_internal_do_not_use")
+        wrapped_dir = paths.join(paths.dirname(name), "wrapped")
     else:
-        internal_dir = "kleaf_internal_do_not_use"
+        wrapped_dir = "wrapped"
     basename = paths.basename(name)
 
     native_binary(
-        name = "{}/{}".format(internal_dir, basename),
-        out = "{}/{}".format(internal_dir, basename),
+        name = "{}/kleaf_internal_do_not_use/{}".format(wrapped_dir, basename),
+        out = "{}/kleaf_internal_do_not_use/{}".format(wrapped_dir, basename),
         src = src,
         **private_kwargs
     )
 
     write_file(
-        name = "{}/{}_args".format(internal_dir, basename),
-        out = "{}/{}_args.txt".format(internal_dir, basename),
+        name = "{}/kleaf_internal_do_not_use/{}_args".format(wrapped_dir, basename),
+        out = "{}/kleaf_internal_do_not_use/{}_args.txt".format(wrapped_dir, basename),
         content = args + [""],
         **private_kwargs
     )
 
-    native.cc_binary(
+    cc_binary_host_musl(
         name = name,
+        internal_name = "{}/{}".format(wrapped_dir, basename),
         srcs = [Label("arg_wrapper.cpp")],
         data = [
-            ":{}/{}".format(internal_dir, basename),
-            ":{}/{}_args".format(internal_dir, basename),
+            ":{}/kleaf_internal_do_not_use/{}".format(wrapped_dir, basename),
+            ":{}/kleaf_internal_do_not_use/{}_args".format(wrapped_dir, basename),
         ],
         **kwargs
     )
