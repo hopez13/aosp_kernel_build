@@ -74,5 +74,6 @@ cc_binary(
         "-Wno-unused-result",
         "-Wno-unused-variable",
     ],
+    linkstatic = False,
     deps = [":cap_names_list_hdr"],
 )

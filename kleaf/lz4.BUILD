@@ -32,6 +32,7 @@ cc_binary(
         "programs/*.h",
     ]),
     copts = ["-O3"],
+    linkstatic = False,
     visibility = ["//visibility:public"],
     deps = [":liblz4"],
 )
