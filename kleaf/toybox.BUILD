@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cc_binary(
+cc_binary_host_musl(
     name = "toybox",
     srcs = glob(
         [
@@ -102,7 +102,7 @@ cc_binary(
     includes = ["android/linux"],
     visibility = ["//visibility:public"],
     deps = [
-        "@//prebuilts/kernel-build-tools:linux_x86_libcrypto",
+        "@//prebuilts/kernel-build-tools:libcrypto",
         "@zlib",
     ],
 )
