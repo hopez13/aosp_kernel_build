@@ -464,6 +464,7 @@ platform(
         "//build/kernel:__subpackages__",
         "@lz4//:__subpackages__",
         "@pigz//:__subpackages__",
+        "@toybox//:__subpackages__",
     ],
 )
 
