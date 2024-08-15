@@ -18,3 +18,5 @@
 build:musl --musl_prebuilts
 build:musl --musl_kbuild
 build:musl --musl_tools_from_sources
+
+common:musl --host_platform=//build/kernel/kleaf/impl:host_musl
