@@ -100,9 +100,10 @@ cc_binary(
         '-DTOYBOX_VENDOR=\\"-kleaf\\"',
     ],
     includes = ["android/linux"],
+    linkstatic = False,
     visibility = ["//visibility:public"],
     deps = [
-        "@//prebuilts/kernel-build-tools:linux_x86_libcrypto",
+        "@//prebuilts/kernel-build-tools:libcrypto",
         "@zlib",
     ],
 )
