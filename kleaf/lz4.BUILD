@@ -25,7 +25,7 @@ cc_library(
     textual_hdrs = ["lib/lz4.c"],
 )
 
-cc_binary(
+cc_binary_host_musl(
     name = "lz4",
     srcs = glob([
         "programs/*.c",
