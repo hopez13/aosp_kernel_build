@@ -22,17 +22,30 @@ cc_library(
     target_compatible_with = _LINUX_X86_64,
 )
 
-# TODO(b/348087663): re-enable after issue is fixed.
 cc_binary(
-    name = "mybin_fully_static_linux_x86_64",
+    name = "mybin_fully_static_linux_x86_64_musl",
     srcs = [
         "bin.c",
         "lib.h",
     ],
     features = ["fully_static_link"],
     linkstatic = True,
-    target_compatible_with = _LINUX_X86_64,
+    target_compatible_with = _LINUX_X86_64 + [
+        "//build/kernel/kleaf/platforms/libc:musl",
+    ],
     deps = [":mylib_linux_x86_64"],
+    tags = ["manual"],
+)
+
+alias(
+    name = "mybin_fully_static_linux_x86_64",
+    actual = select({
+        # glibc doesn't work with fully_static_link: b/348087663
+        "//build/kernel/kleaf/platforms/libc:glibc": ":hello_world_linux_x86_64",
+        # musl requires fully_static_link. This is implicit but it is okay to
+        # make it explicit.
+        "//build/kernel/kleaf/platforms/libc:musl": ":mybin_fully_static_linux_x86_64_musl",
+    })
 )
 
 cc_binary(
@@ -44,6 +57,7 @@ cc_binary(
     linkstatic = True,
     target_compatible_with = _LINUX_X86_64,
     deps = [":mylib_linux_x86_64"],
+    tags = ["manual"],
 )
 
 cc_binary(
@@ -64,8 +78,9 @@ cc_binary(
     ],
     target_compatible_with = _LINUX_X86_64,
     deps = [
-        "//prebuilts/kernel-build-tools:linux_x86_imported_libs",
+        "//prebuilts/kernel-build-tools:imported_libs",
     ],
+    linkstatic = False,
 )
 
 cc_binary(
@@ -91,6 +106,7 @@ hermetic_genrule(
     cmd = """
         $(location :hello_world_linux_x86_64) > $@
         $(location :mybin_dynamic_linux_x86_64) >> $@
+        $(location :mybin_fully_static_linux_x86_64) >> $@
         $(location :mybin_static_linux_x86_64) >> $@
         $(location :openssl_client_linux_x86_64) >> $@
         $(location :cpp_linux_x86_64) >> $@
@@ -99,6 +115,7 @@ hermetic_genrule(
         ":cpp_linux_x86_64",
         ":hello_world_linux_x86_64",
         ":mybin_dynamic_linux_x86_64",
+        ":mybin_fully_static_linux_x86_64",
         ":mybin_static_linux_x86_64",
         ":mylib_linux_x86_64",
         ":openssl_client_linux_x86_64",

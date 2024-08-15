@@ -25,6 +25,10 @@ or wrapping the target with an `android_filegroup` rule. See
 [build/kernel/kleaf/tests/cc_testing/BUILD.bazel](../tests/cc_testing/BUILD.bazel)
 for examples.
 
+If `--config=musl_platform` is set, and the binary is for the execution platform
+("host binaries"), the binary links against musl libc. See [musl.md](musl.md)
+for details.
+
 ## kernel\_* rules
 
 Kleaf uses Bazel's toolchain resolution to determine the C toolchain

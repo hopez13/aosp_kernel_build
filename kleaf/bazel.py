@@ -576,6 +576,7 @@ class BazelWrapper(KleafHelpPrinter):
             # Toolchains and platforms
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/hermetic_cc.bazelrc",
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/platforms.bazelrc",
+            self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/musl_platform.bazelrc",
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/musl.bazelrc",
             # Control Network access - with no internet by default.
             self.kleaf_repo_dir / "build/kernel/kleaf/bazelrc/network.bazelrc",
