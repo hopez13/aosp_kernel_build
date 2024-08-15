@@ -35,7 +35,7 @@ def _transitioned_tool_impl(ctx):
         runfiles = runfiles,
     )
 
-_transitioned_tool = rule(
+transitioned_tool = rule(
     implementation = _transitioned_tool_impl,
     attrs = {
         "src": attr.label(
@@ -60,7 +60,7 @@ def prebuilt_transitioned_tool(name, src, **kwargs):
         src: Label to prebuilt tool that selects between different platforms.
         **kwargs: common kwargs
     """
-    _transitioned_tool(
+    transitioned_tool(
         name = name,
         src = src,
         target_platform = select({
