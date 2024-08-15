@@ -58,10 +58,16 @@ prebuilt_transitioned_tool(
     visibility = ["//visibility:private"],
 )
 
+transitioned_tool_from_sources(
+    name = "toybox_from_sources",
+    src = "@toybox",
+    visibility = ["//visibility:private"],
+)
+
 alias(
     name = "toybox",
     actual = select({
-        "//build/kernel/kleaf:toolchain_from_sources_is_true": "@toybox",
+        "//build/kernel/kleaf:toolchain_from_sources_is_true": ":toybox_from_sources",
         "//conditions:default": ":prebuilt_toybox",
     }),
     visibility = ["//visibility:private"],
