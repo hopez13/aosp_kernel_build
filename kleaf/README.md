@@ -70,6 +70,8 @@
 
 `--config=canary`: [Kleaf Canary Features](docs/canary.md)
 
+`--config=musl`: [Use musl libc for host binaries](docs/musl.md)
+
 ### Flags
 
 For a full list of flags, run
