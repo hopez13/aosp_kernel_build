@@ -11,6 +11,7 @@ cc_binary(
     name = "hello_world_linux_x86_64",
     srcs = ["hello_world.c"],
     target_compatible_with = _LINUX_X86_64,
+    linkstatic = False,
 )
 
 cc_library(
@@ -24,26 +25,42 @@ cc_library(
 
 # TODO(b/348087663): re-enable after issue is fixed.
 cc_binary(
-    name = "mybin_fully_static_linux_x86_64",
+    name = "mybin_fully_static_linux_x86_64_musl",
     srcs = [
         "bin.c",
         "lib.h",
     ],
     features = ["fully_static_link"],
     linkstatic = True,
-    target_compatible_with = _LINUX_X86_64,
+    target_compatible_with = _LINUX_X86_64 + [
+        "//build/kernel/kleaf/platforms/libc:musl",
+    ],
     deps = [":mylib_linux_x86_64"],
+    tags = ["manual"],
 )
 
 cc_binary(
-    name = "mybin_static_linux_x86_64",
+    name = "mybin_static_linux_x86_64_glibc",
     srcs = [
         "bin.c",
         "lib.h",
     ],
     linkstatic = True,
-    target_compatible_with = _LINUX_X86_64,
+    target_compatible_with = _LINUX_X86_64 + [
+        "//build/kernel/kleaf/platforms/libc:glibc",
+    ],
     deps = [":mylib_linux_x86_64"],
+    tags = ["manual"],
+)
+
+alias(
+    name = "mybin_static_linux_x86_64",
+    actual = select({
+        # glibc doesn't work with fully_static_link: b/348087663
+        "//build/kernel/kleaf/platforms/libc:glibc": ":mybin_static_linux_x86_64_glibc",
+        # musl requires fully_static_link.
+        "//build/kernel/kleaf/platforms/libc:musl": ":mybin_fully_static_linux_x86_64_musl",
+    })
 )
 
 cc_binary(
@@ -64,14 +81,16 @@ cc_binary(
     ],
     target_compatible_with = _LINUX_X86_64,
     deps = [
-        "//prebuilts/kernel-build-tools:linux_x86_imported_libs",
+        "//prebuilts/kernel-build-tools:imported_libs",
     ],
+    linkstatic = False,
 )
 
 cc_binary(
     name = "cpp_linux_x86_64",
     srcs = ["cpp.cpp"],
     target_compatible_with = _LINUX_X86_64,
+    linkstatic = False,
 )
 
 cc_binary(
@@ -81,6 +100,7 @@ cc_binary(
         "-lpthread",
     ],
     target_compatible_with = _LINUX_X86_64,
+    linkstatic = False,
 )
 
 # genrule that applies the `cfg = exec` transition. This ensures that all these
