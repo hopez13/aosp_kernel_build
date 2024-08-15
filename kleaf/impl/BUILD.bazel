@@ -463,6 +463,7 @@ platform(
     visibility = [
         "//build/kernel:__subpackages__",
         "@lz4//:__subpackages__",
+        "@toybox//:__subpackages__",
     ],
 )
 
