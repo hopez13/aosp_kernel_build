@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feab9a56_d818b308",
+        "filename": "kleaf/impl/kernel_filegroup_declaration.bzl",
+        "patchSetId": 18
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-15T18:03:49Z",
+      "side": 1,
+      "message": "This is bad: \n\nERROR: /buildbot/tmp/tmp860_gcxy/out/bazel/output_user_root/dc284426cfe34f3e72da12288306beee/external/kleaf~~kernel_prebuilt_ext~gki_prebuilts/kernel_aarch64/BUILD.bazel:28:36: syntax error at \u0027}\u0027: expected :",
+      "range": {
+        "startLine": 127,
+        "startChar": 27,
+        "endLine": 127,
+        "endChar": 28
+      },
+      "revId": "bc8373c762ee8c7a53805a5fff1c41203555a373",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
