@@ -13,6 +13,7 @@
 # limitations under the License.
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
 load("@kernel_toolchain_info//:dict.bzl", "VARS")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_tools")
@@ -83,16 +84,35 @@ alias(
     visibility = ["//visibility:private"],
 )
 
+_TAR_ARGS = [
+    "--mtime=@0",
+    "--owner=0",
+    "--group=0",
+    "--numeric-owner",
+    "--sort=name",
+]
+
 native_binary_with_arg(
+    name = "tar_files/from_prebuilt/tar",
+    src = ":prebuilt_toybox",
+    args = _TAR_ARGS,
+    visibility = ["//visibility:private"],
+)
+
+native_binary_with_arg(
+    name = "tar_files/from_source/tar",
+    src = "@toybox",
+    args = _TAR_ARGS,
+    visibility = ["//visibility:private"],
+)
+
+native_binary(
     name = "tar",
-    src = ":toybox",
-    args = [
-        "--mtime=@0",
-        "--owner=0",
-        "--group=0",
-        "--numeric-owner",
-        "--sort=name",
-    ],
+    src = select({
+        "//build/kernel/kleaf:toolchain_from_sources_is_true": ":tar_files/from_source/tar",
+        "//conditions:default": ":tar_files/from_prebuilt/tar",
+    }),
+    out = "tar",
     visibility = ["//visibility:private"],
 )
 
