@@ -12,11 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# --config=musl: Experimental: Enable musl.
+# --config=musl_platform: Experimental: Switch --host_platform to use musl libc.
 #    See build/kernel/kleaf/docs/musl.md
 
-# Individually enable sub-features.
-build:musl --musl_prebuilts
-build:musl --musl_kbuild
-build:musl --musl_tools_from_sources
-common:musl --config=musl_platform
+common:musl_platform --host_platform=//build/kernel/kleaf/impl:host_musl
