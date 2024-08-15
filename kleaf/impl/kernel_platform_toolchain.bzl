@@ -50,7 +50,7 @@ def _kernel_platform_toolchain_impl(ctx):
             "kleaf-no-canonical-prefixes",
             # Disable flags for C++. These only applies to cc_* rules with
             # C++ code.
-            "kleaf-host-cc-rules-flags",
+            "kleaf-host-cc",
         ],
     )
     compile_variables = cc_common.create_compile_variables(
