@@ -665,6 +665,7 @@ config_setting(
 
 # For prebuilt binaries, use musl variant.
 # Experimental: some prebuilt binaries may still be using the glibc variant.
+# See build/kernel/kleaf/docs/musl.md
 bool_flag(
     name = "musl_prebuilts",
     build_setting_default = False,
@@ -678,6 +679,7 @@ config_setting(
 )
 
 # Experimental: Kbuild builds host tools against musl libc.
+# See build/kernel/kleaf/docs/musl.md
 bool_flag(
     name = "musl_kbuild",
     build_setting_default = False,
@@ -692,6 +694,7 @@ config_setting(
 
 # For hermetic tools built from sources, use musl libc.
 # Experimental: some hermetic tools built from sources may still be using glibc.
+# See build/kernel/kleaf/docs/musl.md
 bool_flag(
     name = "musl_tools_from_sources",
     build_setting_default = False,
