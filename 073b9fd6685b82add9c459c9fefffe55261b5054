@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4355810e_eb698d57",
+        "filename": "kleaf/impl/debug.bzl",
+        "patchSetId": 19
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-16T11:52:34Z",
+      "side": 1,
+      "message": "nit: Add a comment of what does it return?",
+      "range": {
+        "startLine": 80,
+        "startChar": 34,
+        "endLine": 80,
+        "endChar": 35
+      },
+      "revId": "073b9fd6685b82add9c459c9fefffe55261b5054",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

@@ -22,6 +22,30 @@
       },
       "revId": "bc8373c762ee8c7a53805a5fff1c41203555a373",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f193715b_550a8feb",
+        "filename": "kleaf/impl/kernel_filegroup_declaration.bzl",
+        "patchSetId": 18
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-16T11:52:34Z",
+      "side": 1,
+      "message": "Is it because of the single `{`? should it be `{{` instead?",
+      "parentUuid": "feab9a56_d818b308",
+      "range": {
+        "startLine": 127,
+        "startChar": 27,
+        "endLine": 127,
+        "endChar": 28
+      },
+      "revId": "bc8373c762ee8c7a53805a5fff1c41203555a373",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
