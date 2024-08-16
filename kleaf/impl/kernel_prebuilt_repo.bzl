@@ -276,6 +276,7 @@ workspace({})
 
     repository_ctx.file(repository_ctx.path(_join(bazel_target_name, "BUILD.bazel")), """\
 load({kernel_bzl_repr}, "kernel_filegroup")
+load({extracted_system_dlkm_staging_archive_bzl_repr}, "extracted_system_dlkm_staging_archive")
 
 _CLANG_KLEAF_PKG = {clang_kleaf_pkg}
 _MUSL = {musl_repr}
@@ -284,6 +285,7 @@ _MUSL_KBUILD_IS_TRUE = {musl_kbuild_is_true_repr}
 {template_content}
 """.format(
         kernel_bzl_repr = repr(str(Label("//build/kernel/kleaf:kernel.bzl"))),
+        extracted_system_dlkm_staging_archive_bzl_repr = repr(str(Label(":extracted_system_dlkm_staging_archive.bzl"))),
         clang_kleaf_pkg = repr(str(Label("//prebuilts/clang/host/linux-x86/kleaf"))),
         musl_repr = repr(str(Label("//build/kernel/kleaf/impl:musl"))),
         musl_kbuild_is_true_repr = repr(str(Label("//build/kernel/kleaf:musl_kbuild_is_true"))),
