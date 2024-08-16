@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c5b8958_61d3632f",
+        "filename": "kleaf/bazelrc/musl_platform.bazelrc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-16T12:27:19Z",
+      "side": 1,
+      "message": "nit: delete line above",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 1
+      },
+      "revId": "03532def0ba59c8b69d68715ec81de2e5bd0af7f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
