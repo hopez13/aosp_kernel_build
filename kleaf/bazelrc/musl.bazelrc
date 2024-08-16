@@ -20,3 +20,7 @@ build:musl --musl_prebuilts
 build:musl --musl_kbuild
 build:musl --musl_tools_from_sources
 common:musl --config=musl_platform
+
+# Switch on musl build!
+# --host_platform=<musl> imply the other --musl* flags.
+common --config=musl_platform
