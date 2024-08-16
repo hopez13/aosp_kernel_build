@@ -46,6 +46,30 @@
       },
       "revId": "bc8373c762ee8c7a53805a5fff1c41203555a373",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30c9c2ac_0ded1eb0",
+        "filename": "kleaf/impl/kernel_filegroup_declaration.bzl",
+        "patchSetId": 18
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-16T17:43:34Z",
+      "side": 1,
+      "message": "This is fixed elsewhere. The single { is okay because this uses ctx.actions.expand_template, not str.format()",
+      "parentUuid": "f193715b_550a8feb",
+      "range": {
+        "startLine": 127,
+        "startChar": 27,
+        "endLine": 127,
+        "endChar": 28
+      },
+      "revId": "bc8373c762ee8c7a53805a5fff1c41203555a373",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
