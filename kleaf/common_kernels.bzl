@@ -820,6 +820,7 @@ def _define_common_kernel(
         name = name + "_filegroup_declaration",
         kernel_build = name,
         extra_deps = filegroup_extra_deps,
+        images = name + "_images",
         visibility = ["//visibility:private"],
     )
     target_mapping = CI_TARGET_MAPPING.get(name, {})
