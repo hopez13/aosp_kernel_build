@@ -175,6 +175,7 @@ function create_modules_staging() {
   local modules_recovery_list_file=$5
   local modules_charger_list_file=$6
   local depmod_flags=$7
+  local system_dlkm_dir=$8
 
   rm -rf ${dest_dir}
   mkdir -p ${dest_dir}/kernel
@@ -184,6 +185,12 @@ function create_modules_staging() {
   cp ${src_dir}/modules.order ${dest_dir}/modules.order
   cp ${src_dir}/modules.builtin ${dest_dir}/modules.builtin
   cp ${src_dir}/modules.builtin.modinfo ${dest_dir}/modules.builtin.modinfo
+
+  if [[ -n "${system_dlkm_dir}" ]]; then
+    # TODO: fix this properly to calculate relative path from ${dest_dir} to
+    # ${system_dlkm_dir}
+    ln -s "../../../../$(basename ${system_dlkm_dir})" ${dest_dir}/system_dlkm_placeholder
+  fi
 
   if [[ -n "${KLEAF_MODULES_ORDER}" ]] && [[ -d "${src_dir}/extra" ]]; then
     mkdir -p ${dest_dir}/extra/
@@ -241,7 +248,7 @@ function create_modules_staging() {
     cp -f ${dest_dir}/modules.order ${dest_dir}/modules.order.orig
   fi
   create_modules_order_lists "${modules_list_file:-""}" "${modules_recovery_list_file:-""}" \
-	                     "${modules_charger_list_file:-""}" ${dest_dir}/modules.order
+                             "${modules_charger_list_file:-""}" ${dest_dir}/modules.order
 
   if [ -n "${modules_blocklist_file}" ]; then
     # Need to make sure we can find modules_blocklist_file from the staging dir
@@ -260,12 +267,19 @@ function create_modules_staging() {
 
   if [ -n "${TRIM_UNUSED_MODULES}" ]; then
     local used_blocklist_modules=$(mktemp)
+    local vendor_dlkm_gki_modules_list_basenames=$(mktemp -t gki_modules_list.XXXXXXXXXX)
     if [ -f ${dest_dir}/modules.blocklist ]; then
       # TODO: the modules blocklist could contain module aliases instead of the filename
       sed -n -E -e 's/blocklist (.+)/\1/p' ${dest_dir}/modules.blocklist > $used_blocklist_modules
     fi
+    if [[ -f "${VENDOR_DLKM_GKI_MODULES_LIST}" ]]; then
+      # Note, don't use -n to support both the full path to the modules or the
+      # basenames of the modules, e.g. "zsmalloc.ko" vs "mm/zsmalloc.ko".
+      sed 's:^.*/\(.*\.ko\):\1:g' ${VENDOR_DLKM_GKI_MODULES_LIST} > ${vendor_dlkm_gki_modules_list_basenames}
+    fi
 
-    # Remove modules from tree that aren't mentioned in modules.order
+    # Remove modules from tree that aren't mentioned in modules.order or the
+    # GKI modules list for the vendor_dlkm image.
     (
       cd ${dest_dir}
       local grep_flags="-v -w -f modules.order -f ${used_blocklist_modules} "
@@ -275,9 +289,12 @@ function create_modules_staging() {
       if [[ -f modules.order.charger ]]; then
         grep_flags+="-f modules.order.charger "
       fi
-      find * -type f -name "*.ko" | (grep ${grep_flags} - || true) | xargs -r rm
+      if [[ -f "${vendor_dlkm_gki_modules_list_basenames}" ]]; then
+        grep_flags+="-f ${vendor_dlkm_gki_modules_list_basenames} "
+      fi
+      find . -type f -name "*\.ko" | (grep ${grep_flags} - || true) | xargs -r rm
     )
-    rm $used_blocklist_modules
+    rm ${used_blocklist_modules} ${vendor_dlkm_gki_modules_list_basenames}
   fi
 
   # Re-run depmod to detect any dependencies between in-kernel and external
@@ -311,6 +328,13 @@ function create_modules_staging() {
     # modules. This allows us to account for all the modules that were compiled
     # for later use of the staging archive.
     mv -f ${dest_dir}/modules.order.orig ${dest_dir}/modules.order
+  fi
+
+  if [[ -n "${system_dlkm_dir}" ]]; then
+    # Patch modules.load and modules.dep to fix the GKI modules' paths and then
+    # clean up
+    sed -i 's:\<system_dlkm_placeholder\>:/system:g' ${dest_dir}/modules.dep ${dest_dir}/modules.load
+    rm -f ${dest_dir}/system_dlkm_placeholder
   fi
 }
 
@@ -429,7 +453,8 @@ function build_vendor_dlkm() {
   local vendor_dlkm_archive=$1
 
   create_modules_staging "${VENDOR_DLKM_MODULES_LIST}" "${MODULES_STAGING_DIR}" \
-    "${VENDOR_DLKM_STAGING_DIR}" "${VENDOR_DLKM_MODULES_BLOCKLIST}"
+    "${VENDOR_DLKM_STAGING_DIR}" "${VENDOR_DLKM_MODULES_BLOCKLIST}" "" "" "" \
+    "${SYSTEM_DLKM_STAGING_DIR}"
 
   local vendor_dlkm_modules_root_dir=$(echo ${VENDOR_DLKM_STAGING_DIR}/lib/modules/*)
   local vendor_dlkm_modules_load=${vendor_dlkm_modules_root_dir}/modules.load

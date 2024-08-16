@@ -39,6 +39,13 @@ def _vendor_dlkm_image_impl(ctx):
     vendor_dlkm_staging_dir = modules_staging_dir + "/vendor_dlkm_staging"
     vendor_dlkm_fs_type = ctx.attr.vendor_dlkm_fs_type
     vendor_dlkm_etc_files = " ".join([f.path for f in ctx.files.vendor_dlkm_etc_files])
+    system_dlkm_staging_dir = modules_staging_dir + "/system_dlkm_staging"
+
+    if ctx.attr.dedup_dlkm_modules:
+        # buildifier: disable=print
+        print("\nWARNING: {}: dedup_dlkm_modules is deprecated as GKI modules are not included in the vendor_dlkm by default.".format(
+            ctx.label,
+        ))
 
     vendor_dlkm_staging_archive = None
     if ctx.attr.vendor_dlkm_archive:
@@ -56,12 +63,12 @@ def _vendor_dlkm_image_impl(ctx):
         )
         additional_inputs.append(ctx.file.vendor_boot_modules_load)
 
-    exclude_system_dlkm_step = _exclude_system_dlkm(
+    link_with_gki_modules_step = _link_with_gki_modules(
         ctx,
-        modules_staging_dir = modules_staging_dir,
+        gki_modules_staging_dir = system_dlkm_staging_dir if ctx.attr.system_dlkm_image else modules_staging_dir,
     )
-    command += exclude_system_dlkm_step.cmd
-    additional_inputs += exclude_system_dlkm_step.inputs
+    command += link_with_gki_modules_step.cmd
+    additional_inputs += link_with_gki_modules_step.inputs
 
     command += """
             # Use `strip_modules` intead of relying on this.
@@ -73,6 +80,8 @@ def _vendor_dlkm_image_impl(ctx):
                 VENDOR_DLKM_ETC_FILES={quoted_vendor_dlkm_etc_files}
                 VENDOR_DLKM_FS_TYPE={vendor_dlkm_fs_type}
                 VENDOR_DLKM_STAGING_DIR={vendor_dlkm_staging_dir}
+                SYSTEM_DLKM_STAGING_DIR={system_dlkm_staging_dir}
+                VENDOR_DLKM_GKI_MODULES_LIST={vendor_dlkm_gki_modules_list}
                 build_vendor_dlkm {vendor_dlkm_archive}
               )
             # Move output files into place
@@ -88,6 +97,9 @@ def _vendor_dlkm_image_impl(ctx):
               fi
             # Remove staging directories
               rm -rf {vendor_dlkm_staging_dir}
+              if [[ -n "{system_dlkm_staging_dir}" ]]; then
+                rm -rf {system_dlkm_staging_dir}
+              fi
     """.format(
         modules_staging_dir = modules_staging_dir,
         quoted_vendor_dlkm_etc_files = shell.quote(vendor_dlkm_etc_files),
@@ -98,6 +110,8 @@ def _vendor_dlkm_image_impl(ctx):
         vendor_dlkm_modules_blocklist = vendor_dlkm_modules_blocklist.path,
         vendor_dlkm_archive = "1" if ctx.attr.vendor_dlkm_archive else "",
         vendor_dlkm_staging_archive = vendor_dlkm_staging_archive.path if ctx.attr.vendor_dlkm_archive else None,
+        system_dlkm_staging_dir = system_dlkm_staging_dir if not ctx.attr.vendor_dlkm_gki_modules_list else "",
+        vendor_dlkm_gki_modules_list = ctx.file.vendor_dlkm_gki_modules_list.path if ctx.attr.vendor_dlkm_gki_modules_list else "",
     )
 
     additional_inputs += ctx.files.vendor_dlkm_etc_files
@@ -125,22 +139,24 @@ def _vendor_dlkm_image_impl(ctx):
         images_info,
     ]
 
-def _exclude_system_dlkm(ctx, modules_staging_dir):
-    if not ctx.attr.dedup_dlkm_modules:
-        return struct(cmd = "", inputs = [])
-
+def _link_with_gki_modules(ctx, gki_modules_staging_dir):
     inputs = []
 
     if ctx.attr.system_dlkm_image:
+        if ctx.attr.vendor_dlkm_gki_modules_list:
+            fail("{}: With vendor_dlkm_gki_modules_list, build_system_dlkm must not be set".format(ctx.label))
         system_dlkm_files = ctx.files.system_dlkm_image
         src_attr = "system_dlkm_image"
     elif ctx.attr.base_kernel_images:
         system_dlkm_files = ctx.files.base_kernel_images
         src_attr = "base_kernel_images"
-    else:
-        fail("{}: With dedup_dlkm_modules, either build_system_dlkm or base_kernel_images must be set".format(
+    elif ctx.attr.vendor_dlkm_gki_modules_list:
+        fail("{}: With vendor_dlkm_gki_modules_list, either build_system_dlkm or base_kernel_images must be set".format(
             ctx.label,
         ))
+    else:
+        # No GKI modules provided to link against. So exit early.
+        return struct(cmd = "", inputs = [])
 
     system_dlkm_staging_archive = utils.find_file(
         name = SYSTEM_DLKM_STAGING_ARCHIVE_NAME,
@@ -148,24 +164,32 @@ def _exclude_system_dlkm(ctx, modules_staging_dir):
         what = "{} ({} for {})".format(ctx.attr.base_kernel_images.label, src_attr, ctx.label),
         required = True,
     )
-    system_dlkm_modules_load = utils.find_file(
-        name = SYSTEM_DLKM_MODULES_LOAD_NAME,
-        files = system_dlkm_files,
-        what = "{} ({} for {})".format(ctx.attr.base_kernel_images.label, src_attr, ctx.label),
-        required = True,
-    )
+    if not ctx.attr.vendor_dlkm_gki_modules_list:
+        system_dlkm_modules_load = utils.find_file(
+            name = SYSTEM_DLKM_MODULES_LOAD_NAME,
+            files = system_dlkm_files,
+            what = "{} ({} for {})".format(ctx.attr.base_kernel_images.label, src_attr, ctx.label),
+            required = True,
+        )
+    else:
+        system_dlkm_modules_load = ctx.file.vendor_dlkm_gki_modules_list
+
     inputs += [system_dlkm_staging_archive, system_dlkm_modules_load]
 
     cmd = """
-            # Extract modules from system_dlkm staging archive for depmod
-              mkdir -p {modules_staging_dir}
-              tar xf {system_dlkm_staging_archive} --wildcards -C {modules_staging_dir} '*.ko'
-            # Ensure system_dlkm modules aren't loaded
-              cat {system_dlkm_modules_load} >> ${{DIST_DIR}}/modules.load
+           # Extract modules from system_dlkm staging archive for depmod
+             mkdir -p {gki_modules_staging_dir}
+             if [[ -z "{vendor_dlkm_gki_modules_list}" ]]; then
+               tar xf {system_dlkm_staging_archive} --wildcards -C {gki_modules_staging_dir} '*.ko'
+             else
+               for module in $(cat {vendor_dlkm_gki_modules_list}); do
+                 tar xf {system_dlkm_staging_archive} --wildcards -C {gki_modules_staging_dir} '*/'${{module}}
+               done
+             fi
     """.format(
         system_dlkm_staging_archive = system_dlkm_staging_archive.path,
-        modules_staging_dir = modules_staging_dir,
-        system_dlkm_modules_load = system_dlkm_modules_load.path,
+        gki_modules_staging_dir = gki_modules_staging_dir,
+        vendor_dlkm_gki_modules_list = ctx.file.vendor_dlkm_gki_modules_list.path if ctx.attr.vendor_dlkm_gki_modules_list else "",
     )
 
     return struct(cmd = cmd, inputs = inputs)
@@ -187,11 +211,12 @@ Modules listed in this file is stripped away from the `vendor_dlkm` image.""",
         ),
         "vendor_dlkm_archive": attr.bool(doc = "Whether to archive the `vendor_dlkm` modules"),
         "vendor_dlkm_fs_type": attr.string(doc = """vendor_dlkm.img fs type""", values = ["ext4", "erofs"]),
+        "vendor_dlkm_gki_modules_list": attr.label(allow_single_file = True),
         "vendor_dlkm_modules_list": attr.label(allow_single_file = True),
         "vendor_dlkm_etc_files": attr.label_list(allow_files = True),
         "vendor_dlkm_modules_blocklist": attr.label(allow_single_file = True),
         "vendor_dlkm_props": attr.label(allow_single_file = True),
-        "dedup_dlkm_modules": attr.bool(doc = "Whether to exclude `system_dlkm` modules"),
+        "dedup_dlkm_modules": attr.bool(doc = "WARNING: dedup_dlkm_modules is deprecated now that GKI modules are not included in the vendor_dlkm."),
         "system_dlkm_image": attr.label(),
         "base_kernel_images": attr.label(allow_files = True),
     }),
