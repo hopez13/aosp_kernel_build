@@ -946,6 +946,22 @@ function menuconfig() {
 
   ${KERNEL_DIR}/scripts/diffconfig -m ${orig_config} ${new_config} > ${changed_config}
   KCONFIG_CONFIG=${new_fragment} ${ROOT_DIR}/${KERNEL_DIR}/scripts/kconfig/merge_config.sh -m ${FRAGMENT_CONFIG} ${changed_config}
+  VA_BITS_VALUE=$(grep '^CONFIG_ARM64_VA_BITS=' ${changed_config} | cut -d'=' -f2)
+  echo "================VA_BITS_VALUE: $VA_BITS_VALUE"
+
+  VA_BITS_LIST="39 36 47"
+  for VA_BITS in $VA_BITS_LIST; do
+	  echo "NOT WORKING $VA_BITS================="
+	  if [ "$VA_BITS" != "$VA_BITS_VALUE"  ]; then
+	    # Create the string to search for
+		STRING="CONFIG_ARM64_VA_BITS_$VA_BITS"
+		# Search for the string in the TMP_FILE
+		if grep -q "^$STRING=" "${new_fragment}"; then
+			# If the string is found, modify it
+			sed -i "s/^$STRING=.*/# $STRING is not set/" "${new_fragment}"
+		fi
+	  fi
+  done
   sort_config ${new_fragment} > $(realpath ${FRAGMENT_CONFIG})
   set +x
 
