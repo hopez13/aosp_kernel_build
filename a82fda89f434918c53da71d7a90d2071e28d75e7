@@ -33,6 +33,23 @@
       "message": "Please submit this change in main, then backport.",
       "revId": "a82fda89f434918c53da71d7a90d2071e28d75e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f608621f_b52f4367",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-19T19:43:05Z",
+      "side": 1,
+      "message": "also please refactor the existing impl a bit so it shares code with system_dlkm flatten.",
+      "revId": "a82fda89f434918c53da71d7a90d2071e28d75e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
