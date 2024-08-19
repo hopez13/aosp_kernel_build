@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0788aa5e_535851e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-19T16:58:46Z",
+      "side": 1,
+      "message": "+ @ramjiyani@google.com who did a similar change for `system_dlkm` img in CL:2767974\n+ @elsk@google.com for the LGTM as this is a frozen branch.",
+      "revId": "a82fda89f434918c53da71d7a90d2071e28d75e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
