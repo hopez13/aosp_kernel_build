@@ -64,5 +64,12 @@ native_binary_with_arg_test(
 
 test_suite(
     name = "native_binary_with_arg_test",
-    # include all tests in this package
+    tests = [
+        ":echo_multiple",
+        ":echo_selected_arg",
+        ":echo_single",
+        ":echo_space_in_args",
+        ":in_a_directory/aliased",
+        ":in_a_directory/echo",
+    ],
 )
