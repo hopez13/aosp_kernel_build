@@ -71,7 +71,12 @@ def native_binary_with_arg_test(
     )
 
     diff_test(
-        name = name,
+        name = name + "_diff_test",
         file1 = name + "_actual",
         file2 = name + "_expected",
+    )
+
+    hermetic_test(
+        name = name,
+        actual = name + "_diff_test",
     )
