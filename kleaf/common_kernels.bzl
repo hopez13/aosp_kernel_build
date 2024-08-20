@@ -599,7 +599,6 @@ def _define_common_kernel(
         page_size = None,
         deprecation = None,
         ddk_headers_archive = None,
-        ddk_module_headers = None,
         extra_dist = None):
     json_target_config = dict(
         name = name,
@@ -626,7 +625,6 @@ def _define_common_kernel(
         page_size = page_size,
         deprecation = deprecation,
         ddk_headers_archive = ddk_headers_archive,
-        ddk_module_headers = ddk_module_headers,
         extra_dist = extra_dist,
     )
     json_target_config = json.encode_indent(json_target_config, indent = "    ")
@@ -704,7 +702,6 @@ def _define_common_kernel(
         ddk_module_defconfig_fragments = [
             Label("//build/kernel/kleaf/impl/defconfig:signing_modules_disabled"),
         ],
-        ddk_module_headers = ddk_module_headers,
     )
 
     kernel_abi(

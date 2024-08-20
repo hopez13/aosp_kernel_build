@@ -58,11 +58,6 @@ load(
     "MODULES_STAGING_ARCHIVE",
     "MODULE_ENV_ARCHIVE_SUFFIX",
 )
-load(
-    ":ddk/ddk_headers.bzl",
-    "DdkHeadersInfo",
-    "ddk_headers_common_impl",
-)
 load(":debug.bzl", "debug")
 load(":file.bzl", "file")
 load(":file_selector.bzl", "file_selector")
@@ -127,7 +122,6 @@ def kernel_build(
         pack_module_env = None,
         sanitizers = None,
         ddk_module_defconfig_fragments = None,
-        ddk_module_headers = None,
         **kwargs):
     """Defines a kernel build target with all dependent targets.
 
@@ -442,13 +436,6 @@ def kernel_build(
           in `ddk_module`s building against this kernel.
           Unlike `defconfig_fragments`, `ddk_module_defconfig_fragments` is not applied
           to this `kernel_build` target, nor dependent legacy `kernel_module`s.
-        ddk_module_headers: A list of `ddk_headers`, to be used in `ddk_module`s
-          building against this kernel.
-
-          Inherits `ddk_module_headers` from `base_kernel`, with a lower priority
-          than `ddk_module_headers` of this kernel_build.
-
-          These headers are not applied to this `kernel_build` target.
         **kwargs: Additional attributes to the internal rule, e.g.
           [`visibility`](https://docs.bazel.build/versions/main/visibility.html).
           See complete list
@@ -638,7 +625,6 @@ def kernel_build(
         pack_module_env = pack_module_env,
         sanitizers = sanitizers,
         ddk_module_defconfig_fragments = ddk_module_defconfig_fragments,
-        ddk_module_headers = ddk_module_headers,
         arch = arch,
         **kwargs
     )
@@ -1811,15 +1797,6 @@ def _create_infos(
         ddk_module_defconfig_fragments = ddk_module_defconfig_fragments,
     )
 
-    ddk_headers_info = ddk_headers_common_impl(
-        ctx.label,
-        # Because of left-to-right ordering, put DdkHeadersInfo from base_kernel
-        # at the end of the direct list so it has a lower priority.
-        ctx.attr.ddk_module_headers + ([base_kernel] if base_kernel else []),
-        [],
-        [],
-    )
-
     kernel_uapi_depsets = []
     if base_kernel:
         kernel_uapi_depsets.append(base_kernel[KernelBuildUapiInfo].kernel_uapi_headers)
@@ -1943,7 +1920,6 @@ def _create_infos(
 
     return [
         cmds_info,
-        ddk_headers_info,
         serialized_env_info,
         orig_env_info,
         kbuild_mixed_tree_info,
@@ -2116,10 +2092,6 @@ _kernel_build = rule(
             doc = "Additional defconfig fragments for dependant DDK modules.",
             allow_empty = True,
             allow_files = True,
-        ),
-        "ddk_module_headers": attr.label_list(
-            doc = "Additional `ddk_headers` for dependant DDK modules.",
-            providers = [DdkHeadersInfo],
         ),
         "arch": attr.string(),
     } | _kernel_build_additional_attrs() | gcov_attrs(),
