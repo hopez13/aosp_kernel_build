@@ -47,6 +47,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "118a8660_e4a1b98c",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T22:16:50Z",
+      "side": 1,
+      "message": "There was an issue in the past with trying to add the system_dlkm partition on Pixel 6 due to OTAs. I\u0027ve been meaning to re-visit this, but haven\u0027t had the bandwidth. So in the meantime, we should have a workaround for this.",
+      "parentUuid": "83f9a01d_e85d09ea",
+      "range": {
+        "startLine": 274,
+        "startChar": 19,
+        "endLine": 274,
+        "endChar": 80
+      },
+      "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "686c3cad_ccedc49d",
@@ -60,6 +84,24 @@
       "writtenOn": "2024-08-20T20:36:27Z",
       "side": 1,
       "message": "nit: add doc, since this is a pretty big function now",
+      "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a11e177_ba9b2683",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T22:16:50Z",
+      "side": 1,
+      "message": "will do",
+      "parentUuid": "686c3cad_ccedc49d",
       "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -89,6 +131,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "07ad9481_aeedaabe",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T22:16:50Z",
+      "side": 1,
+      "message": "Yeah, this should be \"With vendor_dlkm_gki_modules_list, base_kernel_images must be set.\"",
+      "parentUuid": "9ea68d46_e4f6471b",
+      "range": {
+        "startLine": 154,
+        "startChar": 53,
+        "endLine": 154,
+        "endChar": 111
+      },
+      "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3200676a_e96576d0",
         "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
         "patchSetId": 7
@@ -100,6 +166,30 @@
       "writtenOn": "2024-08-20T20:36:27Z",
       "side": 1,
       "message": "Could you please rewrite this in a single `tar` command instead of extracting multiple times?\n\n------\n\nnit: \n\nAlso if I understand correctly, there may be two copies of the same module, one under flattened and the other nested. Even though they are the same file, using `--wildcards \u0027*/\u0027${{module}}` feels a bit awkward here.\n\nCan we NOT use `*/` and require a full path below `/lib/modules/\u003ckernel release\u003e/kernel`? Or just `tar -t`, filter the list, then `tar -x`.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 19
+      },
+      "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1496d2e3_763ff187",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T22:16:50Z",
+      "side": 1,
+      "message": "yeah, I can optimize this. I originally tried `\u0027/lib/modules/*/kernel/*\u0027${{module}}` but `tar` didn\u0027t like that. I\u0027ll try `tar --list` to grab the modules and then extract them in one go.",
+      "parentUuid": "3200676a_e96576d0",
       "range": {
         "startLine": 185,
         "startChar": 0,
