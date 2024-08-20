@@ -18,6 +18,7 @@ load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_tools")
 load("//build/kernel/kleaf/impl:bison_wrapper.bzl", "bison_wrapper")
 load("//build/kernel/kleaf/impl:native_binary_with_arg.bzl", "native_binary_with_arg")
+load("//build/kernel/kleaf/impl:swig_wrapper.bzl", "swig_wrapper")
 load(
     "//build/kernel/kleaf/impl:transitioned_tool.bzl",
     "prebuilt_transitioned_files",
@@ -124,6 +125,19 @@ bison_wrapper(
 )
 
 prebuilt_transitioned_tool(
+    name = "prebuilt_swig",
+    src = "//prebuilts/kernel-build-tools:swig",
+    visibility = ["//visibility:private"],
+)
+
+swig_wrapper(
+    name = "swig",
+    src = ":prebuilt_swig",
+    swig_lib = "//prebuilts/kernel-build-tools:swig_lib_dir",
+    visibility = ["//visibility:private"],
+)
+
+prebuilt_transitioned_tool(
     name = "prebuilt_lz4",
     src = "//prebuilts/kernel-build-tools:lz4",
     visibility = ["//visibility:private"],
@@ -175,7 +189,6 @@ _PREBUILT_TOOLS = [
     "//prebuilts/kernel-build-tools:pahole",
     "//prebuilts/kernel-build-tools:simg2img",
     "//prebuilts/kernel-build-tools:soong_zip",
-    "//prebuilts/kernel-build-tools:swig",
     "//prebuilts/kernel-build-tools:tune2fs",
     "//prebuilts/kernel-build-tools:ufdt_apply_overlay",
 ]
@@ -200,6 +213,7 @@ _HERMETIC_TOOLS = [
     ":bison",
     ":gzip",
     ":lz4",
+    ":swig",
     ":tar",
     # TODO: This is only used by abi_stgdiff. It should be fine to be removed from hermetic_tools.
     "//build/kernel/kleaf/impl:stgdiff",
