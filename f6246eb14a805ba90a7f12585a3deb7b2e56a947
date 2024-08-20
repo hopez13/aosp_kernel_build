@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bd19a81_29cf82aa",
+        "filename": "kleaf/impl/extracted_system_dlkm_staging_archive.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-20T15:44:27Z",
+      "side": 1,
+      "message": "why not exporting it via `kernel.bzl` instead?",
+      "range": {
+        "startLine": 23,
+        "startChar": 11,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "f6246eb14a805ba90a7f12585a3deb7b2e56a947",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b63986fd_6fca83da",
+        "filename": "kleaf/impl/kernel_filegroup_declaration.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-20T15:44:27Z",
+      "side": 1,
+      "message": "Since `ctx.attr.images` is not required this might fail.",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 24
+      },
+      "revId": "f6246eb14a805ba90a7f12585a3deb7b2e56a947",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e9e586_f2a479c7",
+        "filename": "kleaf/impl/kernel_prebuilt_repo.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-20T15:44:27Z",
+      "side": 1,
+      "message": "nitty nit: line length.",
+      "range": {
+        "startLine": 286,
+        "startChar": 119,
+        "endLine": 286,
+        "endChar": 120
+      },
+      "revId": "f6246eb14a805ba90a7f12585a3deb7b2e56a947",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
