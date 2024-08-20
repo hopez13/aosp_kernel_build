@@ -86,48 +86,6 @@ Usually, for ABI monitoring to be fully turned on, you should set:
 | <a id="common_kernel-extra_dist"></a>extra_dist |  extra targets added to `<name>_dist`   |  `None` |
 
 
-<a id="define_db845c"></a>
-
-## define_db845c
-
-<pre>
-define_db845c(<a href="#define_db845c-name">name</a>, <a href="#define_db845c-outs">outs</a>, <a href="#define_db845c-build_config">build_config</a>, <a href="#define_db845c-module_outs">module_outs</a>, <a href="#define_db845c-make_goals">make_goals</a>, <a href="#define_db845c-define_abi_targets">define_abi_targets</a>,
-              <a href="#define_db845c-kmi_symbol_list">kmi_symbol_list</a>, <a href="#define_db845c-kmi_symbol_list_add_only">kmi_symbol_list_add_only</a>, <a href="#define_db845c-module_grouping">module_grouping</a>, <a href="#define_db845c-unstripped_modules_archive">unstripped_modules_archive</a>,
-              <a href="#define_db845c-gki_modules_list">gki_modules_list</a>, <a href="#define_db845c-dist_dir">dist_dir</a>)
-</pre>
-
-Define target for db845c.
-
-Note: This is a mixed build.
-
-Requires [`define_common_kernels`](#define_common_kernels) to be called in the same package.
-
-**Deprecated**. Use [`kernel_build`](kernel.md#kernel_build) directly.
-
-
-**PARAMETERS**
-
-
-| Name  | Description | Default Value |
-| :------------- | :------------- | :------------- |
-| <a id="define_db845c-name"></a>name |  name of target. Usually `"db845c"`.   |  none |
-| <a id="define_db845c-outs"></a>outs |  See [kernel_build.outs](kernel.md#kernel_build-outs).   |  none |
-| <a id="define_db845c-build_config"></a>build_config |  See [kernel_build.build_config](kernel.md#kernel_build-build_config). If `None`, default to `"build.config.db845c"`.   |  `None` |
-| <a id="define_db845c-module_outs"></a>module_outs |  See [kernel_build.module_outs](kernel.md#kernel_build-module_outs). The list of in-tree kernel modules.   |  `None` |
-| <a id="define_db845c-make_goals"></a>make_goals |  See [kernel_build.make_goals](kernel.md#kernel_build-make_goals).  A list of strings defining targets for the kernel build.   |  `None` |
-| <a id="define_db845c-define_abi_targets"></a>define_abi_targets |  See [kernel_abi.define_abi_targets](kernel.md#kernel_abi-define_abi_targets).   |  `None` |
-| <a id="define_db845c-kmi_symbol_list"></a>kmi_symbol_list |  See [kernel_build.kmi_symbol_list](kernel.md#kernel_build-kmi_symbol_list).   |  `None` |
-| <a id="define_db845c-kmi_symbol_list_add_only"></a>kmi_symbol_list_add_only |  See [kernel_abi.kmi_symbol_list_add_only](kernel.md#kernel_abi-kmi_symbol_list_add_only).   |  `None` |
-| <a id="define_db845c-module_grouping"></a>module_grouping |  See [kernel_abi.module_grouping](kernel.md#kernel_abi-module_grouping).   |  `None` |
-| <a id="define_db845c-unstripped_modules_archive"></a>unstripped_modules_archive |  See [kernel_abi.unstripped_modules_archive](kernel.md#kernel_abi-unstripped_modules_archive).   |  `None` |
-| <a id="define_db845c-gki_modules_list"></a>gki_modules_list |  List of gki modules to be copied to the dist directory. If `None`, all gki kernel modules will be copied.   |  `None` |
-| <a id="define_db845c-dist_dir"></a>dist_dir |  Argument to `copy_to_dist_dir`. If `None`, default is `"out/{name}/dist"`.   |  `None` |
-
-**DEPRECATED**
-
-Use [`kernel_build`](kernel.md#kernel_build) directly.
-
-
 <a id="define_prebuilts"></a>
 
 ## define_prebuilts
