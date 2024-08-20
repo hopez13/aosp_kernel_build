@@ -155,8 +155,25 @@ def _link_with_gki_modules(ctx, gki_modules_staging_dir):
             ctx.label,
         ))
     else:
-        # No GKI modules provided to link against. So exit early.
-        return struct(cmd = "", inputs = [])
+        # No GKI modules provided to link against. For backwards compatibility
+        # with configurations that haven't added support for the attribute
+        # vendor_dlkm_modules_list, check if the special gki_modules folder
+        # exists. If it does, then copy the GKI modules over to the modules
+        # staging directory so that they could be included if they are listed
+        # in the vendor_dlkm_modules_list.
+        cmd = """
+             if [[ -d "$(echo {gki_modules_staging_dir}/lib/modules/*/gki_modules/lib/modules/*/kernel)" ]]; then
+               modules_dir=$(echo {gki_modules_staging_dir}/lib/modules/*)
+               gki_modules_dir=$(echo {gki_modules_staging_dir}/lib/modules/*/gki_modules/lib/modules/*)
+               cp -r ${{gki_modules_dir}}/kernel ${{modules_dir}}/
+               cat ${{gki_modules_dir}}/modules.order ${{modules_dir}}/modules.order \\
+                   > ${{modules_dir}}/modules.order.tmp
+               mv -f ${{modules_dir}}/modules.order.tmp ${{modules_dir}}/modules.order
+             fi
+        """.format(
+            gki_modules_staging_dir = gki_modules_staging_dir,
+        )
+        return struct(cmd = cmd, inputs = [])
 
     system_dlkm_staging_archive = utils.find_file(
         name = SYSTEM_DLKM_STAGING_ARCHIVE_NAME,
