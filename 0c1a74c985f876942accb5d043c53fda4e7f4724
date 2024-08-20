@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40276922_5cecdbce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T23:54:04Z",
+      "side": 1,
+      "message": "I assume this is fully backwards compatible as long as partners did not add *.ko to make_goals before. So +2.",
+      "revId": "0c1a74c985f876942accb5d043c53fda4e7f4724",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
