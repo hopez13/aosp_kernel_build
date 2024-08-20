@@ -38,13 +38,24 @@ def _update_source_file_impl(ctx):
         ctx.file.src,
         ctx.file.dst,
     ]
-    return [DefaultInfo(runfiles = ctx.runfiles(files = runfiles, transitive_files = hermetic_tools.deps))]
+    return [DefaultInfo(runfiles = ctx.runfiles(
+        files = runfiles,
+        transitive_files = depset(
+            transitive = [hermetic_tools.deps] + [target.files for target in ctx.attr.deps],
+        ),
+    ))]
 
 update_source_file = rule(
     implementation = _update_source_file_impl,
     attrs = {
         "src": attr.label(allow_single_file = True),
         "dst": attr.label(allow_single_file = True),
+        "deps": attr.label_list(
+            allow_files = True,
+            doc = """Additional files to depend on. You may add targets here to ensure these targets
+                are built before updating the source file. This can be useful if you want to
+                exercise additional checks.""",
+        ),
     },
     executable = True,
     toolchains = [hermetic_toolchain.type],
