@@ -59,6 +59,14 @@ def _get_base_kernel_for_module_names(ctx):
     # base_kernel_for_module_outs ignores _force_ignore_base_kernel
     return ctx.attr.base_kernel
 
+def _get_base_kernel_for_ddk_headers(ctx):
+    """Returns base_kernel for getting the common DDK headers."""
+
+    # always inherit ddk_module_headers from base_kernel, regardless of _force_ignore_base_kernel.
+    # This is so that for ABI monitoring or compile_commands, even though _force_ignore_base_kernel,
+    # dependant DDK modules can still build properly.
+    return ctx.attr.base_kernel
+
 def _get_base_modules_staging_archive(ctx):
     # ignores _force_ignore_base_kernel, because this is for ABI purposes.
     if not ctx.attr.base_kernel:
@@ -70,5 +78,6 @@ base_kernel_utils = struct(
     non_config_attrs = _base_kernel_non_config_attrs,
     get_base_kernel = _get_base_kernel,
     get_base_kernel_for_module_names = _get_base_kernel_for_module_names,
+    get_base_kernel_for_ddk_headers = _get_base_kernel_for_ddk_headers,
     get_base_modules_staging_archive = _get_base_modules_staging_archive,
 )

@@ -1864,11 +1864,12 @@ def _create_infos(
         ddk_module_defconfig_fragments = ddk_module_defconfig_fragments,
     )
 
+    base_kernel_for_ddk_headers = base_kernel_utils.get_base_kernel_for_ddk_headers(ctx)
     ddk_headers_info = ddk_headers_common_impl(
         ctx.label,
         # Because of left-to-right ordering, put DdkHeadersInfo from base_kernel
         # at the end of the direct list so it has a lower priority.
-        ctx.attr.ddk_module_headers + ([base_kernel] if base_kernel else []),
+        ctx.attr.ddk_module_headers + ([base_kernel_for_ddk_headers] if base_kernel_for_ddk_headers else []),
         [],
         [],
     )
