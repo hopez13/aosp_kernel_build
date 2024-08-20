@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a1b9230_c1142f89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T23:52:43Z",
+      "side": 1,
+      "message": "Does this change any existing behaviors for partners? If so please send out go/gki-newsletter, wait 2 weeks, then merge this.",
+      "revId": "22678e29b6134cb4456263b047e574301f27e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
