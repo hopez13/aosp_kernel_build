@@ -344,11 +344,11 @@ Define an executable that creates `compile_commands.json` from kernel targets.
 
 <pre>
 kernel_filegroup(<a href="#kernel_filegroup-name">name</a>, <a href="#kernel_filegroup-deps">deps</a>, <a href="#kernel_filegroup-srcs">srcs</a>, <a href="#kernel_filegroup-outs">outs</a>, <a href="#kernel_filegroup-all_module_names">all_module_names</a>, <a href="#kernel_filegroup-collect_unstripped_modules">collect_unstripped_modules</a>,
-                 <a href="#kernel_filegroup-config_out_dir">config_out_dir</a>, <a href="#kernel_filegroup-config_out_dir_files">config_out_dir_files</a>, <a href="#kernel_filegroup-ddk_module_defconfig_fragments">ddk_module_defconfig_fragments</a>, <a href="#kernel_filegroup-debug">debug</a>,
-                 <a href="#kernel_filegroup-env_setup_script">env_setup_script</a>, <a href="#kernel_filegroup-exec_platform">exec_platform</a>, <a href="#kernel_filegroup-gki_artifacts">gki_artifacts</a>, <a href="#kernel_filegroup-images">images</a>, <a href="#kernel_filegroup-internal_outs">internal_outs</a>, <a href="#kernel_filegroup-kasan">kasan</a>,
-                 <a href="#kernel_filegroup-kasan_generic">kasan_generic</a>, <a href="#kernel_filegroup-kasan_sw_tags">kasan_sw_tags</a>, <a href="#kernel_filegroup-kcsan">kcsan</a>, <a href="#kernel_filegroup-kernel_release">kernel_release</a>, <a href="#kernel_filegroup-kernel_uapi_headers">kernel_uapi_headers</a>, <a href="#kernel_filegroup-lto">lto</a>,
-                 <a href="#kernel_filegroup-module_env_archive">module_env_archive</a>, <a href="#kernel_filegroup-modules_prepare_archive">modules_prepare_archive</a>, <a href="#kernel_filegroup-protected_modules_list">protected_modules_list</a>, <a href="#kernel_filegroup-strip_modules">strip_modules</a>,
-                 <a href="#kernel_filegroup-target_platform">target_platform</a>, <a href="#kernel_filegroup-trim_nonlisted_kmi">trim_nonlisted_kmi</a>)
+                 <a href="#kernel_filegroup-config_out_dir">config_out_dir</a>, <a href="#kernel_filegroup-config_out_dir_files">config_out_dir_files</a>, <a href="#kernel_filegroup-ddk_module_defconfig_fragments">ddk_module_defconfig_fragments</a>,
+                 <a href="#kernel_filegroup-ddk_module_headers">ddk_module_headers</a>, <a href="#kernel_filegroup-debug">debug</a>, <a href="#kernel_filegroup-env_setup_script">env_setup_script</a>, <a href="#kernel_filegroup-exec_platform">exec_platform</a>, <a href="#kernel_filegroup-gki_artifacts">gki_artifacts</a>, <a href="#kernel_filegroup-images">images</a>,
+                 <a href="#kernel_filegroup-internal_outs">internal_outs</a>, <a href="#kernel_filegroup-kasan">kasan</a>, <a href="#kernel_filegroup-kasan_generic">kasan_generic</a>, <a href="#kernel_filegroup-kasan_sw_tags">kasan_sw_tags</a>, <a href="#kernel_filegroup-kcsan">kcsan</a>, <a href="#kernel_filegroup-kernel_release">kernel_release</a>,
+                 <a href="#kernel_filegroup-kernel_uapi_headers">kernel_uapi_headers</a>, <a href="#kernel_filegroup-lto">lto</a>, <a href="#kernel_filegroup-module_env_archive">module_env_archive</a>, <a href="#kernel_filegroup-modules_prepare_archive">modules_prepare_archive</a>,
+                 <a href="#kernel_filegroup-protected_modules_list">protected_modules_list</a>, <a href="#kernel_filegroup-strip_modules">strip_modules</a>, <a href="#kernel_filegroup-target_platform">target_platform</a>, <a href="#kernel_filegroup-trim_nonlisted_kmi">trim_nonlisted_kmi</a>)
 </pre>
 
 **EXPERIMENTAL.** The API of `kernel_filegroup` rapidly changes and
@@ -378,6 +378,7 @@ It can be used in the `base_kernel` attribute of a [`kernel_build`](#kernel_buil
 | <a id="kernel_filegroup-config_out_dir"></a>config_out_dir |  Directory to support `kernel_config`   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="kernel_filegroup-config_out_dir_files"></a>config_out_dir_files |  Files in `config_out_dir`   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="kernel_filegroup-ddk_module_defconfig_fragments"></a>ddk_module_defconfig_fragments |  Additional defconfig fragments for dependant DDK modules.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="kernel_filegroup-ddk_module_headers"></a>ddk_module_headers |  Additional `ddk_headers` for dependant DDK modules.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="kernel_filegroup-debug"></a>debug |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `"@kleaf//build/kernel/kleaf:debug"`  |
 | <a id="kernel_filegroup-env_setup_script"></a>env_setup_script |  Setup script from `kernel_env`   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="kernel_filegroup-exec_platform"></a>exec_platform |  Execution platform, where the build is executed.<br><br>See https://bazel.build/extending/platforms.   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
@@ -546,6 +547,25 @@ directory, or `DIST_DIR`.
 | <a id="kernel_unstripped_modules_archive-kernel_modules"></a>kernel_modules |  A list of external [`kernel_module`](#kernel_module)s to retrieve unstripped external modules from.<br><br>It requires that the base `kernel_build` has `collect_unstripped_modules = True`.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 
 
+<a id="merge_kzip"></a>
+
+## merge_kzip
+
+<pre>
+merge_kzip(<a href="#merge_kzip-name">name</a>, <a href="#merge_kzip-srcs">srcs</a>)
+</pre>
+
+Merge .kzip files
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="merge_kzip-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="merge_kzip-srcs"></a>srcs |  kzip files   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+
+
 <a id="merged_kernel_uapi_headers"></a>
 
 ## merged_kernel_uapi_headers
@@ -705,11 +725,21 @@ A [`ddk_module`](#ddk_module) is compiled with the following order of include di
     1. All `linux_includes` of this target, in the specified order
     2. All `linux_includes` of `deps`, in the specified order (recursively apply #1.3 on each target)
     3. All `linux_includes` of `hdrs`, in the specified order (recursively apply #1.3 on each target)
+    4. All `linux_includes` from kernel_build:
+       1. All `linux_includes` from `ddk_module_headers` of the `base_kernel` of the
+          `kernel_build` of this `ddk_module`;
+       2. All `linux_includes` from `ddk_module_headers` of the `kernel_build` of this
+          `ddk_module`;
 2. `LINUXINCLUDE` (See `${KERNEL_DIR}/Makefile`)
 3. Traverse depedencies for `includes`:
     1. All `includes` of this target, in the specified order
     2. All `includes` of `deps`, in the specified order (recursively apply #3.1 and #3.3 on each target)
     3. All `includes` of `hdrs`, in the specified order (recursively apply #3.1 and #3.3 on each target)
+    4. All `includes` from kernel_build:
+       1. All `includes` from `ddk_module_headers` of the `base_kernel` of the
+          `kernel_build` of this `ddk_module`;
+       2. All `includes` from `ddk_module_headers` of the `kernel_build` of this
+          `ddk_module`;
 
 In other words, #1 and #3 uses the `preorder` of
 [depset](https://bazel.build/rules/lib/depset).
@@ -730,6 +760,19 @@ your needs.
 For example:
 
 ```
+ddk_headers(name = "base_ddk_headers", includes = ["base"], linux_includes = ["uapi/base"])
+ddk_headers(name = "device_ddk_headers", includes = ["device"], linux_includes = ["uapi/device"])
+
+kernel_build(
+    name = "kernel_aarch64",
+    ddk_module_headers = [":base_ddk_headers"],
+)
+kernel_build(
+    name = "device",
+    base_kernel = ":kernel_aarch64",
+    ddk_module_headers = [":device_ddk_headers"],
+)
+
 ddk_headers(name = "dep_a", includes = ["dep_a"], linux_includes = ["uapi/dep_a"])
 ddk_headers(name = "dep_b", includes = ["dep_b"])
 ddk_headers(name = "dep_c", includes = ["dep_c"], hdrs = ["dep_a"])
@@ -739,6 +782,7 @@ ddk_headers(name = "x", includes = ["x"])
 
 ddk_module(
     name = "module",
+    kernel_build = ":device",
     deps = [":dep_b", ":x", ":dep_c"],
     hdrs = [":hdrs_a", ":x", ":hdrs_b"],
     linux_includes = ["uapi/module"],
@@ -758,6 +802,10 @@ Then `":module"` is compiled with these flags, in this order:
 # 1.3 hdrs, linux_includes, recursively
 -Iuapi/hdrs_a
 
+# 1.4 linux_includes from kernel_build and base_kernel
+-Iuapi/device
+-Iuapi/base
+
 # 2.
 $(LINUXINCLUDE)
 
@@ -775,6 +823,10 @@ $(LINUXINCLUDE)
 -Ihdrs_a
 # x is already included, skip
 -Ihdrs_b
+
+# 3.4. includes from kernel_build and base_kernel
+-Idevice
+-Ibase
 ```
 
 A dependent module automatically gets #1.1, #1.3, #3.1, #3.3, in this order. For example:
@@ -782,6 +834,7 @@ A dependent module automatically gets #1.1, #1.3, #3.1, #3.3, in this order. For
 ```
 ddk_module(
     name = "child",
+    kernel_build = ":device",
     deps = [":module"],
     # ...
 )
@@ -794,6 +847,10 @@ Then `":child"` is compiled with these flags, in this order:
 -Iuapi/module
 -Iuapi/hdrs_a
 
+# 1.4 linux_includes from kernel_build and base_kernel
+-Iuapi/device
+-Iuapi/base
+
 # 2.
 $(LINUXINCLUDE)
 
@@ -803,6 +860,10 @@ $(LINUXINCLUDE)
 -Ihdrs_a
 -Ix
 -Ihdrs_b
+
+# 3.4. includes from kernel_build and base_kernel
+-Idevice
+-Ibase
 ```
 
 
@@ -1094,7 +1155,7 @@ kernel_build(<a href="#kernel_build-name">name</a>, <a href="#kernel_build-build
              <a href="#kernel_build-collect_unstripped_modules">collect_unstripped_modules</a>, <a href="#kernel_build-enable_interceptor">enable_interceptor</a>, <a href="#kernel_build-kbuild_symtypes">kbuild_symtypes</a>, <a href="#kernel_build-toolchain_version">toolchain_version</a>,
              <a href="#kernel_build-strip_modules">strip_modules</a>, <a href="#kernel_build-module_signing_key">module_signing_key</a>, <a href="#kernel_build-system_trusted_key">system_trusted_key</a>,
              <a href="#kernel_build-modules_prepare_force_generate_headers">modules_prepare_force_generate_headers</a>, <a href="#kernel_build-defconfig_fragments">defconfig_fragments</a>, <a href="#kernel_build-page_size">page_size</a>, <a href="#kernel_build-pack_module_env">pack_module_env</a>,
-             <a href="#kernel_build-sanitizers">sanitizers</a>, <a href="#kernel_build-ddk_module_defconfig_fragments">ddk_module_defconfig_fragments</a>, <a href="#kernel_build-kwargs">kwargs</a>)
+             <a href="#kernel_build-sanitizers">sanitizers</a>, <a href="#kernel_build-ddk_module_defconfig_fragments">ddk_module_defconfig_fragments</a>, <a href="#kernel_build-ddk_module_headers">ddk_module_headers</a>, <a href="#kernel_build-kwargs">kwargs</a>)
 </pre>
 
 Defines a kernel build target with all dependent targets.
@@ -1152,6 +1213,7 @@ For example, if name is `"kernel_aarch64"`:
 | <a id="kernel_build-pack_module_env"></a>pack_module_env |  If `True`, create `{name}_module_env.tar.gz` and other archives as part of the default output of this target.<br><br>These archives contains necessary files to build external modules.   |  `None` |
 | <a id="kernel_build-sanitizers"></a>sanitizers |  **non-configurable**. A list of sanitizer configurations. By default, no sanitizers are explicity configured; values in defconfig are respected. Possible values are:   - `["kasan_any_mode"]`   - `["kasan_sw_tags"]`   - `["kasan_generic"]`   - `["kcsan"]`   |  `None` |
 | <a id="kernel_build-ddk_module_defconfig_fragments"></a>ddk_module_defconfig_fragments |  A list of additional defconfigs, to be used in `ddk_module`s building against this kernel. Unlike `defconfig_fragments`, `ddk_module_defconfig_fragments` is not applied to this `kernel_build` target, nor dependent legacy `kernel_module`s.   |  `None` |
+| <a id="kernel_build-ddk_module_headers"></a>ddk_module_headers |  A list of `ddk_headers`, to be used in `ddk_module`s building against this kernel.<br><br>Inherits `ddk_module_headers` from `base_kernel`, with a lower priority than `ddk_module_headers` of this kernel_build.<br><br>These headers are not applied to this `kernel_build` target.   |  `None` |
 | <a id="kernel_build-kwargs"></a>kwargs |  Additional attributes to the internal rule, e.g. [`visibility`](https://docs.bazel.build/versions/main/visibility.html). See complete list [here](https://docs.bazel.build/versions/main/be/common-definitions.html#common-attributes).   |  none |
 
 
