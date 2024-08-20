@@ -25,6 +25,7 @@ load(":abi/get_src_kmi_symbol_list.bzl", "get_src_kmi_symbol_list")
 load(":abi/get_src_protected_exports_files.bzl", "get_src_protected_exports_list", "get_src_protected_modules_list")
 load(":abi/protected_exports.bzl", "protected_exports")
 load(":common_providers.bzl", "KernelBuildAbiInfo")
+load(":diff.bzl", "diff")
 load(":hermetic_exec.bzl", "hermetic_exec")
 load(":kernel_build.bzl", "kernel_build")
 
@@ -407,48 +408,49 @@ def _define_abi_definition_targets(
             **kwargs
         )
 
-        update_source_file(
-            name = name + "_update_definition",
-            src = name + "_out_file",
-            dst = abi_definition_stg,
+
+        diff(
+            name = name + "_diff_symbol_list",
+            file1 = name + "_extracted_symbols",
+            file2 = kmi_symbol_list,
+            failure_message = """\
+symbol list must be updated before updating ABI definition.
+    To update, execute
+        tools/bazel run {}
+    To discover additional files to be updated, execute
+        tools/bazel run -k {}""".format(
+                native.package_relative_label(name + "_update_symbol_list"),
+                native.package_relative_label(name + "_update"),
+            ),
             **kwargs
         )
 
-        hermetic_exec(
+        diff(
+            name = name + "_diff_protected_exports_list",
+            file1 = name + "_protected_exports",
+            file2 = protected_exports_list,
+            failure_message = """\
+protected exports list must be updated before updating ABI definition.
+    To update, execute
+        tools/bazel run {}
+    To discover additional files to be updated, execute
+        tools/bazel run -k {}""".format(
+                native.package_relative_label(native.package_relative_label(name + "_update_protected_exports"))
+                native.package_relative_label(name + "_update"),
+            ),
+            **kwargs
+        )
+
+        update_source_file(
             name = name + "_nodiff_update",
-            data = [
-                name + "_extracted_symbols",
-                name + "_protected_exports",
-                name + "_update_definition",
-                kmi_symbol_list,
-                protected_exports_list,
-                # This is unused in the script, but placed here just to ensure
-                # the checks are executed.
+            src = name + "_out_file",
+            dst = abi_definition_stg,
+            deps = [
+                name + "_diff_symbol_list",
+                name + "_diff_protected_exports_list",
+                # Ensure KMI checks are executed before updating ABI.
                 kmi_symbol_checks,
             ],
-            script = """
-                # Ensure that symbol list is updated
-                if ! diff -q $(rootpath {src_symbol_list}) $(rootpath {dst_symbol_list}); then
-                    echo "ERROR: symbol list must be updated before updating ABI definition."
-                    echo " To update, execute 'tools/bazel run {update_symbol_list_label}'." >&2
-                    exit 1
-                fi
-                # Ensure that protected exports list is updated
-                if ! diff -q $(rootpath {src_protected_exports_list}) $(rootpath {dst_protected_exports_list}); then
-                echo "ERROR: protected exports list must be updated before updating ABI definition. To update, execute 'tools/bazel run {update_protected_exports_label}'." >&2
-                    exit 1
-                fi
-                # Update abi_definition
-                $(rootpath {update_definition})
-                """.format(
-                src_protected_exports_list = name + "_protected_exports",
-                dst_protected_exports_list = protected_exports_list,
-                src_symbol_list = name + "_extracted_symbols",
-                dst_symbol_list = kmi_symbol_list,
-                update_protected_exports_label = native.package_relative_label(name + "_update_protected_exports"),
-                update_symbol_list_label = native.package_relative_label(name + "_update_symbol_list"),
-                update_definition = name + "_update_definition",
-            ),
             **kwargs
         )
 
