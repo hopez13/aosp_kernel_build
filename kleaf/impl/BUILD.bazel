@@ -119,6 +119,7 @@ bzl_library(
         "srcs_aspect.bzl",
         "stamp.bzl",
         "status.bzl",
+        "swig_wrapper.bzl",
         "transitioned_tool.bzl",
         "utils.bzl",
     ],
