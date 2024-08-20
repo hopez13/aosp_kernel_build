@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b498b37_f2730524",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T19:59:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4d3c9bf_309e944d",
+      "range": {
+        "startLine": 268,
+        "startChar": 38,
+        "endLine": 268,
+        "endChar": 50
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1365baf3_a042445a",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-14T01:25:33Z",
       "side": 1,
       "message": "Try to use the term \"base kernel\" instead of GKI. e.g. \"The list of in-tree modules from the base kernel\"\n\nThis is a more generic and precise term; we don\u0027t force base_kernel to be from //common.\n\n(On the other hand, things like --gki_build_config_fragment has the term \"GKI\" because they are applied on //common kernels only, unless people port it to somewhere else.)",
+      "range": {
+        "startLine": 269,
+        "startChar": 33,
+        "endLine": 269,
+        "endChar": 36
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c7ad4de_eab13e23",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T19:59:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1365baf3_a042445a",
       "range": {
         "startLine": 269,
         "startChar": 33,
@@ -93,6 +141,54 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b8b7d25_2f12063b",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T19:59:37Z",
+      "side": 1,
+      "message": "yes that\u0027s right.",
+      "parentUuid": "e9ec4959_cb39f48a",
+      "range": {
+        "startLine": 268,
+        "startChar": 38,
+        "endLine": 270,
+        "endChar": 40
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bc9c0b9_2c4450a3",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T19:59:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0e61967_0c94222e",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 40
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "004ae594_4776ae04",
@@ -116,6 +212,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0469f2f6_37204bac",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T19:59:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "004ae594_4776ae04",
+      "range": {
+        "startLine": 42,
+        "startChar": 34,
+        "endLine": 42,
+        "endChar": 42
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c66689d3_97de2c7b",
@@ -129,6 +249,30 @@
       "writtenOn": "2024-08-14T01:25:33Z",
       "side": 1,
       "message": "nit: just `: \u003e`?",
+      "range": {
+        "startLine": 167,
+        "startChar": 16,
+        "endLine": 167,
+        "endChar": 29
+      },
+      "revId": "1ecf8a8c2c214d3fd99302d27cf96f662a6bc414",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f358116c_c792eb88",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T19:59:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c66689d3_97de2c7b",
       "range": {
         "startLine": 167,
         "startChar": 16,
