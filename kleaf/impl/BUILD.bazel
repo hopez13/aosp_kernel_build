@@ -68,6 +68,7 @@ bzl_library(
         "declare_kernel_prebuilts.bzl",
         "declare_toolchain_constants.bzl",
         "default_host_tools.scl",
+        "diff.bzl",
         "file.bzl",
         "file_selector.bzl",
         "gcov_utils.bzl",
