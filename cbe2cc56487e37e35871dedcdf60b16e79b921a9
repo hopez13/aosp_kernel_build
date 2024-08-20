@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efbe5e0c_66ffcd7b",
+        "filename": "build_utils.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T00:41:07Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need this .orig file if not `[ -z \"${TRIM_UNUSED_MODULES}\" ]` right?",
+      "revId": "cbe2cc56487e37e35871dedcdf60b16e79b921a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
