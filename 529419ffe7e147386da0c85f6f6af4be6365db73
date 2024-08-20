@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "769236fb_51dbb3cc",
+        "filename": "build_utils.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T23:57:27Z",
+      "side": 1,
+      "message": "does realpath --relative-to work?",
+      "parentUuid": "b465b70c_8065a1ff",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 90
+      },
+      "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "83f9a01d_e85d09ea",
@@ -190,6 +214,30 @@
       "side": 1,
       "message": "yeah, I can optimize this. I originally tried `\u0027/lib/modules/*/kernel/*\u0027${{module}}` but `tar` didn\u0027t like that. I\u0027ll try `tar --list` to grab the modules and then extract them in one go.",
       "parentUuid": "3200676a_e96576d0",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 19
+      },
+      "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25093299_c6f76b62",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T23:57:27Z",
+      "side": 1,
+      "message": "It is probably because the entries started with `./`. That being said, this particular piece of code should be robust to handle entries started with or without `./` because they are both valid tarballs. So tar --list then filtering the list is the safest to do.\n\n(Depending on how you implement this, you might also need to enforce a check that all the mentioned modules are extracted)",
+      "parentUuid": "1496d2e3_763ff187",
       "range": {
         "startLine": 185,
         "startChar": 0,
