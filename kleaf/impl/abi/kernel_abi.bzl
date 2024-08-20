@@ -26,7 +26,7 @@ load(":abi/get_src_protected_exports_files.bzl", "get_src_protected_exports_list
 load(":abi/protected_exports.bzl", "protected_exports")
 load(":common_providers.bzl", "KernelBuildAbiInfo")
 load(":diff.bzl", "diff")
-load(":hermetic_exec.bzl", "hermetic_exec")
+load(":empty_binary.bzl", "empty_binary")
 load(":kernel_build.bzl", "kernel_build")
 
 visibility("//build/kernel/kleaf/...")
@@ -224,14 +224,12 @@ def _not_define_abi_targets(
     )
 
     # For kernel_abi_dist to use when define_abi_targets is not set.
-    hermetic_exec(
+    empty_binary(
         name = name + "_diff_executable",
-        script = "",
         **private_kwargs
     )
-    hermetic_exec(
+    empty_binary(
         name = name + "_diff_executable_xml",
-        script = "",
         **private_kwargs
     )
 
@@ -364,9 +362,8 @@ def _define_abi_definition_targets(
 
     if not abi_definition_stg:
         # For kernel_abi_dist to use when abi_definition is empty.
-        hermetic_exec(
+        empty_binary(
             name = name + "_diff_executable",
-            script = "",
             **kwargs
         )
         default_outputs.append(name + "_diff_executable")
