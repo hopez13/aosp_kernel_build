@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4f28649_4b504901",
+        "filename": "kleaf/impl/extracted_system_dlkm_staging_archive.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T21:11:44Z",
+      "side": 1,
+      "message": "We only want to export it to repos instantiated with kernel_prebuilt_repo. However, load visibility does not allow specifying repo\u0027s; so I can only do public here.\n\nWe don\u0027t want this to be a public API unless someone requests so.",
+      "parentUuid": "0bd19a81_29cf82aa",
+      "range": {
+        "startLine": 23,
+        "startChar": 11,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "f6246eb14a805ba90a7f12585a3deb7b2e56a947",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b63986fd_6fca83da",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd6a23dd_ca8cc2d0",
+        "filename": "kleaf/impl/kernel_filegroup_declaration.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T21:11:44Z",
+      "side": 1,
+      "message": "Good point. Let me make this optional.",
+      "parentUuid": "b63986fd_6fca83da",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 24
+      },
+      "revId": "f6246eb14a805ba90a7f12585a3deb7b2e56a947",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "61e9e586_f2a479c7",
         "filename": "kleaf/impl/kernel_prebuilt_repo.bzl",
         "patchSetId": 2
@@ -60,6 +108,30 @@
       "writtenOn": "2024-08-20T15:44:27Z",
       "side": 1,
       "message": "nitty nit: line length.",
+      "range": {
+        "startLine": 286,
+        "startChar": 119,
+        "endLine": 286,
+        "endChar": 120
+      },
+      "revId": "f6246eb14a805ba90a7f12585a3deb7b2e56a947",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb770cb0_140eb2f1",
+        "filename": "kleaf/impl/kernel_prebuilt_repo.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-20T21:11:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "61e9e586_f2a479c7",
       "range": {
         "startLine": 286,
         "startChar": 119,
