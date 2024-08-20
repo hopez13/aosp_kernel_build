@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b465b70c_8065a1ff",
+        "filename": "build_utils.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T20:00:20Z",
+      "side": 1,
+      "message": "@elsk@google.com, any suggestions on how to handle this?",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 90
+      },
+      "revId": "529419ffe7e147386da0c85f6f6af4be6365db73",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
