@@ -450,7 +450,13 @@ def define_common_kernels(
         If unspecified, its value is `["//visibility:public"]`.
 
         See [`visibility`](https://docs.bazel.build/versions/main/visibility.html).
+
+    Deprecated:
+        Use [`common_kernel`](#common_kernel) instead.
     """
+
+    # buildifier: disable=print
+    print("\nWARNING: define_common_kernels() is deprecated. Use common_kernel() instead.")
 
     if visibility == None:
         visibility = ["//visibility:public"]
@@ -514,7 +520,7 @@ def define_common_kernels(
     )
 
     for name, target_config in target_configs.items():
-        _define_common_kernel(
+        common_kernel(
             name = name,
             toolchain_version = toolchain_version,
             visibility = visibility,
@@ -553,14 +559,14 @@ def define_common_kernels(
         flat = True,
     )
 
-    _define_prebuilts(visibility = visibility)
+    define_prebuilts(visibility = visibility)
 
 def _get_target_config(
         name,
         target_configs_names,
         target_configs,
         default_target_configs):
-    """Returns arguments to _define_common_kernel for a target."""
+    """Returns arguments to common_kernel for a target."""
     if target_configs == None:
         target_configs = {}
     target_config = {}
@@ -573,13 +579,13 @@ def _get_target_config(
         target_config.setdefault(key, default_value)
     return target_config
 
-def _define_common_kernel(
+def common_kernel(
         name,
         outs,
-        arch,
         build_config,
-        toolchain_version,
-        visibility,
+        arch = None,
+        visibility = None,
+        toolchain_version = None,
         defconfig_fragments = None,
         enable_interceptor = None,
         kmi_symbol_list = None,
@@ -601,6 +607,72 @@ def _define_common_kernel(
         ddk_headers_archive = None,
         ddk_module_headers = None,
         extra_dist = None):
+    """Macro for an Android Common Kernel.
+
+    The following targets are declared as public API:
+    -   `<name>_sources` (e.g. `kernel_aarch64_sources`)
+        -   Convenience filegroups that refers to all sources required to
+            build `<name>` and related targets.
+    -   `<name>` (e.g. `kernel_aarch64`): [`kernel_build()`](kernel.md#kernel_build)
+        -   This build the main kernel build artifacts, e.g. `vmlinux`, etc.
+    -   `<name>_uapi_headers` (e.g. `kernel_aarch64_uapi_headers`)
+        -   build `kernel-uapi-headers.tar.gz`.
+    -   `<name>_modules` (e.g. `kernel_aarch64_modules`)
+    -   `<name>_additional_artifacts` (e.g. `kernel_aarch64_additional_artifacts`)
+        -   contains additional artifacts that may be added to
+            a distribution. This includes:
+            -   Images, including `system_dlkm`, etc.
+            -   `kernel-headers.tar.gz`
+    -   `<name>_dist` (e.g. `kernel_aarch64_dist`)
+        -   can be run to obtain a distribution outside the workspace.
+    -   `<name>_kythe` (e.g. `kernel_aarch64_kythe`): [`kernel_kythe()`](kernel.md#kernel_kythe)
+
+    **ABI monitoring**
+    If `kmi_symbol_list` is set, ABI monitoring is turned on.
+
+    -    `<name>_abi` (e.g. `kernel_aarch64_abi`): [`kernel_abi()`](kernel.md#kernel_abi)
+    -    `<name>_abi_dist` (e.g. `kernel_aarch64_abi_dist`)
+
+    Usually, for ABI monitoring to be fully turned on, you should set:
+    -   `kmi_symbol_list`
+    -   `additional_kmi_symbol_lists`
+    -   `protected_exports_list`
+    -   `protected_modules_list`
+    -   `trim_nonlisted_kmi` to True
+    -   `kmi_symbol_list_strict_mode` to True
+    -   `abi_definition_stg` to the ABI definition
+    -   `kmi_enforced` to True
+
+    Args:
+        name: name of the kernel_build().
+        outs: See [kernel_build.outs](kernel.md#kernel_build-outs)
+        arch: See [kernel_build.arch](kernel.md#kernel_build-arch)
+        build_config: See [kernel_build.build_config](kernel.md#kernel_build-build_config)
+        toolchain_version: See [kernel_build.toolchain_version](kernel.md#kernel_build-toolchain_version)
+        defconfig_fragments: See [kernel_build.defconfig_fragments](kernel.md#kernel_build-defconfig_fragments)
+        enable_interceptor: See [kernel_build.enable_interceptor](kernel.md#kernel_build-enable_interceptor)
+        kmi_symbol_list: See [kernel_build.kmi_symbol_list](kernel.md#kernel_build-kmi_symbol_list)
+        additional_kmi_symbol_lists: See [kernel_build.additional_kmi_symbol_lists](kernel.md#kernel_build-additional_kmi_symbol_lists)
+        trim_nonlisted_kmi: See [kernel_build.trim_nonlisted_kmi](kernel.md#kernel_build-trim_nonlisted_kmi)
+        kmi_symbol_list_strict_mode: See [kernel_build.kmi_symbol_list_strict_mode](kernel.md#kernel_build-kmi_symbol_list_strict_mode)
+        module_implicit_outs: See [kernel_build.module_implicit_outs](kernel.md#kernel_build-module_implicit_outs)
+        kmi_symbol_list_add_only: See [kernel_abi.kmi_symbol_list_add_only](kernel.md#kernel_abi-kmi_symbol_list_add_only)
+        protected_exports_list: See [kernel_build.protected_exports_list](kernel.md#kernel_build-protected_exports_list)
+        protected_modules_list: See [kernel_build.protected_modules_list](kernel.md#kernel_build-protected_modules_list)
+        make_goals: See [kernel_build.make_goals](kernel.md#kernel_build-make_goals)
+        abi_definition_stg: See [kernel_abi.abi_definition_stg](kernel.md#kernel_abi-abi_definition_stg)
+        kmi_enforced: See [kernel_abi.kmi_enforced](kernel.md#kernel_abi-kmi_enforced)
+        page_size: See [kernel_build.page_size](kernel.md#kernel_build-page_size)
+        ddk_module_headers: See [kernel_build.ddk_module_headers](kernel.md#kernel_build-ddk_module_headers)
+        gki_system_dlkm_modules: system_dlkm module_list
+        build_gki_artifacts: nonconfigurable. If true, build GKI artifacts under
+            target name `<name>_gki_artifacts`.
+        gki_boot_img_sizes: gki_artifacts.boot_img_sizes
+        visibility: default visibility for some targets instantiated with this macro
+        deprecation: If set, mark target deprecated with given message.
+        ddk_headers_archive: nonconfigurable. Target to the archive packing DDK headers
+        extra_dist: extra targets added to `<name>_dist`
+    """
     json_target_config = dict(
         name = name,
         outs = outs,
@@ -629,12 +701,13 @@ def _define_common_kernel(
         ddk_module_headers = ddk_module_headers,
         extra_dist = extra_dist,
     )
-    json_target_config = json.encode_indent(json_target_config, indent = "    ")
-    json_target_config = json_target_config.replace("null", "None")
 
     print_debug(
         name = name + "_print_configs",
-        content = "_define_common_kernel(**{})".format(json_target_config),
+        content = "common_kernel({})".format("".join([
+            "    {} = {},\n".format(k, repr(v))
+            for k, v in json_target_config.items()
+        ])),
         tags = ["manual"],
     )
 
@@ -939,7 +1012,55 @@ def _define_common_kernel(
     )
 
 # TODO(b/291918087): Delete once users have migrated to @gki_prebuilts
-def _define_prebuilts(**kwargs):
+# buildifier: disable=unnamed-macro
+def define_prebuilts(**kwargs):
+    """Define --use_prebuilt_gki and relevant targets.
+
+    You may set the argument `--use_prebuilt_gki` to a GKI prebuilt build number
+    on [ci.android.com](http://ci.android.com) or your custom CI host. The format is:
+
+    ```
+    bazel <command> --use_prebuilt_gki=<build_number> <targets>
+    ```
+
+    For example, the following downloads GKI artifacts of build number 8077484 (assuming
+    the current package is `//common`):
+
+    ```
+    bazel build --use_prebuilt_gki=8077484 //common:kernel_aarch64_download_or_build
+    ```
+
+    If you leave out the `--use_prebuilt_gki` argument, the command is equivalent to
+    `bazel build //common:kernel_aarch64`, which builds kernel from source.
+
+    `<name>_download_or_build` targets builds `<name>` from source if the `use_prebuilt_gki`
+    is not set, and downloads artifacts of the build number from
+    [ci.android.com](http://ci.android.com) (or your custom CI host) if it is set.
+
+    - `kernel_aarch64_download_or_build`
+      - `kernel_aarch64_additional_artifacts_download_or_build`
+      - `kernel_aarch64_uapi_headers_download_or_build`
+
+    Note: If a device should build against downloaded prebuilts unconditionally, set
+    `--use_prebuilt_gki` and a fixed build number in `device.bazelrc`. For example:
+    ```
+    # device.bazelrc
+    build --use_prebuilt_gki
+    build --action_env=KLEAF_DOWNLOAD_BUILD_NUMBER_MAP="gki_prebuilts=8077484"
+    ```
+
+    This is equivalent to specifying `--use_prebuilt_gki=8077484` for all Bazel commands.
+
+    You may set `--use_signed_prebuilts` to download the signed boot images instead
+    of the unsigned one. This requires `--use_prebuilt_gki` to be set to a signed build.
+
+    Args:
+        **kwargs: common kwargs to internal targets.
+
+    Deprecated:
+        See build/kernel/kleaf/docs/ddk/workspace.md for new ways to define prebuilts.
+    """
+
     # Legacy flag for backwards compatibility
     # TODO(https://github.com/bazelbuild/bazel/issues/13463): alias to bool_flag does not
     # work. Hence we use a composite flag here.
