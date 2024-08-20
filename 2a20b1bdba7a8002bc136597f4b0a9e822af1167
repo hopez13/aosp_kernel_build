@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dbe3351_7730b531",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-20T19:55:37Z",
+      "side": 1,
+      "message": "Let\u0027s wait on this change until we notify the GKI newsletter of the reprocussions.",
+      "revId": "2a20b1bdba7a8002bc136597f4b0a9e822af1167",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
