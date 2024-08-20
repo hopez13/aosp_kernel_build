@@ -34,9 +34,7 @@ load(
     "kernel_abi_dist",
     "kernel_build",
     "kernel_build_config",
-    "kernel_compile_commands",
     "kernel_images",
-    "kernel_kythe",
     "kernel_modules_install",
     "kernel_unstripped_modules_archive",
     "merged_kernel_uapi_headers",
@@ -466,25 +464,6 @@ def common_kernel(
             name + "_test",
             name + "_modules_test",
         ],
-    )
-
-    kernel_compile_commands(
-        name = name + "_compile_commands",
-        deps = [name],
-    )
-
-    kernel_kythe(
-        name = name + "_kythe",
-        kernel_build = name,
-        corpus = ":kernel_kythe_corpus",
-    )
-
-    copy_to_dist_dir(
-        name = name + "_kythe_dist",
-        data = [
-            name + "_kythe",
-        ],
-        flat = True,
     )
 
 # TODO(b/291918087): Delete once users have migrated to @gki_prebuilts
