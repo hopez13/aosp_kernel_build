@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49759652_ca8db97c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-21T17:11:15Z",
+      "side": 1,
+      "message": "This is not a straight cherry-pick right? Can you describe what is done to resolve merge conflict in the commit message?",
+      "revId": "c18390d85f88ade6753fb2f279850a8632528cfe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
