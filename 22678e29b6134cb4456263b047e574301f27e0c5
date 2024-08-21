@@ -16,6 +16,29 @@
       "message": "Does this change any existing behaviors for partners? If so please send out go/gki-newsletter, wait 2 weeks, then merge this.",
       "revId": "22678e29b6134cb4456263b047e574301f27e0c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84f8f196_9d90fbf0",
+        "filename": "build_utils.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-21T11:55:00Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 237,
+        "startChar": 29,
+        "endLine": 237,
+        "endChar": 31
+      },
+      "revId": "22678e29b6134cb4456263b047e574301f27e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
