@@ -50,6 +50,23 @@
       "message": "also please refactor the existing impl a bit so it shares code with system_dlkm flatten.",
       "revId": "a82fda89f434918c53da71d7a90d2071e28d75e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0b50382_019b33a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2055842
+      },
+      "writtenOn": "2024-08-21T04:54:46Z",
+      "side": 1,
+      "message": "Hi,\nI pushed a newer version with the changes suggested, i.e. refactored code to share the common code and changed the destination branch to main.\n\nhttps://android-review.git.corp.google.com/c/kernel/build/+/3235082\n\nI\u0027ll abandon this change as it is an old revision.",
+      "revId": "a82fda89f434918c53da71d7a90d2071e28d75e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
