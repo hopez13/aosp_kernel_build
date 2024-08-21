@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5efd7ad2_1df1f755",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-21T23:23:58Z",
+      "side": 1,
+      "message": "No, this should just fix issues 😊",
+      "parentUuid": "8a1b9230_c1142f89",
+      "revId": "22678e29b6134cb4456263b047e574301f27e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84f8f196_9d90fbf0",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-08-21T11:55:00Z",
       "side": 1,
       "message": "nit: remove",
+      "range": {
+        "startLine": 237,
+        "startChar": 29,
+        "endLine": 237,
+        "endChar": 31
+      },
+      "revId": "22678e29b6134cb4456263b047e574301f27e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "699fba5b_979a02ea",
+        "filename": "build_utils.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-08-21T23:23:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "84f8f196_9d90fbf0",
       "range": {
         "startLine": 237,
         "startChar": 29,
