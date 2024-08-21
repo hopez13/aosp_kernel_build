@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd9ee617_5ea90729",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1123518
+      },
+      "writtenOn": "2024-08-21T18:43:38Z",
+      "side": 1,
+      "message": "Thanks for enabling it. After we bringing up the test infra, let\u0027s enable aarch64_trim_and_check on kernel_aarch64_16k afterwards.",
+      "range": {
+        "startLine": 174,
+        "startChar": 13,
+        "endLine": 174,
+        "endChar": 53
+      },
+      "revId": "b135077628c7575ed46ad4da8e48112c2bc2ba2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
