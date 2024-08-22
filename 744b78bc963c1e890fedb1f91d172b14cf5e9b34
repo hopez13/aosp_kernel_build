@@ -22,6 +22,30 @@
       },
       "revId": "744b78bc963c1e890fedb1f91d172b14cf5e9b34",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43855657_701edb52",
+        "filename": "kleaf/impl/empty_binary.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-22T00:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6004ddd2_98d08fd1",
+      "range": {
+        "startLine": 1,
+        "startChar": 16,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "744b78bc963c1e890fedb1f91d172b14cf5e9b34",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
