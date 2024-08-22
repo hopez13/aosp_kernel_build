@@ -67,6 +67,24 @@
       "message": "Hi,\nI pushed a newer version with the changes suggested, i.e. refactored code to share the common code and changed the destination branch to main.\n\nhttps://android-review.git.corp.google.com/c/kernel/build/+/3235082\n\nI\u0027ll abandon this change as it is an old revision.",
       "revId": "a82fda89f434918c53da71d7a90d2071e28d75e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8f03376_bec3d88d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-22T22:27:04Z",
+      "side": 1,
+      "message": "I see that you have uploaded the change in main. After it is submitted, please update this change by re-doing the cherry-pick (as the code seems to have changed).",
+      "parentUuid": "630deba7_3dbe176e",
+      "revId": "a82fda89f434918c53da71d7a90d2071e28d75e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
