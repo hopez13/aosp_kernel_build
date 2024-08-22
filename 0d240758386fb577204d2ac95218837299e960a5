@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23c17c2f_7851e390",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2055842
+      },
+      "writtenOn": "2024-08-22T04:23:12Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c6af39be_975c7a5d",
+      "revId": "0d240758386fb577204d2ac95218837299e960a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40e7a12d_20b05e45",
@@ -41,6 +59,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "768e7927_020295b3",
+        "filename": "build_utils.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 2055842
+      },
+      "writtenOn": "2024-08-22T04:23:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40e7a12d_20b05e45",
+      "range": {
+        "startLine": 537,
+        "startChar": 0,
+        "endLine": 537,
+        "endChar": 1
+      },
+      "revId": "0d240758386fb577204d2ac95218837299e960a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "439df50a_f7bdb53e",
@@ -54,6 +96,30 @@
       "writtenOn": "2024-08-22T00:54:13Z",
       "side": 1,
       "message": "nit do you mean to put the backtick here?",
+      "range": {
+        "startLine": 202,
+        "startChar": 26,
+        "endLine": 202,
+        "endChar": 27
+      },
+      "revId": "0d240758386fb577204d2ac95218837299e960a5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14a1f32e_151d026c",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 2055842
+      },
+      "writtenOn": "2024-08-22T04:23:12Z",
+      "side": 1,
+      "message": "Yes, thanks for noticing. I fixed this.",
+      "parentUuid": "439df50a_f7bdb53e",
       "range": {
         "startLine": 202,
         "startChar": 26,
