@@ -232,14 +232,8 @@ function create_modules_staging() {
       -exec ${OBJCOPY:-${CROSS_COMPILE}objcopy} --strip-debug {} \;
   fi
 
-  # create_modules_order_lists() will overwrite modules.order if MODULES_LIST
-  # is set. If we are not trimming unused modules, then backup the original
-  # modules.order file first so we can restore it later once the modules.load
-  # file is generated. This allows us to account for all the modules that were
-  # compiled for later use of the staging archive.
-  if [ -z "${TRIM_UNUSED_MODULES}" ]; then
-    cp -f ${dest_dir}/modules.order ${dest_dir}/modules.order.orig
-  fi
+  # create_modules_order_lists() will overwrite modules.order if MODULES_LIST is
+  # set.
   create_modules_order_lists "${modules_list_file:-""}" "${modules_recovery_list_file:-""}" \
 	                     "${modules_charger_list_file:-""}" ${dest_dir}/modules.order
 
@@ -305,13 +299,6 @@ function create_modules_staging() {
       cp ${mod_order_filepath} ${mod_load_filepath}
     fi
   done
-
-  if [ -z "${TRIM_UNUSED_MODULES}" ]; then
-    # Restore the original modules.order file if we didn't trim the unused
-    # modules. This allows us to account for all the modules that were compiled
-    # for later use of the staging archive.
-    mv -f ${dest_dir}/modules.order.orig ${dest_dir}/modules.order
-  fi
 }
 
 function build_system_dlkm() {
