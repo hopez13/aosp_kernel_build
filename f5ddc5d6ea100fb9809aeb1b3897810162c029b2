@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06adda82_09518ec6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-22T14:07:54Z",
+      "side": 1,
+      "message": "nit: Could you please also mention that this intentionally does not interact with other debug flags and it\u0027s rather an experimental flag.",
+      "range": {
+        "startLine": 11,
+        "startChar": 63,
+        "endLine": 11,
+        "endChar": 64
+      },
+      "revId": "f5ddc5d6ea100fb9809aeb1b3897810162c029b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
