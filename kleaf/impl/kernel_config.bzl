@@ -113,6 +113,12 @@ def _config_trim(ctx):
               IGNORED because --debug is set!".format(this_label = ctx.label))
         return []
 
+    if ctx.attr._keep_all_ksyms[BuildSettingInfo].value:
+        # buildifier: disable=print
+        print("\nWARNING: {this_label}: Symbol trimming \
+              IGNORED because --allksyms is set!".format(this_label = ctx.label))
+        return []
+
     return [
         _config.enable("TRIM_UNUSED_KSYMS"),
     ]
@@ -545,6 +551,7 @@ kernel_config = rule(
         ),
         "_config_is_stamp": attr.label(default = "//build/kernel/kleaf:config_stamp"),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
+        "_keep_all_ksyms": attr.label(default = "//build/kernel/kleaf/impl:all_ksyms"),
     } | _kernel_config_additional_attrs(),
     executable = True,
     toolchains = [hermetic_toolchain.type],

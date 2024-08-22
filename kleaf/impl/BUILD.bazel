@@ -172,6 +172,14 @@ bool_setting(
     visibility = ["//visibility:public"],
 )
 
+# If set, keeps all symbols in ksymtab even if unused.
+bool_flag(
+    name = "all_ksyms",
+    build_setting_default = False,
+    # All kernel_* from different packages can see this
+    visibility = ["//visibility:public"],
+)
+
 # If set, disables trimming.
 bool_flag(
     name = "force_disable_trim",
