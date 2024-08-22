@@ -16,6 +16,24 @@
       "message": "This is not a straight cherry-pick right? Can you describe what is done to resolve merge conflict in the commit message?",
       "revId": "c18390d85f88ade6753fb2f279850a8632528cfe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ece207c_18914241",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-22T09:51:02Z",
+      "side": 1,
+      "message": "This one is (w.r.t. `main-kernel-build-2024`), the one which caused conflict was CL:3235971 I\u0027ll add a note to that one.",
+      "parentUuid": "49759652_ca8db97c",
+      "revId": "c18390d85f88ade6753fb2f279850a8632528cfe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
