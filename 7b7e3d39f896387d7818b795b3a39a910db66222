@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc39b82b_3d04de22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2024-08-22T10:45:53Z",
+      "side": 1,
+      "message": "I will double-check the timelines for getting the fix into our clang.",
+      "revId": "7b7e3d39f896387d7818b795b3a39a910db66222",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
