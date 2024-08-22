@@ -554,10 +554,13 @@ def _kernel_config_impl(ctx):
           eval ${{POST_DEFCONFIG_CMDS}}
         # Re-config
           {reconfig_cmd}
+        # Generate the minimal config after re-config
+          make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} savedefconfig
         # HACK: run syncconfig to avoid re-triggerring kernel_build
           make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} syncconfig
         # Grab outputs
           rsync -aL ${{OUT_DIR}}/.config {out_dir}/.config
+          rsync -aL ${{OUT_DIR}}/defconfig {out_dir}/defconfig
           rsync -aL ${{OUT_DIR}}/include/ {out_dir}/include/
           {sync_raw_kmi_symbol_list_cmd}
 
@@ -620,6 +623,7 @@ def _kernel_config_impl(ctx):
          # Restore kernel config inputs
            mkdir -p ${{OUT_DIR}}/include/
            rsync -aL {out_dir}/.config ${{OUT_DIR}}/.config
+           rsync -aL {out_dir}/defconfig ${{OUT_DIR}}/defconfig
            rsync -aL --chmod=D+w {out_dir}/include/ ${{OUT_DIR}}/include/
            rsync -aL --chmod=F+w {localversion_file} ${{OUT_DIR}}/localversion
 
