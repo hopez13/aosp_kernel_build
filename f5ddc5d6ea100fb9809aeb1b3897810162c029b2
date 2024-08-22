@@ -22,6 +22,23 @@
       },
       "revId": "f5ddc5d6ea100fb9809aeb1b3897810162c029b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25546309_1e7c53b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-22T22:35:11Z",
+      "side": 1,
+      "message": "How is this different from --notrim?",
+      "revId": "f5ddc5d6ea100fb9809aeb1b3897810162c029b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
