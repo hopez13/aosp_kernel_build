@@ -22,6 +22,30 @@
       },
       "revId": "6f3802205e57533d192a039448a69e8fd12897be",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b925a0_ba27c739",
+        "filename": "kleaf/impl/swig_wrapper.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-23T17:15:29Z",
+      "side": 1,
+      "message": "Yeah I copied it from bison_wrapper. I am still experimenting how to convert both wrappers to use arg_wrapper instead, but no luck yet, so I left this out in this specific change.",
+      "parentUuid": "f3412a7a_c61472f6",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 92
+      },
+      "revId": "6f3802205e57533d192a039448a69e8fd12897be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
