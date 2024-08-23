@@ -21,21 +21,12 @@ visibility("//build/kernel/...")
 def _bison_wrapper_impl(ctx):
     file = ctx.actions.declare_file("{}/bison".format(ctx.attr.name))
     root_from_base = "/".join([".."] * len(paths.dirname(file.path).split("/")))
-    short_root_from_base = "/".join([".."] * len(paths.dirname(file.short_path).split("/")))
 
     content = """\
 #!/bin/sh
 
-if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ]; then
-    # When bazel run, I am at short_path
-    KLEAF_REPO_DIR=${{0%/*}}/{short_root_from_base}
-    ACTUAL=${{KLEAF_REPO_DIR}}/{actual_short_path}
-else
-    # When bazel build, I am at path
-    KLEAF_REPO_DIR=${{0%/*}}/{root_from_base}
-    ACTUAL=${{KLEAF_REPO_DIR}}/{actual}
-fi
-
+KLEAF_REPO_DIR=${{0%/*}}/{root_from_base}
+ACTUAL=${{KLEAF_REPO_DIR}}/{actual}
 export BISON_PKGDATADIR=${{KLEAF_REPO_DIR}}/{pkgdata_dir}
 export M4=$(which m4)
 
@@ -53,9 +44,7 @@ fi
 """.format(
         pkgdata_dir = ctx.file.pkgdata_dir.path,
         actual = ctx.executable.actual.path,
-        actual_short_path = ctx.executable.actual.short_path,
         root_from_base = root_from_base,
-        short_root_from_base = short_root_from_base,
     )
     ctx.actions.write(file, content, is_executable = True)
 
