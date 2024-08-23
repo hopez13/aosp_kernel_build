@@ -21,7 +21,6 @@ visibility("//build/kernel/...")
 def _swig_wrapper_impl(ctx):
     file = ctx.actions.declare_file("{}/swig".format(ctx.attr.name))
     root_from_base = "/".join([".."] * len(paths.dirname(file.path).split("/")))
-    short_root_from_base = "/".join([".."] * len(paths.dirname(file.short_path).split("/")))
 
     # We can't use .runfiles because $0 may be a symlink. We don't have hermetic tools to
     # resolve the symlink properly.
@@ -32,22 +31,12 @@ def _swig_wrapper_impl(ctx):
 
 PATH=
 
-if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ]; then
-    # When bazel run, I am at short_path
-    KLEAF_REPO_DIR=${{0%/*}}/{short_root_from_base}
-    SWIG_LIB="${{KLEAF_REPO_DIR}}/{short_swig_lib}" exec "${{KLEAF_REPO_DIR}}/{src_short_path}" $*
-else
-    # When bazel build, I am at path
-    KLEAF_REPO_DIR=${{0%/*}}/{root_from_base}
-    SWIG_LIB="${{KLEAF_REPO_DIR}}/{swig_lib}" exec "${{KLEAF_REPO_DIR}}/{src}" $*
-fi
+KLEAF_REPO_DIR=${{0%/*}}/{root_from_base}
+SWIG_LIB="${{KLEAF_REPO_DIR}}/{swig_lib}" exec "${{KLEAF_REPO_DIR}}/{src}" $*
 """.format(
         src = ctx.executable.src.path,
-        src_short_path = ctx.executable.src.short_path,
         swig_lib = ctx.files.swig_lib[0].path,
-        short_swig_lib = ctx.file.swig_lib.short_path,
         root_from_base = root_from_base,
-        short_root_from_base = short_root_from_base,
     )
     ctx.actions.write(file, content, is_executable = True)
 
