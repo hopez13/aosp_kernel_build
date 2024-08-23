@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b1505f1_7a20fa69",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-23T14:26:38Z",
+      "side": 1,
+      "message": "nit: Isn\u0027t this deprecated[0]?\n\nupd: Nvm I see below this is indeed deprecated and this is just a refactor.\n\n[0] https://android.googlesource.com/kernel/build/+/5f9d2efccfaf30e6259ba788aa6454593350cb6c/kleaf/docs/download_prebuilt.md#build-against-downloaded-prebuilt-gki-deprecated",
+      "range": {
+        "startLine": 1016,
+        "startChar": 14,
+        "endLine": 1016,
+        "endChar": 32
+      },
+      "revId": "ed0b8dbfe569a287d8ba73aabb1fbc2bcc11b0b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

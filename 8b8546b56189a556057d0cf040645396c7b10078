@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa0c3038_1072fe5d",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-23T14:26:38Z",
+      "side": 0,
+      "message": "was this intentionally left out?",
+      "range": {
+        "startLine": 633,
+        "startChar": 4,
+        "endLine": 633,
+        "endChar": 67
+      },
+      "revId": "8b8546b56189a556057d0cf040645396c7b10078",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
