@@ -39,6 +39,24 @@
       "message": "How is this different from --notrim?",
       "revId": "f5ddc5d6ea100fb9809aeb1b3897810162c029b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b43ea2_377df94d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-08-23T11:51:34Z",
+      "side": 1,
+      "message": "`--notrim` is coupled with runtime module protection [0] and possibly other things. \n\n[0] https://cs.android.com/android/kernel/superproject/+/common-android-mainline:build/kernel/kleaf/impl/kernel_build.bzl;l\u003d846",
+      "parentUuid": "25546309_1e7c53b6",
+      "revId": "f5ddc5d6ea100fb9809aeb1b3897810162c029b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
