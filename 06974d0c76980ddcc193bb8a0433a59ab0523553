@@ -16,6 +16,24 @@
       "message": "Hold this after GKI newsletter sends out.",
       "revId": "06974d0c76980ddcc193bb8a0433a59ab0523553",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac9f5ff0_8ea10133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-23T20:08:11Z",
+      "side": 1,
+      "message": "Merge on or after Sep 02",
+      "parentUuid": "872f4033_3bc43039",
+      "revId": "06974d0c76980ddcc193bb8a0433a59ab0523553",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
