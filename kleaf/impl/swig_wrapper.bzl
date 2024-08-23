@@ -12,7 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""`swig` wrapper."""
+"""`swig` wrapper.
+
+Caveat: Do not use native_binary or ctx.actions.symlink() to wrap this binary
+due to the use of $0.
+"""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 
@@ -21,33 +25,31 @@ visibility("//build/kernel/...")
 def _swig_wrapper_impl(ctx):
     file = ctx.actions.declare_file("{}/swig".format(ctx.attr.name))
     root_from_base = "/".join([".."] * len(paths.dirname(file.path).split("/")))
-    short_root_from_base = "/".join([".."] * len(paths.dirname(file.short_path).split("/")))
-
-    # We can't use .runfiles because $0 may be a symlink. We don't have hermetic tools to
-    # resolve the symlink properly.
-    # https://bazel.build/extending/rules#runfiles_location
 
     content = """\
 #!/bin/sh
 
+# We don't use any tools in this script. Prevent using host tools.
 PATH=
 
 if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ]; then
-    # When bazel run, I am at short_path
-    KLEAF_REPO_DIR=${{0%/*}}/{short_root_from_base}
-    SWIG_LIB="${{KLEAF_REPO_DIR}}/{short_swig_lib}" exec "${{KLEAF_REPO_DIR}}/{src_short_path}" $*
+    export RUNFILES_DIR=${{RUNFILES_DIR:-${{0}}.runfiles}}
+    SWIG_LIB="${{RUNFILES_DIR}}/{workspace_name}/{swig_lib_short}" exec "${{RUNFILES_DIR}}/{workspace_name}/{src_short}" $*
 else
-    # When bazel build, I am at path
     KLEAF_REPO_DIR=${{0%/*}}/{root_from_base}
     SWIG_LIB="${{KLEAF_REPO_DIR}}/{swig_lib}" exec "${{KLEAF_REPO_DIR}}/{src}" $*
 fi
 """.format(
-        src = ctx.executable.src.path,
-        src_short_path = ctx.executable.src.short_path,
-        swig_lib = ctx.files.swig_lib[0].path,
-        short_swig_lib = ctx.file.swig_lib.short_path,
+        # https://bazel.build/extending/rules#runfiles_location
+        # The recommended way to detect launcher_path is use $0.
+        # From man sh: If bash is invoked with a file of commands, $0 is set to the name of that
+        # file.
+        workspace_name = ctx.workspace_name,
         root_from_base = root_from_base,
-        short_root_from_base = short_root_from_base,
+        src = ctx.executable.src.path,
+        swig_lib = ctx.files.swig_lib[0].path,
+        src_short = ctx.executable.src.short_path,
+        swig_lib_short = ctx.files.swig_lib[0].short_path,
     )
     ctx.actions.write(file, content, is_executable = True)
 
@@ -64,7 +66,11 @@ fi
 
 swig_wrapper = rule(
     implementation = _swig_wrapper_impl,
-    doc = "Creates a wrapper script over real `swig` binary.",
+    doc = """Creates a wrapper script over real `swig` binary.
+
+        Caveat: Do not use native_binary or ctx.actions.symlink() to wrap this binary
+        due to the use of $0.
+    """,
     attrs = {
         "src": attr.label(
             allow_files = True,
