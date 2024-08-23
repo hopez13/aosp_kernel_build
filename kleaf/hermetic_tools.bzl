@@ -126,11 +126,16 @@ def _hermetic_tools_internal_impl(ctx):
                 # Ensure _setup_env.sh keeps the original items in PATH
                 export KLEAF_INTERNAL_BUILDTOOLS_PREBUILT_BIN={path}
 """.format(path = hermetic_base)
+
+    # The cwd is xxx.runfiles/<workspace_name>. We need to set RUNFILES_DIR to
+    # xxx.runfiles so we can find other runfiles in binaries.
     run_setup = hashbang + fail_hard + """
                 export PATH=$({path}/readlink -m {path})
+                export RUNFILES_DIR=$(realpath ..)
 """.format(path = hermetic_base_short)
     run_additional_setup = fail_hard + """
                 export PATH=$({path}/readlink -m {path}):$PATH
+                export RUNFILES_DIR=$(realpath ..)
 """.format(path = hermetic_base_short)
 
     hermetic_toolchain_info = _HermeticToolchainInfo(
