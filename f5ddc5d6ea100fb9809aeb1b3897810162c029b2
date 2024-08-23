@@ -57,6 +57,24 @@
       "parentUuid": "25546309_1e7c53b6",
       "revId": "f5ddc5d6ea100fb9809aeb1b3897810162c029b2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "184f7ae5_9ba5cfa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-23T17:47:12Z",
+      "side": 1,
+      "message": "But then this flag just looks like the old --notrim without gki_module_protection_disabled. To me it feels like CL:3149624 should be reverted instead to avoid creating yet another flag to control trimming.\n\nWe already have two switches for trimming: there\u0027s --notrim and kernel_build.trim_nonlisted_kmi, and it is confusing already. The implementation is also much more complicated with the `file_selector()` target. Please avoid adding another flag as much as possible. 😞\n\nIn other words, --notrim is just --allksyms + (non existent) --nogki_module_protection. I would rather create the latter two flags (function-wise) than keeping `--notrim` and `--allksyms`.\n\nIf you absolutely need this flag, how about:\n- Add --nogki_module_protection (and --notrim temporarily assumes it) (name TBD)\n- Announce that --notrim will no longer assume --nogki_module_protection and people have to specify it explicitly to actually boot the kernel; change our CI to specify --nogki_module_protection on notrim builds\n- Make --notrim no longer specify --nogki_module_protection. (essentially revert the functionality added by CL:3149624)\n\n-----\n\nAlternatively, DON\u0027T add a bool_flag; add a bool_setting(). Then let kernel_abi flips the bool_setting(), instead of setting force_disable_trim. That still keeps some complicated code now that trimming is still controlled by 3 things, but at least, only 2 things are on the public UI. \n\nThis complicated code will need some tests to cover all 2^3 \u003d 8 cases to ensure we are doing the right thing on all of the 8 cases.",
+      "parentUuid": "92b43ea2_377df94d",
+      "revId": "f5ddc5d6ea100fb9809aeb1b3897810162c029b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
