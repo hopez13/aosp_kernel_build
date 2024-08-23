@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "914a207c_9264a409",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 6
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-23T17:37:59Z",
+      "side": 1,
+      "message": "The purpose of `file_selector` is to avoid interpreting values in macro expansion phase. This effectively makes trim_nonlisted_kmi nonconfigurable. So either document this, or change file_selector() to interpret `second_selector` differently when `None` is provided (e.g. add another parameter)",
+      "range": {
+        "startLine": 805,
+        "startChar": 0,
+        "endLine": 806,
+        "endChar": 48
+      },
+      "revId": "9f6b6f6b9d3bb58a90e391fe81c2376b3758bce4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
