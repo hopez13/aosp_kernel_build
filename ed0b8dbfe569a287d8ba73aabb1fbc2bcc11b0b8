@@ -22,6 +22,30 @@
       },
       "revId": "ed0b8dbfe569a287d8ba73aabb1fbc2bcc11b0b8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b6fbeac_3bb366ba",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-23T17:13:58Z",
+      "side": 1,
+      "message": "Yes. L1059 expresses this",
+      "parentUuid": "1b1505f1_7a20fa69",
+      "range": {
+        "startLine": 1016,
+        "startChar": 14,
+        "endLine": 1016,
+        "endChar": 32
+      },
+      "revId": "ed0b8dbfe569a287d8ba73aabb1fbc2bcc11b0b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
