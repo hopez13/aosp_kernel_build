@@ -47,6 +47,7 @@ ARM64_TARGETS = ["kernel_aarch64",
                  "u-boot_gem5_aarch64",
                  "u-boot_qemu_aarch64",
                  "u-boot_rockpi4"]
+X86_TARGETS = ["kernel_virt_i686"]
 X86_64_TARGETS = ["kernel_x86_64",
                   "kernel_debug_x86_64",
                   "kernel_microdroid_x86_64",
@@ -278,10 +279,10 @@ def write_prebuilt_info(output_dir):
     json.dump({"kernel-build-id": _args.build_id}, prebuilt_info, indent=4)
     prebuilt_info.write("\n")
 
-def repackage_kernels(build_is_x86_64, output_dir, version, suffix = ""):
+def repackage_kernels(build_uses_bzImage, output_dir, version, suffix = ""):
   uncompressed_kernel = os.path.join(output_dir, "kernel-" + version + suffix)
   lz4_kernel = os.path.join(output_dir, "kernel-" + version + "-lz4" + suffix)
-  if build_is_x86_64:
+  if build_uses_bzImage:
     shutil.move(os.path.join(output_dir, "bzImage"),
               os.path.join(output_dir, "kernel-" + version + suffix))
   else:
@@ -325,8 +326,8 @@ def download_kernel(target, version, output_dir, fetch_system_dlkm=False):
   if not os.path.isdir(output_dir):
     os.mkdir(output_dir)
 
-  build_is_x86_64 = target in X86_64_TARGETS
-  files = ["bzImage"] if build_is_x86_64 else ["Image"]
+  build_uses_bzImage = target in X86_64_TARGETS or target in X86_TARGETS
+  files = ["bzImage"] if build_uses_bzImage else ["Image"]
   files.append("System.map")
 
   if fetch_system_dlkm:
@@ -345,7 +346,7 @@ def download_kernel(target, version, output_dir, fetch_system_dlkm=False):
   else:
     suffix = ""
   uncompressed_kernel = repackage_kernels(
-      build_is_x86_64, output_dir, version, suffix)
+      build_uses_bzImage, output_dir, version, suffix)
   gki_info_path = os.path.join(output_dir, "gki-info.txt")
 
   new_kernel_release = None
