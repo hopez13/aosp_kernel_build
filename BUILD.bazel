@@ -111,6 +111,12 @@ native_binary_with_arg(
 )
 
 prebuilt_transitioned_tool(
+    name = "m4",
+    src = "//prebuilts/build-tools:m4",
+    visibility = ["//visibility:private"],
+)
+
+prebuilt_transitioned_tool(
     name = "prebuilt_bison",
     src = "//prebuilts/build-tools:bison",
     visibility = ["//visibility:private"],
@@ -121,6 +127,7 @@ bison_wrapper(
     actual = ":prebuilt_bison",
     pkgdata_dir = "//prebuilts/build-tools:bison.runfiles_dir",
     pkgdata_files = "//prebuilts/build-tools:bison.runfiles",
+    m4 = ":m4",
     visibility = ["//visibility:private"],
 )
 
@@ -164,7 +171,6 @@ _PREBUILT_TOOLS = [
     "//prebuilts/build-tools:awk",
     "//prebuilts/build-tools:bc",
     "//prebuilts/build-tools:flex",
-    "//prebuilts/build-tools:m4",
     "//prebuilts/build-tools:make",
     "//prebuilts/build-tools:openssl",
     "//prebuilts/build-tools:runextractor",
@@ -213,6 +219,7 @@ _HERMETIC_TOOLS = [
     ":bison",
     ":gzip",
     ":lz4",
+    ":m4",
     ":swig",
     ":tar",
     # TODO: This is only used by abi_stgdiff. It should be fine to be removed from hermetic_tools.
