@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d16f3de7_9f3a880d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3350597
+      },
+      "writtenOn": "2024-08-26T12:29:48Z",
+      "side": 1,
+      "message": "Presubmit tests failed due to unresponsive device. Re-triggering the tests.\n\n[DEVICE_UNRESPONSIVE|520751|LOST_SYSTEM_UNDER_TEST] Attempted adb cd multiple times on device 127.0.0.1:34115 without communication success. Aborting.",
+      "revId": "ac13ae60b8c1cf4588170d7b8bdda63eed6824e9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
