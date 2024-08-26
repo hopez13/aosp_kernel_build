@@ -29,18 +29,22 @@ def _bison_wrapper_impl(ctx):
     content = """\
 #!/bin/sh
 
+# We don't use any tools in this script. Prevent using host tools.
+PATH=
+
 if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ]; then
     export RUNFILES_DIR=${{RUNFILES_DIR:-${{0}}.runfiles}}
     ACTUAL=${{RUNFILES_DIR}}/{workspace_name}/{actual_short}
     export BISON_PKGDATADIR=${{RUNFILES_DIR}}/{workspace_name}/{pkgdata_dir_short}
+    export M4=${{RUNFILES_DIR}}/{workspace_name}/{m4_short}
 else
     KLEAF_REPO_DIR=${{0%/*}}/{root_from_base}
     ACTUAL=${{KLEAF_REPO_DIR}}/{actual}
     export BISON_PKGDATADIR=${{KLEAF_REPO_DIR}}/{pkgdata_dir}
+    export M4=${{KLEAF_REPO_DIR}}/{m4}
 fi
-export M4=$(which m4)
 
-if [ -z "${{M4}}" ]; then
+if [ ! -x "${{M4}}" ]; then
     echo "ERROR: m4 is not found!" >&2
     exit 1
 fi
@@ -60,8 +64,10 @@ fi
         root_from_base = root_from_base,
         pkgdata_dir = ctx.file.pkgdata_dir.path,
         actual = ctx.executable.actual.path,
+        m4 = ctx.executable.m4.path,
         pkgdata_dir_short = ctx.file.pkgdata_dir.short_path,
         actual_short = ctx.executable.actual.short_path,
+        m4_short = ctx.executable.m4.short_path,
     )
     ctx.actions.write(file, content, is_executable = True)
 
@@ -70,7 +76,10 @@ fi
         runfiles = ctx.runfiles(
             files = [ctx.executable.actual],
             transitive_files = ctx.attr.pkgdata_files.files,
-        ).merge(ctx.attr.actual[DefaultInfo].default_runfiles),
+        ).merge_all([
+            ctx.attr.actual[DefaultInfo].default_runfiles,
+            ctx.attr.m4[DefaultInfo].default_runfiles,
+        ]),
         executable = file,
     )
 
@@ -90,6 +99,11 @@ bison_wrapper = rule(
         ),
         "pkgdata_dir": attr.label(allow_single_file = True),
         "pkgdata_files": attr.label(allow_files = True),
+        "m4": attr.label(
+            executable = True,
+            # Don't apply transitions; let hermetic_tools handle it.
+            cfg = "target",
+        ),
     },
     executable = True,
 )
