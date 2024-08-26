@@ -65,7 +65,7 @@ load(
 )
 load(":debug.bzl", "debug")
 load(":file.bzl", "file")
-load(":file_selector.bzl", "file_selector")
+load(":file_selector.bzl", "file_selector", "file_selector_bool")
 load(":gcov_utils.bzl", "gcov_attrs", "get_grab_gcno_step")
 load(":hermetic_toolchain.bzl", "hermetic_toolchain")
 load(":kernel_config.bzl", "kernel_config")
@@ -485,7 +485,6 @@ def kernel_build(
     if arch == None:
         arch = "arm64"
 
-    trim_nonlisted_kmi_str = str(trim_nonlisted_kmi)
     trim_nonlisted_kmi = trim_nonlisted_kmi_utils.selected_attr(trim_nonlisted_kmi)
 
     internal_kwargs = dict(kwargs)
@@ -509,7 +508,7 @@ def kernel_build(
         kernel_build_arch = arch,
         kernel_build_page_size = page_size,
         kernel_build_sanitizers = sanitizers,
-        kernel_build_trim_nonlisted_kmi = trim_nonlisted_kmi_str,
+        kernel_build_trim_nonlisted_kmi = trim_nonlisted_kmi,
         **internal_kwargs
     )
 
@@ -829,21 +828,20 @@ def _get_defconfig_fragments(
 
     module_protection_target = kernel_build_name + "_defconfig_fragment_module_protection"
 
-    # When the value is not specified in the kernel_build rule, do nothing.
-    if kernel_build_trim_nonlisted_kmi == "None":
-        kernel_build_trim_nonlisted_kmi = "True"
-    file_selector(
+    file_selector_bool(
         name = module_protection_target,
         first_selector = select({
-            Label("//build/kernel/kleaf/impl:force_disable_trim_is_true"): "False",
-            Label("//build/kernel/kleaf:debug_is_true"): "False",
-            Label("//build/kernel/kleaf:gcov_is_true"): "False",
-            Label("//build/kernel/kleaf:kasan_is_true"): "False",
-            Label("//build/kernel/kleaf:kcsan_is_true"): "False",
-            Label("//build/kernel/kleaf:kgdb_is_true"): "False",
+            Label("//build/kernel/kleaf/impl:force_disable_trim_is_true"): False,
+            Label("//build/kernel/kleaf:debug_is_true"): False,
+            Label("//build/kernel/kleaf:gcov_is_true"): False,
+            Label("//build/kernel/kleaf:kasan_is_true"): False,
+            Label("//build/kernel/kleaf:kcsan_is_true"): False,
+            Label("//build/kernel/kleaf:kgdb_is_true"): False,
             "//conditions:default": None,
         }),
         second_selector = kernel_build_trim_nonlisted_kmi,
+        # When the value is not specified in the kernel_build rule, do nothing.
+        third_selector = True,
         files = {
             Label("//build/kernel/kleaf/impl/defconfig:gki_module_protection_disabled_defconfig"): "False",
             Label("//build/kernel/kleaf/impl:empty_filegroup"): "True",
