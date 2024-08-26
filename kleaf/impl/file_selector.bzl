@@ -18,19 +18,26 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 
 visibility("//build/kernel/kleaf/impl/...")
 
-def _file_selector_impl(ctx):
+def _file_selector_common_impl(subrule_ctx, *, selector, files):
     files_depsets = []
-    selector = ctx.attr.first_selector or ctx.attr.second_selector or ctx.attr.third_selector
-    for target, expected_value in ctx.attr.files.items():
+    for target, expected_value in files.items():
         if expected_value == selector:
             files_depsets.append(target.files)
     if len(files_depsets) == 0:
         fail("ERROR: {label}: selector is {selector}, but no expected value in files matches. Acceptable values: {values}".format(
-            label = ctx.label,
+            label = subrule_ctx.label,
             selector = selector,
-            values = sets.to_list(sets.make(ctx.attr.files.values())),
+            values = sets.to_list(sets.make(files.values())),
         ))
     return DefaultInfo(files = depset(transitive = files_depsets))
+
+_file_selector_common = subrule(
+    implementation = _file_selector_common_impl,
+)
+
+def _file_selector_impl(ctx):
+    selector = ctx.attr.first_selector or ctx.attr.second_selector or ctx.attr.third_selector
+    return _file_selector_common(selector = selector, files = ctx.attr.files)
 
 file_selector = rule(
     implementation = _file_selector_impl,
@@ -140,4 +147,60 @@ user should expand files or use a filegroup directly.
             allow_files = True,
         ),
     },
+    subrules = [_file_selector_common],
 )
+
+def _file_selector_bool_impl(ctx):
+    if ctx.attr.first_selector_1 == ctx.attr.first_selector_2:
+        return _file_selector_common(selector = str(ctx.attr.first_selector_1), files = ctx.attr.files)
+    if ctx.attr.second_selector_1 == ctx.attr.second_selector_2:
+        return _file_selector_common(selector = str(ctx.attr.second_selector_1), files = ctx.attr.files)
+    if ctx.attr.third_selector_1 == ctx.attr.third_selector_2:
+        return _file_selector_common(selector = str(ctx.attr.third_selector_1), files = ctx.attr.files)
+    return _file_selector_common(selector = "", files = ctx.attr.files)
+
+_file_selector_bool = rule(
+    implementation = _file_selector_bool_impl,
+    attrs = {
+        "first_selector_1": attr.bool(default = True),
+        "first_selector_2": attr.bool(default = False),
+        "second_selector_1": attr.bool(default = True),
+        "second_selector_2": attr.bool(default = False),
+        "third_selector_1": attr.bool(default = True),
+        "third_selector_2": attr.bool(default = False),
+        "files": attr.label_keyed_string_dict(
+            allow_files = True,
+        ),
+    },
+    subrules = [_file_selector_common],
+)
+
+def file_selector_bool(
+        name,
+        first_selector = None,
+        second_selector = None,
+        third_selector = None,
+        files = None,
+        **kwargs):
+    """Like file_selector, but for booleans.
+
+    Args:
+        name: target name
+        first_selector: See file_selector.first_selector, but it is a boolean
+        second_selector: See file_selector.second_selector, but it is a boolean
+        third_selector: See file_selector.third_selector, but it is a boolean
+        files: See file_selector.files, but values should be "True", "False", and "".
+        **kwargs: common kwargs
+    """
+
+    _file_selector_bool(
+        name = name,
+        first_selector_1 = first_selector,
+        first_selector_2 = first_selector,
+        second_selector_1 = second_selector,
+        second_selector_2 = second_selector,
+        third_selector_1 = third_selector,
+        third_selector_2 = third_selector,
+        files = files,
+        **kwargs
+    )
