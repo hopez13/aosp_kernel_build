@@ -455,6 +455,8 @@ def kernel_images(
             avb_boot_key = avb_boot_key,
             avb_boot_algorithm = avb_boot_algorithm,
             avb_boot_partition_name = avb_boot_partition_name,
+            ramdisk_compression = ramdisk_compression,
+            ramdisk_compression_args = ramdisk_compression_args,
             **kwargs
         )
         all_rules.append(":{}_boot_images".format(name))
