@@ -15,6 +15,9 @@ Example list of targets on the `android14-5.15` branch:
 
 [https://android.googlesource.com/kernel/common/+/refs/heads/android14-5.15/BUILD.bazel](https://android.googlesource.com/kernel/common/+/refs/heads/android14-5.15/BUILD.bazel)
 
+**NOTE**: On Android 16 and above, explicit dependency to `//common:all_headers*` targets are no
+longer necessary. They become an implicit dependency from `kernel_build`.
+
 ## //common:all\_headers
 
 This is an alias to `//common:all_headers_aarch64`.
@@ -24,14 +27,27 @@ This is an alias to `//common:all_headers_aarch64`.
 This is a collection of all headers and include directories that a DDK module
 for the arm64 architecture can safely use.
 
-To use it, declare it in the `deps` attribute of a `ddk_module`. Example:
+On Android 16 and above, this is an implicit dependency from `//common:kernel_aarch64`:
 
 ```python
 ddk_module(
     name = "mymodule",
+    kernel_build = "//common:kernel_aarch64",
+    # other fields
+)
+```
+
+On android15-6.6 and below, to use it, declare it in the `deps` attribute of a `ddk_module`.
+Example:
+
+```python
+ddk_module(
+    name = "mymodule",
+    kernel_build = "//common:kernel_aarch64",
     deps = [
-        "//common:all_headers",
+        "//common:all_headers_aarch64",
     ],
+    # other fields
 )
 ```
 
@@ -48,7 +64,7 @@ source tree directly.
 
 ## //common:all_headers\_x86\_64
 
-Same as `//common:all_headers_aarch64` but for the x86 architecture. Include
+Similar to `//common:all_headers_aarch64` but for the x86 architecture. Include
 directories and header files are searched from:
 
 - `arch/x86/include`
