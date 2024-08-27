@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8f0cc9a_9d4e4f34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-27T22:11:47Z",
+      "side": 1,
+      "message": "This patches up the problem, but the real problem seems to be the variable BUILD_INITRAMFS.",
+      "revId": "2a3978079c55357705e1c61107c8426ecaffcd52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
