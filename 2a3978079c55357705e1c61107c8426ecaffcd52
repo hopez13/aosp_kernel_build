@@ -16,6 +16,24 @@
       "message": "This patches up the problem, but the real problem seems to be the variable BUILD_INITRAMFS.",
       "revId": "2a3978079c55357705e1c61107c8426ecaffcd52",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e2f8a3_07bfdfbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-27T22:27:29Z",
+      "side": 1,
+      "message": "I think this is the correct fix. BUILD_INITRAMFS needs to be set to 1 consistently when initramfs is built, because both build.sh and build_utils.sh (when building boot images) uses the value of BUILD_INITRAMFS. See CL:1836775",
+      "parentUuid": "d8f0cc9a_9d4e4f34",
+      "revId": "2a3978079c55357705e1c61107c8426ecaffcd52",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
