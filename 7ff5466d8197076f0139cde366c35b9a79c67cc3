@@ -46,6 +46,30 @@
       },
       "revId": "7ff5466d8197076f0139cde366c35b9a79c67cc3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a456f0a_6a93bfa6",
+        "filename": "kleaf/impl/image/boot_images.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-08-28T19:13:50Z",
+      "side": 1,
+      "message": "Done, I updated the test to cover this case as well.",
+      "parentUuid": "f875c461_16955652",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 59
+      },
+      "revId": "7ff5466d8197076f0139cde366c35b9a79c67cc3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
