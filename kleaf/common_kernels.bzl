@@ -19,6 +19,8 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "string_flag")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
+load("@rules_pkg//pkg:install.bzl", "pkg_install")
 load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
 load("//build/kernel/kleaf/artifact_tests:device_modules_test.bzl", "device_modules_test")
 load("//build/kernel/kleaf/artifact_tests:kernel_test.bzl", "initramfs_modules_options_test")
@@ -944,12 +946,17 @@ def common_kernel(
 
     dist_targets.append(name + "_sbom")
 
-    copy_to_dist_dir(
+    pkg_files(
+        name = name + "_dist_files",
+        srcs = dist_targets,
+        strip_prefix = strip_prefix.files_only(),
+        visibility = ["//visibility:private"],
+    )
+
+    pkg_install(
         name = name + "_dist",
-        data = dist_targets,
-        flat = True,
-        dist_dir = "out/{name}/dist".format(name = name),
-        log = "info",
+        srcs = [name + "_dist_files"],
+        destdir = "out/{name}/dist".format(name = name),
     )
 
     kernel_abi_dist_name = name + "_abi_dist"
