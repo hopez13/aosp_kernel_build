@@ -583,6 +583,7 @@ def common_kernel(
         name,
         outs,
         build_config,
+        makefile = None,
         arch = None,
         visibility = None,
         toolchain_version = None,
@@ -647,6 +648,7 @@ def common_kernel(
         outs: See [kernel_build.outs](kernel.md#kernel_build-outs)
         arch: See [kernel_build.arch](kernel.md#kernel_build-arch)
         build_config: See [kernel_build.build_config](kernel.md#kernel_build-build_config)
+        makefile: See [kernel_build.makefile](kernel.md#kernel_build-makefile)
         toolchain_version: See [kernel_build.toolchain_version](kernel.md#kernel_build-toolchain_version)
         defconfig_fragments: See [kernel_build.defconfig_fragments](kernel.md#kernel_build-defconfig_fragments)
         enable_interceptor: See [kernel_build.enable_interceptor](kernel.md#kernel_build-enable_interceptor)
@@ -677,6 +679,7 @@ def common_kernel(
         outs = outs,
         arch = arch,
         build_config = build_config,
+        makefile = makefile,
         defconfig_fragments = defconfig_fragments,
         toolchain_version = toolchain_version,
         visibility = visibility,
@@ -735,7 +738,6 @@ def common_kernel(
         name = name + "_build_config",
         srcs = [
             # do not sort
-            ":set_kernel_dir_build_config",
             build_config,
             Label("//build/kernel/kleaf:gki_build_config_fragment"),
         ],
@@ -755,6 +757,7 @@ def common_kernel(
             "certs/signing_key.x509",
         ],
         build_config = name + "_build_config",
+        makefile = makefile,
         defconfig_fragments = defconfig_fragments,
         enable_interceptor = enable_interceptor,
         visibility = visibility,
