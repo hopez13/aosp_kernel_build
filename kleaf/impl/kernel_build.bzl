@@ -96,6 +96,7 @@ def kernel_build(
         name,
         build_config,
         outs,
+        makefile = None,
         keep_module_symvers = None,
         srcs = None,
         module_outs = None,
@@ -147,6 +148,60 @@ def kernel_build(
     Args:
         name: The final kernel target name, e.g. `"kernel_aarch64"`.
         build_config: Label of the build.config file, e.g. `"build.config.gki.aarch64"`.
+        makefile: `Makefile` governing the kernel tree sources (see `srcs`).
+            Example values:
+
+            *   `None` (default): Falls back to the value of `KERNEL_DIR` from `build_config`.
+                `kernel_build()` executes `make` in `KERNEL_DIR`.
+
+                Note: The usage of specifying `KERNEL_DIR` in `build_config` is deprecated and will
+                trigger a warning/error in the future.
+
+            *   `"//common:Makefile"` (most common): the kernel sources are located in
+                `//common`. This means `kernel_build()` executes `make` to build the kernel image
+                and in-tree drivers in `common`.
+
+                This usually replaces `//common:set_kernel_dir_build_config` in your `build_config`;
+                that is, if you set `kernel_build.makefile`, it is likely that you may drop
+                `//common:set_kernel_dir_build_config` from components of
+                `kernel_build.build_config`.
+
+                This replaces `KERNEL_DIR=common` in your `build_config`.
+
+            *   `"@kleaf//common:Makefile"`: If you set up a DDK workspace such that Kleaf
+                tooling and your kernel source tree are located in the `@kleaf` submodule, you
+                should specify the full label in the package.
+            *   the `Makefile` next to the build config:
+
+                For example:
+
+                ```
+                kernel_build(
+                    name = "tuna",
+                    build_config = "//package:build.config.tuna", # the build.config.tuna is in //package
+                    makefile = "//package:Makefile", # so set KERNEL_DIR to "package"
+                )
+                ```
+
+                In this example, `build.config.tuna` is in `//package`. Hence,
+                setting `makefile = "Makefile"` is equivalent to the
+                legacy behavior of not setting `KERNEL_DIR` in `build.config`, and allowing
+                `_setup_env.sh` to decide the value by inferring from the directory containing the
+                build config, which is the `//package`.
+
+            *   `Makefile` in the current package: the kernel sources are in the current package
+                where `kernel_build()` is called.
+
+                For example:
+
+                ```
+                kernel_build(
+                    name = "tuna",
+                    build_config = "build.config.tuna", # the build.config.tuna is in this package
+                    makefile = "Makefile", # so set KERNEL_DIR to this package
+                )
+                ```
+
         kconfig_ext: Label of an external Kconfig.ext file sourced by the GKI kernel.
         keep_module_symvers: If set to True, a copy of the default output `Module.symvers` is kept.
           * To avoid collisions in mixed build distribution packages, the file is renamed
@@ -550,6 +605,7 @@ def kernel_build(
     kernel_env(
         name = env_target_name,
         build_config = build_config,
+        makefile = makefile,
         kconfig_ext = kconfig_ext,
         dtstree = dtstree,
         srcs = srcs,
