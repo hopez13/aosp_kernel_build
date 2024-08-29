@@ -117,6 +117,7 @@ bzl_library(
         "python.bzl",
         "raw_kmi_symbol_list.bzl",
         "scripts_config_arg_builder.bzl",
+        "set_kernel_dir.bzl",
         "srcs_aspect.bzl",
         "stamp.bzl",
         "status.bzl",
