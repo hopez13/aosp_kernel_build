@@ -69,6 +69,7 @@ bzl_library(
         "declare_toolchain_constants.bzl",
         "default_host_tools.scl",
         "diff.bzl",
+        "empty_binary.bzl",
         "file.bzl",
         "file_selector.bzl",
         "gcov_utils.bzl",
