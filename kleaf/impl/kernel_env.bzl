@@ -35,6 +35,7 @@ load(":kernel_config_settings.bzl", "kernel_config_settings")
 load(":kernel_dtstree.bzl", "DtstreeInfo")
 load(":kernel_toolchains_utils.bzl", "kernel_toolchains_utils")
 load(":kgdb.bzl", "kgdb")
+load(":set_kernel_dir", "set_kernel_dir")
 load(":stamp.bzl", "stamp")
 load(":status.bzl", "status")
 load(":utils.bzl", "utils")
@@ -169,6 +170,8 @@ def _kernel_env_impl(ctx):
 
     toolchains = kernel_toolchains_utils.get(ctx)
 
+    set_kernel_dir_ret = set_kernel_dir(kernel_dir = ctx.attr.kernel_dir)
+
     command = hermetic_tools.setup
     if ctx.attr._debug_annotate_scripts[BuildSettingInfo].value:
         command += debug.trap()
@@ -238,6 +241,7 @@ def _kernel_env_impl(ctx):
         # create a build environment
           source {build_utils_sh}
           export BUILD_CONFIG={build_config}
+          {set_kernel_dir_cmd}
           {set_localversion_cmd}
           source {setup_env}
           {check_arch_cmd}
@@ -284,6 +288,7 @@ def _kernel_env_impl(ctx):
         """.format(
         build_utils_sh = ctx.file._build_utils_sh.path,
         build_config = build_config.path,
+        set_kernel_dir_cmd = set_kernel_dir_ret.cmd,
         set_localversion_cmd = stamp.set_localversion_cmd(ctx),
         setup_env = setup_env.path,
         check_arch_cmd = _get_check_arch_cmd(ctx),
@@ -333,7 +338,12 @@ def _kernel_env_impl(ctx):
         setup_inputs.append(kconfig_ext)
     setup_inputs += dtstree_srcs
 
-    run_env = _get_run_env(ctx, srcs, toolchains)
+    run_env = _get_run_env(
+        ctx,
+        srcs,
+        toolchains,
+        set_kernel_dir_ret = set_kernel_dir_ret,
+    )
 
     env_info = KernelEnvInfo(
         inputs = depset(setup_inputs),
@@ -509,7 +519,7 @@ def _get_make_verbosity_command(ctx):
 
     return command
 
-def _get_run_env(ctx, srcs, toolchains):
+def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
     """Returns setup script for execution phase.
 
     Unlike the setup script for regular builds, this doesn't modify variables from build.config for
@@ -533,6 +543,7 @@ def _get_run_env(ctx, srcs, toolchains):
         # create a build environment
           source {build_utils_sh}
           export BUILD_CONFIG={build_config}
+          {set_kernel_dir_cmd}
 
         # Silence "git: command not found" and "date: bad date @"
           export SOURCE_DATE_EPOCH=0
@@ -543,6 +554,7 @@ def _get_run_env(ctx, srcs, toolchains):
     """.format(
         build_utils_sh = ctx.file._build_utils_sh.short_path,
         build_config = ctx.file.build_config.short_path,
+        set_kernel_dir_cmd = set_kernel_dir_ret.cmd,
         setup_env = ctx.file.setup_env.short_path,
         toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
     )
@@ -604,6 +616,7 @@ kernel_env = rule(
             allow_single_file = True,
             doc = "label referring to the main build config",
         ),
+        "kernel_dir": attr.string(doc = "KERNEL_DIR"),
         "srcs": attr.label_list(
             mandatory = True,
             allow_files = True,
@@ -666,4 +679,5 @@ kernel_env = rule(
         ),
     } | _kernel_env_additional_attrs(),
     toolchains = [hermetic_toolchain.type],
+    subrules = [set_kernel_dir],
 )

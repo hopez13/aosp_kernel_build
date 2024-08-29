@@ -96,6 +96,7 @@ def kernel_build(
         name,
         build_config,
         outs,
+        kernel_dir = None,
         keep_module_symvers = None,
         srcs = None,
         module_outs = None,
@@ -147,6 +148,20 @@ def kernel_build(
     Args:
         name: The final kernel target name, e.g. `"kernel_aarch64"`.
         build_config: Label of the build.config file, e.g. `"build.config.gki.aarch64"`.
+        kernel_dir: [Non-configurable](https://bazel.build/docs/configurable-attributes).
+            Label to the package containing the kernel tree sources (see `srcs`). Example
+            values:
+
+            *   `"//common"` (most common): the kernel sources are located in `//common`. This means
+                the kernel image and in-tree drivers will be built from `common`.
+            *   `None` (default): Falls back to the value of `KERNEL_DIR` from `build_config`.
+            *   `pacakge_relative_label(":x")`: the kernel sources are in the current package.
+                You can replace `:x` with any other labels. The label name is not inspected,
+                only the repository name and package.
+
+            This usually replaces `//common:set_kernel_dir_build_config` in your `build_config`;
+            that is, if you set `kernel_build.kernel_dir`, it is likely that you may drop
+            `//common:set_kernel_dir_build_config` from components of `kernel_build.build_config`.
         kconfig_ext: Label of an external Kconfig.ext file sourced by the GKI kernel.
         keep_module_symvers: If set to True, a copy of the default output `Module.symvers` is kept.
           * To avoid collisions in mixed build distribution packages, the file is renamed
@@ -551,6 +566,10 @@ def kernel_build(
     kernel_env(
         name = env_target_name,
         build_config = build_config,
+        kernel_dir = paths.join(
+            package_relative_label(kernel_dir).workspace_root,
+            package_relative_label(kernel_dir).package,
+        ),
         kconfig_ext = kconfig_ext,
         dtstree = dtstree,
         srcs = srcs,
