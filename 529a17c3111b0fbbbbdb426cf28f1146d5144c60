@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e6ba213_8ee16b18",
+        "filename": "kleaf/hermetic_tools.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-08-29T16:33:23Z",
+      "side": 1,
+      "message": "why is this in run_setup _and_ in run_additional_setup?",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 50
+      },
+      "revId": "529a17c3111b0fbbbbdb426cf28f1146d5144c60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
