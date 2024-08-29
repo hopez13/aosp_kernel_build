@@ -25,6 +25,7 @@ _"Not supported"_ is displayed. Contact [owners](../OWNERS) if you need support.
 * [`BUILD_CONFIG`](#build_config)
 * [`BUILD_CONFIG_FRAGMENTS`](#build_config_fragments)
 * [`FAST_BUILD`](#fast_build)
+* [`KERNEL_DIR`](#kernel_dir)
 * [`OUT_DIR`](#out_dir)
 * [`DIST_DIR`](#dist_dir)
 * [`MAKE_GOALS`](#make_goals)
@@ -127,6 +128,22 @@ installing modules by building the `kernel_build` target, e.g.
 ```shell
 $ bazel build //common:kernel_aarch64
 ```
+
+## KERNEL\_DIR
+
+```python
+kernel_build(kernel_dir = ...)
+```
+
+If you set `KERNEL_DIR=common` in your build config, set
+`kernel_dir = "//common"` instead.
+
+If you did not set `KERNEL_DIR` in your build config, and the build config
+is directly below a package (a `BUILD.bazel` or `BUILD` file is found right
+next to the build config), then set `kernel_dir` to any label in that package.
+
+If your use case is different from any of the above, or you would like to
+understand the mechanics of this attribute, see [documentation for all rules].
 
 ## OUT\_DIR
 
