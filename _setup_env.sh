@@ -36,6 +36,14 @@ function append_cmd() {
 export -f append_cmd
 
 export KERNEL_DIR
+if [ -n "${KLEAF_INTERNAL_PERFERRED_KERNEL_DIR}" ]; then
+  if [ -n "${KERNEL_DIR}" ]; then
+    echo "WARNING: You specified kernel_build.kernel_dir=${KLEAF_INTERNAL_PERFERRED_KERNEL_DIR}." >&2
+    echo "  Please delete KERNEL_DIR=${KERNEL_DIR} from ${BUILD_CONFIG}; it is not used." >&2
+  fi
+  KERNEL_DIR="${KLEAF_INTERNAL_PERFERRED_KERNEL_DIR}"
+  unset KLEAF_INTERNAL_PERFERRED_KERNEL_DIR
+fi
 # for case that KERNEL_DIR is not specified in environment
 if [ -z "${KERNEL_DIR}" ]; then
     # for the case that KERNEL_DIR is not specified in the BUILD_CONFIG file
@@ -43,6 +51,7 @@ if [ -z "${KERNEL_DIR}" ]; then
     # for the case that KERNEL_DIR is specified in the BUILD_CONFIG file,
     # or via the config files sourced, the value of KERNEL_DIR
     # set here would be overwritten, and the specified value would be used.
+    # TODO: Add migration guide for kernel_build.kernel_dir
     build_config_path=$(readlink -f ${ROOT_DIR}/${BUILD_CONFIG})
     real_root_dir=${build_config_path%%${BUILD_CONFIG}}
     build_config_dir=$(dirname ${build_config_path})

@@ -96,6 +96,7 @@ def kernel_build(
         name,
         build_config,
         outs,
+        kernel_dir = None,
         keep_module_symvers = None,
         srcs = None,
         module_outs = None,
@@ -147,6 +148,70 @@ def kernel_build(
     Args:
         name: The final kernel target name, e.g. `"kernel_aarch64"`.
         build_config: Label of the build.config file, e.g. `"build.config.gki.aarch64"`.
+        kernel_dir: A target in the package containing the kernel tree sources (see `srcs`).
+            Example values:
+
+            *   `None` (default): Falls back to the value of `KERNEL_DIR` from `build_config`.
+
+                Note: The usage of specifying `KERNEL_DIR` in `build_config` is deprecated and will
+                trigger a warning/error in the future.
+
+            *   `"//common:kernel_dir_anchor"` (most common): the kernel sources are located in
+                `//common`. This means the kernel image and in-tree drivers will be built from
+                `common`.
+
+                This usually replaces `//common:set_kernel_dir_build_config` in your `build_config`;
+                that is, if you set `kernel_build.kernel_dir`, it is likely that you may drop
+                `//common:set_kernel_dir_build_config` from components of
+                `kernel_build.build_config`.
+
+                This replaces `KERNEL_DIR=common` in your `build_config`.
+
+                Note: Technically, any target in the `//common` package would achieve the same
+                effect, as long as there are no circular dependencies in the loading phase. However,
+                using `"//common:kernel_dir_anchor"` clearly states its intention.
+            *   `"@kleaf//common:kernel_dir_anchor"`: If you set up a DDK workspace such that Kleaf
+                tooling and your kernel source tree are located in the `@kleaf` submodule, you
+                should specify the full label in the package.
+            *   A target in the package of the build config: the kernel source trees are in the
+                aforementioned package.
+
+                For example:
+
+                ```
+                # mypackage/BUILD.bazel: Package //mypackage
+                filegroup(
+                    name = "kernel_dir_anchor",
+                    srcs = [],
+                    visibility = ["//visibility:private"]
+                )
+                kernel_build(
+                    name = "tuna",
+                    build_config = "build.config.tuna", # the build.config.tuna is in //mypackage
+                    kernel_dir = ":kernel_dir_anchor", # so set kernel_dir to //mypackage
+                )
+                ```
+
+                In this example, `build.config.tuna` is directly below `//mypackage. Hence,
+                setting `kernel_dir = ":kernel_dir_anchor"` is equivalent to the
+                legacy behavior of not setting `KERNEL_DIR` in `build.config`, and allowing
+                `_setup_env.sh` to decide the value by inferring from the directory containing the
+                build config, which is `mypackage`.
+
+                Note: You could technically use `kernel_dir = "build.config.tuna"` to achieve the
+                same effect in the short term. However, this may cause confusion when build configs
+                go away. Hence, a separate anchor target is used. When `build.config.tuna` is
+                deleted in the future, it is clear that `kernel_dir` is not affected by this
+                deletion.
+
+            *   a label in the current package: the kernel sources are in the current package where
+                `kernel_build()` is called.
+
+                Note:  To avoid circular dependencies in the loading phase, this anchor should not
+                depend on anything. You can use any source file in the package or an empty
+                filegroup. The  dependency is not reflected in the actions, so changes to the anchor
+                does not trigger a rebuild.
+
         kconfig_ext: Label of an external Kconfig.ext file sourced by the GKI kernel.
         keep_module_symvers: If set to True, a copy of the default output `Module.symvers` is kept.
           * To avoid collisions in mixed build distribution packages, the file is renamed
@@ -551,6 +616,7 @@ def kernel_build(
     kernel_env(
         name = env_target_name,
         build_config = build_config,
+        kernel_dir = kernel_dir,
         kconfig_ext = kconfig_ext,
         dtstree = dtstree,
         srcs = srcs,
