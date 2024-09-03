@@ -139,13 +139,19 @@ You may customize [`DIST_DIR`](#dist_dir). See below.
 You may specify it statically with
 
 ```python
+pkg_install(destdir=...)
+```
+
+or
+
+```python
 copy_to_dist_dir(dist_dir=...)
 ```
 
-You may override it in the command line with `--dist_dir`:
+You may override it in the command line with `--destdir`:
 
 ```shell
-$ bazel run ..._dist -- --dist_dir=...
+$ bazel run ..._dist -- --destdir=...
 ```
 
 See [documentation for all rules].

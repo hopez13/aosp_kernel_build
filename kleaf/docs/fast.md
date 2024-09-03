@@ -7,7 +7,7 @@ For local developing workflow, build with `--config=fast`.
 Example:
 
 ```shell
-$ tools/bazel run --config=fast //common:kernel_aarch64 -- --dist_dir=out/dist
+$ tools/bazel run --config=fast //common:kernel_aarch64 -- --destdir=out/dist
 ```
 
 Or add to `user.bazelrc`:

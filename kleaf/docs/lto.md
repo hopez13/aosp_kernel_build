@@ -30,12 +30,13 @@ For example:
 $ tools/bazel build --lto=none //private/path/to/sources:tuna_dist
 ```
 
-The `--lto` option is applied to the build, not the `copy_to_dist_dir` step.
+The `--lto` option is applied to the build, not the `copy_to_dist_dir`
+or `pkg_install` target.
 Hence, put it before the `--` delimiter when running a `*_dist` target. For
 example:
 
 ```shell
-$ tools/bazel run --lto=none //private/path/to/sources:tuna_dist -- --dist_dir=out/dist
+$ tools/bazel run --lto=none //private/path/to/sources:tuna_dist -- --destdir=out/dist
 ```
 
 ## Option 2: Disable LTO for this workspace
