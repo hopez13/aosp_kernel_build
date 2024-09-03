@@ -124,16 +124,16 @@ bison_wrapper(
     visibility = ["//visibility:private"],
 )
 
-prebuilt_transitioned_tool(
-    name = "prebuilt_swig",
+swig_wrapper(
+    name = "wrapped_swig",
     src = "//prebuilts/kernel-build-tools:swig",
+    swig_lib = "//prebuilts/kernel-build-tools:swig_lib_dir",
     visibility = ["//visibility:private"],
 )
 
-swig_wrapper(
+prebuilt_transitioned_tool(
     name = "swig",
-    src = ":prebuilt_swig",
-    swig_lib = "//prebuilts/kernel-build-tools:swig_lib_dir",
+    src = ":wrapped_swig",
     visibility = ["//visibility:private"],
 )
 
