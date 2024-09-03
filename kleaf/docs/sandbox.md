@@ -7,7 +7,7 @@ To reduce sandboxes and boost build time, build with `--config=local`.
 Example:
 
 ```shell
-$ tools/bazel run --config=local //common:kernel_aarch64 -- --dist_dir=out/dist
+$ tools/bazel run --config=local //common:kernel_aarch64 -- --destdir=out/dist
 ```
 
 Or add to `user.bazelrc`:

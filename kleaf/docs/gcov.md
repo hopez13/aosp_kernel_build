@@ -18,14 +18,7 @@ macro. In the above example, the `.gcno` files can be found at
 bazel-bin/common/kernel_aarch64/kernel_aarch64_gcno/
 ```
 
-... or in `dist_dir`:
-
-```shell
-$ tools/bazel run --gcov //common:kernel_aarch64_dist
-[...]
-$ ls bazel-bin/common/kernel_aarch64/kernel_aarch64_gcno/
-[...]
-```
+... or in `destdir`.
 
 ## Handling path mapping
 
@@ -55,10 +48,10 @@ $ cat bazel-bin/common/kernel_aarch64/gcno_mapping.kernel_aarch64.json
 [...]
 ```
 
-You may also find this file under `dist_dir`:
+You may also find this file under `destdir`:
 
 ```shell
-$ tools/bazel run //common:kernel_aarch64_dist -- --dist_dir=out/kernel_aarch64/dist
+$ tools/bazel run //common:kernel_aarch64_dist -- --destdir=out/kernel_aarch64/dist
 [...]
 $ cat out/kernel_aarch64/dist/gcno_mapping.kernel_aarch64.json
 [...]
@@ -76,16 +69,16 @@ $ cat bazel-bin/common-modules/virtual-device/virtual_device_x86_64/gcno_mapping
 [...]
 ```
 
-Or under `dist_dir`:
+Or under `destdir`:
 
 ```shell
-$ tools/bazel run --gcov //common-modules/virtual-device:virtual_device_x86_64_dist -- --dist_dir=out/vd/dist
+$ tools/bazel run --gcov //common-modules/virtual-device:virtual_device_x86_64_dist -- --destdir=out/vd/dist
 [...]
 $ cat out/vd/dist/gcno_mapping.virtual_device_x86_64.json
 [...]
 ```
 
-**Note**: You will also see `gcno_mapping.kernel_x86_64.json` under `dist_dir`. That file is incomplete
+**Note**: You will also see `gcno_mapping.kernel_x86_64.json` under `destdir`. That file is incomplete
 as it does not contain mappings for in-tree modules specific for virtual device.
 
 ### Sample content of `gcno_mapping.<name>.json`:
