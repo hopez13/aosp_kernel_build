@@ -20,3 +20,8 @@ build:musl --musl_prebuilts
 build:musl --musl_kbuild
 build:musl --musl_tools_from_sources
 common:musl --config=musl_platform
+
+# By default, enable some musl libc features.
+# This is added temporarily and intentionally duplicated with the list above.
+build --musl_prebuilts
+build --musl_tools_from_sources
