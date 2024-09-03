@@ -194,23 +194,22 @@ Example for Pixel 2021 (see the `kernel_images` target named `slider_images`):
 
 [https://android.googlesource.com/kernel/google-modules/raviole-device/+/refs/heads/android13-gs-raviole-5.15/BUILD.bazel](https://android.googlesource.com/kernel/google-modules/raviole-device/+/refs/heads/android13-gs-raviole-5.15/BUILD.bazel)
 
-### Step 5: Define a target for distribution {#step-5}
+### Step 5: Define targets for distribution {#step-5}
 
-Define a `copy_to_dist_dir` target that includes the targets you want in the
-distribution directory. The name of this `copy_to_dist_dir` target is usually
-the name of your device with `_dist` appended to it, e.g. `tuna_dist`.
+Define a `pkg_files` target and a `pkg_install` target that includes the targets
+you want in the distribution directory. The name of this `pkg_install` target
+is usually the name of your device with `_dist` appended to it, e.g.
+`tuna_dist`.
 
-Set `flat = True` so the directory structure within `dist_dir` is flattened.
+You may set `strip_prefix = strip_prefix.files_only()` so the directory
+structure within `destdir` is flattened. If an alternative directory structure
+is desired, use other rules and functions in `@rules_pkg//pkg:mappings.bzl`
+to achieve this.
 
-Set `dist_dir` so there's less typing at build time. For example:
+It is recommended to set `destdir` so you do not have to specify it in the
+command line every time.
 
-```text
-copy_to_dist_dir(
-   dist_dir = "out/dist"
-)
-```
-
-Add the following to the `data` attribute of the `copy_to_dist_dir` target:
+Add the following to the `srcs` attribute of the `pkg_files` target:
 
 * The name of the `kernel_build` you have created in Step 1,
   e.g. `:tuna`. This adds all `outs`
@@ -236,9 +235,40 @@ Add the following to the `data` attribute of the `copy_to_dist_dir` target:
     does not need to be specified, because `module_outs` are added to
     distribution.
 
-Example for Pixel 2021 (see the `copy_to_dist_dir` target named `slider_dist`):
+Then, add the `pkg_files` target to the `srcs` attribute of the `pkg_install`
+target.
 
-[https://android.googlesource.com/kernel/google-modules/raviole-device/+/refs/heads/android13-gs-raviole-5.15/BUILD.bazel](https://android.googlesource.com/kernel/google-modules/raviole-device/+/refs/heads/android13-gs-raviole-5.15/BUILD.bazel)
+Example:
+
+```
+load("@rules_pkg//pkg:install.bzl", "pkg_install")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
+
+pkg_files(
+    name = "tuna_files",
+    srcs = [
+        ":tuna",
+        ":tuna_images",
+        ":tuna_modules_install",
+        "//common:kernel_aarch64_uapi_headers",
+        "//common:kernel_aarch64",
+        "//common:kernel_aarch64_modules",
+        "//common:kernel_aarch64_additional_artifacts",
+    ],
+    strip_prefix = strip_prefix.files_only(),
+    visibility = ["//visibility:private"],
+)
+
+pkg_install(
+    name = "tuna_dist",
+    srcs = [":tuna_files"],
+    destdir = "out/tuna/dist",
+    visibility = ["//visibility:private"],
+)
+```
+
+See [rules_pkg](https://github.com/bazelbuild/rules_pkg) for details on how to
+use `pkg_files`, `strip_prefix`, and `pkg_install` properly.
 
 ### Step 6: Build, flash and test
 
