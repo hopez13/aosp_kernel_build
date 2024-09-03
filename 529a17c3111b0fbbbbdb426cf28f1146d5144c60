@@ -46,6 +46,30 @@
       },
       "revId": "529a17c3111b0fbbbbdb426cf28f1146d5144c60",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2f9c334_de8e4a25",
+        "filename": "kleaf/hermetic_tools.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-03T23:23:01Z",
+      "side": 1,
+      "message": "On a second thought, I am dropping it for the sake of brevity.",
+      "parentUuid": "15b23526_3bb9a1ad",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 50
+      },
+      "revId": "529a17c3111b0fbbbbdb426cf28f1146d5144c60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
