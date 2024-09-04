@@ -16,6 +16,24 @@
       "message": "The change looks good to me, though I wonder whether we can find a more sensible default if most people will sprinkle `makefile \u003d \":Makefile\"` all over their build files.",
       "revId": "836d27051585fca63d9f238995cfdc39e625c137",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ef8064_a1e63faa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-04T17:42:06Z",
+      "side": 1,
+      "message": "I agree that it might be a bit cumbersome, but it is a bit inevitable:\n\n- During the migration phase, we need a way to distinguish legacy behavior and new behavior. The default should be the legacy behavior during the migration phase, which is safer.\n- This specifies an explicit dependency on :Makefile. Explicitly specifying dependencies are good.",
+      "parentUuid": "1c65dd14_464723c6",
+      "revId": "836d27051585fca63d9f238995cfdc39e625c137",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
