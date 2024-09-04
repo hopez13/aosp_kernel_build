@@ -21,6 +21,7 @@ export MAKE_ARGS=$@
 export ROOT_DIR=$($(dirname $(readlink -f $0))/gettop.sh)
 export NET_TEST=${ROOT_DIR}/kernel/tests/net/test
 
+# add for test
 # if device has its own build.config.net_test in the
 # root (via manifest copy rule) then use it, otherwise
 # use the default one in the build/ directory. if the
