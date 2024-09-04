@@ -40,6 +40,30 @@
       ],
       "revId": "7e3572284b714bed5b66cc8be9b7ba0d35646fc0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0945c055_4ed94394",
+        "filename": "kleaf/docs/impl.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-04T17:33:13Z",
+      "side": 1,
+      "message": "Done in the example below. PTAL again",
+      "parentUuid": "94e89d35_995cff92",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 12
+      },
+      "revId": "7e3572284b714bed5b66cc8be9b7ba0d35646fc0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
