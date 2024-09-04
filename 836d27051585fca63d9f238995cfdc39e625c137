@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c65dd14_464723c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-09-04T11:49:38Z",
+      "side": 1,
+      "message": "The change looks good to me, though I wonder whether we can find a more sensible default if most people will sprinkle `makefile \u003d \":Makefile\"` all over their build files.",
+      "revId": "836d27051585fca63d9f238995cfdc39e625c137",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
