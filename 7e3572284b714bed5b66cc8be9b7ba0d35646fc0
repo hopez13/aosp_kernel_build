@@ -1,0 +1,45 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94e89d35_995cff92",
+        "filename": "kleaf/docs/impl.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-09-04T12:04:29Z",
+      "side": 1,
+      "message": "Need to add a load statement as well?",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 12
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "069f1bb2_3ca4d44f",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/impl.md",
+              "range": {
+                "startLine": 198,
+                "startChar": 0,
+                "endLine": 198,
+                "endChar": 0
+              },
+              "replacement": "\nFirst, load the `pkg_files` and `pkg_install` rules.\n\n```\nload(\"//tools/build_defs/pkg:pkg.bzl\", \"pkg_files\", \"pkg_install\")\nload(\"//build/kernel/kleaf:utils.bzl\", \"strip_prefix\")\n```\n"
+            }
+          ]
+        }
+      ],
+      "revId": "7e3572284b714bed5b66cc8be9b7ba0d35646fc0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
