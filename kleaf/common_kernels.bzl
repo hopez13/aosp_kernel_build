@@ -91,6 +91,7 @@ def _default_target_configs():
     aarch64_trim_and_check = bool(aarch64_kmi_symbol_list) or len(aarch64_additional_kmi_symbol_lists) > 0
     aarch64_abi_definition_stg = native.glob(["android/abi_gki_aarch64.stg"])
     aarch64_abi_definition_stg = aarch64_abi_definition_stg[0] if aarch64_abi_definition_stg else None
+    known_abi_breaks = (native.glob(["android/abi_gki_aarch64_known_abi_breaks"]) or [None])[0]
 
     # Common configs for aarch64*
     aarch64_common = {
@@ -118,6 +119,7 @@ def _default_target_configs():
         "protected_modules_list": aarch64_protected_modules_list,
         "abi_definition_stg": aarch64_abi_definition_stg,
         "kmi_enforced": bool(aarch64_abi_definition_stg),
+        "known_abi_breaks": known_abi_breaks,
     }
 
     # Common configs for riscv64
@@ -617,7 +619,8 @@ def _define_common_kernel(
         page_size = None,
         deprecation = None,
         ddk_headers_archive = None,
-        extra_dist = None):
+        extra_dist = None,
+        known_abi_breaks = None):
     json_target_config = dict(
         name = name,
         outs = outs,
@@ -643,6 +646,7 @@ def _define_common_kernel(
         deprecation = deprecation,
         ddk_headers_archive = ddk_headers_archive,
         extra_dist = extra_dist,
+        known_abi_breaks = known_abi_breaks,
     )
     json_target_config = json.encode_indent(json_target_config, indent = "    ")
     json_target_config = json_target_config.replace("null", "None")
@@ -732,6 +736,7 @@ def _define_common_kernel(
         kmi_symbol_list_add_only = kmi_symbol_list_add_only,
         deprecation = deprecation,
         enable_add_vmlinux = _GKI_ADD_VMLINUX,
+        known_abi_breaks = known_abi_breaks,
     )
 
     if enable_interceptor:

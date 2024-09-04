@@ -111,6 +111,30 @@ following instead:
 $ tools/bazel run //common:kernel_aarch64_abi_nodiff_update
 ```
 
+### Allowing incompatible ABI changes {#update-abi-known-breaks}
+
+Some ABI changes may be difficult for the tooling to detect whether they are
+safe or not. For example, replacing a reserved padding field with a real field.
+
+When a change is detected as incompatible, you can override this decision by
+adding the ABI report to the list of known ABI breaks:
+
+```shell
+tools/bazel run //common:kernel_aarch64_abi_update_known_breaks
+```
+
+This rule collects all incompatible ABI changes from the ABI file history and
+puts all unique findings into the corresponding list of known ABI breaks, such
+as `common/android/kernel_aarch64_abi_update_known_breaks`.
+
+This rule can also be used to create this file from scratch, but before running
+it you need to populate the file with the oldest commit that corresponds to the
+current `KMI_GENERATION`, like this:
+
+```
+# ABI freeze commit: <commit-hash>
+```
+
 ### Convert from `build_abi.sh`
 
 Here's a table for converting `build_abi.sh`
