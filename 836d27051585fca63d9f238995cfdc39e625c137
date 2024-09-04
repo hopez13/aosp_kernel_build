@@ -34,6 +34,24 @@
       "parentUuid": "1c65dd14_464723c6",
       "revId": "836d27051585fca63d9f238995cfdc39e625c137",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14f00069_7ad4f44e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-04T17:45:30Z",
+      "side": 1,
+      "message": "Also, `makefile \u003d \":Makefile\"` is only for the case when the in-tree drivers are built from source trees in the **current** package. This is not necessarily the case for device mixed builds. Cuttlefish will use `//common:Makefile` for example.",
+      "parentUuid": "c2ef8064_a1e63faa",
+      "revId": "836d27051585fca63d9f238995cfdc39e625c137",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
