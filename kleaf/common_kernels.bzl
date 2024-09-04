@@ -80,6 +80,7 @@ def common_kernel(
         deprecation = None,
         ddk_headers_archive = None,
         ddk_module_headers = None,
+        known_abi_breaks = None,
         extra_dist = None):
     """Macro for an Android Common Kernel.
 
@@ -174,6 +175,7 @@ def common_kernel(
         deprecation = deprecation,
         ddk_headers_archive = ddk_headers_archive,
         ddk_module_headers = ddk_module_headers,
+        known_abi_breaks = known_abi_breaks,
         extra_dist = extra_dist,
     )
 
@@ -267,6 +269,7 @@ def common_kernel(
         kmi_symbol_list_add_only = kmi_symbol_list_add_only,
         deprecation = deprecation,
         enable_add_vmlinux = _GKI_ADD_VMLINUX,
+        known_abi_breaks = known_abi_breaks,
     )
 
     if enable_interceptor:
