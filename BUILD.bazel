@@ -514,6 +514,19 @@ py_test(
     ],
 )
 
+py_binary(
+    name = "update_known_abi_breaks",
+    srcs = ["abi/update_known_abi_breaks.py"],
+    data = [
+        "//prebuilts/kernel-build-tools:linux-x86/bin/stgdiff",
+    ],
+    env = {
+        "STGDIFF": "$(location //prebuilts/kernel-build-tools:linux-x86/bin/stgdiff)",
+    },
+    main = "abi/update_known_abi_breaks.py",
+    visibility = ["//visibility:public"],
+)
+
 # Target for distribution.
 filegroup(
     name = "init_ddk_zip",

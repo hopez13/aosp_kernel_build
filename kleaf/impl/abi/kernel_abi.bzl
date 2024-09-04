@@ -24,6 +24,7 @@ load(":abi/extracted_symbols.bzl", "extracted_symbols")
 load(":abi/get_src_kmi_symbol_list.bzl", "get_src_kmi_symbol_list")
 load(":abi/get_src_protected_exports_files.bzl", "get_src_protected_exports_list", "get_src_protected_modules_list")
 load(":abi/protected_exports.bzl", "protected_exports")
+load(":abi/update_known_abi_breaks.bzl", "update_known_abi_breaks")
 load(":common_providers.bzl", "KernelBuildAbiInfo")
 load(":diff.bzl", "diff")
 load(":empty_binary.bzl", "empty_binary")
@@ -60,6 +61,7 @@ def kernel_abi(
         kmi_symbol_list_add_only = None,
         kernel_modules_exclude_list = None,
         enable_add_vmlinux = None,
+        known_abi_breaks = None,
         **kwargs):
     """Declare multiple targets to support ABI monitoring.
 
@@ -151,6 +153,7 @@ def kernel_abi(
         If `True`, enable the `kernel_build_add_vmlinux`
         [transition](https://bazel.build/extending/config#user-defined-transitions) from all targets
         instantiated by this macro (e.g. produced by abi_dump, extracted_symbols, etc).
+      known_abi_breaks: File with with incompatibile ABI changes over KMI history.
       **kwargs: Additional attributes to the internal rule, e.g.
         [`visibility`](https://docs.bazel.build/versions/main/visibility.html).
         See complete list
@@ -196,6 +199,7 @@ def kernel_abi(
             abi_dump_target = name + "_dump",
             kernel_modules_exclude_list = kernel_modules_exclude_list,
             enable_add_vmlinux = enable_add_vmlinux,
+            known_abi_breaks = known_abi_breaks,
             **kwargs
         )
 
@@ -252,6 +256,7 @@ def _define_abi_targets(
         abi_dump_target,
         kernel_modules_exclude_list,
         enable_add_vmlinux,
+        known_abi_breaks,
         **kwargs):
     """Helper to `_define_other_targets` when `define_abi_targets = True.`
 
@@ -334,6 +339,7 @@ def _define_abi_targets(
         kmi_symbol_list = name + "_src_kmi_symbol_list",
         protected_exports_list = name + "_src_protected_exports_list",
         kmi_symbol_checks = name + "_kmi_symbol_checks",
+        known_abi_breaks = known_abi_breaks,
         **kwargs
     )
 
@@ -350,6 +356,7 @@ def _define_abi_definition_targets(
         kmi_symbol_list,
         protected_exports_list,
         kmi_symbol_checks,
+        known_abi_breaks,
         **kwargs):
     """Helper to `_define_abi_targets`.
 
@@ -464,5 +471,12 @@ protected exports list must be updated before updating ABI definition.
             nodiff_update = name + "_nodiff_update",
             **kwargs
         )
+
+        if known_abi_breaks:
+            update_known_abi_breaks(
+                name = name + "_update_known_breaks",
+                abi_definition_stg = abi_definition_stg,
+                known_abi_breaks = known_abi_breaks,
+            )
 
     return default_outputs
