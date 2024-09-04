@@ -80,6 +80,7 @@ def common_kernel(
         deprecation = None,
         ddk_headers_archive = None,
         ddk_module_headers = None,
+        known_abi_breaks = None,
         extra_dist = None):
     """Macro for an Android Common Kernel.
 
@@ -145,6 +146,7 @@ def common_kernel(
         visibility: default visibility for some targets instantiated with this macro
         deprecation: If set, mark target deprecated with given message.
         ddk_headers_archive: nonconfigurable. Target to the archive packing DDK headers
+        known_abi_breaks: File with with incompatibile ABI changes over KMI history.
         extra_dist: extra targets added to `<name>_dist`
     """
     json_target_config = dict(
@@ -174,6 +176,7 @@ def common_kernel(
         deprecation = deprecation,
         ddk_headers_archive = ddk_headers_archive,
         ddk_module_headers = ddk_module_headers,
+        known_abi_breaks = known_abi_breaks,
         extra_dist = extra_dist,
     )
 
@@ -267,6 +270,7 @@ def common_kernel(
         kmi_symbol_list_add_only = kmi_symbol_list_add_only,
         deprecation = deprecation,
         enable_add_vmlinux = _GKI_ADD_VMLINUX,
+        known_abi_breaks = known_abi_breaks,
     )
 
     if enable_interceptor:
