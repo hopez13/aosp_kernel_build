@@ -366,6 +366,47 @@ to fix the problem.
 You may also use `--workaround_btrfs_b292212788` to work around this issue
 temporarily.
 
+## Build hangs because of another process
+
+If your build hangs with a message like:
+
+```
+Another command (pid=22557) is running. Waiting for it to complete on the server (server_pid=7118)...
+```
+
+The Bazel server has a lock so that it can only handle one bazel command at a
+time.
+
+First, figure out what process 22557 is doing, and what the parent process
+of the process 22557 is. You can do this with `ps`, or by
+examining `/proc/22557`.
+
+Sometimes, the running process (22557) may be a `bazel query` command issued
+by an IDE (e.g. VSCode Bazel plugin). Configure the IDE to make it issue
+`bazel query` commands with the `--preemptible` flag so that the query can be
+interrupted.
+
+See the following links for details.
+
+[Provide the ability to interrupt certain bazel commands (#12524)](https://github.com/bazelbuild/bazel/issues/12524)
+
+[Flag --preemptible](https://bazel.build/reference/command-line-reference#flag--preemptible)
+
+If the running process is issued by your build scripts, adjust your build
+scripts so it does not run multiple `bazel` commands simultaneously.
+
+In some cases, adjusting `--output_base` may be another option. Note that
+choosing a different `--output_base` spawns another Bazel server with different
+build caches. Due to internal mechanics of the Bazel wrapper script, if you
+modify `--output_base`, you may need to adjust `--output_root` as well. Run
+`tools/bazel help kleaf` for details about `--output_root`.
+
+See the following links for details.
+
+[Calling Bazel from scripts](https://bazel.build/run/scripts)
+
+[Flag --output_base](https://bazel.build/reference/command-line-reference#flag--output_base)
+
 ## fatal: not a git repository: '[...]/.git' {#not-git}
 
 This is a harmless warning message.
