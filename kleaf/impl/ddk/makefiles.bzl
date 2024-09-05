@@ -313,6 +313,10 @@ def _makefiles_impl(ctx):
 
     if ctx.attr.top_level_makefile:
         args.add("--produce-top-level-makefile")
+    if ctx.attr.kbuild_has_linux_include:
+        args.add("--kbuild-has-linux-include")
+    if ctx.attr.kbuild_add_submodule_linux_include:
+        args.add("--kbuild-add-submodule-linux-include")
 
     args.add_all(
         "--linux-include-dirs",
@@ -422,6 +426,14 @@ makefiles = rule(
         "module_local_defines": attr.string_list(),
         "module_copts": attr.string_list(),
         "top_level_makefile": attr.bool(),
+        "kbuild_has_linux_include": attr.bool(
+            doc = "Whether to add linux_include from kbuild",
+            default = True,
+        ),
+        "kbuild_add_submodule_linux_include": attr.bool(
+            doc = "Whether to add submodule's linux_include to merged Kbuild files",
+            default = True,
+        ),
         "internal_target_fail_message": attr.string(
             doc = "For testing only. Assert that this target to fail to build with the given message.",
         ),

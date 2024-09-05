@@ -176,5 +176,7 @@ def ddk_submodule(
         module_local_defines = local_defines,
         module_copts = copts,
         top_level_makefile = False,
+        kbuild_has_linux_include = False,
+        kbuild_add_submodule_linux_include = False,
         **kwargs
     )
