@@ -96,7 +96,9 @@ def _gen_makefile(
         out_file.write(content)
 
 
-def _merge_directories(output_makefiles: pathlib.Path, submodule_makefile_dir: pathlib.Path):
+def _merge_directories(
+        output_makefiles: pathlib.Path,
+        submodule_makefile_dir: pathlib.Path):
     """Merges the content of submodule_makefile_dir into output_makefiles.
 
     File of the same relative path are concatenated.
@@ -122,6 +124,19 @@ def _merge_directories(output_makefiles: pathlib.Path, submodule_makefile_dir: p
                 dst.write(src.read())
                 dst.write("\n")
 
+def _append_submodule_linux_include_dirs(
+        output_makefiles: pathlib.Path,
+        submodule_linux_include_dirs: dict[pathlib.Path, list[pathlib.Path]],
+):
+    """For top-level ddk_module, append LINUXINCLUDE from deps of submodules"""
+    for dirname, linux_includes_of_dir in submodule_linux_include_dirs.items():
+        kbuild_file = output_makefiles / dirname / "Kbuild"
+        with open(kbuild_file, "a") as out_file:
+            out_file.write(textwrap.dedent("""\
+                # Common LINUXINLUDE for all submodules in this directory
+            """))
+            _handle_linux_includes(out_file, linux_includes_of_dir)
+
 
 def gen_ddk_makefile(
         output_makefiles: pathlib.Path,
@@ -130,6 +145,7 @@ def gen_ddk_makefile(
         produce_top_level_makefile: Optional[bool],
         submodule_makefiles: list[pathlib.Path],
         kernel_module_out: Optional[pathlib.Path],
+        submodule_linux_include_dirs: dict[pathlib.Path, list[pathlib.Path]],
         **kwargs
 ):
     if produce_top_level_makefile:
@@ -148,6 +164,8 @@ def gen_ddk_makefile(
 
     for submodule_makefile_dir in submodule_makefiles:
         _merge_directories(output_makefiles, submodule_makefile_dir)
+    _append_submodule_linux_include_dirs(output_makefiles,
+                                         submodule_linux_include_dirs)
 
 
 def _gen_ddk_makefile_for_module(
@@ -387,6 +405,17 @@ def _handle_copts(out_cflags: TextIO,
                 """))
 
 
+class SubmoduleLinuxIncludeDirAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if not values:
+            raise argparse.ArgumentTypeError(
+                "--submodule-linux-include-dirs requires at least one value")
+        dirname = values[0]
+        if not hasattr(namespace, self.dest):
+            setattr(namespace, self.dest, {})
+        getattr(namespace, self.dest)[dirname] = values[1:]
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format="%(levelname)s: %(message)s")
@@ -406,9 +435,14 @@ if __name__ == "__main__":
     parser.add_argument("--local-defines", nargs="*", default=[])
     parser.add_argument("--copt-file", type=argparse.FileType("r"))
     parser.add_argument("--produce-top-level-makefile", action="store_true")
+    parser.add_argument("--kbuild-add-submodule-linux-include",
+                        action="store_true")
     parser.add_argument("--submodule-makefiles",
                         type=pathlib.Path, nargs="*", default=[])
     parser.add_argument("--internal-target-fail-message", default=None)
+    parser.add_argument("--submodule-linux-include-dirs",
+                        type=pathlib.Path, nargs="+", default={},
+                        action=SubmoduleLinuxIncludeDirAction)
 
     args = parser.parse_args()
 
