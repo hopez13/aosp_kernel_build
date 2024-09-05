@@ -418,5 +418,6 @@ def ddk_module(
         module_local_defines = local_defines,
         module_copts = copts,
         top_level_makefile = True,
+        kbuild_has_linux_include = True,
         **private_kwargs
     )
