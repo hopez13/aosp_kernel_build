@@ -401,12 +401,28 @@ DdkSubmoduleInfo = provider(
 
             - `out` is the name of an output file
             - `src` is a label containing the label of the target declaring the output
-             file.""",
+             file.
+
+            For `ddk_submodule` and regular `ddk_module`, this contains a single struct.
+            For the top-level `ddk_module` with submodules, this contains all structs from its
+            submodules.""",
         "srcs": """A [depset](https://bazel.build/extending/depsets) of source files to build the
             submodule.""",
+        "out": """A single `out` of this `ddk_submodule` or regular `ddk_module`. None for the
+            top-level `ddk_module` with submodules""",
         "kernel_module_deps": """A [depset](https://bazel.build/extending/depsets) of
             `KernelModuleDepInfo` of dependent targets of this submodules that are
             kernel_module's.""",
+        "linux_includes_include_infos": """
+            For `ddk_submodule`, this is set to let the top-level `ddk_module` properly
+            generates the `LINUXINCLUDE` in the Kbuild file. This contains a
+            [depset](https://bazel.build/extending/depsets) of `DdkIncludeInfo` constructed from
+            deps, hdrs, texture_hdrs, kernel_build, etc, to build the top-level `ddk_module`.
+
+            Only `linux_includes` in this field should be read; hence the name. `includes` are set
+            in a per-submodule basis and handled within the implementation of `ddk_submodule`. Files
+            to build the submodule are sent to the top-level `ddk_module` via `srcs`.
+        """,
     },
 )
 
