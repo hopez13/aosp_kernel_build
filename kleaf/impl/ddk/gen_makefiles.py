@@ -18,6 +18,7 @@ Generate a DDK module Makefile
 
 import absl.flags.argparse_flags
 import argparse
+import collections
 import json
 import logging
 import os
@@ -122,6 +123,7 @@ def _merge_directories(
 
 def _append_submodule_linux_include_dirs(
         output_makefiles: pathlib.Path,
+        linux_include_dirs: list[pathlib.Path],
         submodule_linux_include_dirs: dict[pathlib.Path, list[pathlib.Path]],
 ):
     """For top-level ddk_module, append LINUXINCLUDE from deps of submodules"""
@@ -131,7 +133,11 @@ def _append_submodule_linux_include_dirs(
             out_file.write(textwrap.dedent("""\
                 # Common LINUXINLUDE for all submodules in this directory
             """))
-            _handle_linux_includes(out_file, True, linux_includes_of_dir)
+
+            combined_linux_includes = linux_includes_of_dir + linux_include_dirs
+            combined_linux_includes = list(collections.OrderedDict.fromkeys(
+                combined_linux_includes).keys())
+            _handle_linux_includes(out_file, True, combined_linux_includes)
 
 
 def gen_ddk_makefile(
@@ -141,6 +147,7 @@ def gen_ddk_makefile(
         produce_top_level_makefile: Optional[bool],
         submodule_makefiles: list[pathlib.Path],
         kernel_module_out: Optional[pathlib.Path],
+        linux_include_dirs: list[pathlib.Path],
         submodule_linux_include_dirs: dict[pathlib.Path, list[pathlib.Path]],
         **kwargs
 ):
@@ -155,12 +162,14 @@ def gen_ddk_makefile(
             output_makefiles=output_makefiles,
             package=package,
             kernel_module_out=kernel_module_out,
+            linux_include_dirs=linux_include_dirs,
             **kwargs
         )
 
     for submodule_makefile_dir in submodule_makefiles:
         _merge_directories(output_makefiles, submodule_makefile_dir)
     _append_submodule_linux_include_dirs(output_makefiles,
+                                         linux_include_dirs,
                                          submodule_linux_include_dirs)
 
 
