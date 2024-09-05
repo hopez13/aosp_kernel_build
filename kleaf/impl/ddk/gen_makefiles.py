@@ -135,7 +135,7 @@ def _append_submodule_linux_include_dirs(
             out_file.write(textwrap.dedent("""\
                 # Common LINUXINLUDE for all submodules in this directory
             """))
-            _handle_linux_includes(out_file, linux_includes_of_dir)
+            _handle_linux_includes(out_file, True, linux_includes_of_dir)
 
 
 def gen_ddk_makefile(
@@ -177,6 +177,7 @@ def _gen_ddk_makefile_for_module(
         linux_include_dirs: list[pathlib.Path],
         local_defines: list[str],
         copt_file: Optional[TextIO],
+        kbuild_has_linux_include: bool,
         **unused_kwargs
 ):
     kernel_module_srcs_json_content = json.load(kernel_module_srcs_json)
@@ -257,7 +258,8 @@ def _gen_ddk_makefile_for_module(
                 """))
 
         out_file.write(f"\n# Common flags for {kernel_module_out.with_suffix('.o').name}\n")
-        _handle_linux_includes(out_file, linux_include_dirs)
+        _handle_linux_includes(out_file, kbuild_has_linux_include,
+                               linux_include_dirs)
         # At this time of writing (2022-11-01), this is the order how cc_library
         # constructs arguments to the compiler.
         _handle_defines(out_cflags, local_defines)
@@ -353,9 +355,13 @@ def _handle_src(
                     """))
 
 
-def _handle_linux_includes(out_file: TextIO,
+def _handle_linux_includes(out_file: TextIO, kbuild_has_linux_include: bool,
                            linux_include_dirs: list[pathlib.Path]):
     if not linux_include_dirs:
+        return
+    if not kbuild_has_linux_include:
+        out_file.write(
+            "# Skipping LINUXINCLUDE for submodules; they are added later\n")
         return
     out_file.write("\n")
     out_file.write(textwrap.dedent("""\
@@ -435,6 +441,7 @@ if __name__ == "__main__":
     parser.add_argument("--local-defines", nargs="*", default=[])
     parser.add_argument("--copt-file", type=argparse.FileType("r"))
     parser.add_argument("--produce-top-level-makefile", action="store_true")
+    parser.add_argument("--kbuild-has-linux-include", action="store_true")
     parser.add_argument("--kbuild-add-submodule-linux-include",
                         action="store_true")
     parser.add_argument("--submodule-makefiles",
