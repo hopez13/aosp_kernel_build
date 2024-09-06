@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d518fd4_409926a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1889140
+      },
+      "writtenOn": "2024-09-06T18:34:22Z",
+      "side": 1,
+      "message": "I thought we were going to remove the akita_16k target in `android14-gs-pixel-5.15-24Q3` as per b/359377672#comment5",
+      "revId": "8e95e3119d921a2b3714480b65bfadfbfdfaa61a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
