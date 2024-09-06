@@ -65,6 +65,10 @@ def ddk_submodule(
     `linux_includes` must be specified in the top-level `ddk_module`; see
     [`ddk_module.linux_includes`](#ddk_module-linux_includes).
 
+    `ddk_submodule` should avoid depending on `ddk_headers` that has
+    `linux_includes`. See the Submodules section in [`ddk_module`](#ddk_module)
+    for best practices.
+
     **Ordering of `includes`**
 
     See [`ddk_module`](#ddk_module).
