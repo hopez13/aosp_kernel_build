@@ -66,6 +66,7 @@ WARNING: define_kleaf_workspace() should be called with common_kernel_package={}
         bazel_skylib = True,
         io_abseil_py = True,
         io_bazel_stardoc = True,
+        rules_pkg = True,
     )
 
     # The prebuilt NDK does not support Bazel.
