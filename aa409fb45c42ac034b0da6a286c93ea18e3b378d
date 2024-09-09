@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "012a3048_681248ca",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-09-09T11:14:56Z",
+      "side": 1,
+      "message": "isnt\u0027 that already handled by `nargs\u003d\"+\"` ?",
+      "range": {
+        "startLine": 410,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 77
+      },
+      "revId": "aa409fb45c42ac034b0da6a286c93ea18e3b378d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
