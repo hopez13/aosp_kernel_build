@@ -36,13 +36,13 @@ function append_cmd() {
 export -f append_cmd
 
 export KERNEL_DIR
-if [ -n "${KLEAF_INTERNAL_PERFERRED_KERNEL_DIR}" ]; then
+if [ -n "${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}" ]; then
   if [ -n "${KERNEL_DIR}" ]; then
-    echo "WARNING: You specified kernel_build.kernel_dir=${KLEAF_INTERNAL_PERFERRED_KERNEL_DIR}." >&2
+    echo "WARNING: You specified kernel_build.kernel_dir=${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}." >&2
     echo "  Please delete KERNEL_DIR=${KERNEL_DIR} from ${BUILD_CONFIG}; it is not used." >&2
   fi
-  KERNEL_DIR="${KLEAF_INTERNAL_PERFERRED_KERNEL_DIR}"
-  unset KLEAF_INTERNAL_PERFERRED_KERNEL_DIR
+  KERNEL_DIR="${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}"
+  unset KLEAF_INTERNAL_PREFERRED_KERNEL_DIR
 fi
 # for case that KERNEL_DIR is not specified in environment
 if [ -z "${KERNEL_DIR}" ]; then

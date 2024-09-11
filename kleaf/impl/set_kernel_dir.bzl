@@ -27,12 +27,12 @@ def _set_kernel_dir_impl(_subrule_ctx, *, makefile):
         )
 
     cmd = """
-        KLEAF_INTERNAL_PERFERRED_KERNEL_DIR={quoted_kernel_dir}
+        KLEAF_INTERNAL_PREFERRED_KERNEL_DIR={quoted_kernel_dir}
     """.format(
         quoted_kernel_dir = shell.quote(makefile.dirname),
     )
     run_cmd = """
-        KLEAF_INTERNAL_PERFERRED_KERNEL_DIR={quoted_kernel_dir}
+        KLEAF_INTERNAL_PREFERRED_KERNEL_DIR={quoted_kernel_dir}
     """.format(
         quoted_kernel_dir = shell.quote(paths.dirname(makefile.short_path)),
     )
