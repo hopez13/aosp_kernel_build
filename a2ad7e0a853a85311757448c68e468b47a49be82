@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37fad14d_19b68368",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2024-09-12T08:30:06Z",
+      "side": 1,
+      "message": "Verified that this makes the kasan build work: go/abtd-run/L54800030006379727",
+      "revId": "a2ad7e0a853a85311757448c68e468b47a49be82",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
