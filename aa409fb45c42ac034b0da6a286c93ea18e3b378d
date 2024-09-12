@@ -22,6 +22,30 @@
       },
       "revId": "aa409fb45c42ac034b0da6a286c93ea18e3b378d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe3cb0e_0eaf116d",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-12T19:10:29Z",
+      "side": 1,
+      "message": "Yes. I put it in so pylint is happy, and the check is more self-contained (instead of throwing IndexError if the other code accidentally changed)",
+      "parentUuid": "012a3048_681248ca",
+      "range": {
+        "startLine": 410,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 77
+      },
+      "revId": "aa409fb45c42ac034b0da6a286c93ea18e3b378d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
