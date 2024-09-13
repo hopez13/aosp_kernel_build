@@ -13,7 +13,6 @@
 # limitations under the License.
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@kernel_toolchain_info//:dict.bzl", "VARS")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//build/kernel/kleaf:hermetic_tools.bzl", "hermetic_tools")
 load("//build/kernel/kleaf/impl:bison_wrapper.bzl", "bison_wrapper")
@@ -316,11 +315,6 @@ hermetic_tools(
         },
         "//conditions:default": {
             ":toybox_find": "find",
-        },
-    }) | select({
-        "//build/kernel/kleaf:remove_strings_from_hermetic_tools_is_true": {},
-        "//conditions:default": {
-            "//prebuilts/clang/host/linux-x86/clang-{}:bin/llvm-strings".format(VARS["CLANG_VERSION"]): "llvm-strings",
         },
     }) | {
         ":toybox": ":".join(_TOYS),
