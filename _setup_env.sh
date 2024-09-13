@@ -37,12 +37,7 @@ export -f append_cmd
 
 export KERNEL_DIR
 if [ -n "${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}" ]; then
-  if [ -n "${KERNEL_DIR}" ]; then
-    echo "WARNING: You specified kernel_build.kernel_dir=${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}." >&2
-    echo "  Please delete KERNEL_DIR=${KERNEL_DIR} from ${BUILD_CONFIG}; it is not used." >&2
-  fi
   KERNEL_DIR="${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}"
-  unset KLEAF_INTERNAL_PREFERRED_KERNEL_DIR
 fi
 # for case that KERNEL_DIR is not specified in environment
 if [ -z "${KERNEL_DIR}" ]; then
@@ -51,7 +46,6 @@ if [ -z "${KERNEL_DIR}" ]; then
     # for the case that KERNEL_DIR is specified in the BUILD_CONFIG file,
     # or via the config files sourced, the value of KERNEL_DIR
     # set here would be overwritten, and the specified value would be used.
-    # TODO: Add migration guide for kernel_build.kernel_dir
     build_config_path=$(readlink -f ${ROOT_DIR}/${BUILD_CONFIG})
     real_root_dir=${build_config_path%%${BUILD_CONFIG}}
     build_config_dir=$(dirname ${build_config_path})
@@ -66,6 +60,23 @@ for fragment in ${BUILD_CONFIG_FRAGMENTS}; do
   . ${ROOT_DIR}/${fragment}
 done
 set +a
+
+if [ -n "${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}" ]; then
+  if [ "${KERNEL_DIR}" != "${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}" ]; then
+    # If kernel_build.makefile is set and inconsistent with the value in build config, print a error.
+    echo "ERROR: You specified kernel_build.makefile to be below ${KLEAF_INTERNAL_PREFERRED_KERNEL_DIR}," >&2
+    echo "  But it is not the same as KERNEL_DIR=${KERNEL_DIR}." >&2
+    echo "  Please delete KERNEL_DIR=${KERNEL_DIR} from ${BUILD_CONFIG}." >&2
+    exit 1
+  fi
+  unset KLEAF_INTERNAL_PREFERRED_KERNEL_DIR
+else
+  # If kernel_build.makefile is not set, print a warning
+  echo "WARNING: kernel_build.makefile is not set, and KERNEL_DIR=${KERNEL_DIR}. " >&2
+  echo "  To suppress this warning, maybe set:" >&2
+  echo '    kernel_build(makefiles = "//'"${KERNEL_DIR}"':Makefile")' >&2
+  echo "  and delete KERNEL_DIR from build config if it is set explicitly." >&2
+fi
 
 # For incremental kernel development, it is beneficial to trade certain
 # optimizations for faster builds.
