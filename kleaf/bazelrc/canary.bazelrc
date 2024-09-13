@@ -17,9 +17,6 @@
 # Some of the features are experimental, most of them will be default in future
 # releases and some of them might get discontinued.
 
-# Enable building the toolchain from sources.
-build:canary --toolchain_from_sources
-
 # Set KCONFIG_WERROR=1 to treat kconfig warnings as errors.
 build:canary --kconfig_werror
 
