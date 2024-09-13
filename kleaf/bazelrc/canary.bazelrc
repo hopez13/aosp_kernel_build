@@ -20,9 +20,6 @@
 # Enable building the toolchain from sources.
 build:canary --toolchain_from_sources
 
-# Drop llvm-strings from hermetic tools.
-build:canary --remove_strings_from_hermetic_tools
-
 # Set KCONFIG_WERROR=1 to treat kconfig warnings as errors.
 build:canary --kconfig_werror
 
