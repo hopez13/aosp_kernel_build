@@ -649,20 +649,6 @@ config_setting(
     visibility = ["//visibility:public"],
 )
 
-# If true, drop llvm-strings from hermetic-tools.
-# TODO(b/340932508): delete this flag
-bool_flag(
-    name = "remove_strings_from_hermetic_tools",
-    build_setting_default = True,
-    visibility = ["//visibility:private"],
-)
-
-config_setting(
-    name = "remove_strings_from_hermetic_tools_is_true",
-    flag_values = {":remove_strings_from_hermetic_tools": "1"},
-    visibility = ["//build/kernel:__pkg__"],
-)
-
 # For prebuilt binaries, use musl variant.
 # Experimental: some prebuilt binaries may still be using the glibc variant.
 # See build/kernel/kleaf/docs/musl.md
