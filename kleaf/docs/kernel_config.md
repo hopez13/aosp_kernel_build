@@ -18,7 +18,7 @@ the requested build config.
 The menu command (`menuconfig`, `xconfig`, etc.) must be provided to the
 underlying executable, so they need to be provided after `--`. See
 [Running executables](https://bazel.build/docs/user-manual#running-executables).
-If nothing is provided, the default is `menuconfig`.
+If nothing is provided, the default is `savedefconfig`.
 
 Example:
 
