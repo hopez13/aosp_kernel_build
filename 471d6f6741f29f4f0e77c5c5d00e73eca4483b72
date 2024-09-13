@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a868776b_e44be4ad",
+        "filename": "_setup_env.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-09-13T13:51:56Z",
+      "side": 1,
+      "message": "Avoid being personal, the person (or machine) running this is maybe not the one specifying it. Instead, consider `\u0027kernel_build.makefile\u0027 is defined/configured/specified to be below ...`",
+      "range": {
+        "startLine": 67,
+        "startChar": 17,
+        "endLine": 67,
+        "endChar": 52
+      },
+      "revId": "471d6f6741f29f4f0e77c5c5d00e73eca4483b72",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82037dde_1f454b56",
+        "filename": "_setup_env.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-09-13T13:51:56Z",
+      "side": 1,
+      "message": "remove the \u0027maybe\u0027 and hence make the instructions sound a bit more confident :-)",
+      "range": {
+        "startLine": 76,
+        "startChar": 36,
+        "endLine": 76,
+        "endChar": 41
+      },
+      "revId": "471d6f6741f29f4f0e77c5c5d00e73eca4483b72",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
