@@ -415,10 +415,10 @@ config_setting(
 )
 
 # Default is false.
-# If true, build some parts of the toolchain from sources.
+# If true, build toybox from sources.
 bool_flag(
     name = "toolchain_from_sources",
-    build_setting_default = False,
+    build_setting_default = True,
     visibility = ["//visibility:private"],
 )
 
