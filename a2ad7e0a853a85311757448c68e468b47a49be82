@@ -16,6 +16,23 @@
       "message": "Verified that this makes the kasan build work: go/abtd-run/L54800030006379727",
       "revId": "a2ad7e0a853a85311757448c68e468b47a49be82",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29084e08_27b45199",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2024-09-13T07:51:52Z",
+      "side": 1,
+      "message": "Matthias, to get the clang bug fix that lets us re-enable CFI for these targets, we\u0027ll either have to update to clang-r530567 or I\u0027ll need to look into having the fix backported to r522817. Are there any current plans on updating to r530567?",
+      "revId": "a2ad7e0a853a85311757448c68e468b47a49be82",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
