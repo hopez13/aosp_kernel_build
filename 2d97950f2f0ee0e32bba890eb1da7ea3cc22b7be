@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a0c2e6_ec34aff2",
+        "filename": "gki/what_commits_per_release",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-09-16T15:27:27Z",
+      "side": 1,
+      "message": "Perhaps we can let `git` do the work for us.\n\n`git log --no-merges -s --abbrev-commit --abbrev\u003d12 --pretty\u003dformat:\"%h %s\" ${GIT_RANGE} -- ${FILE_LIST}`\n\nAnd with shortstat:\n\n`git log --no-merges -s --abbrev-commit --abbrev\u003d12 --pretty\u003dformat:\"%h %s\" --shortstat ${GIT_RANGE} -- ${FILE_LIST}`",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 26
+      },
+      "revId": "2d97950f2f0ee0e32bba890eb1da7ea3cc22b7be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
