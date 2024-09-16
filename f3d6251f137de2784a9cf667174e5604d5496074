@@ -16,6 +16,23 @@
       "message": "uboot is broken because of CL:3187699",
       "revId": "f3d6251f137de2784a9cf667174e5604d5496074",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3712164_2772028e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-16T23:17:24Z",
+      "side": 1,
+      "message": "pixel is broken; need pa/2935003",
+      "revId": "f3d6251f137de2784a9cf667174e5604d5496074",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
