@@ -16,6 +16,24 @@
       "message": "Does this need to be back-ported to `main-kernel-build-2024`?",
       "revId": "6cdbe873285da859d9d14e32e9924c967f76cb7d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e34e5197_c27c1abd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-17T22:28:17Z",
+      "side": 1,
+      "message": "I think this is fine; we can backport if someone requests it (hardly anyone would use a configurable attribute here, I think)",
+      "parentUuid": "a9689e51_a383d81b",
+      "revId": "6cdbe873285da859d9d14e32e9924c967f76cb7d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
