@@ -16,6 +16,24 @@
       "message": "Hmm, the version string changes:\n\n```\nLinux version 6.11.0-mainline-gae96b41eae67-abP81049538-4k (kleaf@build-host) (Android (11967740, +pgo, +bolt, +lto, +mlgo, based on r522817) clang version 18.0.1 (https://android.googlesource.com/toolchain/llvm-project d8003a456d14a3deb8054cdaa529ffbf02d9b262), LLD 18.0.1) #1 SMP PREEMPT 2024-09-16T20:35:01+00:00\n```\n\ndo we care? I am not sure ...",
       "revId": "2a0c5166b661204d0121656dd939a22ac13e33e7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "853650d0_a93baa21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-17T17:00:10Z",
+      "side": 1,
+      "message": "Right, this is the only concern I have as well.\n\nIt is actually part of the public app API as well: https://developer.android.com/reference/android/system/StructUtsname#version",
+      "parentUuid": "475c5413_653fdb52",
+      "revId": "2a0c5166b661204d0121656dd939a22ac13e33e7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
