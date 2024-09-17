@@ -24,6 +24,7 @@ load(
     "prebuilt_transitioned_tool",
     "transitioned_tool_from_sources",
 )
+load(":date.bzl", "date")
 
 filegroup(
     name = "sysroot",
@@ -240,7 +241,6 @@ _TOYS = [
     "cp",
     "cpio",
     "cut",
-    "date",
     "dd",
     "diff",
     "dirname",
@@ -302,6 +302,18 @@ _TOYS = [
     "xxd",
 ]
 
+date(
+    name = "date",
+    actual = ":toybox",
+    wrapper = ":date_wrapper",
+)
+
+py_binary(
+    name = "date_wrapper",
+    srcs = ["date_wrapper.py"],
+    main = "date_wrapper.py",
+)
+
 hermetic_tools(
     name = "hermetic-tools",
     symlinks = select({
@@ -318,6 +330,7 @@ hermetic_tools(
         },
     }) | {
         ":toybox": ":".join(_TOYS),
+        ":date": "date",
 
         # Host tools
         "@kleaf_host_tools//:bash": "bash",
