@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8be201a5_e85e4856",
+        "filename": "build.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1557540
+      },
+      "writtenOn": "2024-09-18T15:16:23Z",
+      "side": 1,
+      "message": "I see that the main branch has:\n\n```\n(grep ${grep_flags} - || true)\n```\n\nwhich comes from https://r.android.com/2212558. Should we pull that in as well?",
+      "range": {
+        "startLine": 619,
+        "startChar": 36,
+        "endLine": 619,
+        "endChar": 57
+      },
+      "revId": "8d7aefa3685312dec0cc16c6a8294f49bdb611b2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
