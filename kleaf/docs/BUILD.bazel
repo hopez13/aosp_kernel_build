@@ -17,13 +17,15 @@
 To update:
 
 ```
+rm -rf build/kernel/kleaf/docs/api_reference
 tools/bazel run --config=internet //build/kernel/kleaf/docs:docs_dist
 ```
 """
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@io_bazel_stardoc//stardoc:stardoc.bzl", "stardoc")
-load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
+load("@rules_pkg//pkg:install.bzl", "pkg_install")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_files", "strip_prefix")
 
 _SRCS = [
     "//build/kernel/kleaf:common_kernels.bzl",
@@ -37,6 +39,8 @@ _SRCS = [
     "//build/kernel/kleaf:print_debug.bzl",
     "//build/kernel/kleaf:update_source_file.bzl",
 ]
+
+_DESTDIR = package_name() + "/api_reference"
 
 bzl_library(
     name = "deps",
@@ -72,14 +76,18 @@ filegroup(
     visibility = ["//build/kernel/kleaf:__subpackages__"],
 )
 
-copy_to_dist_dir(
+pkg_files(
+    name = "docs_dist_files",
+    srcs = [":docs"],
+    attributes = pkg_attributes(
+        mode = "644",
+    ),
+    strip_prefix = strip_prefix.files_only(),
+    visibility = ["//visibility:private"],
+)
+
+pkg_install(
     name = "docs_dist",
-    data = [":docs"],
-    dist_dir = package_name() + "/api_reference",
-    flat = True,
-    mode_overrides = {
-        "*": 644,
-    },
-    visibility = ["//build/kernel/kleaf:__subpackages__"],
-    wipe_dist_dir = True,
+    srcs = [":docs_dist_files"],
+    destdir = _DESTDIR,
 )
