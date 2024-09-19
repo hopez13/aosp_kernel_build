@@ -447,8 +447,14 @@ def kernel_build(
 
           If the value is `"false"`; or the value is `"auto"` and
           `--kbuild_symtypes` is not specified, then `KBUILD_SYMTYPES=`.
-        toolchain_version: [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes).
+        toolchain_version: **Deprecated**.
+          [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes).
           The toolchain version to depend on.
+
+          It is deprecated to specify `toolchain_version`. Instead, delete the attribute, so it
+          uses the default clang toolchain. The default clang toolchain version is specified in the
+          `@kernel_toolchain_info` repository, usually containing the content of
+          `common/build.config.constants`.
         strip_modules: If `None` or not specified, default is `False`.
           If set to `True`, debug information for distributed modules is stripped.
 
@@ -569,6 +575,10 @@ def kernel_build(
 
     toolchain_constraints = []
     if toolchain_version != None:
+        # buildifier: disable=print
+        print("\nWARNING: {}: kernel_build.toolchain_version is deprecated. Please delete it.".format(
+            native.package_relative_label(name)
+        ))
         toolchain_constraint = Label("//prebuilts/clang/host/linux-x86/kleaf:{}".format(toolchain_version))
         toolchain_constraints.append(Label(toolchain_constraint))
     else:
