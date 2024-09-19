@@ -10,7 +10,9 @@ updated, but corresponding Bazel rules aren't.
 
 To fix, check clang version. Specifically, check the attribute
 `toolchain_version` of `kernel_build` against the value in `CLANG_PREBUILT_BIN`
-(usually in `build.config.common` or `build.config.constants`).
+(usually in `build.config.common` or `build.config.constants`). The recommended
+approach is to delete `kernel_build.toolchain_version` and use the default value
+loaded from `build.config.constants`.
 
 Example:
 [CL 1918433](https://android-review.googlesource.com/c/kernel/common/+/1918433/3/BUILD.bazel)
