@@ -40,6 +40,30 @@
       ],
       "revId": "4ec38bf5ea8fc5ec54b20a90f8be4ad3cb309b71",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8c85939_ca08ce3b",
+        "filename": "kleaf/docs/download_prebuilt.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-19T21:47:50Z",
+      "side": 0,
+      "message": "People might still be using copy_to_dist_dir. So I kept both.",
+      "parentUuid": "22859229_7da992a1",
+      "range": {
+        "startLine": 20,
+        "startChar": 3,
+        "endLine": 20,
+        "endChar": 19
+      },
+      "revId": "4ec38bf5ea8fc5ec54b20a90f8be4ad3cb309b71",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
