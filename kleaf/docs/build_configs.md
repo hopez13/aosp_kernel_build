@@ -231,15 +231,8 @@ Not supported. Contact [owners](../OWNERS) if you need support for this config.
 
 ## LD
 
-Not used in Bazel. Alternatives:
-
-You may customize the clang toolchain version via
-
-```python
-kernel_build(toolchain_version=...)
-```
-
-See [documentation for all rules].
+Not customizable in Bazel. Alternatives: use `--user_clang_toolchain` to specify
+a custom clang toolchain.
 
 ## HERMETIC\_TOOLCHAIN
 
