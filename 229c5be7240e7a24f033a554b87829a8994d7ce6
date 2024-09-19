@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cc566ea_edcbe596",
+        "filename": "kleaf/docs/BUILD.bazel",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-19T10:36:30Z",
+      "side": 1,
+      "message": "why is this needed here? Does this mean that for other distributions user cannot run the dist target without removing the directory first?\n\nupd: nvm I just saw the `wipe_dist_dir \u003d True,` from the removed target so it makes sense now.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 44
+      },
+      "revId": "229c5be7240e7a24f033a554b87829a8994d7ce6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

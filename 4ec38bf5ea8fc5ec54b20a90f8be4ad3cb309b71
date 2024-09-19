@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f15356b_b1f4ee1b",
+        "filename": "kleaf/docs/BUILD.bazel",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-19T10:36:30Z",
+      "side": 0,
+      "message": "nit: If this is not anymore needed, maybe it\u0027s time to remove https://cs.android.com/android/kernel/superproject/+/common-android-mainline:build/kernel/kleaf/BUILD.bazel;l\u003d857-873 too.",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 58
+      },
+      "revId": "4ec38bf5ea8fc5ec54b20a90f8be4ad3cb309b71",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
