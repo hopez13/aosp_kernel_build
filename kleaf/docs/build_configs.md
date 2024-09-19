@@ -382,7 +382,7 @@ Not supported.
 Reason: commands are disallowed in general because of unclear dependency.
 
 You may define a `genrule` target with appropriate inputs (possibly from a
-`kernel_build` macro), then add the target to your `copy_to_dist_dir` macro.
+`kernel_build` macro), then add the target to your `pkg_files` macro.
 
 ## LTO
 
@@ -426,7 +426,7 @@ Not used in Bazel.
 Reason: commands are disallowed in general because of unclear dependency.
 
 Alternatives: You may define a `genrule` or `exec` target with appropriate
-inputs, then add the target to your `copy_to_dist_dir` macro.
+inputs, then add the target to your `pkg_files` macro.
 
 See [documentation for `genrule`].
 
@@ -437,7 +437,7 @@ Not used in Bazel.
 Reason: commands are disallowed in general because of unclear dependency.
 
 Alternatives: You may define a `genrule` or `exec` target with appropriate
-inputs, then add the target to your `copy_to_dist_dir` macro.
+inputs, then add the target to your `pkg_files` macro.
 
 See [documentation for `genrule`].
 
@@ -485,7 +485,7 @@ Not used in Bazel.
 Reason: Commands are disallowed in general because of unclear dependency.
 
 Alternatives: you may define a `genrule` or `exec` target with appropriate
-inputs, then add the target to your `copy_to_dist_dir` macro.
+inputs, then add the target to your `pkg_files` macro.
 
 ## SKIP\_UNPACKING\_RAMDISK
 
@@ -773,7 +773,7 @@ See [documentation for all rules].
 
 ## BUILD\_GKI\_CERTIFICATION\_TOOLS
 
-Add `//build/kernel:gki_certification_tools` to your `copy_to_dist_dir()` macro
+Add `//build/kernel:gki_certification_tools` to your `pkg_files()` macro
 invocation.
 
 See [build/kernel/BUILD.bazel](../../BUILD.bazel).
