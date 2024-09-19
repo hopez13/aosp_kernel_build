@@ -8,7 +8,7 @@ partition images, etc., see [impl.md#step-5](impl.md#step-5).
 # Creating a distribution for a single module
 
 To create a distribution for a single `kernel_module` or `ddk_module`,
-define a separate `copy_to_dist_dir` rule that contains just the target:
+define a separate `pkg_install` rule that contains just the target:
 
 ```py
 kernel_module(
@@ -16,9 +16,15 @@ kernel_module(
     # ...
 )
 
-copy_to_dist_dir(
+pkg_files(
+    name = "foo_files",
+    srcs = [":foo"],
+    # ...
+)
+
+pkg_install(
     name = "foo_dist",
-    data = [":foo"],
+    srcs = [":foo_files"],
     # ...
 )
 ```
@@ -28,7 +34,7 @@ the ["DAMP" rule](kleaf_development.md#damp). All targets that are visible to
 users should be defined in `BUILD.bazel` files, not wrapped in macros.
 
 Yet sometimes, you may want to be less repetitive on `BUILD.bazel` files. For that
-reason, you may define a small macro that glues the two targets together:
+reason, you may define a small macro that glues the three targets together:
 
 ```py
 # NOTE: This is discouraged.
@@ -43,10 +49,19 @@ def kernel_module_dist(
         **kwargs
     )
 
-    copy_to_dist_dir(
+    pkg_files(
+        name = name + "_files",
+        srcs = [name],
+        strip_prefix = strip_prefix.files_only(),
+        **(kwargs | dict(
+            visibility = ["://visibility:private"],
+        ))
+    )
+
+    pkg_install(
         name = name + "_dist",
-        data = [name],
-        flat = True,
+        srcs = [name + "_files"],
+        **kwargs
     )
 ```
 
