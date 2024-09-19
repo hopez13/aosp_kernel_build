@@ -1,0 +1,45 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22859229_7da992a1",
+        "filename": "kleaf/docs/download_prebuilt.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-19T10:31:02Z",
+      "side": 0,
+      "message": "what about this one?",
+      "range": {
+        "startLine": 20,
+        "startChar": 3,
+        "endLine": 20,
+        "endChar": 19
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "d4808fdf_1416da9f",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/download_prebuilt.md",
+              "range": {
+                "startLine": 18,
+                "startChar": 0,
+                "endLine": 23,
+                "endChar": 0
+              },
+              "replacement": "*   `kernel_build()`: `base_kernel`\n*   Any target: `kernel_build`\n*   `copy_to_dist_dir`: `data`\n*   `pkg_files`: `srcs`\n*   `kernel_abi_dist`: `data`\n*   `kernel_abi_dist`: `kernel_build`\n"
+            }
+          ]
+        }
+      ],
+      "revId": "4ec38bf5ea8fc5ec54b20a90f8be4ad3cb309b71",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
