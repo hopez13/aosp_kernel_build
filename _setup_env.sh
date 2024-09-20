@@ -117,8 +117,9 @@ export KBUILD_BUILD_HOST=build-host
 export KBUILD_BUILD_USER=build-user
 export KBUILD_BUILD_VERSION=1
 
-# List of dreprecated prebuilt directories that should not be used anywhere.
-deprecated_prebuilts_paths=(
+# List of prebuilt directories shell variables to incorporate into PATH
+# Deprecated; they should not be used anywhere.
+prebuilts_paths=(
 LINUX_GCC_CROSS_COMPILE_PREBUILTS_BIN
 LINUX_GCC_CROSS_COMPILE_ARM32_PREBUILTS_BIN
 LINUX_GCC_CROSS_COMPILE_COMPAT_PREBUILTS_BIN
@@ -131,30 +132,16 @@ LIBUFDT_PREBUILTS_BIN
 BUILDTOOLS_PREBUILT_BIN
 )
 
-# List of prebuilt directories shell variables to incorporate into PATH
-prebuilts_paths=("${deprecated_prebuilts_paths[@]}")
-prebuilts_paths+=(
-KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN
-KLEAF_INTERNAL_RUST_PREBUILT_BIN
-)
-
 unset LD_LIBRARY_PATH
 
-for prebuilt_bin in "${deprecated_prebuilts_paths[@]}"; do
+for prebuilt_bin in "${prebuilts_paths[@]}"; do
   prebuilt_bin_value=\${${prebuilt_bin}}
   eval prebuilt_bin_value="${prebuilt_bin_value}"
-  if [ -n "${prebuilt_bin_value}" ]; then
-    echo "WARNING: ${prebuilt_bin} should not be set (value: ${prebuilt_bin_value}). This will be an error in the future." >&2
-  fi
-done
-
-for prebuilt_bin in "${prebuilts_paths[@]}"; do
-    prebuilt_bin=\${${prebuilt_bin}}
-    eval prebuilt_bin="${prebuilt_bin}"
-    if [ -n "${prebuilt_bin}" ]; then
+    if [ -n "${prebuilt_bin_value}" ]; then
+        echo "WARNING: ${prebuilt_bin} should not be set (value: ${prebuilt_bin_value}). This will be an error in the future." >&2
         # Mitigate dup paths
-        PATH=${PATH//"${ROOT_DIR}\/${prebuilt_bin}:"}
-        PATH=${ROOT_DIR}/${prebuilt_bin}:${PATH}
+        PATH=${PATH//"${ROOT_DIR}\/${prebuilt_bin_value}:"}
+        PATH=${ROOT_DIR}/${prebuilt_bin_value}:${PATH}
     fi
 done
 export PATH
