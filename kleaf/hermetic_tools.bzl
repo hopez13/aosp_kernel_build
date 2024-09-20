@@ -123,8 +123,6 @@ def _hermetic_tools_internal_impl(ctx):
 
     setup = fail_hard + """
                 export PATH=$({path}/readlink -m {path})
-                # Ensure _setup_env.sh keeps the original items in PATH
-                export KLEAF_INTERNAL_BUILDTOOLS_PREBUILT_BIN={path}
 """.format(path = hermetic_base)
 
     # The cwd is xxx.runfiles/<workspace_name>. We need to set RUNFILES_DIR to

@@ -137,29 +137,11 @@ LINUX_GCC_CROSS_COMPILE_COMPAT_PREBUILTS_BIN
 )
 prebuilts_paths+=("${deprecated_prebuilts_paths[@]}")
 prebuilts_paths+=(
-KLEAF_INTERNAL_BUILDTOOLS_PREBUILT_BIN
 KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN
 KLEAF_INTERNAL_RUST_PREBUILT_BIN
 )
 
 unset LD_LIBRARY_PATH
-
-if [ "${HERMETIC_TOOLCHAIN:-0}" -eq 1 ]; then
-  HOST_TOOLS=${OUT_DIR}/host_tools
-  rm -rf ${HOST_TOOLS}
-  mkdir -p ${HOST_TOOLS}
-  for tool in \
-      bash \
-      git \
-      perl \
-      rsync \
-      sh \
-      ${ADDITIONAL_HOST_TOOLS}
-  do
-      ln -sf $(which $tool) ${HOST_TOOLS}
-  done
-  PATH=${HOST_TOOLS}
-fi
 
 for prebuilt_bin in "${deprecated_prebuilts_paths[@]}"; do
     prebuilt_bin_value=\${${prebuilt_bin}}
