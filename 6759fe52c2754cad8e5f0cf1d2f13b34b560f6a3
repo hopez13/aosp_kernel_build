@@ -16,6 +16,24 @@
       "message": "bug lines in objtool, keep track in b/367476741",
       "revId": "6759fe52c2754cad8e5f0cf1d2f13b34b560f6a3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61a3bfd7_defaf86e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-20T19:14:17Z",
+      "side": 1,
+      "message": "Waiting for https://lore.kernel.org/lkml/20240917012808.24037-1-elsk@google.com/",
+      "parentUuid": "f9c31332_2e1f420e",
+      "revId": "6759fe52c2754cad8e5f0cf1d2f13b34b560f6a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
