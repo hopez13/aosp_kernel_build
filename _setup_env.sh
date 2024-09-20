@@ -117,8 +117,8 @@ export KBUILD_BUILD_HOST=build-host
 export KBUILD_BUILD_USER=build-user
 export KBUILD_BUILD_VERSION=1
 
-# List of prebuilt directories shell variables to incorporate into PATH
-prebuilts_paths=(
+# List of dreprecated prebuilt directories that should not be used anywhere.
+deprecated_prebuilts_paths=(
 LINUX_GCC_CROSS_COMPILE_PREBUILTS_BIN
 LINUX_GCC_CROSS_COMPILE_ARM32_PREBUILTS_BIN
 LINUX_GCC_CROSS_COMPILE_COMPAT_PREBUILTS_BIN
@@ -129,7 +129,21 @@ LZ4_PREBUILTS_BIN
 DTC_PREBUILTS_BIN
 LIBUFDT_PREBUILTS_BIN
 BUILDTOOLS_PREBUILT_BIN
+)
+for prebuilt_bin in "${deprecated_prebuilts_paths[@]}"; do
+  prebuilt_bin_value=\${${prebuilt_bin}}
+  eval prebuilt_bin_value="${prebuilt_bin_value}"
+  if [ -n "${prebuilt_bin_value}" ]; then
+    echo "WARNING: ${prebuilt_bin} should not be set (value: ${prebuilt_bin_value}). This will be an error in the future." >&2
+  fi
+done
+
+# List of prebuilt directories shell variables to incorporate into PATH
+prebuilts_paths=("${deprecated_prebuilts_paths[@]}")
+prebuilts_paths+=(
 KLEAF_INTERNAL_BUILDTOOLS_PREBUILT_BIN
+KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN
+KLEAF_INTERNAL_RUST_PREBUILT_BIN
 )
 
 unset LD_LIBRARY_PATH
