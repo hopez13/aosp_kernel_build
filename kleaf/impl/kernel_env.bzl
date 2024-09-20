@@ -549,8 +549,6 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
           export SOURCE_DATE_EPOCH=0
 
           source {setup_env}
-        # Re-instate PATH
-          {run_additional_setup}
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
     """.format(
@@ -558,7 +556,6 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
         build_config = ctx.file.build_config.short_path,
         set_kernel_dir_cmd = set_kernel_dir_ret.run_cmd,
         setup_env = ctx.file.setup_env.short_path,
-        run_additional_setup = hermetic_tools.run_additional_setup,
         toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
     )
     tools = [
