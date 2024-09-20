@@ -123,8 +123,7 @@ def _get_rust_env(ctx):
         rustc = utils.find_file("rustc", ctx.files._rust_tools, "rust tools", required = True)
         bindgen = utils.find_file("bindgen", ctx.files._rust_tools, "rust tools", required = True)
         return """
-            KLEAF_INTERNAL_RUST_PREBUILT_BIN={quoted_rust_bin}
-            KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
+            export PATH="${{PATH}}:"{quoted_rust_bin}":"{quoted_clangtools_bin}
         """.format(
             quoted_rust_bin = shell.quote(rustc.dirname),
             quoted_clangtools_bin = shell.quote(bindgen.dirname),
@@ -222,8 +221,6 @@ def _kernel_env_impl(ctx):
 
     kconfig_werror_setup = _get_kconfig_werror_setup(ctx)
 
-    command += _get_rust_env(ctx)
-
     env_setup_cmds = _get_env_setup_cmds(ctx)
     pre_env_script = ctx.actions.declare_file("{}/pre_env.sh".format(ctx.attr.name))
     ctx.actions.write(pre_env_script, env_setup_cmds.pre_env)
@@ -247,6 +244,8 @@ def _kernel_env_impl(ctx):
           {check_arch_cmd}
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
+        # Rust
+          {rust_env_cmd}
         # TODO(b/236012223) Remove the warning after deprecation.
           {make_goals_deprecation_warning}
         # Enforce check configs.
@@ -293,6 +292,7 @@ def _kernel_env_impl(ctx):
         setup_env = setup_env.path,
         check_arch_cmd = _get_check_arch_cmd(ctx),
         toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
+        rust_env_cmd = _get_rust_env(ctx),
         make_goals_deprecation_warning = make_goals_deprecation_warning,
         kconfig_werror_setup = kconfig_werror_setup,
         out = out_file.path,
