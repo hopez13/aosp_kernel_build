@@ -129,16 +129,13 @@ BUILDTOOLS_PREBUILT_BIN
 )
 
 # List of prebuilt directories shell variables to incorporate into PATH
+# TODO(b/368678234): Remove these once uboot usage are cleaned up.
 prebuilts_paths=(
 LINUX_GCC_CROSS_COMPILE_PREBUILTS_BIN
 LINUX_GCC_CROSS_COMPILE_ARM32_PREBUILTS_BIN
 LINUX_GCC_CROSS_COMPILE_COMPAT_PREBUILTS_BIN
 )
 prebuilts_paths+=("${deprecated_prebuilts_paths[@]}")
-prebuilts_paths+=(
-KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN
-KLEAF_INTERNAL_RUST_PREBUILT_BIN
-)
 
 unset LD_LIBRARY_PATH
 
