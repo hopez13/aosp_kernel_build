@@ -123,8 +123,8 @@ def _get_rust_env(ctx):
         rustc = utils.find_file("rustc", ctx.files._rust_tools, "rust tools", required = True)
         bindgen = utils.find_file("bindgen", ctx.files._rust_tools, "rust tools", required = True)
         return """
-            RUST_PREBUILT_BIN={quoted_rust_bin}
-            CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
+            KLEAF_INTERNAL_RUST_PREBUILT_BIN={quoted_rust_bin}
+            KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
         """.format(
             quoted_rust_bin = shell.quote(rustc.dirname),
             quoted_clangtools_bin = shell.quote(bindgen.dirname),
