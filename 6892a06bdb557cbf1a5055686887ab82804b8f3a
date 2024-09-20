@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32f88e79_c1a9891c",
+        "filename": "_setup_env.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-20T22:31:06Z",
+      "side": 1,
+      "message": "Still needed by uboot",
+      "revId": "6892a06bdb557cbf1a5055686887ab82804b8f3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae1a473e_9298f5da",
+        "filename": "_setup_env.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-20T22:31:06Z",
+      "side": 1,
+      "message": "still needed by uboot",
+      "revId": "6892a06bdb557cbf1a5055686887ab82804b8f3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
