@@ -168,6 +168,7 @@ def _kernel_toolchains_impl(ctx):
             export HOSTLDFLAGS={quoted_hostldflags}
             export USERLDFLAGS={quoted_userldflags}
 
+            mkdir -p ${{OUT_DIR}}
             # Append to *LDFLAGS based on the current settings of $OUT_DIR.
             function kleaf_internal_append_one_ldflags() {{
                 local backtrack_relative=$1
