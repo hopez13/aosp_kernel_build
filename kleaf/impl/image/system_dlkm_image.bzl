@@ -34,7 +34,7 @@ visibility("//build/kernel/kleaf/...")
 def _system_dlkm_image_impl(ctx):
     system_dlkm_modules_load = ctx.actions.declare_file("{}/{}".format(ctx.label.name, _MODULES_LOAD_NAME))
     system_dlkm_staging_archive = ctx.actions.declare_file("{}/{}".format(ctx.label.name, _STAGING_ARCHIVE_NAME))
-    system_dlkm_modules_blocklist = ctx.actions.declare_file("{}/system_dlkm.modules.blocklist".format(ctx.label.name))
+    out_modules_blocklist = ctx.actions.declare_file("{}/system_dlkm.modules.blocklist".format(ctx.label.name))
 
     modules_staging_dir = system_dlkm_staging_archive.dirname + "/staging"
     system_dlkm_staging_dir = modules_staging_dir + "/system_dlkm_staging"
@@ -102,9 +102,7 @@ def _system_dlkm_image_impl(ctx):
 
     additional_inputs.extend(ctx.files.modules_list)
     additional_inputs.extend(ctx.files.modules_blocklist)
-    additional_inputs.extend(ctx.files.system_dlkm_modules_list)
-    additional_inputs.extend(ctx.files.system_dlkm_modules_blocklist)
-    additional_inputs.extend(ctx.files.system_dlkm_props)
+    additional_inputs.extend(ctx.files.props)
 
     command = ""
     outputs = []
@@ -134,8 +132,6 @@ def _system_dlkm_image_impl(ctx):
                    (
                      MODULES_LIST={modules_list}
                      MODULES_BLOCKLIST={modules_blocklist}
-                     SYSTEM_DLKM_MODULES_LIST={system_dlkm_modules_list}
-                     SYSTEM_DLKM_MODULES_BLOCKLIST={input_system_dlkm_modules_blocklist}
                      SYSTEM_DLKM_PROPS={system_dlkm_props}
                      MODULES_STAGING_DIR={modules_staging_dir}
                      SYSTEM_DLKM_FS_TYPE={system_dlkm_fs_type}
@@ -153,9 +149,9 @@ def _system_dlkm_image_impl(ctx):
                    mv "${{DIST_DIR}}/system_dlkm.modules.load" {system_dlkm_modules_load}
                    mv "${{DIST_DIR}}/system_dlkm_staging_archive.tar.gz" {system_dlkm_staging_archive}
                    if [ -f "${{DIST_DIR}}/system_dlkm.modules.blocklist" ]; then
-                     mv "${{DIST_DIR}}/system_dlkm.modules.blocklist" {system_dlkm_modules_blocklist}
+                     mv "${{DIST_DIR}}/system_dlkm.modules.blocklist" {out_modules_blocklist}
                    else
-                     : > {system_dlkm_modules_blocklist}
+                     : > {out_modules_blocklist}
                    fi
 
                  # Remove staging directories
@@ -167,9 +163,7 @@ def _system_dlkm_image_impl(ctx):
             modules_staging_dir = modules_staging_dir,
             modules_list = utils.optional_path(ctx.file.modules_list),
             modules_blocklist = utils.optional_path(ctx.file.modules_blocklist),
-            system_dlkm_modules_list = utils.optional_path(ctx.file.system_dlkm_modules_list),
-            input_system_dlkm_modules_blocklist = utils.optional_path(ctx.file.system_dlkm_modules_blocklist),
-            system_dlkm_props = utils.optional_path(ctx.file.system_dlkm_props),
+            system_dlkm_props = utils.optional_path(ctx.file.props),
             system_dlkm_fs_type = fs_type,
             system_dlkm_staging_dir = system_dlkm_staging_dir,
             system_dlkm_flatten_img = system_dlkm_flatten_img.path if system_dlkm_flatten_img else "/dev/null",
@@ -178,13 +172,13 @@ def _system_dlkm_image_impl(ctx):
             system_dlkm_img_name = system_dlkm_img_name,
             system_dlkm_modules_load = system_dlkm_modules_load.path,
             system_dlkm_staging_archive = system_dlkm_staging_archive.path,
-            system_dlkm_modules_blocklist = system_dlkm_modules_blocklist.path,
+            out_modules_blocklist = out_modules_blocklist.path,
         )
 
     outputs += [
         system_dlkm_modules_load,
         system_dlkm_staging_archive,
-        system_dlkm_modules_blocklist,
+        out_modules_blocklist,
     ]
 
     default_info = image_utils.build_modules_image(
@@ -243,11 +237,9 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
         ),
         "modules_list": attr.label(allow_single_file = True),
         "modules_blocklist": attr.label(allow_single_file = True),
-        "system_dlkm_fs_type": attr.string(doc = """Deprecated. system_dlkm image fs type""", values = ["ext4", "erofs"]),
-        "system_dlkm_fs_types": attr.string_list(doc = """system_dlkm image fs types""", allow_empty = True),
-        "system_dlkm_modules_list": attr.label(allow_single_file = True),
-        "system_dlkm_modules_blocklist": attr.label(allow_single_file = True),
-        "system_dlkm_props": attr.label(allow_single_file = True),
+        "fs_type": attr.string(doc = """Deprecated. system_dlkm image fs type""", values = ["ext4", "erofs"]),
+        "fs_types": attr.string_list(doc = """system_dlkm image fs types""", allow_empty = True),
+        "props": attr.label(allow_single_file = True),
     },
     subrules = [image_utils.build_modules_image],
 )
