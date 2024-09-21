@@ -197,7 +197,7 @@ def _system_dlkm_image_impl(ctx):
         mnemonic = "SystemDlkmImage",
         kernel_modules_install = ctx.attr.kernel_modules_install,
         deps = ctx.attr.deps,
-        create_modules_order = ctx.attr.create_modules_order,
+        create_modules_order = False,
     )
 
     utils.compare_file_names(
@@ -236,12 +236,6 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
         "deps": attr.label_list(
             doc = """A list of additional dependencies to build system_dlkm image.""",
             allow_files = True,
-        ),
-        "create_modules_order": attr.bool(
-            default = True,
-            doc = """Whether to create and keep a modules.order file generated
-                by a postorder traversal of the `kernel_modules_install` sources.
-                It defaults to `True`.""",
         ),
         "base_kernel_images": attr.label(allow_files = True),
         "build_system_dlkm_flatten_image": attr.bool(
