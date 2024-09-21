@@ -19,6 +19,7 @@ load("@bazel_skylib//lib:shell.bzl", "shell")
 load(
     ":common_providers.bzl",
     "ImagesInfo",
+    "KernelModuleInfo",
 )
 load(
     ":image/image_utils.bzl",
@@ -63,6 +64,10 @@ def _vendor_dlkm_image_impl(ctx):
     command += exclude_system_dlkm_step.cmd
     additional_inputs += exclude_system_dlkm_step.inputs
 
+    additional_inputs.extend(ctx.files.vendor_dlkm_modules_list)
+    additional_inputs.extend(ctx.files.vendor_dlkm_modules_blocklist)
+    additional_inputs.extend(ctx.files.vendor_dlkm_props)
+
     outputs = []
     vendor_dlkm_flatten_img = None
     vendor_dlkm_flatten_img_name = None
@@ -77,6 +82,9 @@ def _vendor_dlkm_image_impl(ctx):
             # Build vendor_dlkm
               mkdir -p {vendor_dlkm_staging_dir}
               (
+                VENDOR_DLKM_MODULES_LIST={vendor_dlkm_modules_list}
+                VENDOR_DLKM_MODULES_BLOCKLIST={input_vendor_dlkm_modules_blocklist}
+                VENDOR_DLKM_PROPS={vendor_dlkm_props}
                 MODULES_STAGING_DIR={modules_staging_dir}
                 VENDOR_DLKM_ETC_FILES={quoted_vendor_dlkm_etc_files}
                 VENDOR_DLKM_FS_TYPE={vendor_dlkm_fs_type}
@@ -104,6 +112,9 @@ def _vendor_dlkm_image_impl(ctx):
         build_flatten_image = int(ctx.attr.build_vendor_dlkm_flatten_image),
         modules_staging_dir = modules_staging_dir,
         quoted_vendor_dlkm_etc_files = shell.quote(vendor_dlkm_etc_files),
+        vendor_dlkm_modules_list = utils.optional_path(ctx.file.vendor_dlkm_modules_list),
+        input_vendor_dlkm_modules_blocklist = utils.optional_path(ctx.file.vendor_dlkm_modules_blocklist),
+        vendor_dlkm_props = utils.optional_path(ctx.file.vendor_dlkm_props),
         vendor_dlkm_fs_type = vendor_dlkm_fs_type,
         vendor_dlkm_staging_dir = vendor_dlkm_staging_dir,
         vendor_dlkm_flatten_img = vendor_dlkm_flatten_img.path if vendor_dlkm_flatten_img else "/dev/null",
@@ -126,8 +137,7 @@ def _vendor_dlkm_image_impl(ctx):
     if ctx.attr.vendor_dlkm_archive:
         outputs.append(vendor_dlkm_staging_archive)
 
-    default_info = image_utils.build_modules_image_impl_common(
-        ctx = ctx,
+    default_info = image_utils.build_modules_image(
         what = "vendor_dlkm",
         outputs = outputs,
         build_command = command,
@@ -135,6 +145,9 @@ def _vendor_dlkm_image_impl(ctx):
         set_ext_modules = True,
         additional_inputs = additional_inputs,
         mnemonic = "VendorDlkmImage",
+        kernel_modules_install = ctx.attr.kernel_modules_install,
+        deps = ctx.attr.deps,
+        create_modules_order = ctx.attr.create_modules_order,
     )
 
     images_info = ImagesInfo(files_dict = {
@@ -201,7 +214,26 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
 - `vendor_dlkm.img`
 - `vendor_dlkm_flatten.img` if build_vendor_dlkm_flatten is True
 """,
-    attrs = image_utils.build_modules_image_attrs_common({
+    attrs = {
+        "kernel_modules_install": attr.label(
+            mandatory = True,
+            providers = [KernelModuleInfo],
+        ),
+        "deps": attr.label_list(
+            allow_files = True,
+            doc = """A list of additional dependencies to build system_dlkm image.
+
+            This must include the following:
+
+            - The file specified by `selinux_fc` in `vendor_dlkm_props`, if set
+            """,
+        ),
+        "create_modules_order": attr.bool(
+            default = True,
+            doc = """Whether to create and keep a modules.order file generated
+                by a postorder traversal of the `kernel_modules_install` sources.
+                It defaults to `True`.""",
+        ),
         "build_vendor_dlkm_flatten_image": attr.bool(
             default = False,
             doc = "When True it builds vendor_dlkm image with no `uname -r` in the path",
@@ -221,5 +253,6 @@ Modules listed in this file is stripped away from the `vendor_dlkm` image.""",
         "dedup_dlkm_modules": attr.bool(doc = "Whether to exclude `system_dlkm` modules"),
         "system_dlkm_image": attr.label(),
         "base_kernel_images": attr.label(allow_files = True),
-    }),
+    },
+    subrules = [image_utils.build_modules_image],
 )

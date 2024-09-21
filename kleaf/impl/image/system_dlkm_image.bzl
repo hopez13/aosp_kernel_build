@@ -100,6 +100,12 @@ def _system_dlkm_image_impl(ctx):
                        SYSTEM_DLKM_RE_SIGN=0
         """
 
+    additional_inputs.extend(ctx.files.modules_list)
+    additional_inputs.extend(ctx.files.modules_blocklist)
+    additional_inputs.extend(ctx.files.system_dlkm_modules_list)
+    additional_inputs.extend(ctx.files.system_dlkm_modules_blocklist)
+    additional_inputs.extend(ctx.files.system_dlkm_props)
+
     command = ""
     outputs = []
     outputs_to_compare = []
@@ -126,6 +132,11 @@ def _system_dlkm_image_impl(ctx):
                  # Build {system_dlkm_img_name}
                    mkdir -p {system_dlkm_staging_dir}
                    (
+                     MODULES_LIST={modules_list}
+                     MODULES_BLOCKLIST={modules_blocklist}
+                     SYSTEM_DLKM_MODULES_LIST={system_dlkm_modules_list}
+                     SYSTEM_DLKM_MODULES_BLOCKLIST={input_system_dlkm_modules_blocklist}
+                     SYSTEM_DLKM_PROPS={system_dlkm_props}
                      MODULES_STAGING_DIR={modules_staging_dir}
                      SYSTEM_DLKM_FS_TYPE={system_dlkm_fs_type}
                      SYSTEM_DLKM_STAGING_DIR={system_dlkm_staging_dir}
@@ -154,6 +165,11 @@ def _system_dlkm_image_impl(ctx):
             extract_staging_archive_cmd = extract_staging_archive_cmd,
             extra_flags_cmd = extra_flags_cmd,
             modules_staging_dir = modules_staging_dir,
+            modules_list = utils.optional_path(ctx.file.modules_list),
+            modules_blocklist = utils.optional_path(ctx.file.modules_blocklist),
+            system_dlkm_modules_list = utils.optional_path(ctx.file.system_dlkm_modules_list),
+            input_system_dlkm_modules_blocklist = utils.optional_path(ctx.file.system_dlkm_modules_blocklist),
+            system_dlkm_props = utils.optional_path(ctx.file.system_dlkm_props),
             system_dlkm_fs_type = fs_type,
             system_dlkm_staging_dir = system_dlkm_staging_dir,
             system_dlkm_flatten_img = system_dlkm_flatten_img.path if system_dlkm_flatten_img else "/dev/null",
@@ -171,8 +187,7 @@ def _system_dlkm_image_impl(ctx):
         system_dlkm_modules_blocklist,
     ]
 
-    default_info = image_utils.build_modules_image_impl_common(
-        ctx = ctx,
+    default_info = image_utils.build_modules_image(
         what = "system_dlkm",
         outputs = outputs,
         additional_inputs = additional_inputs,
@@ -180,6 +195,9 @@ def _system_dlkm_image_impl(ctx):
         build_command = command,
         modules_staging_dir = modules_staging_dir,
         mnemonic = "SystemDlkmImage",
+        kernel_modules_install = ctx.attr.kernel_modules_install,
+        deps = ctx.attr.deps,
+        create_modules_order = ctx.attr.create_modules_order,
     )
 
     utils.compare_file_names(
@@ -210,7 +228,21 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
 - `system_dlkm.modules.load`
 
 """,
-    attrs = image_utils.build_modules_image_attrs_common({
+    attrs = {
+        "kernel_modules_install": attr.label(
+            mandatory = True,
+            providers = [KernelModuleInfo],
+        ),
+        "deps": attr.label_list(
+            doc = """A list of additional dependencies to build system_dlkm image.""",
+            allow_files = True,
+        ),
+        "create_modules_order": attr.bool(
+            default = True,
+            doc = """Whether to create and keep a modules.order file generated
+                by a postorder traversal of the `kernel_modules_install` sources.
+                It defaults to `True`.""",
+        ),
         "base_kernel_images": attr.label(allow_files = True),
         "build_system_dlkm_flatten_image": attr.bool(
             default = False,
@@ -223,5 +255,6 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
         "system_dlkm_modules_list": attr.label(allow_single_file = True),
         "system_dlkm_modules_blocklist": attr.label(allow_single_file = True),
         "system_dlkm_props": attr.label(allow_single_file = True),
-    }),
+    },
+    subrules = [image_utils.build_modules_image],
 )

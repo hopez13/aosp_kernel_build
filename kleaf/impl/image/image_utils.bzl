@@ -32,12 +32,17 @@ SYSTEM_DLKM_MODULES_LOAD_NAME = "system_dlkm.modules.load"
 
 VENDOR_DLKM_STAGING_ARCHIVE_NAME = "vendor_dlkm_staging_archive.tar.gz"
 
-def _build_modules_image_impl_common(
-        ctx,
+def _build_modules_image_impl(
+        subrule_ctx,
+        kernel_modules_install,
+        deps,
+        create_modules_order,
         what,
         outputs,
         build_command,
         modules_staging_dir,
+        *,
+        _set_ext_modules,
         restore_modules_install = None,
         set_ext_modules = None,
         implicit_outputs = None,
@@ -46,12 +51,16 @@ def _build_modules_image_impl_common(
     """Command implementation for building images that directly contain modules.
 
     Args:
-        ctx: ctx.
+        subrule_ctx: subrule_ctx.
+        kernel_modules_install: `kernel_modules_install`
+        deps: List of dependencies provided to the image building process,
+        create_modules_order: Whether to create and keep a modules.order file generated
+            by a postorder traversal of the `kernel_modules_install` sources.
         what: what is being built, for logging.
         outputs: list of `ctx.actions.declare_file`
         build_command: the command to build `outputs` and `implicit_outputs`.
         modules_staging_dir: a staging directory for module installation.
-        restore_modules_install: If `True`, restore `ctx.attr.kernel_modules_install`.
+        restore_modules_install: If `True`, restore `kernel_modules_install`.
          Default is `True`.
         set_ext_modules: If `True`, set variable `EXT_MODULES` before invoking script
           in `build_utils.sh`
@@ -59,12 +68,13 @@ def _build_modules_image_impl_common(
          returned in `DefaultInfo`).
         additional_inputs: Additional files to be included.
         mnemonic: string to reference the build operation.
+        _set_ext_modules: bool_flag that specifies whether to set EXT_MODULES.
     """
 
     if restore_modules_install == None:
         restore_modules_install = True
 
-    kernel_build_infos = ctx.attr.kernel_modules_install[KernelModuleInfo].kernel_build_infos
+    kernel_build_infos = kernel_modules_install[KernelModuleInfo].kernel_build_infos
     kernel_build_outs = depset(
         transitive = [
             # Prefer device kernel_build, then base kernel_build
@@ -81,16 +91,16 @@ def _build_modules_image_impl_common(
         name = "System.map",
         files = kernel_build_outs,
         required = True,
-        what = "{}: outs of dependent kernel_build {}".format(ctx.label, kernel_build_infos.label),
+        what = "{}: outs of dependent kernel_build {}".format(subrule_ctx.label, kernel_build_infos.label),
     )
 
     modules_install_staging_dws = None
     if restore_modules_install:
-        modules_install_staging_dws_list = ctx.attr.kernel_modules_install[KernelModuleInfo].modules_staging_dws_depset.to_list()
+        modules_install_staging_dws_list = kernel_modules_install[KernelModuleInfo].modules_staging_dws_depset.to_list()
         if len(modules_install_staging_dws_list) != 1:
             fail("{}: {} is not a `kernel_modules_install`.".format(
-                ctx.label,
-                ctx.attr.kernel_modules_install.label,
+                subrule_ctx.label,
+                kernel_modules_install.label,
             ))
         modules_install_staging_dws = modules_install_staging_dws_list[0]
 
@@ -100,8 +110,8 @@ def _build_modules_image_impl_common(
     inputs.append(system_map)
     if restore_modules_install:
         inputs += dws.files(modules_install_staging_dws)
-    inputs += ctx.files.deps
     transitive_inputs = [kernel_build_infos.serialized_env_info.inputs]
+    transitive_inputs += [target.files for target in deps]
     tools = kernel_build_infos.serialized_env_info.tools
 
     command_outputs = []
@@ -113,40 +123,6 @@ def _build_modules_image_impl_common(
         serialized_env_info = kernel_build_infos.serialized_env_info,
         restore_out_dir_cmd = utils.get_check_sandbox_cmd(),
     )
-
-    for attr_name in (
-        "modules_list",
-        "modules_recovery_list",
-        "modules_charger_list",
-        "modules_blocklist",
-        "vendor_dlkm_fs_type",
-        "vendor_dlkm_modules_list",
-        "vendor_dlkm_modules_blocklist",
-        "vendor_dlkm_props",
-        "system_dlkm_fs_type",
-        "system_dlkm_fs_types",
-        "system_dlkm_modules_list",
-        "system_dlkm_modules_blocklist",
-        "system_dlkm_props",
-    ):
-        # Checks if attr_name is a valid attribute name in the current rule.
-        # If not, do not touch its value.
-        if not hasattr(ctx.file, attr_name):
-            continue
-
-        # If it is a valid attribute name, set environment variable to the path if the argument is
-        # supplied, otherwise set environment variable to empty.
-        file = getattr(ctx.file, attr_name)
-        path = ""
-        if file != None:
-            path = file.path
-            inputs.append(file)
-        command += """
-            {name}={path}
-        """.format(
-            name = attr_name.upper(),
-            path = path,
-        )
 
     # Allow writing to files because create_modules_staging wants to overwrite modules.order.
     if restore_modules_install:
@@ -165,8 +141,8 @@ def _build_modules_image_impl_common(
         )
 
     modules_order_cmd = ""
-    if ctx.attr.create_modules_order:
-        modules_order_depset = ctx.attr.kernel_modules_install[KernelModuleInfo].modules_order
+    if create_modules_order:
+        modules_order_depset = kernel_modules_install[KernelModuleInfo].modules_order
         modules_order_depset_list = modules_order_depset.to_list()
         inputs += modules_order_depset_list
         modules_order_cmd = """
@@ -176,13 +152,13 @@ def _build_modules_image_impl_common(
             modules_order = " ".join([modules_order.path for modules_order in modules_order_depset_list]),
         )
 
-    if set_ext_modules and ctx.attr._set_ext_modules[BuildSettingInfo].value:
-        ext_modules = ctx.attr.kernel_modules_install[KernelModuleInfo].packages.to_list()
+    if set_ext_modules and _set_ext_modules[BuildSettingInfo].value:
+        ext_modules = kernel_modules_install[KernelModuleInfo].packages.to_list()
         command += """EXT_MODULES={quoted_ext_modules}""".format(
             quoted_ext_modules = shell.quote(" ".join(ext_modules)),
         )
 
-    if not ctx.attr._set_ext_modules[BuildSettingInfo].value:
+    if not _set_ext_modules[BuildSettingInfo].value:
         # buildifier: disable=print
         print("""\nWARNING: This is a temporary flag to mitigate issues on migrating away from
 setting EXT_MODULES in build.config. If you need --noset_ext_modules, please
@@ -201,8 +177,8 @@ file a bug.""")
         build_command = build_command,
     )
 
-    debug.print_scripts(ctx, command)
-    ctx.actions.run_shell(
+    debug.print_scripts_subrule(command)
+    subrule_ctx.actions.run_shell(
         mnemonic = mnemonic,
         inputs = depset(inputs, transitive = transitive_inputs),
         tools = tools,
@@ -212,32 +188,15 @@ file a bug.""")
     )
     return DefaultInfo(files = depset(outputs))
 
-def _build_modules_image_attrs_common(additional = None):
-    """Common attrs for rules that builds images that directly contain modules."""
-    ret = {
-        "kernel_modules_install": attr.label(
-            mandatory = True,
-            providers = [KernelModuleInfo],
-        ),
-        "deps": attr.label_list(
-            allow_files = True,
-        ),
-        "_debug_print_scripts": attr.label(
-            default = "//build/kernel/kleaf:debug_print_scripts",
-        ),
+_build_modules_image = subrule(
+    implementation = _build_modules_image_impl,
+    attrs = {
         "_set_ext_modules": attr.label(
             default = "//build/kernel/kleaf:set_ext_modules",
         ),
-        "create_modules_order": attr.bool(
-            default = True,
-            doc = """Whether to create and keep a modules.order file generated
-                by a postorder traversal of the `kernel_modules_install` sources.
-                It defaults to `True`.""",
-        ),
-    }
-    if additional != None:
-        ret.update(additional)
-    return ret
+    },
+    subrules = [debug.print_scripts_subrule],
+)
 
 def _ramdisk_options(ramdisk_compression, ramdisk_compression_args):
     """Options for how to treat ramdisk images.
@@ -277,7 +236,6 @@ def _ramdisk_options(ramdisk_compression, ramdisk_compression_args):
     )
 
 image_utils = struct(
-    build_modules_image_impl_common = _build_modules_image_impl_common,
-    build_modules_image_attrs_common = _build_modules_image_attrs_common,
+    build_modules_image = _build_modules_image,
     ramdisk_options = _ramdisk_options,
 )
