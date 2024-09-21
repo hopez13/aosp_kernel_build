@@ -381,6 +381,12 @@ py_binary(
     ],
 )
 
+py_binary(
+    name = "image/kernel_images_replace",
+    srcs = ["image/kernel_images_replace.py"],
+    visibility = ["//visibility:public"],
+)
+
 py_test(
     name = "get_kmi_string_test",
     timeout = "short",
