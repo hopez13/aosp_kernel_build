@@ -442,7 +442,6 @@ def kernel_images(
             system_dlkm_modules_list = system_dlkm_modules_list,
             system_dlkm_modules_blocklist = system_dlkm_modules_blocklist,
             system_dlkm_props = system_dlkm_props,
-            create_modules_order = False,
             **kwargs
         )
         all_rules.append(":{}_system_dlkm_image".format(name))
