@@ -16,11 +16,27 @@
 
 visibility("private")
 
+OrFileInfo = provider(
+    "Provides info for or_file",
+    fields = {
+        "selected_label": "label of selected target",
+    },
+)
+
 def _or_file_impl(ctx):
-    file = ctx.file.first or ctx.file.second
-    if file:
-        return DefaultInfo(files = depset([file]))
-    return DefaultInfo(files = depset())
+    if ctx.file.first:
+        files = ctx.files.first
+        selected_label = ctx.attr.first.label
+    elif ctx.file.second:
+        files = ctx.files.second
+        selected_label = ctx.attr.second.label
+    else:
+        files = []
+        selected_label = None
+    return [
+        DefaultInfo(files = depset(files)),
+        OrFileInfo(selected_label = selected_label),
+    ]
 
 or_file = rule(
     implementation = _or_file_impl,
