@@ -35,14 +35,13 @@ visibility("//build/kernel/kleaf/...")
 def _vendor_dlkm_image_impl(ctx):
     vendor_dlkm_img = ctx.actions.declare_file("{}/vendor_dlkm.img".format(ctx.label.name))
     vendor_dlkm_modules_load = ctx.actions.declare_file("{}/vendor_dlkm.modules.load".format(ctx.label.name))
-    vendor_dlkm_modules_blocklist = ctx.actions.declare_file("{}/vendor_dlkm.modules.blocklist".format(ctx.label.name))
+    out_modules_blocklist = ctx.actions.declare_file("{}/vendor_dlkm.modules.blocklist".format(ctx.label.name))
     modules_staging_dir = vendor_dlkm_img.dirname + "/staging"
     vendor_dlkm_staging_dir = modules_staging_dir + "/vendor_dlkm_staging"
-    vendor_dlkm_fs_type = ctx.attr.vendor_dlkm_fs_type
-    vendor_dlkm_etc_files = " ".join([f.path for f in ctx.files.vendor_dlkm_etc_files])
+    etc_files = " ".join([f.path for f in ctx.files.etc_files])
 
     vendor_dlkm_staging_archive = None
-    if ctx.attr.vendor_dlkm_archive:
+    if ctx.attr.archive:
         vendor_dlkm_staging_archive = ctx.actions.declare_file("{}/{}".format(ctx.label.name, VENDOR_DLKM_STAGING_ARCHIVE_NAME))
 
     command = ""
@@ -64,14 +63,14 @@ def _vendor_dlkm_image_impl(ctx):
     command += exclude_system_dlkm_step.cmd
     additional_inputs += exclude_system_dlkm_step.inputs
 
-    additional_inputs.extend(ctx.files.vendor_dlkm_modules_list)
-    additional_inputs.extend(ctx.files.vendor_dlkm_modules_blocklist)
-    additional_inputs.extend(ctx.files.vendor_dlkm_props)
+    additional_inputs.extend(ctx.files.modules_list)
+    additional_inputs.extend(ctx.files.modules_blocklist)
+    additional_inputs.extend(ctx.files.props)
 
     outputs = []
     vendor_dlkm_flatten_img = None
     vendor_dlkm_flatten_img_name = None
-    if ctx.attr.build_vendor_dlkm_flatten_image:
+    if ctx.attr.build_flatten:
         vendor_dlkm_flatten_img = ctx.actions.declare_file("{}/vendor_dlkm.flatten.img".format(ctx.label.name))
         outputs.append(vendor_dlkm_flatten_img)
         vendor_dlkm_flatten_img_name = "vendor_dlkm.flatten.img"
@@ -82,15 +81,15 @@ def _vendor_dlkm_image_impl(ctx):
             # Build vendor_dlkm
               mkdir -p {vendor_dlkm_staging_dir}
               (
-                VENDOR_DLKM_MODULES_LIST={vendor_dlkm_modules_list}
-                VENDOR_DLKM_MODULES_BLOCKLIST={input_vendor_dlkm_modules_blocklist}
-                VENDOR_DLKM_PROPS={vendor_dlkm_props}
+                VENDOR_DLKM_MODULES_LIST={modules_list}
+                VENDOR_DLKM_MODULES_BLOCKLIST={input_modules_blocklist}
+                VENDOR_DLKM_PROPS={props}
                 MODULES_STAGING_DIR={modules_staging_dir}
-                VENDOR_DLKM_ETC_FILES={quoted_vendor_dlkm_etc_files}
-                VENDOR_DLKM_FS_TYPE={vendor_dlkm_fs_type}
+                VENDOR_DLKM_ETC_FILES={quoted_etc_files}
+                VENDOR_DLKM_FS_TYPE={fs_type}
                 VENDOR_DLKM_STAGING_DIR={vendor_dlkm_staging_dir}
                 VENDOR_DLKM_GEN_FLATTEN_IMAGE={build_flatten_image}
-                build_vendor_dlkm {vendor_dlkm_archive}
+                build_vendor_dlkm {archive}
               )
             # Move output files into place
               mv "${{DIST_DIR}}/vendor_dlkm.img" {vendor_dlkm_img}
@@ -102,39 +101,39 @@ def _vendor_dlkm_image_impl(ctx):
                 mv "${{DIST_DIR}}/vendor_dlkm_staging_archive.tar.gz" {vendor_dlkm_staging_archive}
               fi
               if [[ -f "${{DIST_DIR}}/vendor_dlkm.modules.blocklist" ]]; then
-                mv "${{DIST_DIR}}/vendor_dlkm.modules.blocklist" {vendor_dlkm_modules_blocklist}
+                mv "${{DIST_DIR}}/vendor_dlkm.modules.blocklist" {out_modules_blocklist}
               else
-                : > {vendor_dlkm_modules_blocklist}
+                : > {out_modules_blocklist}
               fi
             # Remove staging directories
               rm -rf {vendor_dlkm_staging_dir}
     """.format(
-        build_flatten_image = int(ctx.attr.build_vendor_dlkm_flatten_image),
+        build_flatten_image = int(ctx.attr.build_flatten),
         modules_staging_dir = modules_staging_dir,
-        quoted_vendor_dlkm_etc_files = shell.quote(vendor_dlkm_etc_files),
-        vendor_dlkm_modules_list = utils.optional_path(ctx.file.vendor_dlkm_modules_list),
-        input_vendor_dlkm_modules_blocklist = utils.optional_path(ctx.file.vendor_dlkm_modules_blocklist),
-        vendor_dlkm_props = utils.optional_path(ctx.file.vendor_dlkm_props),
-        vendor_dlkm_fs_type = vendor_dlkm_fs_type,
+        quoted_etc_files = shell.quote(etc_files),
+        modules_list = utils.optional_path(ctx.file.modules_list),
+        input_modules_blocklist = utils.optional_path(ctx.file.modules_blocklist),
+        props = utils.optional_path(ctx.file.props),
+        fs_type = ctx.attr.fs_type,
         vendor_dlkm_staging_dir = vendor_dlkm_staging_dir,
         vendor_dlkm_flatten_img = vendor_dlkm_flatten_img.path if vendor_dlkm_flatten_img else "/dev/null",
         vendor_dlkm_flatten_img_name = vendor_dlkm_flatten_img_name,
         vendor_dlkm_img = vendor_dlkm_img.path,
         vendor_dlkm_modules_load = vendor_dlkm_modules_load.path,
-        vendor_dlkm_modules_blocklist = vendor_dlkm_modules_blocklist.path,
-        vendor_dlkm_archive = "1" if ctx.attr.vendor_dlkm_archive else "",
-        vendor_dlkm_staging_archive = vendor_dlkm_staging_archive.path if ctx.attr.vendor_dlkm_archive else None,
+        out_modules_blocklist = out_modules_blocklist.path,
+        archive = "1" if ctx.attr.archive else "",
+        vendor_dlkm_staging_archive = vendor_dlkm_staging_archive.path if ctx.attr.archive else None,
     )
 
-    additional_inputs += ctx.files.vendor_dlkm_etc_files
+    additional_inputs += ctx.files.etc_files
 
     outputs += [
         vendor_dlkm_img,
         vendor_dlkm_modules_load,
-        vendor_dlkm_modules_blocklist,
+        out_modules_blocklist,
     ]
 
-    if ctx.attr.vendor_dlkm_archive:
+    if ctx.attr.archive:
         outputs.append(vendor_dlkm_staging_archive)
 
     default_info = image_utils.build_modules_image(
@@ -228,7 +227,7 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
                 by a postorder traversal of the `kernel_modules_install` sources.
                 It defaults to `True`.""",
         ),
-        "build_vendor_dlkm_flatten_image": attr.bool(
+        "build_flatten": attr.bool(
             default = False,
             doc = "When True it builds vendor_dlkm image with no `uname -r` in the path",
         ),
@@ -238,12 +237,12 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
 
 Modules listed in this file is stripped away from the `vendor_dlkm` image.""",
         ),
-        "vendor_dlkm_archive": attr.bool(doc = "Whether to archive the `vendor_dlkm` modules"),
-        "vendor_dlkm_fs_type": attr.string(doc = """vendor_dlkm.img fs type""", values = ["ext4", "erofs"]),
-        "vendor_dlkm_modules_list": attr.label(allow_single_file = True),
-        "vendor_dlkm_etc_files": attr.label_list(allow_files = True),
-        "vendor_dlkm_modules_blocklist": attr.label(allow_single_file = True),
-        "vendor_dlkm_props": attr.label(allow_single_file = True),
+        "archive": attr.bool(doc = "Whether to archive the `vendor_dlkm` modules"),
+        "fs_type": attr.string(doc = """vendor_dlkm.img fs type""", values = ["ext4", "erofs"]),
+        "modules_list": attr.label(allow_single_file = True),
+        "etc_files": attr.label_list(allow_files = True),
+        "modules_blocklist": attr.label(allow_single_file = True),
+        "props": attr.label(allow_single_file = True),
         "dedup_dlkm_modules": attr.bool(doc = "Whether to exclude `system_dlkm` modules"),
         "system_dlkm_image": attr.label(),
         "base_kernel_images": attr.label(allow_files = True),
