@@ -23,6 +23,7 @@ load(":image/boot_images.bzl", "boot_images")
 load(":image/dtbo.bzl", "dtbo")
 load(":image/image_utils.bzl", "image_utils")
 load(":image/initramfs.bzl", "initramfs")
+load(":image/or_file.bzl", "or_file")
 load(":image/system_dlkm_image.bzl", "system_dlkm_image")
 load(":image/vendor_dlkm_image.bzl", "vendor_dlkm_image")
 
@@ -342,6 +343,10 @@ def kernel_images(
           See complete list
           [here](https://docs.bazel.build/versions/main/be/common-definitions.html#common-attributes).
     """
+    private_kwargs = kwargs | {
+        "visibility": ["//visibility:private"],
+    }
+
     all_rules = []
 
     build_any_boot_image = build_boot or build_vendor_boot or build_vendor_kernel_boot or \
@@ -427,21 +432,31 @@ def kernel_images(
         all_rules.append(":{}_initramfs".format(name))
 
     if build_system_dlkm:
+        or_file(
+            name = "{}_system_dlkm_modules_list".format(name),
+            first = system_dlkm_modules_list,
+            second = modules_list,
+            **private_kwargs
+        )
+        or_file(
+            name = "{}_system_dlkm_modules_blocklist".format(name),
+            first = system_dlkm_modules_blocklist,
+            second = modules_blocklist,
+            **private_kwargs
+        )
         system_dlkm_image(
             name = "{}_system_dlkm_image".format(name),
             # For GKI system_dlkm
             kernel_modules_install = kernel_modules_install,
             # For device system_dlkm, give GKI's system_dlkm_staging_archive.tar.gz
-            base_kernel_images = base_kernel_images,
-            build_system_dlkm_flatten_image = build_system_dlkm_flatten,
+            base = base_kernel_images,
+            build_flatten = build_system_dlkm_flatten,
             deps = deps,
-            modules_list = modules_list,
-            modules_blocklist = modules_blocklist,
-            system_dlkm_fs_type = system_dlkm_fs_type,
-            system_dlkm_fs_types = system_dlkm_fs_types,
-            system_dlkm_modules_list = system_dlkm_modules_list,
-            system_dlkm_modules_blocklist = system_dlkm_modules_blocklist,
-            system_dlkm_props = system_dlkm_props,
+            modules_list = ":{}_system_dlkm_modules_list".format(name),
+            modules_blocklist = ":{}_system_dlkm_modules_blocklist".format(name),
+            fs_type = system_dlkm_fs_type,
+            fs_types = system_dlkm_fs_types,
+            props = system_dlkm_props,
             **kwargs
         )
         all_rules.append(":{}_system_dlkm_image".format(name))

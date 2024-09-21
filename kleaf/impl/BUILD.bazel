@@ -79,6 +79,7 @@ bzl_library(
         "image/image_utils.bzl",
         "image/initramfs.bzl",
         "image/kernel_images.bzl",
+        "image/or_file.bzl",
         "image/super_image.bzl",
         "image/system_dlkm_image.bzl",
         "image/vendor_dlkm_image.bzl",
