@@ -15,6 +15,7 @@
 Build multiple kernel images.
 """
 
+load("@bazel_skylib//lib:shell.bzl", "shell")
 load(
     ":common_providers.bzl",
     "ImagesInfo",
@@ -23,6 +24,7 @@ load(":image/boot_images.bzl", "boot_images")
 load(":image/dtbo.bzl", "dtbo")
 load(":image/image_utils.bzl", "image_utils")
 load(":image/initramfs.bzl", "initramfs")
+load(":image/kernel_images_replace.bzl", "kernel_images_replace")
 load(":image/or_file.bzl", "or_file")
 load(":image/system_dlkm_image.bzl", "system_dlkm_image")
 load(":image/vendor_dlkm_image.bzl", "vendor_dlkm_image")
@@ -524,6 +526,13 @@ def kernel_images(
         )
         all_rules.append(":{}_dtbo".format(name))
 
+    kernel_images_replace(
+        name = name + "_replace",
+        selected_modules_list = name + "_system_dlkm_modules_list" if build_system_dlkm else None,
+        selected_modules_blocklist = name + "_system_dlkm_modules_blocklist" if build_system_dlkm else None,
+        **private_kwargs
+    )
+
     kernel_images_filegroup(
         name = name,
         srcs = all_rules,
@@ -531,6 +540,19 @@ def kernel_images(
     )
 
 def _kernel_images_filegroup_impl(ctx):
+    # buildifier: disable=print
+    print("""
+WARNING: kernel_images() is deprecated. Run the following command to print skeleton equivalent code:
+    (Note: Use cquery if you need to evaluate the select() expressions)
+    (Note: add additional flags to both commands if you have them)
+
+    tools/bazel query --output=build {targets} | \\
+    tools/bazel run {replace}_replace
+    """.format(
+        replace = ctx.label,
+        targets = shell.quote(" union ".join([str(target.label) for target in ctx.attr.srcs])),
+    ))
+
     default_info = DefaultInfo(files = depset(transitive = [
         target.files
         for target in ctx.attr.srcs

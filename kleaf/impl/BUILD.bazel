@@ -79,6 +79,7 @@ bzl_library(
         "image/image_utils.bzl",
         "image/initramfs.bzl",
         "image/kernel_images.bzl",
+        "image/kernel_images_replace.bzl",
         "image/or_file.bzl",
         "image/super_image.bzl",
         "image/system_dlkm_image.bzl",
@@ -387,6 +388,12 @@ py_binary(
     deps = [
         "//build/kernel/kleaf:buildozer_command_builder",
     ],
+)
+
+py_binary(
+    name = "image/kernel_images_replace",
+    srcs = ["image/kernel_images_replace.py"],
+    visibility = ["//visibility:public"],
 )
 
 py_test(
