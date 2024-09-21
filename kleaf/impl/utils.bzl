@@ -220,6 +220,12 @@ def _write_depset(ctx, d, out):
         depset = depset([out_file], transitive = [d]),
     )
 
+def _optional_path(file):
+    """If file is None, return empty string. Otherwise return its path."""
+    if file == None:
+        return ""
+    return file.path
+
 # Utilities that applies to all Bazel stuff in general. These functions are
 # not Kleaf specific.
 utils = struct(
@@ -235,6 +241,7 @@ utils = struct(
     hash_hex = _hash_hex,
     get_check_sandbox_cmd = _get_check_sandbox_cmd,
     write_depset = _write_depset,
+    optional_path = _optional_path,
 )
 
 def _filter_module_srcs(files):
