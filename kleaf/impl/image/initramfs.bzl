@@ -15,7 +15,12 @@
 Build initramfs.
 """
 
+load(
+    ":common_providers.bzl",
+    "KernelModuleInfo",
+)
 load(":image/image_utils.bzl", "image_utils")
+load(":utils.bzl", "utils")
 
 visibility("//build/kernel/kleaf/...")
 
@@ -101,6 +106,11 @@ def _initramfs_impl(ctx):
         cp_modules_options_cmd = """
             : > ${modules_root_dir}/modules.options
     """
+    additional_inputs.extend(ctx.files.modules_list)
+    additional_inputs.extend(ctx.files.modules_recovery_list)
+    additional_inputs.extend(ctx.files.modules_charger_list)
+    additional_inputs.extend(ctx.files.modules_blocklist)
+    additional_inputs.extend(ctx.files.modules_options)
 
     ramdisk_compress = image_utils.ramdisk_options(
         ramdisk_compression = ctx.attr.ramdisk_compression,
@@ -108,6 +118,11 @@ def _initramfs_impl(ctx):
     ).ramdisk_compress
 
     command = """
+               MODULES_LIST={modules_list}
+               MODULES_RECOVERY_LIST={modules_recovery_list}
+               MODULES_CHARGER_LIST={modules_charger_list}
+               MODULES_BLOCKLIST={modules_blocklist}
+               MODULES_OPTIONS={modules_options}
              # Use `strip_modules` intead of relying on this.
                unset DO_NOT_STRIP_MODULES
                mkdir -p {initramfs_staging_dir}
@@ -130,6 +145,11 @@ def _initramfs_impl(ctx):
              # Remove staging directories
                rm -rf {initramfs_staging_dir}
     """.format(
+        modules_list = utils.optional_path(ctx.file.modules_list),
+        modules_recovery_list = utils.optional_path(ctx.file.modules_recovery_list),
+        modules_charger_list = utils.optional_path(ctx.file.modules_charger_list),
+        modules_blocklist = utils.optional_path(ctx.file.modules_blocklist),
+        modules_options = utils.optional_path(ctx.file.modules_options),
         modules_staging_dir = modules_staging_dir,
         initramfs_staging_dir = initramfs_staging_dir,
         ramdisk_compress = ramdisk_compress,
@@ -144,8 +164,7 @@ def _initramfs_impl(ctx):
         cp_modules_options_cmd = cp_modules_options_cmd,
     )
 
-    default_info = image_utils.build_modules_image_impl_common(
-        ctx = ctx,
+    default_info = image_utils.build_modules_image(
         what = "initramfs",
         outputs = outputs,
         build_command = command,
@@ -156,6 +175,9 @@ def _initramfs_impl(ctx):
         ],
         additional_inputs = additional_inputs,
         mnemonic = "Initramfs",
+        kernel_modules_install = ctx.attr.kernel_modules_install,
+        deps = ctx.attr.deps,
+        create_modules_order = ctx.attr.create_modules_order,
     )
     return [
         default_info,
@@ -181,7 +203,21 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
 An additional label, `{name}/vendor_boot.modules.load`, is declared to point to the
 corresponding files.
 """,
-    attrs = image_utils.build_modules_image_attrs_common({
+    attrs = {
+        "kernel_modules_install": attr.label(
+            mandatory = True,
+            providers = [KernelModuleInfo],
+        ),
+        "deps": attr.label_list(
+            allow_files = True,
+            doc = """A list of additional dependencies to build initramfs.""",
+        ),
+        "create_modules_order": attr.bool(
+            default = True,
+            doc = """Whether to create and keep a modules.order file generated
+                by a postorder traversal of the `kernel_modules_install` sources.
+                It defaults to `True`.""",
+        ),
         "vendor_boot_modules_load": attr.output(
             doc = "`vendor_boot.modules.load` or `vendor_kernel_boot.modules.load`",
         ),
@@ -204,5 +240,6 @@ corresponding files.
         "ramdisk_compression_args": attr.string(
             doc = "Command line arguments passed only to lz4 command to control compression level.",
         ),
-    }),
+    },
+    subrules = [image_utils.build_modules_image],
 )
