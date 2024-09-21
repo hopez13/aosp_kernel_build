@@ -23,6 +23,7 @@ load(":image/boot_images.bzl", "boot_images")
 load(":image/dtbo.bzl", "dtbo")
 load(":image/image_utils.bzl", "image_utils")
 load(":image/initramfs.bzl", "initramfs")
+load(":image/kernel_images_replace.bzl", "kernel_images_replace")
 load(":image/or_file.bzl", "or_file")
 load(":image/system_dlkm_image.bzl", "system_dlkm_image")
 load(":image/vendor_dlkm_image.bzl", "vendor_dlkm_image")
@@ -538,10 +539,34 @@ def kernel_images(
         )
         all_rules.append(":{}_dtbo".format(name))
 
+    native.genquery(
+        name = name + "_query_output",
+        expression = " ".join([
+            str(native.package_relative_label(target))
+            for target in all_rules
+        ]),
+        opts = ["--output=build"],
+        scope = all_rules,
+        **private_kwargs
+    )
+
+    kernel_images_replace(
+        name = name + "_replace",
+        query_output = name + "_query_output",
+        selected_modules_list = name + "_system_dlkm_modules_list",
+        selected_modules_blocklist = name + "_system_dlkm_modules_blocklist",
+        **private_kwargs
+    )
+
+    images_kwargs = dict(kwargs)
+    images_kwargs.setdefault("deprecation", """Run the following command to get an updated BUILD declaration:
+    tools/bazel run {}
+    """.format(native.package_relative_label(name + "_replace")))
+
     _kernel_images(
         name = name,
         srcs = all_rules,
-        **kwargs
+        **images_kwargs
     )
 
 def _kernel_images_impl(ctx):
