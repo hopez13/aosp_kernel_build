@@ -526,6 +526,16 @@ def kernel_images(
         )
         all_rules.append(":{}_dtbo".format(name))
 
+    native.genquery(
+        name = name + "_genquery",
+        expression = " ".join([
+            str(native.package_relative_label(target)) for target in all_rules
+        ]),
+        opts = ["--output=build"],
+        scope = all_rules,
+        **private_kwargs
+    )
+
     _kernel_images(
         name = name,
         srcs = all_rules,
