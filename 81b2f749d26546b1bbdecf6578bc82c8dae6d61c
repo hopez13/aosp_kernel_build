@@ -16,6 +16,29 @@
       "message": "This breaks the following test:\n\n```sh\ntools/bazel test //build/kernel/kleaf/tests/hermetic_test:simple_genrule_with_cc_toolchain\n\nbazel-out/k8-opt-exec-ST-d57f47055a04/bin/build/kernel/kleaf/tests/hermetic_test/simple_genrule_with_cc_toolchain_hermetic_genrule_toolchain_setup/setup.sh: line 15: OUT_DIR: unbound variable\n```",
       "revId": "81b2f749d26546b1bbdecf6578bc82c8dae6d61c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f4bb979_20a059f9",
+        "filename": "kleaf/impl/kernel_toolchains.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-23T11:19:07Z",
+      "side": 1,
+      "message": "The test error comes from this line, which is weird, because clearly `$OUT_DIR` was previously used in this script (L174), so not sure if the error comes from here, or if it needs to be defined before appending this script to the [failing genrule](https://cs.android.com/android/kernel/superproject/+/common-android-mainline:build/kernel/kleaf/impl/hermetic_genrule.bzl;l\u003d44)",
+      "range": {
+        "startLine": 170,
+        "startChar": 21,
+        "endLine": 170,
+        "endChar": 33
+      },
+      "revId": "81b2f749d26546b1bbdecf6578bc82c8dae6d61c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
