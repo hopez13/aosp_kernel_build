@@ -444,6 +444,22 @@ def kernel_images(
             second = modules_blocklist,
             **private_kwargs
         )
+
+        if system_dlkm_fs_type and system_dlkm_fs_types:
+            fail("""{}: Both system_dlkm_fs_type="{}" and system_dlkm_fs_types={} are specified. system_dlkm_fs_type is deprecated, use system_dlkm_fs_types instead.""".format(
+                native.package_relative_label(name),
+                system_dlkm_fs_type,
+                system_dlkm_fs_types,
+            ))
+
+        # Build system_dlkm.img with ext4 fs as default
+        if not system_dlkm_fs_type and not system_dlkm_fs_types:
+            system_dlkm_fs_types = ["kleaf_internal_legacy_ext4_single"]
+
+        # if system_dlkm_fs_type: Build system_dlkm.img with given fs type
+        if system_dlkm_fs_type:
+            system_dlkm_fs_types = [system_dlkm_fs_type]
+
         system_dlkm_image(
             name = "{}_system_dlkm_image".format(name),
             # For GKI system_dlkm
@@ -454,7 +470,6 @@ def kernel_images(
             deps = deps,
             modules_list = ":{}_system_dlkm_modules_list".format(name),
             modules_blocklist = ":{}_system_dlkm_modules_blocklist".format(name),
-            fs_type = system_dlkm_fs_type,
             fs_types = system_dlkm_fs_types,
             props = system_dlkm_props,
             **kwargs
