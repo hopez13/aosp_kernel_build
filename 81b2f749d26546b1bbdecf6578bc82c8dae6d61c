@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f41a5a7_c88c4db4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-23T10:52:04Z",
+      "side": 1,
+      "message": "This breaks the following test:\n\n```sh\ntools/bazel test //build/kernel/kleaf/tests/hermetic_test:simple_genrule_with_cc_toolchain\n\nbazel-out/k8-opt-exec-ST-d57f47055a04/bin/build/kernel/kleaf/tests/hermetic_test/simple_genrule_with_cc_toolchain_hermetic_genrule_toolchain_setup/setup.sh: line 15: OUT_DIR: unbound variable\n```",
+      "revId": "81b2f749d26546b1bbdecf6578bc82c8dae6d61c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
