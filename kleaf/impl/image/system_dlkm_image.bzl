@@ -39,18 +39,6 @@ def _system_dlkm_image_impl(ctx):
     modules_staging_dir = system_dlkm_staging_archive.dirname + "/staging"
     system_dlkm_staging_dir = modules_staging_dir + "/system_dlkm_staging"
 
-    fs_types = ctx.attr.fs_types
-    if ctx.attr.fs_type and fs_types:
-        fail("""{}: Both fs_type="{}" and fs_types={} are specified. fs_type is deprecated, use fs_types instead.""".format(ctx.label, ctx.attr.fs_type, fs_types))
-
-    # Build system_dlkm.img with ext4 fs as default
-    if not ctx.attr.fs_type and not fs_types:
-        fs_type = "ext4"
-
-    # if fs_type: Build system_dlkm.img with given fs type
-    if ctx.attr.fs_type:
-        fs_types = [ctx.attr.fs_type]
-
     additional_inputs = []
     restore_modules_install = True
     extract_staging_archive_cmd = ""
@@ -105,8 +93,11 @@ def _system_dlkm_image_impl(ctx):
     command = ""
     outputs = []
     outputs_to_compare = []
-    for fs_type in fs_types:
-        if fs_type:
+    for fs_type in ctx.attr.fs_types:
+        if fs_type == "kleaf_internal_legacy_ext4_single":
+            # buildifier: disable=print
+            print("\nWARNING: {}: system_dlkm_fs_type is deprecated. Use system_dlkm_fs_types instead.".format(ctx.label))
+            fs_type = "ext4"
             system_dlkm_img = ctx.actions.declare_file("{}/system_dlkm.img".format(ctx.label.name))
             system_dlkm_img_name = "system_dlkm.img"
         else:
@@ -250,8 +241,14 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
             blocklist module_name
             ```
         """),
-        "fs_type": attr.string(doc = """Deprecated. system_dlkm image fs type""", values = ["ext4", "erofs"]),
-        "fs_types": attr.string_list(doc = """system_dlkm image fs types""", allow_empty = True),
+        "fs_types": attr.string_list(
+            doc = """List of file systems type for `system_dlkm` images.
+
+                If not specified, build `system_dlkm.img` with ext4. Otherwise, build
+                `system_dlkm.<fs>.img` for each file system type in the list.""",
+            allow_empty = False,
+            default = ["ext4"],
+        ),
         "props": attr.label(allow_single_file = True, doc = """
             A text file containing
             the properties to be used for creation of a `system_dlkm` image
