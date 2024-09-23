@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beee99fc_4aeb2069",
+        "filename": "kleaf/impl/debug.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-23T09:20:03Z",
+      "side": 1,
+      "message": "nit: The changes in this file could be split in a separate CL, or at least be mentioned in the CL description.",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 5
+      },
+      "revId": "0d26fb8c5468fe01e87ec5fb6e86148715f14a85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
