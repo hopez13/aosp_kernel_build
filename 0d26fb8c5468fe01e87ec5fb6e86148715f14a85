@@ -45,6 +45,30 @@
       },
       "revId": "0d26fb8c5468fe01e87ec5fb6e86148715f14a85",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd794a68_45c31c7c",
+        "filename": "kleaf/impl/image/initramfs.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-23T18:16:51Z",
+      "side": 1,
+      "message": "You are right; it should not touch these variables to be a no-op. Let me fix this.",
+      "parentUuid": "84efc718_5a98eda1",
+      "range": {
+        "startLine": 116,
+        "startChar": 15,
+        "endLine": 116,
+        "endChar": 16
+      },
+      "revId": "0d26fb8c5468fe01e87ec5fb6e86148715f14a85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
