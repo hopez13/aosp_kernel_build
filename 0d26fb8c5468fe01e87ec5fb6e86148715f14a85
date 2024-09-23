@@ -22,6 +22,29 @@
       },
       "revId": "0d26fb8c5468fe01e87ec5fb6e86148715f14a85",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84efc718_5a98eda1",
+        "filename": "kleaf/impl/image/initramfs.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-23T11:46:33Z",
+      "side": 1,
+      "message": "nit: Here and in the other rules: I think this refactor is not no-op as it goes from not setting these variables (which is handle in some places e.g. L127, and scripts like `build_utils.sh`) to potentially set them to `None` value (e.g. `MODULES_LIST\u003dNone`) which can cause errors like the one seen in `//common:kernel_aarch64_additional_tests_empty_images_initramfs`. Maybe the utility function should take the var name and the file path and create the script fragment accordingly.",
+      "range": {
+        "startLine": 116,
+        "startChar": 15,
+        "endLine": 116,
+        "endChar": 16
+      },
+      "revId": "0d26fb8c5468fe01e87ec5fb6e86148715f14a85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
