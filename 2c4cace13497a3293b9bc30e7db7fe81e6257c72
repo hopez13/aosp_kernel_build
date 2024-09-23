@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7258d30_b966f170",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-23T12:02:23Z",
+      "side": 0,
+      "message": "nit: why not `modules_blocklist`?",
+      "range": {
+        "startLine": 463,
+        "startChar": 24,
+        "endLine": 463,
+        "endChar": 32
+      },
+      "revId": "2c4cace13497a3293b9bc30e7db7fe81e6257c72",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
