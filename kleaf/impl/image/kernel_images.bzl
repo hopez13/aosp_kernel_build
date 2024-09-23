@@ -448,9 +448,6 @@ def kernel_images(
         all_rules.append(":{}_system_dlkm_image".format(name))
 
     if build_vendor_dlkm:
-        if vendor_dlkm_fs_type == None:
-            vendor_dlkm_fs_type = "ext4"
-
         vendor_dlkm_image(
             name = "{}_vendor_dlkm_image".format(name),
             kernel_modules_install = kernel_modules_install,

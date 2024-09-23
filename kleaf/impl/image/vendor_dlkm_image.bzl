@@ -245,7 +245,11 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
 Modules listed in this file is stripped away from the `vendor_dlkm` image.""",
         ),
         "archive": attr.bool(doc = "Whether to archive the `vendor_dlkm` modules"),
-        "fs_type": attr.string(doc = """vendor_dlkm.img fs type""", values = ["ext4", "erofs"]),
+        "fs_type": attr.string(
+            doc = """Filesystem for `vendor_dlkm.img`.""",
+            values = ["ext4", "erofs"],
+            default = "ext4",
+        ),
         "modules_list": attr.label(
             allow_single_file = True,
             doc = """An optional file
