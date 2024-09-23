@@ -28,10 +28,35 @@ def _print_scripts(ctx, command, what = None):
         command: The command passed to `ctx.actions.run_shell`
         what: an optional text to distinguish actions within a target.
     """
-    if ctx.attr._debug_print_scripts[BuildSettingInfo].value:
+    _print_scripts_subrule_impl(
+        subrule_ctx = ctx,
+        command = command,
+        what = what,
+        _debug_print_scripts = ctx.attr._debug_print_scripts,
+    )
+
+def _print_scripts_subrule_impl(subrule_ctx, command, *, _debug_print_scripts, what = None):
+    """Print scripts at analysis phase.
+
+    Args:
+        subrule_ctx: subrule_ctx
+        command: The command passed to `ctx.actions.run_shell`
+        _debug_print_scripts: target of the flag
+        what: an optional text to distinguish actions within a target.
+    """
+    if _debug_print_scripts[BuildSettingInfo].value:
         # buildifier: disable=print
         print("""
-        # Script that runs %s%s:%s""" % (ctx.label, (" " + what if what else ""), command))
+        # Script that runs %s%s:%s""" % (subrule_ctx.label, (" " + what if what else ""), command))
+
+_print_scripts_subrule = subrule(
+    implementation = _print_scripts_subrule_impl,
+    attrs = {
+        "_debug_print_scripts": attr.label(
+            default = "//build/kernel/kleaf:debug_print_scripts",
+        ),
+    },
+)
 
 def _trap():
     """Return a shell script that prints a date before each command afterwards.
@@ -139,6 +164,7 @@ _print_platforms_aspect = aspect(
 
 debug = struct(
     print_scripts = _print_scripts,
+    print_scripts_subrule = _print_scripts_subrule,
     trap = _trap,
     modpost_warn = _modpost_warn,
     print_platforms = _print_platforms,
