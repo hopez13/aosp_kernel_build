@@ -46,6 +46,30 @@
       },
       "revId": "2c4cace13497a3293b9bc30e7db7fe81e6257c72",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62cd5ede_035c9aae",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-23T19:04:00Z",
+      "side": 0,
+      "message": "In fact I think this won\u0027t build due to `kleaf/impl/image/vendor_dlkm_image.bzl` L241",
+      "parentUuid": "e1b9546a_18e7c7a8",
+      "range": {
+        "startLine": 463,
+        "startChar": 24,
+        "endLine": 463,
+        "endChar": 32
+      },
+      "revId": "2c4cace13497a3293b9bc30e7db7fe81e6257c72",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
