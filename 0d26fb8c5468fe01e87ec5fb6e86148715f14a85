@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa975b05_f008a26b",
+        "filename": "kleaf/impl/debug.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-23T22:49:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "beee99fc_4aeb2069",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 5
+      },
+      "revId": "0d26fb8c5468fe01e87ec5fb6e86148715f14a85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84efc718_5a98eda1",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "You are right; it should not touch these variables to be a no-op. Let me fix this.",
       "parentUuid": "84efc718_5a98eda1",
+      "range": {
+        "startLine": 116,
+        "startChar": 15,
+        "endLine": 116,
+        "endChar": 16
+      },
+      "revId": "0d26fb8c5468fe01e87ec5fb6e86148715f14a85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a73131e7_37b12035",
+        "filename": "kleaf/impl/image/initramfs.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-23T22:49:00Z",
+      "side": 1,
+      "message": "Done in the new PS. Now, it sets these variables to an empty string if the file is not provided before and after the change.",
+      "parentUuid": "bd794a68_45c31c7c",
       "range": {
         "startLine": 116,
         "startChar": 15,
