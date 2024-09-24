@@ -40,8 +40,13 @@ load("//build/kernel/kleaf/impl:ddk/ddk_module.bzl", _ddk_module = "ddk_module")
 load("//build/kernel/kleaf/impl:ddk/ddk_submodule.bzl", _ddk_submodule = "ddk_submodule")
 load("//build/kernel/kleaf/impl:ddk/ddk_uapi_headers.bzl", _ddk_uapi_headers = "ddk_uapi_headers")
 load("//build/kernel/kleaf/impl:gki_artifacts.bzl", _gki_artifacts = "gki_artifacts", _gki_artifacts_prebuilts = "gki_artifacts_prebuilts")
+load("//build/kernel/kleaf/impl:image/boot_images.bzl", _boot_images = "boot_images")
+load("//build/kernel/kleaf/impl:image/dtbo.bzl", _dtbo = "dtbo")
+load("//build/kernel/kleaf/impl:image/initramfs.bzl", _initramfs = "initramfs")
 load("//build/kernel/kleaf/impl:image/kernel_images.bzl", _kernel_images = "kernel_images")
 load("//build/kernel/kleaf/impl:image/super_image.bzl", _super_image = "super_image", _unsparsed_image = "unsparsed_image")
+load("//build/kernel/kleaf/impl:image/system_dlkm_image.bzl", _system_dlkm_image = "system_dlkm_image")
+load("//build/kernel/kleaf/impl:image/vendor_dlkm_image.bzl", _vendor_dlkm_image = "vendor_dlkm_image")
 load("//build/kernel/kleaf/impl:kernel_build.bzl", _kernel_build_macro = "kernel_build")
 load("//build/kernel/kleaf/impl:kernel_build_config.bzl", _kernel_build_config = "kernel_build_config")
 load("//build/kernel/kleaf/impl:kernel_compile_commands.bzl", _kernel_compile_commands = "kernel_compile_commands")
@@ -58,6 +63,7 @@ load("//build/kernel/kleaf/impl:merged_kernel_uapi_headers.bzl", _merged_kernel_
 
 # Re-exports. This is the list of public rules and macros.
 android_filegroup = _android_filegroup
+boot_images = _boot_images
 checkpatch = _checkpatch
 ddk_headers = _ddk_headers
 ddk_headers_archive = _ddk_headers_archive
@@ -67,9 +73,11 @@ ddk_uapi_headers = _ddk_uapi_headers
 dependency_graph = _dependency_graph
 dependency_graph_drawer = _dependency_graph_drawer
 dependency_graph_extractor = _dependency_graph_extractor
+dtbo = _dtbo
 extract_symbols = _extract_symbols
 gki_artifacts = _gki_artifacts
 gki_artifacts_prebuilts = _gki_artifacts_prebuilts
+initramfs = _initramfs
 initramfs_modules_lists_test = _initramfs_modules_lists_test
 kernel_abi = _kernel_abi
 kernel_abi_dist = _kernel_abi_dist
@@ -88,7 +96,9 @@ kernel_unstripped_modules_archive = _kernel_unstripped_modules_archive
 merge_kzip = _merge_kzip
 merged_kernel_uapi_headers = _merged_kernel_uapi_headers
 super_image = _super_image
+system_dlkm_image = _system_dlkm_image
 unsparsed_image = _unsparsed_image
+vendor_dlkm_image = _vendor_dlkm_image
 
 # Tests
 kernel_module_test = _kernel_module_test

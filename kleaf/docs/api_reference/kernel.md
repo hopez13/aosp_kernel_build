@@ -22,6 +22,46 @@ Like filegroup, but applies transitions to Android.
 | <a id="android_filegroup-cpu"></a>cpu |  Architecture.   | String | optional |  `"arm64"`  |
 
 
+<a id="boot_images"></a>
+
+## boot_images
+
+<pre>
+boot_images(<a href="#boot_images-name">name</a>, <a href="#boot_images-deps">deps</a>, <a href="#boot_images-outs">outs</a>, <a href="#boot_images-avb_boot_algorithm">avb_boot_algorithm</a>, <a href="#boot_images-avb_boot_key">avb_boot_key</a>, <a href="#boot_images-avb_boot_partition_name">avb_boot_partition_name</a>,
+            <a href="#boot_images-avb_boot_partition_size">avb_boot_partition_size</a>, <a href="#boot_images-avb_sign_boot_img">avb_sign_boot_img</a>, <a href="#boot_images-build_boot">build_boot</a>, <a href="#boot_images-initramfs">initramfs</a>, <a href="#boot_images-kernel_build">kernel_build</a>,
+            <a href="#boot_images-mkbootimg">mkbootimg</a>, <a href="#boot_images-ramdisk_compression">ramdisk_compression</a>, <a href="#boot_images-ramdisk_compression_args">ramdisk_compression_args</a>, <a href="#boot_images-unpack_ramdisk">unpack_ramdisk</a>,
+            <a href="#boot_images-vendor_boot_name">vendor_boot_name</a>, <a href="#boot_images-vendor_ramdisk_binaries">vendor_ramdisk_binaries</a>, <a href="#boot_images-vendor_ramdisk_dev_nodes">vendor_ramdisk_dev_nodes</a>)
+</pre>
+
+Build boot images, including `boot.img`, `vendor_boot.img`, etc.
+
+Execute `build_boot_images` in `build_utils.sh`.
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="boot_images-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="boot_images-deps"></a>deps |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="boot_images-outs"></a>outs |  -   | List of labels | optional |  `[]`  |
+| <a id="boot_images-avb_boot_algorithm"></a>avb_boot_algorithm |  `avb_boot_key` algorithm used e.g. SHA256_RSA2048. Used when `avb_sign_boot_img` is True.   | String | optional |  `""`  |
+| <a id="boot_images-avb_boot_key"></a>avb_boot_key |  Key used for signing. Used when `avb_sign_boot_img` is True.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="boot_images-avb_boot_partition_name"></a>avb_boot_partition_name |  Name of the boot partition. Used when `avb_sign_boot_img` is True.   | String | optional |  `""`  |
+| <a id="boot_images-avb_boot_partition_size"></a>avb_boot_partition_size |  Size of the boot partition in bytes. Used when `avb_sign_boot_img` is True.   | Integer | optional |  `0`  |
+| <a id="boot_images-avb_sign_boot_img"></a>avb_sign_boot_img |  If set to `True` signs the boot image using the avb_boot_key. The kernel prebuilt tool `avbtool` is used for signing.   | Boolean | optional |  `False`  |
+| <a id="boot_images-build_boot"></a>build_boot |  -   | Boolean | optional |  `False`  |
+| <a id="boot_images-initramfs"></a>initramfs |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="boot_images-kernel_build"></a>kernel_build |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
+| <a id="boot_images-mkbootimg"></a>mkbootimg |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `"@kleaf//tools/mkbootimg:mkbootimg.py"`  |
+| <a id="boot_images-ramdisk_compression"></a>ramdisk_compression |  If provided it specfies the format used for any ramdisks generated.If not provided a fallback value from build.config is used.   | String | optional |  `""`  |
+| <a id="boot_images-ramdisk_compression_args"></a>ramdisk_compression_args |  Command line arguments passed only to lz4 command to control compression level.   | String | optional |  `""`  |
+| <a id="boot_images-unpack_ramdisk"></a>unpack_ramdisk |  When false it skips unpacking the vendor ramdisk and copy it as is, without modifications, into the boot image. Also skip the mkbootfs step.<br><br>It defaults to True. (Allowing falling back to the value in build config. This will change in the future, after giving notice about its deprecation.)   | Boolean | optional |  `True`  |
+| <a id="boot_images-vendor_boot_name"></a>vendor_boot_name |  * If `"vendor_boot"`, build `vendor_boot.img` * If `"vendor_kernel_boot"`, build `vendor_kernel_boot.img` * If `None`, skip `vendor_boot`.   | String | optional |  `""`  |
+| <a id="boot_images-vendor_ramdisk_binaries"></a>vendor_ramdisk_binaries |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="boot_images-vendor_ramdisk_dev_nodes"></a>vendor_ramdisk_dev_nodes |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+
+
 <a id="checkpatch"></a>
 
 ## checkpatch
@@ -229,6 +269,27 @@ It works by matching undefined symbols from one module with exported symbols fro
 | <a id="dependency_graph_extractor-kernel_modules"></a>kernel_modules |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 
 
+<a id="dtbo"></a>
+
+## dtbo
+
+<pre>
+dtbo(<a href="#dtbo-name">name</a>, <a href="#dtbo-srcs">srcs</a>, <a href="#dtbo-config_file">config_file</a>, <a href="#dtbo-kernel_build">kernel_build</a>)
+</pre>
+
+Build dtbo.
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="dtbo-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="dtbo-srcs"></a>srcs |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="dtbo-config_file"></a>config_file |  if set, use mkdtimg cfg_create with the given config file, instead of mkdtimg create   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="dtbo-kernel_build"></a>kernel_build |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
+
+
 <a id="extract_symbols"></a>
 
 ## extract_symbols
@@ -296,6 +357,52 @@ gki_artifacts_prebuilts(<a href="#gki_artifacts_prebuilts-name">name</a>, <a hre
 | <a id="gki_artifacts_prebuilts-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="gki_artifacts_prebuilts-srcs"></a>srcs |  -   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="gki_artifacts_prebuilts-outs"></a>outs |  -   | List of strings | optional |  `[]`  |
+
+
+<a id="initramfs"></a>
+
+## initramfs
+
+<pre>
+initramfs(<a href="#initramfs-name">name</a>, <a href="#initramfs-deps">deps</a>, <a href="#initramfs-create_modules_order">create_modules_order</a>, <a href="#initramfs-kernel_modules_install">kernel_modules_install</a>, <a href="#initramfs-modules_blocklist">modules_blocklist</a>,
+          <a href="#initramfs-modules_charger_list">modules_charger_list</a>, <a href="#initramfs-modules_list">modules_list</a>, <a href="#initramfs-modules_options">modules_options</a>, <a href="#initramfs-modules_recovery_list">modules_recovery_list</a>,
+          <a href="#initramfs-ramdisk_compression">ramdisk_compression</a>, <a href="#initramfs-ramdisk_compression_args">ramdisk_compression_args</a>, <a href="#initramfs-vendor_boot_modules_load">vendor_boot_modules_load</a>,
+          <a href="#initramfs-vendor_boot_modules_load_charger">vendor_boot_modules_load_charger</a>, <a href="#initramfs-vendor_boot_modules_load_recovery">vendor_boot_modules_load_recovery</a>)
+</pre>
+
+Build initramfs.
+
+When included in a `copy_to_dist_dir` rule, this rule copies the following to `DIST_DIR`:
+- `initramfs.img`
+- `modules.load`
+- `modules.load.recovery`
+- `modules.load.charger`
+- `vendor_boot.modules.load`
+- `vendor_boot.modules.load.recovery`
+- `vendor_boot.modules.load.charger`
+
+An additional label, `{name}/vendor_boot.modules.load`, is declared to point to the
+corresponding files.
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="initramfs-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="initramfs-deps"></a>deps |  A list of additional dependencies to build initramfs.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="initramfs-create_modules_order"></a>create_modules_order |  Whether to create and keep a modules.order file generated by a postorder traversal of the `kernel_modules_install` sources. It defaults to `True`.   | Boolean | optional |  `True`  |
+| <a id="initramfs-kernel_modules_install"></a>kernel_modules_install |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
+| <a id="initramfs-modules_blocklist"></a>modules_blocklist |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="initramfs-modules_charger_list"></a>modules_charger_list |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="initramfs-modules_list"></a>modules_list |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="initramfs-modules_options"></a>modules_options |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="initramfs-modules_recovery_list"></a>modules_recovery_list |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="initramfs-ramdisk_compression"></a>ramdisk_compression |  If provided it specfies the format used for any ramdisks generated.If not provided a fallback value from build.config is used.   | String | optional |  `""`  |
+| <a id="initramfs-ramdisk_compression_args"></a>ramdisk_compression_args |  Command line arguments passed only to lz4 command to control compression level.   | String | optional |  `""`  |
+| <a id="initramfs-vendor_boot_modules_load"></a>vendor_boot_modules_load |  `vendor_boot.modules.load` or `vendor_kernel_boot.modules.load`   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="initramfs-vendor_boot_modules_load_charger"></a>vendor_boot_modules_load_charger |  `vendor_boot.modules.load.charger` or `vendor_kernel_boot.modules.load.charger`   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="initramfs-vendor_boot_modules_load_recovery"></a>vendor_boot_modules_load_recovery |  `vendor_boot.modules.load.recovery` or `vendor_kernel_boot.modules.load.recovery`   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 
 
 <a id="kernel_build_config"></a>
@@ -621,6 +728,38 @@ When included in a `copy_to_dist_dir` rule, this rule copies a `super.img` to `D
 | <a id="super_image-vendor_dlkm_image"></a>vendor_dlkm_image |  `vendor_dlkm_image` to include in super.img   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 
 
+<a id="system_dlkm_image"></a>
+
+## system_dlkm_image
+
+<pre>
+system_dlkm_image(<a href="#system_dlkm_image-name">name</a>, <a href="#system_dlkm_image-deps">deps</a>, <a href="#system_dlkm_image-base_kernel_images">base_kernel_images</a>, <a href="#system_dlkm_image-build_flatten">build_flatten</a>, <a href="#system_dlkm_image-fs_types">fs_types</a>, <a href="#system_dlkm_image-kernel_modules_install">kernel_modules_install</a>,
+                  <a href="#system_dlkm_image-modules_blocklist">modules_blocklist</a>, <a href="#system_dlkm_image-modules_list">modules_list</a>, <a href="#system_dlkm_image-props">props</a>)
+</pre>
+
+Build system_dlkm partition image with signed GKI modules.
+
+When included in a `copy_to_dist_dir` rule, this rule copies the following to `DIST_DIR`:
+- `system_dlkm.[erofs|ext4].img` if `fs_types` is specified
+- `system_dlkm.flatten.[erofs|ext4].img` if `build_flatten` is True
+- `system_dlkm.modules.load`
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="system_dlkm_image-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="system_dlkm_image-deps"></a>deps |  A list of additional dependencies to build system_dlkm image.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="system_dlkm_image-base_kernel_images"></a>base_kernel_images |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="system_dlkm_image-build_flatten"></a>build_flatten |  When True it builds system_dlkm image with no `uname -r` in the path.   | Boolean | optional |  `False`  |
+| <a id="system_dlkm_image-fs_types"></a>fs_types |  List of file systems type for `system_dlkm` images.<br><br>If not specified, build `system_dlkm.img` with ext4. Otherwise, build `system_dlkm.<fs>.img` for each file system type in the list.   | List of strings | optional |  `["ext4"]`  |
+| <a id="system_dlkm_image-kernel_modules_install"></a>kernel_modules_install |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
+| <a id="system_dlkm_image-modules_blocklist"></a>modules_blocklist |  An optional file containing a list of modules which are blocked from being loaded.<br><br>This file is copied directly to the staging directory and should be in the format: <pre><code>blocklist module_name</code></pre>   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="system_dlkm_image-modules_list"></a>modules_list |  An optional file containing the list of kernel modules which shall be copied into a system_dlkm partition image.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="system_dlkm_image-props"></a>props |  A text file containing the properties to be used for creation of a `system_dlkm` image (filesystem, partition size, etc). If this is not set (and `build_system_dlkm` is), a default set of properties will be used which assumes an ext4 filesystem and a dynamic partition.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+
+
 <a id="unsparsed_image"></a>
 
 ## unsparsed_image
@@ -643,6 +782,46 @@ When included in a `copy_to_dist_dir` rule, this rule copies a `super_unsparsed.
 | <a id="unsparsed_image-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="unsparsed_image-src"></a>src |  image to unsparse   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="unsparsed_image-out"></a>out |  -   | String | required |  |
+
+
+<a id="vendor_dlkm_image"></a>
+
+## vendor_dlkm_image
+
+<pre>
+vendor_dlkm_image(<a href="#vendor_dlkm_image-name">name</a>, <a href="#vendor_dlkm_image-deps">deps</a>, <a href="#vendor_dlkm_image-archive">archive</a>, <a href="#vendor_dlkm_image-base_kernel_images">base_kernel_images</a>, <a href="#vendor_dlkm_image-build_flatten">build_flatten</a>, <a href="#vendor_dlkm_image-create_modules_order">create_modules_order</a>,
+                  <a href="#vendor_dlkm_image-dedup_dlkm_modules">dedup_dlkm_modules</a>, <a href="#vendor_dlkm_image-etc_files">etc_files</a>, <a href="#vendor_dlkm_image-fs_type">fs_type</a>, <a href="#vendor_dlkm_image-kernel_modules_install">kernel_modules_install</a>, <a href="#vendor_dlkm_image-modules_blocklist">modules_blocklist</a>,
+                  <a href="#vendor_dlkm_image-modules_list">modules_list</a>, <a href="#vendor_dlkm_image-props">props</a>, <a href="#vendor_dlkm_image-system_dlkm_image">system_dlkm_image</a>, <a href="#vendor_dlkm_image-vendor_boot_modules_load">vendor_boot_modules_load</a>)
+</pre>
+
+Build vendor_dlkm image.
+
+Execute `build_vendor_dlkm` in `build_utils.sh`.
+
+When included in a `copy_to_dist_dir` rule, this rule copies the following to `DIST_DIR`:
+- `vendor_dlkm.img`
+- `vendor_dlkm_flatten.img` if build_vendor_dlkm_flatten is True
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="vendor_dlkm_image-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="vendor_dlkm_image-deps"></a>deps |  A list of additional dependencies to build system_dlkm image.<br><br>This must include the following:<br><br>- The file specified by `selinux_fc` in `props`, if set   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="vendor_dlkm_image-archive"></a>archive |  Whether to archive the `vendor_dlkm` modules   | Boolean | optional |  `False`  |
+| <a id="vendor_dlkm_image-base_kernel_images"></a>base_kernel_images |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="vendor_dlkm_image-build_flatten"></a>build_flatten |  When True it builds vendor_dlkm image with no `uname -r` in the path   | Boolean | optional |  `False`  |
+| <a id="vendor_dlkm_image-create_modules_order"></a>create_modules_order |  Whether to create and keep a modules.order file generated by a postorder traversal of the `kernel_modules_install` sources. It defaults to `True`.   | Boolean | optional |  `True`  |
+| <a id="vendor_dlkm_image-dedup_dlkm_modules"></a>dedup_dlkm_modules |  Whether to exclude `system_dlkm` modules   | Boolean | optional |  `False`  |
+| <a id="vendor_dlkm_image-etc_files"></a>etc_files |  Files that need to be copied to `vendor_dlkm.img` etc/ directory.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
+| <a id="vendor_dlkm_image-fs_type"></a>fs_type |  Filesystem for `vendor_dlkm.img`.   | String | optional |  `"ext4"`  |
+| <a id="vendor_dlkm_image-kernel_modules_install"></a>kernel_modules_install |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
+| <a id="vendor_dlkm_image-modules_blocklist"></a>modules_blocklist |  An optional file containing a list of modules which are blocked from being loaded.<br><br>This file is copied directly to the staging directory and should be in the format: <pre><code>blocklist module_name</code></pre>   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="vendor_dlkm_image-modules_list"></a>modules_list |  An optional file containing the list of kernel modules which shall be copied into a `vendor_dlkm` partition image. Any modules passed into `MODULES_LIST` which become part of the `vendor_boot.modules.load` will be trimmed from the `vendor_dlkm.modules.load`.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="vendor_dlkm_image-props"></a>props |  A text file containing the properties to be used for creation of a `vendor_dlkm` image (filesystem, partition size, etc). If this is not set (and `build_vendor_dlkm` is), a default set of properties will be used which assumes an ext4 filesystem and a dynamic partition.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="vendor_dlkm_image-system_dlkm_image"></a>system_dlkm_image |  -   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="vendor_dlkm_image-vendor_boot_modules_load"></a>vendor_boot_modules_load |  File to `vendor_boot.modules.load`.<br><br>Modules listed in this file is stripped away from the `vendor_dlkm` image.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 
 
 <a id="ddk_module"></a>
