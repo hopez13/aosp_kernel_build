@@ -207,6 +207,7 @@ corresponding files.
         "kernel_modules_install": attr.label(
             mandatory = True,
             providers = [KernelModuleInfo],
+            doc = "The [`kernel_modules_install`](#kernel_modules_install).",
         ),
         "deps": attr.label_list(
             allow_files = True,
@@ -227,11 +228,35 @@ corresponding files.
         "vendor_boot_modules_load_charger": attr.output(
             doc = "`vendor_boot.modules.load.charger` or `vendor_kernel_boot.modules.load.charger`",
         ),
-        "modules_list": attr.label(allow_single_file = True),
-        "modules_recovery_list": attr.label(allow_single_file = True),
-        "modules_charger_list": attr.label(allow_single_file = True),
-        "modules_blocklist": attr.label(allow_single_file = True),
-        "modules_options": attr.label(allow_single_file = True),
+        "modules_list": attr.label(
+            allow_single_file = True,
+            doc = "A file containing list of modules to use for `vendor_boot.modules.load`.",
+        ),
+        "modules_recovery_list": attr.label(
+            allow_single_file = True,
+            doc = "A file containing a list of modules to load when booting into recovery.",
+        ),
+        "modules_charger_list": attr.label(
+            allow_single_file = True,
+            doc = "A file containing a list of modules to load when booting intocharger mode.",
+        ),
+        "modules_blocklist": attr.label(allow_single_file = True, doc = """
+            A file containing a list of modules which are
+            blocked from being loaded.
+
+            This file is copied directly to staging directory, and should be in the format:
+            ```
+            blocklist module_name
+            ```
+            """),
+        "modules_options": attr.label(allow_single_file = True, doc = """
+            a file copied to `/lib/modules/<kernel_version>/modules.options` on the ramdisk.
+
+            Lines in the file should be of the form:
+            ```
+            options <modulename> <param1>=<val> <param2>=<val> ...
+            ```
+            """),
         "ramdisk_compression": attr.string(
             doc = "If provided it specfies the format used for any ramdisks generated." +
                   "If not provided a fallback value from build.config is used.",
