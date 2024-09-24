@@ -487,7 +487,7 @@ def kernel_images(
         boot_images(
             name = "{}_boot_images".format(name),
             kernel_build = kernel_build,
-            outs = ["{}_boot_images/{}".format(name, out) for out in boot_image_outs],
+            outs = boot_image_outs,
             deps = deps,
             initramfs = ":{}_initramfs".format(name) if build_initramfs else None,
             mkbootimg = mkbootimg,
