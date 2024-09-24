@@ -304,7 +304,13 @@ def _kernel_config_impl(ctx):
         # Pre-defconfig commands
           eval ${{PRE_DEFCONFIG_CMDS}}
         # Actual defconfig
-          make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{DEFCONFIG}}
+          if [ -e ${{DEFCONFIG}} ]; then
+            mkdir -p ${{OUT_DIR}}
+            cp ${{DEFCONFIG}} ${{OUT_DIR}}/.config
+            make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} olddefconfig
+          else
+            make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{DEFCONFIG}}
+          fi
         # Post-defconfig commands
           eval ${{POST_DEFCONFIG_CMDS}}
         # Re-config
