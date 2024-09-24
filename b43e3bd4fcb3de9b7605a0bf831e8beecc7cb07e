@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2942def1_381d793c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-24T05:38:24Z",
+      "side": 1,
+      "message": "I still need to clean up the API of boot_images and initramfs. Should be done by tomorrow.",
+      "revId": "b43e3bd4fcb3de9b7605a0bf831e8beecc7cb07e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
