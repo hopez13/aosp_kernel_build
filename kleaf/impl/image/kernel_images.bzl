@@ -392,19 +392,7 @@ def kernel_images(
     elif build_vendor_kernel_boot:
         vendor_boot_name = "vendor_kernel_boot"
 
-    vendor_boot_modules_load = None
-    vendor_boot_modules_load_recovery = None
-    vendor_boot_modules_load_charger = None
     if build_initramfs:
-        if vendor_boot_name:
-            vendor_boot_modules_load = "{}_initramfs/{}.modules.load".format(name, vendor_boot_name)
-
-            if modules_recovery_list:
-                vendor_boot_modules_load_recovery = "{}_initramfs/{}.modules.load.recovery".format(name, vendor_boot_name)
-
-            if modules_charger_list:
-                vendor_boot_modules_load_charger = "{}_initramfs/{}.modules.load.charger".format(name, vendor_boot_name)
-
         if ramdisk_compression_args and ramdisk_compression != "lz4":
             fail(
                 "ramdisk_compress_args provided but ramdisk_compression={} is not lz4.".format(
@@ -416,9 +404,6 @@ def kernel_images(
             name = "{}_initramfs".format(name),
             kernel_modules_install = kernel_modules_install,
             deps = deps,
-            vendor_boot_modules_load = vendor_boot_modules_load,
-            vendor_boot_modules_load_recovery = vendor_boot_modules_load_recovery,
-            vendor_boot_modules_load_charger = vendor_boot_modules_load_charger,
             modules_list = modules_list,
             modules_recovery_list = modules_recovery_list,
             modules_charger_list = modules_charger_list,
@@ -427,6 +412,7 @@ def kernel_images(
             ramdisk_compression = ramdisk_compression,
             ramdisk_compression_args = ramdisk_compression_args,
             create_modules_order = create_modules_order,
+            vendor_boot_name = vendor_boot_name,
             **kwargs
         )
         all_rules.append(":{}_initramfs".format(name))
@@ -480,7 +466,7 @@ def kernel_images(
         vendor_dlkm_image(
             name = "{}_vendor_dlkm_image".format(name),
             kernel_modules_install = kernel_modules_install,
-            vendor_boot_modules_load = vendor_boot_modules_load,
+            vendor_boot_modules_load = "{}_initramfs".format(name),
             build_flatten = build_vendor_dlkm_flatten,
             deps = deps,
             archive = vendor_dlkm_archive,
