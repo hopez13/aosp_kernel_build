@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7aab1a4_20948fb4",
+        "filename": "kleaf/impl/image/vendor_dlkm_image.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-24T20:07:39Z",
+      "side": 1,
+      "message": "question: How is this different from L52 check (besides `target` vs `files`)?",
+      "range": {
+        "startLine": 55,
+        "startChar": 17,
+        "endLine": 55,
+        "endChar": 22
+      },
+      "revId": "be3a674a69f1b8fd0aa2d5610ea794c82c0c75fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
