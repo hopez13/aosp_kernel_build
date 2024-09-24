@@ -538,13 +538,13 @@ def kernel_images(
         )
         all_rules.append(":{}_dtbo".format(name))
 
-    _kernel_images(
+    kernel_images_filegroup(
         name = name,
         srcs = all_rules,
         **kwargs
     )
 
-def _kernel_images_impl(ctx):
+def _kernel_images_filegroup_impl(ctx):
     default_info = DefaultInfo(files = depset(transitive = [
         target.files
         for target in ctx.attr.srcs
@@ -569,8 +569,9 @@ def _kernel_images_impl(ctx):
         output_group_info,
     ]
 
-_kernel_images = rule(
-    implementation = _kernel_images_impl,
+kernel_images_filegroup = rule(
+    doc = "Legacy, internal macro to provide output groups for individual images.",
+    implementation = _kernel_images_filegroup_impl,
     attrs = {
         "srcs": attr.label_list(),
     },
