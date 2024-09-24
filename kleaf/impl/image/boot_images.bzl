@@ -239,31 +239,67 @@ boot_images = rule(
     implementation = _boot_images_impl,
     doc = """Build boot images, including `boot.img`, `vendor_boot.img`, etc.
 
-Execute `build_boot_images` in `build_utils.sh`.""",
+        Implementation detail: This executes `build_boot_images` in `build_utils.sh`.""",
     attrs = {
         "kernel_build": attr.label(
+            doc = "The [`kernel_build`](#kernel_build).",
             mandatory = True,
             providers = [KernelSerializedEnvInfo, KernelBuildInfo],
         ),
         "initramfs": attr.label(
+            doc = "The [`initramfs`](#initramfs).",
             providers = [InitramfsInfo],
         ),
         "deps": attr.label_list(
+            doc = "Additional dependencies to build boot images.",
             allow_files = True,
         ),
-        "outs": attr.output_list(),
+        "outs": attr.output_list(
+            doc = """A list of output files that will be installed to `DIST_DIR` when
+                `build_boot_images` in `build/kernel/build_utils.sh` is executed.
+
+                Unlike `kernel_images`, you must specify the list explicitly.
+            """,
+            allow_empty = False,
+        ),
         "mkbootimg": attr.label(
             allow_single_file = True,
             default = "//tools/mkbootimg:mkbootimg.py",
+            doc = """mkbootimg.py script which builds boot.img.
+                Only used if `build_boot`. If `None`,
+                default to `//tools/mkbootimg:mkbootimg.py`.
+                NOTE: This overrides `MKBOOTIMG_PATH`.
+            """,
         ),
-        "build_boot": attr.bool(),
-        "vendor_boot_name": attr.string(doc = """
-* If `"vendor_boot"`, build `vendor_boot.img`
-* If `"vendor_kernel_boot"`, build `vendor_kernel_boot.img`
-* If `None`, skip `vendor_boot`.
-""", values = ["vendor_boot", "vendor_kernel_boot"]),
-        "vendor_ramdisk_binaries": attr.label_list(allow_files = True),
-        "vendor_ramdisk_dev_nodes": attr.label_list(allow_files = True),
+        "build_boot": attr.bool(
+            doc = """**Use with caution.** Build boot image.
+
+                It is unlikely that you'll need to specify this attribute to build a boot image.
+                Instead, consider using the boot image from GKI artifacts.
+            """,
+        ),
+        "vendor_boot_name": attr.string(doc = """Name of `vendor_boot` image.
+
+                * If `"vendor_boot"`, build `vendor_boot.img`
+                * If `"vendor_kernel_boot"`, build `vendor_kernel_boot.img`
+                * If `None`, skip building `vendor_boot`.
+            """, values = ["vendor_boot", "vendor_kernel_boot"]),
+        "vendor_ramdisk_binaries": attr.label_list(allow_files = True, doc = """
+                List of vendor ramdisk binaries
+                which includes the device-specific components of ramdisk like the fstab
+                file and the device-specific rc files. If specifying multiple vendor ramdisks
+                and identical file paths exist in the ramdisks, the file from last ramdisk is used.
+
+                Note: **order matters**. To prevent buildifier from sorting the list, add the following:
+                ```
+                # do not sort
+                ```
+            """),
+        "vendor_ramdisk_dev_nodes": attr.label_list(allow_files = True, doc = """
+                List of dev nodes description files
+                which describes special device files to be added to the vendor
+                ramdisk. File format is as accepted by mkbootfs.
+            """),
         "unpack_ramdisk": attr.bool(
             doc = """ When false it skips unpacking the vendor ramdisk and copy it as
             is, without modifications, into the boot image. Also skip the mkbootfs step.
