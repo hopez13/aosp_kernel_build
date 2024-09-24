@@ -28,6 +28,7 @@ load(
     "VENDOR_DLKM_STAGING_ARCHIVE_NAME",
     "image_utils",
 )
+load(":image/initramfs.bzl", "InitramfsInfo")
 load(":utils.bzl", "utils")
 
 visibility("//build/kernel/kleaf/...")
@@ -46,15 +47,24 @@ def _vendor_dlkm_image_impl(ctx):
 
     command = ""
     additional_inputs = []
-    if ctx.file.vendor_boot_modules_load:
+
+    vendor_boot_modules_load = None
+    if ctx.attr.vendor_boot_modules_load:
+        if InitramfsInfo in ctx.attr.vendor_boot_modules_load:
+            vendor_boot_modules_load = ctx.attr.vendor_boot_modules_load[InitramfsInfo].vendor_boot_modules_load
+        elif ctx.files.vendor_boot_modules_load:
+            if len(ctx.files.vendor_boot_modules_load) > 1:
+                fail("Only a single file is allowed in vendor_boot_modules_load.")
+            vendor_boot_modules_load = ctx.files.vendor_boot_modules_load[0]
+    if vendor_boot_modules_load:
         command += """
                 # Restore vendor_boot.modules.load or vendor_kernel_boot.modules.load
                 # to modules.load, where build_utils.sh build_vendor_dlkm uses
                   cat {vendor_boot_modules_load} >> ${{DIST_DIR}}/modules.load
         """.format(
-            vendor_boot_modules_load = ctx.file.vendor_boot_modules_load.path,
+            vendor_boot_modules_load = vendor_boot_modules_load.path,
         )
-        additional_inputs.append(ctx.file.vendor_boot_modules_load)
+        additional_inputs.append(vendor_boot_modules_load)
 
     exclude_system_dlkm_step = _exclude_system_dlkm(
         ctx,
@@ -239,10 +249,14 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
             doc = "When True it builds vendor_dlkm image with no `uname -r` in the path",
         ),
         "vendor_boot_modules_load": attr.label(
-            allow_single_file = True,
+            allow_files = True,
             doc = """File to `vendor_boot.modules.load`.
 
-Modules listed in this file is stripped away from the `vendor_dlkm` image.""",
+                Modules listed in this file is stripped away from the `vendor_dlkm` image.
+
+                As a special case, you may also provide a [`initramfs`](#initramfs) target here,
+                in which case the `vendor_boot.modules.load` of the initramfs is used.
+            """,
         ),
         "archive": attr.bool(doc = "Whether to archive the `vendor_dlkm` modules"),
         "fs_type": attr.string(
