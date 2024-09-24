@@ -29,13 +29,24 @@ InitramfsInfo = provider(
     fields = {
         "initramfs_img": "Output image",
         "initramfs_staging_archive": "Archive of initramfs staging directory",
+        "vendor_boot_modules_load": "output vendor_boot.modules.load or vendor_kernel_boot.modules.load",
     },
 )
 
 def _initramfs_impl(ctx):
     initramfs_img = ctx.actions.declare_file("{}/initramfs.img".format(ctx.label.name))
     modules_load = ctx.actions.declare_file("{}/modules.load".format(ctx.label.name))
-    vendor_boot_modules_load = ctx.outputs.vendor_boot_modules_load
+
+    vendor_boot_modules_load = None
+    vendor_boot_modules_load_recovery = None
+    vendor_boot_modules_load_charger = None
+    if ctx.attr.vendor_boot_name:
+        vendor_boot_modules_load = ctx.actions.declare_file("{}/{}.modules.load".format(ctx.label.name, ctx.attr.vendor_boot_name))
+        if ctx.file.modules_recovery_list:
+            vendor_boot_modules_load_recovery = ctx.actions.declare_file("{}/{}.modules.load.recovery".format(ctx.label.name, ctx.attr.vendor_boot_name))
+        if ctx.file.modules_charger_list:
+            vendor_boot_modules_load_charger = ctx.actions.declare_file("{}/{}.modules.load.charger".format(ctx.label.name, ctx.attr.vendor_boot_name))
+
     initramfs_staging_archive = ctx.actions.declare_file("{}/initramfs_staging_archive.tar.gz".format(ctx.label.name))
 
     outputs = [
@@ -62,7 +73,6 @@ def _initramfs_impl(ctx):
         outputs.append(modules_load_recovery)
 
     cp_vendor_boot_modules_load_recovery_cmd = ""
-    vendor_boot_modules_load_recovery = ctx.outputs.vendor_boot_modules_load_recovery
     if vendor_boot_modules_load_recovery:
         cp_vendor_boot_modules_load_recovery_cmd = """
                cp ${{modules_root_dir}}/modules.load.recovery {vendor_boot_modules_load_recovery}
@@ -82,7 +92,6 @@ def _initramfs_impl(ctx):
         outputs.append(modules_load_charger)
 
     cp_vendor_boot_modules_load_charger_cmd = ""
-    vendor_boot_modules_load_charger = ctx.outputs.vendor_boot_modules_load_charger
     if vendor_boot_modules_load_charger:
         cp_vendor_boot_modules_load_charger_cmd = """
                cp ${{modules_root_dir}}/modules.load.charger {vendor_boot_modules_load_charger}
@@ -184,6 +193,7 @@ def _initramfs_impl(ctx):
         InitramfsInfo(
             initramfs_img = initramfs_img,
             initramfs_staging_archive = initramfs_staging_archive,
+            vendor_boot_modules_load = vendor_boot_modules_load,
         ),
     ]
 
@@ -207,6 +217,7 @@ corresponding files.
         "kernel_modules_install": attr.label(
             mandatory = True,
             providers = [KernelModuleInfo],
+            doc = "The [`kernel_modules_install`](#kernel_modules_install).",
         ),
         "deps": attr.label_list(
             allow_files = True,
@@ -218,20 +229,35 @@ corresponding files.
                 by a postorder traversal of the `kernel_modules_install` sources.
                 It defaults to `True`.""",
         ),
-        "vendor_boot_modules_load": attr.output(
-            doc = "`vendor_boot.modules.load` or `vendor_kernel_boot.modules.load`",
+        "modules_list": attr.label(
+            allow_single_file = True,
+            doc = "A file containing list of modules to use for `vendor_boot.modules.load`.",
         ),
-        "vendor_boot_modules_load_recovery": attr.output(
-            doc = "`vendor_boot.modules.load.recovery` or `vendor_kernel_boot.modules.load.recovery`",
+        "modules_recovery_list": attr.label(
+            allow_single_file = True,
+            doc = "A file containing a list of modules to load when booting into recovery.",
         ),
-        "vendor_boot_modules_load_charger": attr.output(
-            doc = "`vendor_boot.modules.load.charger` or `vendor_kernel_boot.modules.load.charger`",
+        "modules_charger_list": attr.label(
+            allow_single_file = True,
+            doc = "A file containing a list of modules to load when booting intocharger mode.",
         ),
-        "modules_list": attr.label(allow_single_file = True),
-        "modules_recovery_list": attr.label(allow_single_file = True),
-        "modules_charger_list": attr.label(allow_single_file = True),
-        "modules_blocklist": attr.label(allow_single_file = True),
-        "modules_options": attr.label(allow_single_file = True),
+        "modules_blocklist": attr.label(allow_single_file = True, doc = """
+            A file containing a list of modules which are
+            blocked from being loaded.
+
+            This file is copied directly to staging directory, and should be in the format:
+            ```
+            blocklist module_name
+            ```
+            """),
+        "modules_options": attr.label(allow_single_file = True, doc = """
+            a file copied to `/lib/modules/<kernel_version>/modules.options` on the ramdisk.
+
+            Lines in the file should be of the form:
+            ```
+            options <modulename> <param1>=<val> <param2>=<val> ...
+            ```
+            """),
         "ramdisk_compression": attr.string(
             doc = "If provided it specfies the format used for any ramdisks generated." +
                   "If not provided a fallback value from build.config is used.",
@@ -240,6 +266,12 @@ corresponding files.
         "ramdisk_compression_args": attr.string(
             doc = "Command line arguments passed only to lz4 command to control compression level.",
         ),
+        "vendor_boot_name": attr.string(doc = """Name of `vendor_boot` image.
+
+                * If `"vendor_boot"`, build `vendor_boot.img`
+                * If `"vendor_kernel_boot"`, build `vendor_kernel_boot.img`
+                * If `None`, skip building `vendor_boot`.
+            """, values = ["vendor_boot", "vendor_kernel_boot"]),
     },
     subrules = [image_utils.build_modules_image],
 )
