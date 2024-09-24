@@ -47,9 +47,9 @@ def _boot_images_impl(ctx):
         initramfs_staging_archive = ctx.attr.initramfs[InitramfsInfo].initramfs_staging_archive
         initramfs_staging_dir = modules_staging_dir + "/initramfs_staging"
 
-    outs = []
-    for out in ctx.outputs.outs:
-        outs.append(out.short_path[len(outdir_short) + 1:])
+    out_files = []
+    for out in ctx.attr.outs:
+        out_files.append(ctx.actions.declare_file("{}/{}".format(ctx.label.name, out)))
 
     kernel_build_outs = depset(transitive = [
         ctx.attr.kernel_build[KernelBuildInfo].outs,
@@ -215,7 +215,7 @@ def _boot_images_impl(ctx):
         mkbootimg_staging_dir = mkbootimg_staging_dir,
         search_and_cp_output = ctx.executable._search_and_cp_output.path,
         outdir = outdir,
-        outs = " ".join(outs),
+        outs = " ".join(ctx.attr.outs),
         modules_staging_dir = modules_staging_dir,
         boot_flag_cmd = boot_flag_cmd,
         vendor_boot_flag_cmd = vendor_boot_flag_cmd,
@@ -229,11 +229,12 @@ def _boot_images_impl(ctx):
     ctx.actions.run_shell(
         mnemonic = "BootImages",
         inputs = depset(inputs, transitive = transitive_inputs),
-        outputs = ctx.outputs.outs,
+        outputs = out_files,
         tools = depset(tools, transitive = transitive_tools),
         progress_message = "Building boot images %{label}",
         command = command,
     )
+    return DefaultInfo(files = depset(out_files))
 
 boot_images = rule(
     implementation = _boot_images_impl,
@@ -251,7 +252,14 @@ Execute `build_boot_images` in `build_utils.sh`.""",
         "deps": attr.label_list(
             allow_files = True,
         ),
-        "outs": attr.output_list(),
+        "outs": attr.string_list(
+            doc = """A list of output files that will be installed to `DIST_DIR` when
+                `build_boot_images` in `build/kernel/build_utils.sh` is executed.
+
+                Unlike `kernel_images`, you must specify the list explicitly.
+            """,
+            allow_empty = False,
+        ),
         "mkbootimg": attr.label(
             allow_single_file = True,
             default = "//tools/mkbootimg:mkbootimg.py",
