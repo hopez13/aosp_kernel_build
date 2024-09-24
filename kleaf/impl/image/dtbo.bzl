@@ -75,13 +75,39 @@ dtbo = rule(
         "kernel_build": attr.label(
             mandatory = True,
             providers = [KernelSerializedEnvInfo, KernelBuildInfo],
+            doc = "The [`kernel_build`](#kernel_build).",
         ),
         "srcs": attr.label_list(
             allow_files = True,
+            doc = """
+                List of `*.dtbo` files used to package the `dtbo.img`. This corresponds to
+                `MKDTIMG_DTBOS` in build configs; see example below.
+
+                Example:
+                ```
+                kernel_build(
+                    name = "tuna_kernel",
+                    outs = [
+                        "path/to/foo.dtbo",
+                        "path/to/bar.dtbo",
+                    ],
+                )
+                dtbo(
+                    name = "tuna_images",
+                    kernel_build = ":tuna_kernel",
+                    srcs = [
+                        ":tuna_kernel/path/to/foo.dtbo",
+                        ":tuna_kernel/path/to/bar.dtbo",
+                    ],
+                )
+                ```
+            """,
         ),
         "config_file": attr.label(
             allow_single_file = True,
-            doc = "if set, use mkdtimg cfg_create with the given config file, instead of mkdtimg create",
+            doc = """A config file to create dtbo image by cfg_create command.
+
+            If set, use mkdtimg cfg_create with the given config file, instead of mkdtimg create""",
         ),
         "_debug_print_scripts": attr.label(
             default = "//build/kernel/kleaf:debug_print_scripts",
