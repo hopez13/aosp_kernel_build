@@ -232,11 +232,22 @@ def _optional_single_path(files, what = None):
     If more than one file, error.
     Otherwise return its path.
     """
-    if not files:
+    file = _optional_file(files, what = what)
+    if not file:
         return ""
+    return file.path
+
+def _optional_file(files, what = None):
+    """If files is empty, return None.
+
+    If more than one file, error.
+    Otherwise return the file.
+    """
+    if not files:
+        return None
     if len(files) > 1:
         fail("{}: expected a single file!".format(what or ""))
-    return files[0].path
+    return files[0]
 
 # Utilities that applies to all Bazel stuff in general. These functions are
 # not Kleaf specific.
@@ -255,6 +266,7 @@ utils = struct(
     write_depset = _write_depset,
     optional_path = _optional_path,
     optional_single_path = _optional_single_path,
+    optional_file = _optional_file,
 )
 
 def _filter_module_srcs(files):
