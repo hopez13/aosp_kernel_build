@@ -120,6 +120,7 @@ def _kernel_env_config_settings():
 def _kernel_env_get_config_tags(
         ctx,
         mnemonic_prefix,
+        pre_defconfig_fragments,
         post_defconfig_fragments):
     """Return necessary files for KernelEnvAttrInfo's fields related to "config tags"
 
@@ -130,6 +131,7 @@ def _kernel_env_get_config_tags(
     Args:
         ctx: ctx
         mnemonic_prefix: prefix to mnemonics for actions created within this function.
+        pre_defconfig_fragments: a `list[File]` of pre defconfig fragments.
         post_defconfig_fragments: a `list[File]` of post defconfig fragments.
 
     Returns:
@@ -150,6 +152,8 @@ def _kernel_env_get_config_tags(
     common_config_tags_file = ctx.actions.declare_file("{}/common_config_tags.json".format(ctx.label.name))
     args = ctx.actions.args()
     args.add("--base", base_config_tags_file)
+    if pre_defconfig_fragments:
+        args.add_all("--pre_defconfig_fragments", pre_defconfig_fragments)
     if post_defconfig_fragments:
         args.add_all("--post_defconfig_fragments", post_defconfig_fragments)
     args.add("--dest", common_config_tags_file)
@@ -232,6 +236,7 @@ def _create_progress_message_item(attr_key, attr_val, map, interesting_list):
 
 def _get_progress_message_note(
         ctx,
+        pre_defconfig_fragments,
         post_defconfig_fragments):
     """Returns a description text for progress message.
 
@@ -239,6 +244,7 @@ def _get_progress_message_note(
 
     Args:
         ctx: ctx
+        pre_defconfig_fragments: a `list[File]` of pre defconfig fragments.
         post_defconfig_fragments: a `list[File]` of post defconfig fragments.
 
     Returns:
@@ -276,7 +282,7 @@ def _get_progress_message_note(
     # Files under build/kernel/kleaf/impl/defconfig are named as *_defconfig.
     # For progress_messsage, we only care about the part before _defconfig.
     # See kernel_build.defconfig_fragments documentation.
-    for file in post_defconfig_fragments:
+    for file in pre_defconfig_fragments + post_defconfig_fragments:
         ret.append(file.basename.removesuffix("_defconfig"))
 
     ret = sorted(sets.to_list(sets.make(ret)))
