@@ -145,8 +145,8 @@ def _create_main_action(
         ddk_config_info):
     """Registers the main action that creates the output files."""
 
-    kconfig_depset_written = utils.write_depset(ctx, ddk_config_info.kconfig, "kconfig_depset.txt")
-    defconfig_depset_written = utils.write_depset(ctx, ddk_config_info.defconfig, "defconfig_depset.txt")
+    kconfig_depset_written = utils.write_depset(ddk_config_info.kconfig, "kconfig_depset.txt")
+    defconfig_depset_written = utils.write_depset(ddk_config_info.defconfig, "defconfig_depset.txt")
 
     ddk_config_env = ctx.attr.kernel_build[KernelBuildExtModuleInfo].ddk_config_env
 
@@ -269,11 +269,6 @@ for its format.
             allow_single_file = True,
             doc = "The `defconfig` file.",
         ),
-        "_write_depset": attr.label(
-            default = "//build/kernel/kleaf/impl:write_depset",
-            executable = True,
-            cfg = "exec",
-        ),
         # Needed to compose DdkConfigInfo
         "module_deps": attr.label_list(),
         "module_hdrs": attr.label_list(allow_files = [".h"]),
@@ -284,5 +279,8 @@ for its format.
         ),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
     },
-    subrules = [ddk_config_subrule],
+    subrules = [
+        ddk_config_subrule,
+        utils.write_depset,
+    ],
 )

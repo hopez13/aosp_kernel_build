@@ -677,11 +677,6 @@ kernel_env = rule(
             executable = True,
             cfg = "exec",
         ),
-        "_write_depset": attr.label(
-            default = "//build/kernel/kleaf/impl:write_depset",
-            executable = True,
-            cfg = "exec",
-        ),
     } | _kernel_env_additional_attrs(),
     toolchains = [hermetic_toolchain.type],
     subrules = [set_kernel_dir],
