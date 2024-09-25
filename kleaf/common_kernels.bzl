@@ -60,6 +60,8 @@ def common_kernel(
         arch = None,
         visibility = None,
         toolchain_version = None,
+        defconfig = None,
+        pre_defconfig_fragments = None,
         defconfig_fragments = None,
         enable_interceptor = None,
         kmi_symbol_list = None,
@@ -123,6 +125,8 @@ def common_kernel(
         build_config: See [kernel_build.build_config](kernel.md#kernel_build-build_config)
         makefile: See [kernel_build.makefile](kernel.md#kernel_build-makefile)
         toolchain_version: See [kernel_build.toolchain_version](kernel.md#kernel_build-toolchain_version)
+        defconfig: See [kernel_build.defconfig](kernel.md#kernel_build-defconfig)
+        pre_defconfig_fragments: See [kernel_build.pre_defconfig_fragments](kernel.md#kernel_build-pre_defconfig_fragments)
         defconfig_fragments: See [kernel_build.defconfig_fragments](kernel.md#kernel_build-defconfig_fragments)
         enable_interceptor: See [kernel_build.enable_interceptor](kernel.md#kernel_build-enable_interceptor)
         kmi_symbol_list: See [kernel_build.kmi_symbol_list](kernel.md#kernel_build-kmi_symbol_list)
@@ -153,6 +157,8 @@ def common_kernel(
         arch = arch,
         build_config = build_config,
         makefile = makefile,
+        defconfig = defconfig,
+        pre_defconfig_fragments = pre_defconfig_fragments,
         defconfig_fragments = defconfig_fragments,
         toolchain_version = toolchain_version,
         visibility = visibility,
@@ -231,6 +237,8 @@ def common_kernel(
         ],
         build_config = name + "_build_config",
         makefile = makefile,
+        defconfig = defconfig,
+        pre_defconfig_fragments = pre_defconfig_fragments,
         defconfig_fragments = defconfig_fragments,
         enable_interceptor = enable_interceptor,
         visibility = visibility,
