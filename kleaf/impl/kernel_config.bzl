@@ -187,8 +187,8 @@ def _reconfig(ctx):
 
     configs = []
     transitive_deps = []
-    apply_defconfig_fragments_cmd = ""
-    check_defconfig_fragments_cmd = ""
+    apply_post_defconfig_fragments_cmd = ""
+    check_post_defconfig_fragments_cmd = ""
 
     for fn in (
         _config_lto,
@@ -199,20 +199,20 @@ def _reconfig(ctx):
     ):
         configs += fn(ctx)
 
-    if ctx.files.defconfig_fragments:
-        transitive_deps += [target.files for target in ctx.attr.defconfig_fragments]
-        defconfig_fragments_paths = [f.path for f in ctx.files.defconfig_fragments]
+    if ctx.files.post_defconfig_fragments:
+        transitive_deps += [target.files for target in ctx.attr.post_defconfig_fragments]
+        post_defconfig_fragments_paths = [f.path for f in ctx.files.post_defconfig_fragments]
 
-        apply_defconfig_fragments_cmd = config_utils.create_merge_dot_config_cmd(
-            " ".join(defconfig_fragments_paths),
+        apply_post_defconfig_fragments_cmd = config_utils.create_merge_dot_config_cmd(
+            " ".join(post_defconfig_fragments_paths),
         )
-        apply_defconfig_fragments_cmd += """
+        apply_post_defconfig_fragments_cmd += """
             need_olddefconfig=1
         """
 
-        check_defconfig_fragments_cmd = config_utils.create_check_defconfig_cmd(
+        check_post_defconfig_fragments_cmd = config_utils.create_check_defconfig_cmd(
             ctx.label,
-            " ".join(defconfig_fragments_paths),
+            " ".join(post_defconfig_fragments_paths),
         )
 
     cmd = """
@@ -227,18 +227,18 @@ def _reconfig(ctx):
                 need_olddefconfig=1
             fi
 
-            {apply_defconfig_fragments_cmd}
+            {apply_post_defconfig_fragments_cmd}
 
             if [[ -n "${{need_olddefconfig}}" ]]; then
                 make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} olddefconfig
             fi
 
-            {check_defconfig_fragments_cmd}
+            {check_post_defconfig_fragments_cmd}
         )
     """.format(
         configs = " ".join(configs),
-        apply_defconfig_fragments_cmd = apply_defconfig_fragments_cmd,
-        check_defconfig_fragments_cmd = check_defconfig_fragments_cmd,
+        apply_post_defconfig_fragments_cmd = apply_post_defconfig_fragments_cmd,
+        check_post_defconfig_fragments_cmd = check_post_defconfig_fragments_cmd,
     )
 
     return struct(
@@ -534,8 +534,8 @@ kernel_config = rule(
             doc = "Label to trusted system key.",
             allow_single_file = True,
         ),
-        "defconfig_fragments": attr.label_list(
-            doc = "defconfig fragments",
+        "post_defconfig_fragments": attr.label_list(
+            doc = "**post** defconfig fragments",
             allow_files = True,
         ),
         "_write_depset": attr.label(
