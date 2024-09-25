@@ -16,6 +16,16 @@
 
 visibility("//build/kernel/kleaf/...")
 
+StepInfo = provider(
+    "Describes a step, part of a run_shell",
+    fields = {
+        "inputs": "depset of files",
+        "outputs": "list of files",
+        "tools": "**list of depset** of files or FilesToRunProviders",
+        "cmd": "command line",
+    },
+)
+
 KernelCmdsInfo = provider(
     doc = """Provides a directory of `.cmd` files.""",
     fields = {
