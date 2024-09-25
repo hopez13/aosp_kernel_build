@@ -90,16 +90,7 @@ def _kernel_build_config_settings():
     }
 
 def _kernel_config_config_settings_raw():
-    return dicts.add(
-        kgdb.config_settings_raw(),
-        {
-            "debug": "//build/kernel/kleaf:debug",
-            "kasan": "//build/kernel/kleaf:kasan",
-            "kasan_sw_tags": "//build/kernel/kleaf:kasan_sw_tags",
-            "kasan_generic": "//build/kernel/kleaf:kasan_generic",
-            "kcsan": "//build/kernel/kleaf:kcsan",
-        },
-    )
+    return kgdb.config_settings_raw()
 
 def _kernel_config_config_settings():
     return _trim_attrs() | _lto_attrs() | {

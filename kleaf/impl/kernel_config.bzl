@@ -27,6 +27,7 @@ load(
     "KernelEnvMakeGoalsInfo",
     "KernelSerializedEnvInfo",
     "KernelToolchainInfo",
+    "StepInfo",
 )
 load(":config_utils.bzl", "config_utils")
 load(":debug.bzl", "debug")
@@ -35,22 +36,22 @@ load(":kernel_config_settings.bzl", "kernel_config_settings")
 load(":kgdb.bzl", "kgdb")
 load(":scripts_config_arg_builder.bzl", _config = "scripts_config_arg_builder")
 load(":stamp.bzl", "stamp")
-load(":utils.bzl", "kernel_utils")
+load(":utils.bzl", "kernel_utils", "utils")
 
 visibility("//build/kernel/kleaf/...")
 
 # Name of raw symbol list under $OUT_DIR
 _RAW_KMI_SYMBOL_LIST_BELOW_OUT_DIR = "abi_symbollist.raw"
 
-def _config_lto(ctx):
+def _config_lto_impl(_subrule_ctx, lto_config_flag):
     """Return configs for LTO.
 
     Args:
-        ctx: ctx
+        _subrule_ctx: subrule_ctx
+        lto_config_flag: value of lto attr
     Returns:
         a list of arguments to `scripts/config`
     """
-    lto_config_flag = ctx.attr.lto
 
     lto_configs = []
 
@@ -87,49 +88,61 @@ def _config_lto(ctx):
 
     return lto_configs
 
-def _config_trim(ctx):
+_config_lto = subrule(implementation = _config_lto_impl)
+
+def _config_trim_impl(subrule_ctx, trim_attr_value, raw_kmi_symbol_list_file, *, _debug, _kgdb):
     """Return configs for trimming.
 
     Args:
-        ctx: ctx
+        subrule_ctx: subrule_ctx
+        trim_attr_value: value of trim_nonlisted_kmi_utils.get_value(ctx)
+        raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
+        _debug: --debug
+        _kgdb: --kgdb
     Returns:
         a list of arguments to `scripts/config`
     """
-    if trim_nonlisted_kmi_utils.get_value(ctx) and not ctx.files.raw_kmi_symbol_list:
-        fail("{}: trim_nonlisted_kmi is set but raw_kmi_symbol_list is empty.".format(ctx.label))
+    if trim_attr_value and not raw_kmi_symbol_list_file:
+        fail("{}: trim_nonlisted_kmi is set but raw_kmi_symbol_list is empty.".format(subrule_ctx.label))
 
-    if not trim_nonlisted_kmi_utils.get_value(ctx):
+    if not trim_attr_value:
         return []
 
-    if ctx.attr._kgdb[BuildSettingInfo].value:
+    if _kgdb[BuildSettingInfo].value:
         # buildifier: disable=print
         print("\nWARNING: {this_label}: Symbol trimming \
-              IGNORED because --kgdb is set!".format(this_label = ctx.label))
+              IGNORED because --kgdb is set!".format(this_label = subrule_ctx.label))
         return []
 
-    if ctx.attr.debug[BuildSettingInfo].value:
+    if _debug[BuildSettingInfo].value:
         # buildifier: disable=print
         print("\nWARNING: {this_label}: Symbol trimming \
-              IGNORED because --debug is set!".format(this_label = ctx.label))
+              IGNORED because --debug is set!".format(this_label = subrule_ctx.label))
         return []
 
     return [
         _config.enable("TRIM_UNUSED_KSYMS"),
     ]
 
-def _config_symbol_list(ctx):
+_config_trim = subrule(
+    implementation = _config_trim_impl,
+    attrs = {
+        "_debug": attr.label(default = "//build/kernel/kleaf:debug"),
+        "_kgdb": attr.label(default = "//build/kernel/kleaf:kgdb"),
+    },
+)
+
+def _config_symbol_list_impl(_subrule_ctx, raw_kmi_symbol_list_file):
     """Return configs for `raw_symbol_list`.
 
     Args:
-        ctx: ctx
+        _subrule_ctx: subrule_ctx
+        raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
     Returns:
         a list of arguments to `scripts/config`
     """
-    if not ctx.files.raw_kmi_symbol_list:
+    if not raw_kmi_symbol_list_file:
         return []
-
-    if len(ctx.files.raw_kmi_symbol_list) > 1:
-        fail("{}: raw_kmi_symbol_list must only provide at most one file".format(ctx.label))
 
     return [
         _config.set_str(
@@ -138,7 +151,9 @@ def _config_symbol_list(ctx):
         ),
     ]
 
-def _config_keys(ctx):
+_config_symbol_list = subrule(implementation = _config_symbol_list_impl)
+
+def _config_keys_impl(_subrule_ctx, module_signing_key_file, system_trusted_key_file):
     """Return configs for module signing keys and system trusted keys.
 
     Note: by embedding the system path into the binary, the resulting build
@@ -147,61 +162,103 @@ def _config_keys(ctx):
     binary.
 
     Args:
-        ctx: ctx
+        _subrule_ctx: subrule_ctx
+        module_signing_key_file: file of module_signing_key
+        system_trusted_key_file: file of system_trusted_key
     Returns:
         a list of arguments to `scripts/config`
     """
     configs = []
-    if ctx.file.module_signing_key:
+    if module_signing_key_file:
         configs.append(_config.set_str(
             "MODULE_SIG_KEY",
-            ctx.file.module_signing_key.basename,
+            module_signing_key_file.basename,
         ))
 
-    if ctx.file.system_trusted_key:
+    if system_trusted_key_file:
         configs.append(_config.set_str(
             "SYSTEM_TRUSTED_KEYS",
-            ctx.file.system_trusted_key.basename,
+            system_trusted_key_file.basename,
         ))
 
     return configs
 
-def _check_trimming_disabled(ctx):
-    """Checks that trimming is disabled if --k*san is set"""
-    if not trim_nonlisted_kmi_utils.get_value(ctx):
+_config_keys = subrule(implementation = _config_keys_impl)
+
+def _check_trimming_disabled_impl(subrule_ctx, trim_attr_value, **kwargs):
+    """Checks that trimming is disabled if --k*san is set
+
+    Args:
+        subrule_ctx: subrule_ctx
+        trim_attr_value: value of trim_nonlisted_kmi_utils.get_value(ctx)
+        **kwargs: must contain all k*san attrs
+    """
+    if not trim_attr_value:
         return
 
     for attr_name in (
-        "kasan",
-        "kasan_sw_tags",
-        "kasan_generic",
-        "kcsan",
+        "_kasan",
+        "_kasan_sw_tags",
+        "_kasan_generic",
+        "_kcsan",
     ):
-        if getattr(ctx.attr, attr_name)[BuildSettingInfo].value:
-            fail("{}: --{} requires trimming to be disabled".format(ctx.label, attr_name))
+        if kwargs[attr_name][BuildSettingInfo].value:
+            fail("{}: --{} requires trimming to be disabled".format(subrule_ctx.label, attr_name))
 
-def _reconfig(ctx):
-    """Return a command and extra inputs to re-configure `.config` file."""
+_check_trimming_disabled = subrule(
+    implementation = _check_trimming_disabled_impl,
+    attrs = {
+        "_kasan": attr.label(default = "//build/kernel/kleaf:kasan"),
+        "_kasan_sw_tags": attr.label(default = "//build/kernel/kleaf:kasan_sw_tags"),
+        "_kasan_generic": attr.label(default = "//build/kernel/kleaf:kasan_generic"),
+        "_kcsan": attr.label(default = "//build/kernel/kleaf:kcsan"),
+    },
+)
 
-    _check_trimming_disabled(ctx)
+def _reconfig_impl(
+        subrule_ctx,
+        lto_config_flag,
+        trim_attr_value,
+        raw_kmi_symbol_list_file,
+        module_signing_key_file,
+        system_trusted_key_file,
+        post_defconfig_fragments_files):
+    """Return a command and extra inputs to re-configure `.config` file.
+
+    Args:
+        subrule_ctx: subrule_ctx
+        lto_config_flag: value of lto attr
+        trim_attr_value: value of trim_nonlisted_kmi_utils.get_value(ctx)
+        raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
+        module_signing_key_file: file of module_signing_key
+        system_trusted_key_file: file of system_trusted_key
+        post_defconfig_fragments_files: files of post_defconfig_fragments
+    """
+
+    _check_trimming_disabled(trim_attr_value = trim_attr_value)
 
     configs = []
-    transitive_deps = []
     apply_post_defconfig_fragments_cmd = ""
     check_post_defconfig_fragments_cmd = ""
 
-    for fn in (
-        _config_lto,
-        _config_trim,
-        _config_symbol_list,
-        _config_keys,
-        kgdb.get_scripts_config_args,
-    ):
-        configs += fn(ctx)
+    configs += _config_lto(
+        lto_config_flag = lto_config_flag,
+    )
+    configs += _config_trim(
+        trim_attr_value = trim_attr_value,
+        raw_kmi_symbol_list_file = raw_kmi_symbol_list_file,
+    )
+    configs += _config_symbol_list(
+        raw_kmi_symbol_list_file = raw_kmi_symbol_list_file,
+    )
+    configs += _config_keys(
+        module_signing_key_file = module_signing_key_file,
+        system_trusted_key_file = system_trusted_key_file,
+    )
+    configs += kgdb.get_scripts_config_args()
 
-    if ctx.files.post_defconfig_fragments:
-        transitive_deps += [target.files for target in ctx.attr.post_defconfig_fragments]
-        post_defconfig_fragments_paths = [f.path for f in ctx.files.post_defconfig_fragments]
+    if post_defconfig_fragments_files:
+        post_defconfig_fragments_paths = [f.path for f in post_defconfig_fragments_files]
 
         apply_post_defconfig_fragments_cmd = config_utils.create_merge_dot_config_cmd(
             " ".join(post_defconfig_fragments_paths),
@@ -211,7 +268,7 @@ def _reconfig(ctx):
         """
 
         check_post_defconfig_fragments_cmd = config_utils.create_check_defconfig_cmd(
-            ctx.label,
+            subrule_ctx.label,
             " ".join(post_defconfig_fragments_paths),
         )
 
@@ -241,10 +298,102 @@ def _reconfig(ctx):
         check_post_defconfig_fragments_cmd = check_post_defconfig_fragments_cmd,
     )
 
-    return struct(
+    return StepInfo(
         cmd = cmd,
-        deps = depset(transitive = transitive_deps),
+        inputs = depset(post_defconfig_fragments_files),
+        outputs = [],
+        tools = [],
     )
+
+_reconfig = subrule(
+    implementation = _reconfig_impl,
+    subrules = [
+        _check_trimming_disabled,
+        _config_lto,
+        _config_trim,
+        _config_symbol_list,
+        _config_keys,
+        kgdb.get_scripts_config_args,
+    ],
+)
+
+def _pre_defconfig_impl(_subrule_ctx):
+    cmd = """
+        # Pre-defconfig commands
+        eval ${PRE_DEFCONFIG_CMDS}
+    """
+    return StepInfo(
+        inputs = depset(),
+        cmd = cmd,
+        outputs = [],
+        tools = [],
+    )
+
+_pre_defconfig = subrule(
+    implementation = _pre_defconfig_impl,
+)
+
+def _make_defconfig_impl(_subrule_ctx):
+    cmd = """
+        # Actual defconfig
+        make -C ${KERNEL_DIR} ${TOOL_ARGS} O=${OUT_DIR} ${DEFCONFIG}
+    """
+    return StepInfo(
+        inputs = depset(),
+        cmd = cmd,
+        outputs = [],
+        tools = [],
+    )
+
+_make_defconfig = subrule(
+    implementation = _make_defconfig_impl,
+)
+
+def _post_defconfig_impl(
+        _subrule_ctx,
+        lto_config_flag,
+        trim_attr_value,
+        raw_kmi_symbol_list_file,
+        module_signing_key_file,
+        system_trusted_key_file,
+        post_defconfig_fragments_files):
+    """Handle post defconfig step
+
+    Args:
+        _subrule_ctx: subrule_ctx
+        lto_config_flag: value of lto attr
+        trim_attr_value: value of trim_nonlisted_kmi_utils.get_value(ctx)
+        raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
+        module_signing_key_file: file of module_signing_key
+        system_trusted_key_file: file of system_trusted_key
+        post_defconfig_fragments_files: files of post_defconfig_fragments
+    """
+    cmd = """
+        # Post-defconfig commands
+        eval ${POST_DEFCONFIG_CMDS}
+    """
+
+    reconfig_ret = _reconfig(
+        lto_config_flag = lto_config_flag,
+        trim_attr_value = trim_attr_value,
+        raw_kmi_symbol_list_file = raw_kmi_symbol_list_file,
+        module_signing_key_file = module_signing_key_file,
+        system_trusted_key_file = system_trusted_key_file,
+        post_defconfig_fragments_files = post_defconfig_fragments_files,
+    )
+    cmd += reconfig_ret.cmd
+
+    return StepInfo(
+        inputs = reconfig_ret.inputs,
+        cmd = cmd,
+        outputs = reconfig_ret.outputs,
+        tools = reconfig_ret.tools,
+    )
+
+_post_defconfig = subrule(
+    implementation = _post_defconfig_impl,
+    subrules = [_reconfig],
+)
 
 def _kernel_config_impl(ctx):
     localversion_file = stamp.write_localversion(ctx)
@@ -262,14 +411,26 @@ def _kernel_config_impl(ctx):
         ]])
     ]
     transitive_inputs = []
+    tools = []
 
     out_dir = ctx.actions.declare_directory(ctx.attr.name + "/out_dir")
     outputs = [out_dir]
 
-    reconfig = _reconfig(ctx)
-    transitive_inputs.append(reconfig.deps)
-
-    tools = []
+    step_returns = [
+        _pre_defconfig(),
+        _make_defconfig(),
+        _post_defconfig(
+            lto_config_flag = ctx.attr.lto,
+            trim_attr_value = trim_nonlisted_kmi_utils.get_value(ctx),
+            raw_kmi_symbol_list_file = utils.optional_file(ctx.files.raw_kmi_symbol_list),
+            module_signing_key_file = ctx.file.module_signing_key,
+            system_trusted_key_file = ctx.file.system_trusted_key,
+            post_defconfig_fragments_files = ctx.files.post_defconfig_fragments,
+        ),
+    ]
+    transitive_inputs += [step_return.inputs for step_return in step_returns]
+    outputs += [out for step_return in step_returns for out in step_return.outputs]
+    tools += [tool for step_return in step_returns for tool in step_return.tools]
 
     transitive_inputs.append(ctx.attr.env[KernelEnvInfo].inputs)
     transitive_tools = [ctx.attr.env[KernelEnvInfo].tools]
@@ -301,14 +462,7 @@ def _kernel_config_impl(ctx):
 
     command = ctx.attr.env[KernelEnvInfo].setup + """
           {cache_dir_cmd}
-        # Pre-defconfig commands
-          eval ${{PRE_DEFCONFIG_CMDS}}
-        # Actual defconfig
-          make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{DEFCONFIG}}
-        # Post-defconfig commands
-          eval ${{POST_DEFCONFIG_CMDS}}
-        # Re-config
-          {reconfig_cmd}
+          {defconfig_cmd}
         # HACK: run syncconfig to avoid re-triggerring kernel_build
           make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} syncconfig
         # Grab outputs
@@ -329,7 +483,7 @@ def _kernel_config_impl(ctx):
         out_dir = out_dir.path,
         cache_dir_cmd = cache_dir_step.cmd,
         cache_dir_post_cmd = cache_dir_step.post_cmd,
-        reconfig_cmd = reconfig.cmd,
+        defconfig_cmd = "\n".join([step_return.cmd for step_return in step_returns]),
         localversion_file = localversion_file.path,
         sync_raw_kmi_symbol_list_cmd = sync_raw_kmi_symbol_list_cmd,
     )
@@ -339,7 +493,7 @@ def _kernel_config_impl(ctx):
         mnemonic = "KernelConfig",
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = outputs,
-        tools = depset(tools, transitive = transitive_tools),
+        tools = tools + [depset(transitive = transitive_tools)],
         progress_message = "Creating kernel config{} %{{label}}".format(
             ctx.attr.env[KernelEnvAttrInfo].progress_message_note,
         ),
@@ -548,4 +702,9 @@ kernel_config = rule(
     } | _kernel_config_additional_attrs(),
     executable = True,
     toolchains = [hermetic_toolchain.type],
+    subrules = [
+        _pre_defconfig,
+        _make_defconfig,
+        _post_defconfig,
+    ],
 )
