@@ -563,7 +563,7 @@ def kernel_build(
         Label("//build/kernel/kleaf:lto_is_default"): "default",
     })
 
-    defconfig_fragments = _get_defconfig_fragments(
+    post_defconfig_fragments = _get_post_defconfig_fragments(
         kernel_build_name = name,
         kernel_build_defconfig_fragments = defconfig_fragments,
         kernel_build_arch = arch,
@@ -628,7 +628,7 @@ def kernel_build(
             Label("//build/kernel/kleaf:musl_kbuild_is_true"): name + "_platform_exec_musl",
             "//conditions:default": name + "_platform_exec",
         }),
-        defconfig_fragments = defconfig_fragments,
+        post_defconfig_fragments = post_defconfig_fragments,
         **internal_kwargs
     )
 
@@ -674,7 +674,7 @@ def kernel_build(
         module_signing_key = module_signing_key,
         system_trusted_key = system_trusted_key,
         lto = lto,
-        defconfig_fragments = defconfig_fragments,
+        post_defconfig_fragments = post_defconfig_fragments,
         **internal_kwargs
     )
 
@@ -830,7 +830,7 @@ IGNORED because kernel_build.sanitizers is set!".format(this_label = ctx.label, 
 
     return False
 
-def _get_defconfig_fragments(
+def _get_post_defconfig_fragments(
         kernel_build_name,
         kernel_build_defconfig_fragments,
         kernel_build_arch,

@@ -126,7 +126,10 @@ def _kernel_env_config_settings():
         for attr_name, label in _kernel_env_config_settings_raw().items()
     }
 
-def _kernel_env_get_config_tags(ctx, mnemonic_prefix, defconfig_fragments):
+def _kernel_env_get_config_tags(
+        ctx,
+        mnemonic_prefix,
+        post_defconfig_fragments):
     """Return necessary files for KernelEnvAttrInfo's fields related to "config tags"
 
     config_tags is the mechanism to isolate --cache_dir.
@@ -136,7 +139,7 @@ def _kernel_env_get_config_tags(ctx, mnemonic_prefix, defconfig_fragments):
     Args:
         ctx: ctx
         mnemonic_prefix: prefix to mnemonics for actions created within this function.
-        defconfig_fragments: a `list[File]` of defconfig fragments.
+        post_defconfig_fragments: a `list[File]` of post defconfig fragments.
 
     Returns:
         A struct with two fields:
@@ -152,16 +155,16 @@ def _kernel_env_get_config_tags(ctx, mnemonic_prefix, defconfig_fragments):
     base_config_tags_file = ctx.actions.declare_file("{}/base_config_tags.json".format(ctx.label.name))
     ctx.actions.write(base_config_tags_file, json.encode_indent(base_config_tags, indent = "    "))
 
-    # common: base + defconfig_fragments
+    # common: base + post_defconfig_fragments
     common_config_tags_file = ctx.actions.declare_file("{}/common_config_tags.json".format(ctx.label.name))
     args = ctx.actions.args()
     args.add("--base", base_config_tags_file)
-    if defconfig_fragments:
-        args.add_all("--defconfig_fragments", defconfig_fragments)
+    if post_defconfig_fragments:
+        args.add_all("--post_defconfig_fragments", post_defconfig_fragments)
     args.add("--dest", common_config_tags_file)
     ctx.actions.run(
         outputs = [common_config_tags_file],
-        inputs = depset([base_config_tags_file], transitive = [depset(defconfig_fragments)]),
+        inputs = depset([base_config_tags_file], transitive = [depset(post_defconfig_fragments)]),
         executable = ctx.executable._cache_dir_config_tags,
         arguments = [args],
         mnemonic = "{}CommonConfigTags".format(mnemonic_prefix),
@@ -236,14 +239,16 @@ def _create_progress_message_item(attr_key, attr_val, map, interesting_list):
     else:
         return "{}={}".format(print_attr_key, attr_val)
 
-def _get_progress_message_note(ctx, defconfig_fragments):
+def _get_progress_message_note(
+        ctx,
+        post_defconfig_fragments):
     """Returns a description text for progress message.
 
     This is a shortened and human-readable version of `kernel_env_get_config_tags`.
 
     Args:
         ctx: ctx
-        defconfig_fragments: a `list[File]` of defconfig fragments.
+        post_defconfig_fragments: a `list[File]` of post defconfig fragments.
 
     Returns:
         A string to be added to the end of `progress_message`
@@ -280,7 +285,7 @@ def _get_progress_message_note(ctx, defconfig_fragments):
     # Files under build/kernel/kleaf/impl/defconfig are named as *_defconfig.
     # For progress_messsage, we only care about the part before _defconfig.
     # See kernel_build.defconfig_fragments documentation.
-    for file in defconfig_fragments:
+    for file in post_defconfig_fragments:
         ret.append(file.basename.removesuffix("_defconfig"))
 
     ret = sorted(sets.to_list(sets.make(ret)))

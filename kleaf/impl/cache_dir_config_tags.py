@@ -21,7 +21,7 @@ import sys
 from typing import TextIO
 
 TARGET_KEY = "_target"
-DEFCONFIG_FRAGMENTS_KEY = "_defconfig_fragments"
+POST_DEFCONFIG_FRAGMENTS_KEY = "_post_defconfig_fragments"
 
 
 def load_json(path: pathlib.Path):
@@ -50,7 +50,7 @@ def comment_json(object, fp):
 def main(
         base: pathlib.Path,
         target: str | None,
-        defconfig_fragments: list[pathlib.Path] | None,
+        post_defconfig_fragments: list[pathlib.Path] | None,
         dest: pathlib.Path,
         comment: bool,
 ):
@@ -61,16 +61,16 @@ def main(
     if target is not None:
         config_tags[TARGET_KEY] = target
 
-    # Use None check so that, if --defconfig_fragments is an empty list,
-    # treat it as a directive to set _defconfig_fragments as an empty list.
-    if defconfig_fragments is not None:
-        if DEFCONFIG_FRAGMENTS_KEY in config_tags:
-            print(f"ERROR: {base} already has {DEFCONFIG_FRAGMENTS_KEY}!",
+    # Use None check so that, if --post_defconfig_fragments is an empty list,
+    # treat it as a directive to set _post_defconfig_fragments as an empty list.
+    if post_defconfig_fragments is not None:
+        if POST_DEFCONFIG_FRAGMENTS_KEY in config_tags:
+            print(f"ERROR: {base} already has {POST_DEFCONFIG_FRAGMENTS_KEY}!",
                   file=sys.stderr)
             sys.exit(1)
 
-        config_tags[DEFCONFIG_FRAGMENTS_KEY] = [
-            str(path) for path in defconfig_fragments]
+        config_tags[POST_DEFCONFIG_FRAGMENTS_KEY] = [
+            str(path) for path in post_defconfig_fragments]
 
     if comment:
         write_json = comment_json
@@ -105,9 +105,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--target", help="If set, add label of target to the result")
     parser.add_argument(
-        "--defconfig_fragments", nargs="*",
+        "--post_defconfig_fragments", nargs="*",
         type=pathlib.Path, default=None,
-        help="If set, add defconfig fragments to result")
+        help="If set, add post defconfig fragments to result")
     parser.add_argument(
         "--dest", type=pathlib.Path,
         required=True,

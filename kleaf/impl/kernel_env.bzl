@@ -198,11 +198,11 @@ def _kernel_env_impl(ctx):
 
     # If multiple targets have the same KERNEL_DIR are built simultaneously
     # with --spawn_strategy=local, try to isolate their OUT_DIRs.
-    defconfig_fragments = ctx.files.defconfig_fragments
+    post_defconfig_fragments = ctx.files.post_defconfig_fragments
     config_tags_out = kernel_config_settings.kernel_env_get_config_tags(
         ctx = ctx,
         mnemonic_prefix = "KernelEnv",
-        defconfig_fragments = defconfig_fragments,
+        post_defconfig_fragments = post_defconfig_fragments,
     )
     inputs.append(config_tags_out.env)
 
@@ -303,7 +303,10 @@ def _kernel_env_impl(ctx):
         bin_dir_and_workspace_root = bin_dir_and_workspace_root,
     )
 
-    progress_message_note = kernel_config_settings.get_progress_message_note(ctx, defconfig_fragments)
+    progress_message_note = kernel_config_settings.get_progress_message_note(
+        ctx,
+        post_defconfig_fragments,
+    )
 
     debug.print_scripts(ctx, command)
     ctx.actions.run_shell(
@@ -625,8 +628,8 @@ kernel_env = rule(
             doc = """labels that this build config refers to, including itself.
             E.g. ["build.config.gki.aarch64", "build.config.gki"]""",
         ),
-        "defconfig_fragments": attr.label_list(
-            doc = "defconfig fragments",
+        "post_defconfig_fragments": attr.label_list(
+            doc = "**post** defconfig fragments",
             allow_files = True,
         ),
         "setup_env": attr.label(
