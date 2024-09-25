@@ -123,6 +123,8 @@ def kernel_build(
         module_signing_key = None,
         system_trusted_key = None,
         modules_prepare_force_generate_headers = None,
+        defconfig = None,
+        pre_defconfig_fragments = None,
         defconfig_fragments = None,
         page_size = None,
         pack_module_env = None,
@@ -468,20 +470,49 @@ def kernel_build(
         dtstree: Device tree support.
         modules_prepare_force_generate_headers: If `True` it forces generation of
           additional headers as part of modules_prepare.
-        defconfig_fragments: A list of targets that are applied to the defconfig.
+        defconfig: Label to the base defconfig.
 
-          As a convention, files should usually be named `<prop>_defconfig`
-          (e.g. `kasan_defconfig`) or `<prop>_<value>_defconfig` (e.g. `lto_none_defconfig`)
-          to provide human-readable hints during the build. The prefix should
-          describe what the defconfig does. However, this is not a requirement.
-          These configs are also applied to external modules, including
-          `kernel_module`s and `ddk_module`s.
+            As a convention, files should usually be named `<device>_defconfig`
+            (e.g. `tuna_defconfig`) to provide human-readable hints during the build. The prefix
+            should be the name of the `kernel_build`. However, this is not a requirement.
+            These configs are also applied to external modules, including
+            `kernel_module`s and `ddk_module`s.
 
-          **NOTE**: `defconfig_fragments` are applied **after** `make defconfig`, similar
-          to `POST_DEFCONFIG_CMDS`. If you migrate from `PRE_DEFCONFIG_CMDS`
-          to `defconfig_fragments`, certain values may change; double check
-          by building the `<target_name>_config` target and examining the
-          generated `.config` file.
+            For mixed builds (`base_kernel` is set), this is usually set to the `defconfig`
+            of the `base_kernel`, e.g. `//common:arch/arm64/configs/gki_defconfig`.
+
+        pre_defconfig_fragments: A list of fragments that are applied to the defconfig
+            **before** `make defconfig`.
+
+            As a convention, files should usually be named `<prop>_defconfig`
+            (e.g. `16k_defconfig`) or `<prop>_<value>_defconfig` (e.g. `page_size_16k_defconfig`)
+            to provide human-readable hints during the build. The prefix should
+            describe what the defconfig does. However, this is not a requirement.
+            These configs are also applied to external modules, including
+            `kernel_module`s and `ddk_module`s.
+
+            For mixed builds (`base_kernel` is set), the file usually contains additional
+            in-tree modules to build on top of `gki_defconfig`, e.g. `CONFIG_FOO=m`.
+
+            **NOTE**: `pre_defconfig_fragments` are applied **before** `make defconfig`, similar
+            to `PRE_DEFCONFIG_CMDS`. If you had `POST_DEFCONFIG_CMDS` applying fragments in your
+            build configs, consider using `defconfig_fragments` instead.
+        defconfig_fragments: A list of fragments that are applied to the defconfig
+            **after** `make defconfig`.
+
+            As a convention, files should usually be named `<prop>_defconfig`
+            (e.g. `kasan_defconfig`) or `<prop>_<value>_defconfig` (e.g. `lto_none_defconfig`)
+            to provide human-readable hints during the build. The prefix should
+            describe what the defconfig does. However, this is not a requirement.
+            These configs are also applied to external modules, including
+            `kernel_module`s and `ddk_module`s.
+
+            Files usually contain debug options. If you want to build in-tree modules, adding them
+            to `pre_defconfig_fragments` may be a better choice.
+
+            **NOTE**: `defconfig_fragments` are applied **after** `make defconfig`, similar
+            to `POST_DEFCONFIG_CMDS`. If you had `PRE_DEFCONFIG_CMDS` applying fragments in your
+            build configs, consider using `pre_defconfig_fragments` instead.
         page_size: Default is `"default"`. Page size of the kernel build.
 
           Value may be one of `"default"`, `"4k"`, `"16k"` or `"64k"`. If
@@ -628,6 +659,7 @@ def kernel_build(
             Label("//build/kernel/kleaf:musl_kbuild_is_true"): name + "_platform_exec_musl",
             "//conditions:default": name + "_platform_exec",
         }),
+        pre_defconfig_fragments = pre_defconfig_fragments,
         post_defconfig_fragments = post_defconfig_fragments,
         **internal_kwargs
     )
@@ -674,6 +706,8 @@ def kernel_build(
         module_signing_key = module_signing_key,
         system_trusted_key = system_trusted_key,
         lto = lto,
+        defconfig = defconfig,
+        pre_defconfig_fragments = pre_defconfig_fragments,
         post_defconfig_fragments = post_defconfig_fragments,
         **internal_kwargs
     )
