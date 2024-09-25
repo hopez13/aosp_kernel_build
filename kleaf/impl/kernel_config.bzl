@@ -538,11 +538,6 @@ kernel_config = rule(
             doc = "defconfig fragments",
             allow_files = True,
         ),
-        "_write_depset": attr.label(
-            default = "//build/kernel/kleaf/impl:write_depset",
-            executable = True,
-            cfg = "exec",
-        ),
         "_config_is_stamp": attr.label(default = "//build/kernel/kleaf:config_stamp"),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
     } | _kernel_config_additional_attrs(),
