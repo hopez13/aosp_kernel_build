@@ -24,16 +24,37 @@ load(":utils.bzl", "kernel_utils", "utils")
 
 visibility("//build/kernel/kleaf/...")
 
-def _boot_images_impl(ctx):
+def _build_boot_or_vendor_boot(
+        subrule_ctx,
+        bin_dir,
+        kernel_build,
+        initramfs,
+        deps,
+        outs,
+        mkbootimg,
+        build_boot,
+        vendor_boot_name,
+        vendor_ramdisk_binaries,
+        vendor_ramdisk_dev_nodes,
+        unpack_ramdisk,
+        avb_sign_boot_img,
+        avb_boot_partition_size,
+        avb_boot_key,
+        avb_boot_algorithm,
+        avb_boot_partition_name,
+        ramdisk_compression,
+        ramdisk_compression_args,
+        *,
+        _search_and_cp_output):
     ## Declare implicit outputs of the command
-    ## This is like ctx.actions.declare_directory(ctx.label.name) without actually declaring it.
+    ## This is like subrule_ctx.actions.declare_directory(subrule_ctx.label.name) without actually declaring it.
     outdir_short = paths.join(
-        ctx.label.workspace_root,
-        ctx.label.package,
-        ctx.label.name,
+        subrule_ctx.label.workspace_root,
+        subrule_ctx.label.package,
+        subrule_ctx.label.name,
     )
     outdir = paths.join(
-        ctx.bin_dir.path,
+        bin_dir.path,
         outdir_short,
     )
     modules_staging_dir = outdir + "/staging"
@@ -43,88 +64,97 @@ def _boot_images_impl(ctx):
     initramfs_staging_archive = None
     initramfs_staging_dir = None
 
-    if ctx.attr.initramfs:
-        initramfs_staging_archive = ctx.attr.initramfs[InitramfsInfo].initramfs_staging_archive
+    if initramfs:
+        initramfs_staging_archive = initramfs[InitramfsInfo].initramfs_staging_archive
         initramfs_staging_dir = modules_staging_dir + "/initramfs_staging"
 
     out_files = []
-    for out in ctx.attr.outs:
-        out_files.append(ctx.actions.declare_file("{}/{}".format(ctx.label.name, out)))
+    for out in outs:
+        out_files.append(subrule_ctx.actions.declare_file("{}/{}".format(subrule_ctx.label.name, out)))
 
     kernel_build_outs = depset(transitive = [
-        ctx.attr.kernel_build[KernelBuildInfo].outs,
-        ctx.attr.kernel_build[KernelBuildInfo].base_kernel_files,
+        kernel_build[KernelBuildInfo].outs,
+        kernel_build[KernelBuildInfo].base_kernel_files,
     ])
 
-    inputs = [
-        ctx.file.mkbootimg,
-    ]
-    if ctx.attr.initramfs:
+    inputs = []
+    if initramfs:
         inputs += [
-            ctx.attr.initramfs[InitramfsInfo].initramfs_img,
+            initramfs[InitramfsInfo].initramfs_img,
             initramfs_staging_archive,
         ]
-    inputs += ctx.files.deps
-    inputs += ctx.files.vendor_ramdisk_binaries
-    inputs += ctx.files.vendor_ramdisk_dev_nodes
 
     transitive_inputs = [
+        mkbootimg.files,
         kernel_build_outs,
-        ctx.attr.kernel_build[KernelSerializedEnvInfo].inputs,
+        kernel_build[KernelSerializedEnvInfo].inputs,
     ]
+    transitive_inputs += [target.files for target in deps]
 
-    tools = [ctx.executable._search_and_cp_output]
-    transitive_tools = [ctx.attr.kernel_build[KernelSerializedEnvInfo].tools]
+    transitive_tools = [kernel_build[KernelSerializedEnvInfo].tools]
 
     command = kernel_utils.setup_serialized_env_cmd(
-        serialized_env_info = ctx.attr.kernel_build[KernelSerializedEnvInfo],
+        serialized_env_info = kernel_build[KernelSerializedEnvInfo],
         restore_out_dir_cmd = utils.get_check_sandbox_cmd(),
     )
 
     command += """
         MKBOOTIMG_PATH={mkbootimg}
-    """.format(mkbootimg = ctx.file.mkbootimg.path)
+    """.format(mkbootimg = utils.optional_single_path(mkbootimg.files.to_list()))
 
-    if ctx.attr.build_boot:
+    if build_boot:
         boot_flag_cmd = "BUILD_BOOT_IMG=1"
     else:
         boot_flag_cmd = "BUILD_BOOT_IMG="
 
-    if not ctx.attr.vendor_boot_name:
+    if not vendor_boot_name:
         vendor_boot_flag_cmd = """
             BUILD_VENDOR_BOOT_IMG=
             SKIP_VENDOR_BOOT=1
             BUILD_VENDOR_KERNEL_BOOT=
         """
-    elif ctx.attr.vendor_boot_name == "vendor_boot":
+    elif vendor_boot_name == "vendor_boot":
         vendor_boot_flag_cmd = """
             BUILD_VENDOR_BOOT_IMG=1
             SKIP_VENDOR_BOOT=
             BUILD_VENDOR_KERNEL_BOOT=
         """
-    elif ctx.attr.vendor_boot_name == "vendor_kernel_boot":
+    elif vendor_boot_name == "vendor_kernel_boot":
         vendor_boot_flag_cmd = """
             BUILD_VENDOR_BOOT_IMG=1
             SKIP_VENDOR_BOOT=
             BUILD_VENDOR_KERNEL_BOOT=1
         """
     else:
-        fail("{}: unknown vendor_boot_name {}".format(ctx.label, ctx.attr.vendor_boot_name))
+        fail("{}: unknown vendor_boot_name {}".format(subrule_ctx.label, vendor_boot_name))
 
-    if ctx.files.vendor_ramdisk_binaries:
-        # build_utils.sh uses singular VENDOR_RAMDISK_BINARY
-        command += """
-            VENDOR_RAMDISK_BINARY="{vendor_ramdisk_binaries}"
-        """.format(
-            vendor_ramdisk_binaries = " ".join([file.path for file in ctx.files.vendor_ramdisk_binaries]),
+    if vendor_ramdisk_binaries:
+        vendor_ramdisk_binaries_files = depset(transitive = [target.files for target in vendor_ramdisk_binaries])
+        written_vendor_ramdisk_binaries = utils.write_depset(
+            vendor_ramdisk_binaries_files,
+            "vendor_ramdisk_binaries.txt",
         )
 
-    if ctx.files.vendor_ramdisk_dev_nodes:
+        # build_utils.sh uses singular VENDOR_RAMDISK_BINARY
+        command += """
+            VENDOR_RAMDISK_BINARY="$(cat {written})"
+        """.format(
+            written = written_vendor_ramdisk_binaries.depset_file.path,
+        )
+        transitive_inputs.append(written_vendor_ramdisk_binaries.depset)
+
+    if vendor_ramdisk_dev_nodes:
+        vendor_ramdisk_dev_nodes_files = depset(transitive = [target.files for target in vendor_ramdisk_dev_nodes])
+        written_vendor_ramdisk_dev_nodes = utils.write_depset(
+            vendor_ramdisk_dev_nodes_files,
+            "vendor_ramdisk_dev_nodes.txt",
+        )
         command += """
             VENDOR_RAMDISK_DEV_NODES="{vendor_ramdisk_dev_nodes}"
         """.format(
-            vendor_ramdisk_dev_nodes = " ".join([file.path for file in ctx.files.vendor_ramdisk_dev_nodes]),
+            written = written_vendor_ramdisk_dev_nodes.depset_file,
         )
+        transitive_inputs.append(written_vendor_ramdisk_dev_nodes.depset)
 
     command += """
              # Create and restore DIST_DIR.
@@ -136,14 +166,14 @@ def _boot_images_impl(ctx):
         kernel_build_outs = " ".join([out.path for out in kernel_build_outs.to_list()]),
     )
 
-    if ctx.attr.initramfs:
+    if initramfs:
         command += """
                cp {initramfs_img} ${{DIST_DIR}}/initramfs.img
              # Create and restore initramfs_staging_dir
                mkdir -p {initramfs_staging_dir}
                tar xf {initramfs_staging_archive} -C {initramfs_staging_dir}
         """.format(
-            initramfs_img = ctx.attr.initramfs[InitramfsInfo].initramfs_img.path,
+            initramfs_img = initramfs[InitramfsInfo].initramfs_img.path,
             initramfs_staging_dir = initramfs_staging_dir,
             initramfs_staging_archive = initramfs_staging_archive.path,
         )
@@ -158,7 +188,7 @@ def _boot_images_impl(ctx):
                BUILD_INITRAMFS=
                INITRAMFS_STAGING_DIR=
         """
-    if ctx.attr.unpack_ramdisk:
+    if unpack_ramdisk:
         boot_flag_cmd += """
             if [[ -n ${SKIP_UNPACKING_RAMDISK} ]]; then
                 echo "WARNING: Using SKIP_UNPACKING_RAMDISK in build config is deprecated." >&2
@@ -169,10 +199,10 @@ def _boot_images_impl(ctx):
         boot_flag_cmd += """
             SKIP_UNPACKING_RAMDISK=1
         """
-    if ctx.attr.avb_sign_boot_img:
-        if not ctx.attr.avb_boot_partition_size or \
-           not ctx.attr.avb_boot_key or not ctx.attr.avb_boot_algorithm or \
-           not ctx.attr.avb_boot_partition_name:
+    if avb_sign_boot_img:
+        if not avb_boot_partition_size or \
+           not avb_boot_key or not avb_boot_algorithm or \
+           not avb_boot_partition_name:
             fail("avb_sign_boot_img is true, but one of [avb_boot_partition_size, avb_boot_key," +
                  " avb_boot_algorithm, avb_boot_partition_name] is not specified.")
 
@@ -183,15 +213,15 @@ def _boot_images_impl(ctx):
             AVB_BOOT_ALGORITHM={avb_boot_algorithm}
             AVB_BOOT_PARTITION_NAME={avb_boot_partition_name}
         """.format(
-            avb_boot_partition_size = ctx.attr.avb_boot_partition_size,
-            avb_boot_key = ctx.file.avb_boot_key.path,
-            avb_boot_algorithm = ctx.attr.avb_boot_algorithm,
-            avb_boot_partition_name = ctx.attr.avb_boot_partition_name,
+            avb_boot_partition_size = avb_boot_partition_size,
+            avb_boot_key = utils.optional_single_path(avb_boot_key.files.to_list()),
+            avb_boot_algorithm = avb_boot_algorithm,
+            avb_boot_partition_name = avb_boot_partition_name,
         )
 
     ramdisk_options = image_utils.ramdisk_options(
-        ramdisk_compression = ctx.attr.ramdisk_compression,
-        ramdisk_compression_args = ctx.attr.ramdisk_compression_args,
+        ramdisk_compression = ramdisk_compression,
+        ramdisk_compression_args = ramdisk_compression_args,
     )
 
     command += """
@@ -213,9 +243,9 @@ def _boot_images_impl(ctx):
                rm -rf {modules_staging_dir}
     """.format(
         mkbootimg_staging_dir = mkbootimg_staging_dir,
-        search_and_cp_output = ctx.executable._search_and_cp_output.path,
+        search_and_cp_output = _search_and_cp_output.executable.path,
         outdir = outdir,
-        outs = " ".join([out for out in ctx.attr.outs]),
+        outs = " ".join(outs),
         modules_staging_dir = modules_staging_dir,
         boot_flag_cmd = boot_flag_cmd,
         vendor_boot_flag_cmd = vendor_boot_flag_cmd,
@@ -225,8 +255,8 @@ def _boot_images_impl(ctx):
         ramdisk_ext = ramdisk_options.ramdisk_ext,
     )
 
-    debug.print_scripts(ctx, command)
-    ctx.actions.run_shell(
+    debug.print_scripts_subrule(command)
+    subrule_ctx.actions.run_shell(
         mnemonic = "BootImages",
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = out_files,
@@ -241,6 +271,45 @@ def _boot_images_impl(ctx):
         command = command,
     )
     return DefaultInfo(files = depset(out_files))
+
+# Common implementation to build boot image or vendor boot image.
+# TODO: Split build_boot_images in build_utils
+build_boot_or_vendor_boot = subrule(
+    implementation = _build_boot_or_vendor_boot,
+    attrs = {
+        "_search_and_cp_output": attr.label(
+            default = Label("//build/kernel/kleaf:search_and_cp_output"),
+            cfg = "exec",
+            executable = True,
+        ),
+    },
+    subrules = [
+        debug.print_scripts_subrule,
+        utils.write_depset,
+    ],
+)
+
+def _boot_images_impl(ctx):
+    return build_boot_or_vendor_boot(
+        bin_dir = ctx.bin_dir,
+        kernel_build = ctx.attr.kernel_build,
+        initramfs = ctx.attr.initramfs,
+        deps = ctx.attr.deps,
+        outs = ctx.attr.outs,
+        mkbootimg = ctx.attr.mkbootimg,
+        build_boot = ctx.attr.build_boot,
+        vendor_boot_name = ctx.attr.vendor_boot_name,
+        vendor_ramdisk_binaries = ctx.attr.vendor_ramdisk_binaries,
+        vendor_ramdisk_dev_nodes = ctx.attr.vendor_ramdisk_dev_nodes,
+        unpack_ramdisk = ctx.attr.unpack_ramdisk,
+        avb_sign_boot_img = ctx.attr.avb_sign_boot_img,
+        avb_boot_partition_size = ctx.attr.avb_boot_partition_size,
+        avb_boot_key = ctx.attr.avb_boot_key,
+        avb_boot_algorithm = ctx.attr.avb_boot_algorithm,
+        avb_boot_partition_name = ctx.attr.avb_boot_partition_name,
+        ramdisk_compression = ctx.attr.ramdisk_compression,
+        ramdisk_compression_args = ctx.attr.ramdisk_compression_args,
+    )
 
 boot_images = rule(
     implementation = _boot_images_impl,
@@ -323,13 +392,11 @@ Execute `build_boot_images` in `build_utils.sh`.""",
         "ramdisk_compression_args": attr.string(
             doc = "Command line arguments passed only to lz4 command to control compression level.",
         ),
-        "_debug_print_scripts": attr.label(
-            default = "//build/kernel/kleaf:debug_print_scripts",
-        ),
         "_search_and_cp_output": attr.label(
             default = Label("//build/kernel/kleaf:search_and_cp_output"),
             cfg = "exec",
             executable = True,
         ),
     },
+    subrules = [build_boot_or_vendor_boot],
 )
