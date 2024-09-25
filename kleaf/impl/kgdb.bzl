@@ -69,15 +69,16 @@ def _additional_make_goals(ctx):
         return ["scripts_gdb"]
     return []
 
-def _get_scripts_config_args(ctx):
+def _get_scripts_config_args_impl(_subrule_ctx, *, _kgdb):
     """Returns arguments to `scripts/config` for --kgdb.
 
     Args:
-        ctx: ctx
+        _subrule_ctx: subrule_ctx
+        _kgdb: --kgdb
     Returns:
         a list of arguments to `scripts/config`
     """
-    if not ctx.attr._kgdb[BuildSettingInfo].value:
+    if not _kgdb[BuildSettingInfo].value:
         return []
     return [
         _config.enable("GDB_SCRIPTS"),
@@ -90,6 +91,14 @@ def _get_scripts_config_args(ctx):
         _config.disable("WATCHDOG"),
         _config.enable_if("KGDB_LOW_LEVEL_TRAP", condition = "X86"),
     ]
+
+_get_scripts_config_args = subrule(
+    implementation = _get_scripts_config_args_impl,
+    attrs = {
+        key: attr.label(default = value)
+        for key, value in _kgdb_config_settings_raw().items()
+    },
+)
 
 kgdb = struct(
     get_grab_gdb_scripts_step = _get_grab_gdb_scripts_step,
