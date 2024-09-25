@@ -82,6 +82,7 @@ bzl_library(
         "image/or_file.bzl",
         "image/super_image.bzl",
         "image/system_dlkm_image.bzl",
+        "image/vendor_boot_image.bzl",
         "image/vendor_dlkm_image.bzl",
         "kernel_build.bzl",
         "kernel_build_config.bzl",
