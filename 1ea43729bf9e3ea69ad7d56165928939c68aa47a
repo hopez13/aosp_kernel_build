@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2f49a10_2109fa12",
+        "filename": "kleaf/impl/image/kernel_images_replace.py",
+        "patchSetId": 27
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-25T05:08:57Z",
+      "side": 1,
+      "message": "Sample output: pa/2944238",
+      "revId": "1ea43729bf9e3ea69ad7d56165928939c68aa47a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
