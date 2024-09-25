@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7809f9e2_21f89cd1",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 18
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-25T00:14:57Z",
+      "side": 1,
+      "message": "This needs to use cquery, because Pixel",
+      "range": {
+        "startLine": 528,
+        "startChar": 0,
+        "endLine": 529,
+        "endChar": 38
+      },
+      "revId": "40684df60bd6f1177b388b72b75b5ec7235780dc",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
