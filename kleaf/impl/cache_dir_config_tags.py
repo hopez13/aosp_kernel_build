@@ -21,6 +21,7 @@ import sys
 from typing import TextIO
 
 TARGET_KEY = "_target"
+PRE_DEFCONFIG_FRAGMENTS_KEY = "_pre_defconfig_fragments"
 POST_DEFCONFIG_FRAGMENTS_KEY = "_post_defconfig_fragments"
 
 
@@ -50,6 +51,7 @@ def comment_json(object, fp):
 def main(
         base: pathlib.Path,
         target: str | None,
+        pre_defconfig_fragments: list[pathlib.Path] | None,
         post_defconfig_fragments: list[pathlib.Path] | None,
         dest: pathlib.Path,
         comment: bool,
@@ -60,6 +62,17 @@ def main(
     # treat it as a directive to set _target as an empty string.
     if target is not None:
         config_tags[TARGET_KEY] = target
+
+    # Use None check so that, if --pre_defconfig_fragments is an empty list,
+    # treat it as a directive to set _pre_defconfig_fragments as an empty list.
+    if pre_defconfig_fragments is not None:
+        if PRE_DEFCONFIG_FRAGMENTS_KEY in config_tags:
+            print(f"ERROR: {base} already has {PRE_DEFCONFIG_FRAGMENTS_KEY}!",
+                  file=sys.stderr)
+            sys.exit(1)
+
+        config_tags[PRE_DEFCONFIG_FRAGMENTS_KEY] = [
+            str(path) for path in pre_defconfig_fragments]
 
     # Use None check so that, if --post_defconfig_fragments is an empty list,
     # treat it as a directive to set _post_defconfig_fragments as an empty list.
@@ -104,6 +117,10 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--target", help="If set, add label of target to the result")
+    parser.add_argument(
+        "--pre_defconfig_fragments", nargs="*",
+        type=pathlib.Path, default=None,
+        help="If set, add pre defconfig fragments to result")
     parser.add_argument(
         "--post_defconfig_fragments", nargs="*",
         type=pathlib.Path, default=None,
