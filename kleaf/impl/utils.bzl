@@ -189,27 +189,28 @@ def _get_check_sandbox_cmd():
            fi
     """
 
-def _write_depset(ctx, d, out):
+def _write_depset_impl(subrule_ctx, d, out, *, _write_depset):
     """Writes a depset to a file.
 
     Requires `_write_depset` in attrs.
 
     Args:
-        ctx: ctx
+        subrule_ctx: subrule_ctx
         d: the depset
         out: name of the output file
+        _write_depset: the script to write a depset
     Returns:
         A struct with the following fields:
         - depset_file: the declared output file.
         - depset: a depset that contains `d` and `depset_file`
     """
-    out_file = ctx.actions.declare_file("{}/{}".format(ctx.attr.name, out))
+    out_file = subrule_ctx.actions.declare_file("{}/{}".format(subrule_ctx.label.name, out))
 
-    args = ctx.actions.args()
+    args = subrule_ctx.actions.args()
     args.add(out_file)
     args.add_all(d)
-    ctx.actions.run(
-        executable = ctx.executable._write_depset,
+    subrule_ctx.actions.run(
+        executable = _write_depset,
         arguments = [args],
         outputs = [out_file],
         mnemonic = "WriteDepset",
@@ -219,6 +220,17 @@ def _write_depset(ctx, d, out):
         depset_file = out_file,
         depset = depset([out_file], transitive = [d]),
     )
+
+_write_depset = subrule(
+    implementation = _write_depset_impl,
+    attrs = {
+        "_write_depset": attr.label(
+            default = ":write_depset",
+            executable = True,
+            cfg = "exec",
+        )
+    }
+)
 
 def _optional_path(file):
     """If file is None, return empty string. Otherwise return its path."""
