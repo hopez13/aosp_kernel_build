@@ -62,6 +62,7 @@ def common_kernel(
         arch = None,
         visibility = None,
         toolchain_version = None,
+        defconfig = None,
         enable_interceptor = None,
         kmi_symbol_list = None,
         additional_kmi_symbol_lists = None,
@@ -124,6 +125,7 @@ def common_kernel(
         build_config: See [kernel_build.build_config](kernel.md#kernel_build-build_config)
         makefile: See [kernel_build.makefile](kernel.md#kernel_build-makefile)
         toolchain_version: See [kernel_build.toolchain_version](kernel.md#kernel_build-toolchain_version)
+        defconfig: See [kernel_build.defconfig](kernel.md#kernel_build-defconfig)
         enable_interceptor: See [kernel_build.enable_interceptor](kernel.md#kernel_build-enable_interceptor)
         kmi_symbol_list: See [kernel_build.kmi_symbol_list](kernel.md#kernel_build-kmi_symbol_list)
         additional_kmi_symbol_lists: See [kernel_build.additional_kmi_symbol_lists](kernel.md#kernel_build-additional_kmi_symbol_lists)
@@ -153,6 +155,7 @@ def common_kernel(
         arch = arch,
         build_config = build_config,
         makefile = makefile,
+        defconfig = defconfig,
         toolchain_version = toolchain_version,
         visibility = visibility,
         enable_interceptor = enable_interceptor,
@@ -230,6 +233,7 @@ def common_kernel(
         ],
         build_config = name + "_build_config",
         makefile = makefile,
+        defconfig = defconfig,
         enable_interceptor = enable_interceptor,
         visibility = visibility,
         collect_unstripped_modules = _COLLECT_UNSTRIPPED_MODULES,
