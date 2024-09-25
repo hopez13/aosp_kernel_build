@@ -720,6 +720,11 @@ kernel_config = rule(
             doc = "Label to trusted system key.",
             allow_single_file = True,
         ),
+        "defconfig": attr.label(allow_files = True),
+        "pre_defconfig_fragments": attr.label_list(
+            doc = "**pre** defconfig fragments",
+            allow_files = True,
+        ),
         "post_defconfig_fragments": attr.label_list(
             doc = "**post** defconfig fragments",
             allow_files = True,
