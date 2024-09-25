@@ -395,10 +395,12 @@ def _kernel_filegroup_impl(ctx):
     config_tags_out = kernel_config_settings.kernel_env_get_config_tags(
         ctx = ctx,
         mnemonic_prefix = "KernelFilegroup",
+        pre_defconfig_fragments = [],
         post_defconfig_fragments = [],
     )
     progress_message_note = kernel_config_settings.get_progress_message_note(
         ctx,
+        pre_defconfig_fragments = [],
         post_defconfig_fragments = [],
     )
     kernel_env_attr_info = KernelEnvAttrInfo(
