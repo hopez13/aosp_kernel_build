@@ -46,6 +46,30 @@
       },
       "revId": "dadc2d6747d8afd717142ad6f11a6d23f17f4718",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0525f24_10d9f06d",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-26T20:51:49Z",
+      "side": 1,
+      "message": "If you do need readelf, then try avoid relying on `CLANG_VERSION` but use actual C toolchain resolution.\n\nEventually we want to keep exactly one clang version registered, so `CLANG_VERSION` should no longer be needed in the future. Using `CLANG_VERSION` just adds tech debt for the future.",
+      "parentUuid": "b450876e_5af745c8",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 113
+      },
+      "revId": "dadc2d6747d8afd717142ad6f11a6d23f17f4718",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
