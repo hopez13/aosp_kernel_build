@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "937bc611_2916eed4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-26T19:58:05Z",
+      "side": 1,
+      "message": "Yes. The reason I did not use buildozer in this case:\n\n- For buildozer I still need the user to run the command (instead of running buildozer for them). This is because I don\u0027t know where buildozer is installed:\n  - There\u0027s one in BCR but it requires internet: https://registry.bazel.build/modules/buildozer and we need to add the dependency\n  - Otherwise, the user installs it to $GOPATH/bin or possibly anywhere: https://github.com/bazelbuild/buildtools/blob/main/buildozer/README.md\n  \n- For buildozer the implementation would be different. In the kernel_images() level I\u0027ll read all attribute values and manually put them in the correct sub-target. This can introduce human errors (e.g. I forgot to put some attributes in some sub-target). However, with the current implementation (with `bazel cquery --output\u003dbuild`), it is guaranteed to be correct because Bazel tells us what is the equivalent rule() instantiations.\n\nAll I do here is a small sanitization from boot_images() to vendor_boot_image(), because I don\u0027t plan to expose boot_images().",
+      "parentUuid": "ecdd2c8a_8e7f6512",
+      "revId": "aa7210b8ad61327331542d83122949090913aec5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6306318_d9c422f2",
         "filename": "kleaf/impl/image/kernel_images_replace.bzl",
         "patchSetId": 28
