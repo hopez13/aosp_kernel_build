@@ -119,11 +119,6 @@ vendor_boot_image = rule(
             """,
             mandatory = True,
         ),
-        "_search_and_cp_output": attr.label(
-            default = Label("//build/kernel/kleaf:search_and_cp_output"),
-            cfg = "exec",
-            executable = True,
-        ),
     },
     subrules = [build_boot_or_vendor_boot],
 )
