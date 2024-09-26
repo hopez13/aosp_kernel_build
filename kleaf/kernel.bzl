@@ -39,6 +39,7 @@ load("//build/kernel/kleaf/impl:ddk/ddk_headers_archive.bzl", _ddk_headers_archi
 load("//build/kernel/kleaf/impl:ddk/ddk_module.bzl", _ddk_module = "ddk_module")
 load("//build/kernel/kleaf/impl:ddk/ddk_submodule.bzl", _ddk_submodule = "ddk_submodule")
 load("//build/kernel/kleaf/impl:ddk/ddk_uapi_headers.bzl", _ddk_uapi_headers = "ddk_uapi_headers")
+load("//build/kernel/kleaf/impl:gcov_files.bzl", _gcov_files = "gcov_files")
 load("//build/kernel/kleaf/impl:gki_artifacts.bzl", _gki_artifacts = "gki_artifacts", _gki_artifacts_prebuilts = "gki_artifacts_prebuilts")
 load("//build/kernel/kleaf/impl:image/kernel_images.bzl", _kernel_images = "kernel_images")
 load("//build/kernel/kleaf/impl:image/super_image.bzl", _super_image = "super_image", _unsparsed_image = "unsparsed_image")
@@ -68,6 +69,7 @@ dependency_graph = _dependency_graph
 dependency_graph_drawer = _dependency_graph_drawer
 dependency_graph_extractor = _dependency_graph_extractor
 extract_symbols = _extract_symbols
+gcov_files = _gcov_files
 gki_artifacts = _gki_artifacts
 gki_artifacts_prebuilts = _gki_artifacts_prebuilts
 initramfs_modules_lists_test = _initramfs_modules_lists_test
