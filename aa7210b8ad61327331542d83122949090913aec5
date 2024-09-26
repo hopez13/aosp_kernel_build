@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecdd2c8a_8e7f6512",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-09-26T15:02:26Z",
+      "side": 1,
+      "message": "Have you considered letting buildozer doing the migration?",
+      "revId": "aa7210b8ad61327331542d83122949090913aec5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6306318_d9c422f2",
         "filename": "kleaf/impl/image/kernel_images_replace.bzl",
         "patchSetId": 28
