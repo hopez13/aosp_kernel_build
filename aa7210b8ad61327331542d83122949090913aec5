@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6306318_d9c422f2",
+        "filename": "kleaf/impl/image/kernel_images_replace.bzl",
+        "patchSetId": 28
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-26T14:57:11Z",
+      "side": 1,
+      "message": "nit: images_name (from above line)",
+      "range": {
+        "startLine": 74,
+        "startChar": 28,
+        "endLine": 74,
+        "endChar": 67
+      },
+      "revId": "aa7210b8ad61327331542d83122949090913aec5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
