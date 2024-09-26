@@ -22,6 +22,30 @@
       },
       "revId": "55a7f1a1e3a4e18e8403c45a6b49a83416d71477",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5e418a_306f00a3",
+        "filename": "kleaf/impl/image/kernel_images.bzl",
+        "patchSetId": 19
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-26T19:51:46Z",
+      "side": 1,
+      "message": "No, this shouldn\u0027t break users. This is not part of the API.\n\nkernel_images() macro is part of the API, which called _kernel_images rule. This change just renames the internal _kernel_images rule to kernel_images_filegroup so I can use it in common_kernels.bzl",
+      "parentUuid": "2c2a6cf3_fd4b3791",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 558,
+        "endChar": 23
+      },
+      "revId": "55a7f1a1e3a4e18e8403c45a6b49a83416d71477",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
