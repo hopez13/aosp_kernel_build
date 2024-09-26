@@ -31,6 +31,13 @@ StepInfo = provider(
     },
 )
 
+DefconfigInfo = provider(
+    "Describes the value of kernel_build.defconfig",
+    fields = {
+        "file": "a single defconfig file",
+    }
+)
+
 KernelCmdsInfo = provider(
     doc = """Provides a directory of `.cmd` files.""",
     fields = {
