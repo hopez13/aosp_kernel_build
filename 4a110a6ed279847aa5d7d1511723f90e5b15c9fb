@@ -22,6 +22,30 @@
       },
       "revId": "4a110a6ed279847aa5d7d1511723f90e5b15c9fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c404fcf_87b6249d",
+        "filename": "kleaf/impl/image/vendor_boot_image.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-26T19:49:52Z",
+      "side": 1,
+      "message": "Yeah let me drop this in a follow up patch",
+      "parentUuid": "46181ce7_566bf543",
+      "range": {
+        "startLine": 122,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 10
+      },
+      "revId": "4a110a6ed279847aa5d7d1511723f90e5b15c9fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
