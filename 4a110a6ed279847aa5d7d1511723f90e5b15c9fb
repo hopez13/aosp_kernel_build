@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46181ce7_566bf543",
+        "filename": "kleaf/impl/image/vendor_boot_image.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-26T12:30:34Z",
+      "side": 1,
+      "message": "nit: Is this needed? I thought it is part of the subrule default attribute already?",
+      "range": {
+        "startLine": 122,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 10
+      },
+      "revId": "4a110a6ed279847aa5d7d1511723f90e5b15c9fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
