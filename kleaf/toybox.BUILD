@@ -103,7 +103,7 @@ cc_binary(
     linkstatic = False,
     visibility = ["//visibility:public"],
     deps = [
-        "@//prebuilts/kernel-build-tools:libcrypto",
+        "@kleaf//prebuilts/kernel-build-tools:libcrypto",
         "@zlib",
     ],
 )
