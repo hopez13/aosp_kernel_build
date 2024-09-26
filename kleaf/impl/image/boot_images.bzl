@@ -392,11 +392,6 @@ Execute `build_boot_images` in `build_utils.sh`.""",
         "ramdisk_compression_args": attr.string(
             doc = "Command line arguments passed only to lz4 command to control compression level.",
         ),
-        "_search_and_cp_output": attr.label(
-            default = Label("//build/kernel/kleaf:search_and_cp_output"),
-            cfg = "exec",
-            executable = True,
-        ),
     },
     subrules = [build_boot_or_vendor_boot],
 )
