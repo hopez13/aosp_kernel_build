@@ -56,7 +56,8 @@ def _create_merge_dot_config_step(defconfig_depset_written):
         fi
     """.format(
         defconfig_depset_file = defconfig_depset_file.path,
-        merge_dot_config_cmd = config_utils.create_merge_dot_config_cmd(
+        merge_dot_config_cmd = config_utils.create_merge_config_cmd(
+            base_expr = "${OUT_DIR}/.config",
             defconfig_fragments_paths_expr = "$(cat {})".format(defconfig_depset_file.path),
         ),
     )

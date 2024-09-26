@@ -20,6 +20,7 @@ load(":abi/trim_nonlisted_kmi_utils.bzl", "trim_nonlisted_kmi_utils")
 load(":cache_dir.bzl", "cache_dir")
 load(
     ":common_providers.bzl",
+    "DefconfigInfo",
     "KernelBuildOriginalEnvInfo",
     "KernelConfigInfo",
     "KernelEnvAttrInfo",
@@ -259,8 +260,9 @@ def _reconfig_impl(
     if post_defconfig_fragment_files:
         post_defconfig_fragments_paths = [f.path for f in post_defconfig_fragment_files]
 
-        apply_post_defconfig_fragments_cmd = config_utils.create_merge_dot_config_cmd(
-            " ".join(post_defconfig_fragments_paths),
+        apply_post_defconfig_fragments_cmd = config_utils.create_merge_config_cmd(
+            base_expr = "${OUT_DIR}/.config",
+            defconfig_fragments_paths_expr = " ".join(post_defconfig_fragments_paths),
         )
         apply_post_defconfig_fragments_cmd += """
             need_olddefconfig=1
@@ -308,13 +310,87 @@ _reconfig = subrule(
     ],
 )
 
-def _pre_defconfig_impl(_subrule_ctx):
+def _set_up_defconfig_impl(subrule_ctx, defconfig_info):
+    """Puts defconfig in $OUT_DIR."""
+    if not defconfig_info:
+        return StepInfo(inputs = depset(), cmd = "", outputs = [], tools = [])
+    if not defconfig_info.file:
+        # TODO(b/368119551): handle allmodconfig
+        return StepInfo(inputs = depset(), cmd = "", outputs = [], tools = [])
+
     cmd = """
+        if [[ -n "${{DEFCONFIG}}" ]]; then
+            echo "ERROR: DEFCONFIG cannot be set in build configs if kernel_build.defconfig is set." >&2
+            echo "  DEFCONFIG=${{DEFCONFIG}}" >&2
+            echo "  kernel_build.defconfig={defconfig_file}" >&2
+            exit 1
+        fi
+
+        DEFCONFIG=kleaf_internal_{kernel_build_name}_defconfig
+        (
+            {set_src_arch_cmd}
+            if [[ -f "${{KERNEL_DIR}}/arch/${{SRCARCH}}/configs/${{DEFCONFIG}}" ]]; then
+                echo "ERROR: Please delete ${{KERNEL_DIR}}/arch/${{SRCARCH}}/configs/${{DEFCONFIG}} and try again." >&2
+                exit 1
+            fi
+            mkdir -p "${{OUT_DIR}}/arch/${{SRCARCH}}/configs/"
+            cp -L {defconfig_file} "${{OUT_DIR}}/arch/${{SRCARCH}}/configs/${{DEFCONFIG}}"
+        )
+    """.format(
+        set_src_arch_cmd = kernel_utils.set_src_arch_cmd(),
+        kernel_build_name = subrule_ctx.label.name.removesuffix("_config"),
+        defconfig_file = defconfig_info.file.path,
+    )
+    return StepInfo(
+        inputs = depset([defconfig_info.file]),
+        cmd = cmd,
+        outputs = [],
+        tools = [],
+    )
+
+_set_up_defconfig = subrule(
+    implementation = _set_up_defconfig_impl,
+)
+
+def _pre_defconfig_impl(_subrule_ctx, pre_defconfig_fragment_files):
+    cmd = ""
+    if pre_defconfig_fragment_files:
+        cmd += """
+            if [[ -n "${{PRE_DEFCONFIG_CMDS}}" ]]; then
+                echo "ERROR: PRE_DEFCONFIG_CMDS must not be set if kernel_build.pre_defconfig_fragments is set!" >&2
+                echo "  PRE_DEFCONFIG_CMDS=${{PRE_DEFCONFIG_CMDS}}" >&2
+                echo "  kernel_build.pre_defconfig_fragments={fragments}" >&2
+                exit 1
+            fi
+        """.format(
+            fragments = " ".join([file.path for file in pre_defconfig_fragment_files]),
+        )
+    cmd += """
         # Pre-defconfig commands
         eval ${PRE_DEFCONFIG_CMDS}
     """
+    if pre_defconfig_fragment_files:
+        apply_pre_defconfig_fragments_cmd = config_utils.create_merge_config_cmd(
+            base_expr = "${OUT_DIR}/arch/${SRCARCH}/configs/${DEFCONFIG}",
+            defconfig_fragments_paths_expr = " ".join([file.path for file in pre_defconfig_fragment_files]),
+            quiet = True,
+        )
+        cmd += """
+            (
+                {set_src_arch_cmd}
+                if ! [[ -f ${{OUT_DIR}}/arch/${{SRCARCH}}/configs/${{DEFCONFIG}} ]]; then
+                    echo "ERROR: No base defconfig to apply pre defconfig fragment on!" >&2
+                    exit 1
+                fi
+                # Apply pre_defconfig_fragments
+                {apply_pre_defconfig_fragments_cmd}
+            )
+        """.format(
+            set_src_arch_cmd = kernel_utils.set_src_arch_cmd(),
+            apply_pre_defconfig_fragments_cmd = apply_pre_defconfig_fragments_cmd,
+        )
     return StepInfo(
-        inputs = depset(),
+        inputs = depset(pre_defconfig_fragment_files),
         cmd = cmd,
         outputs = [],
         tools = [],
@@ -396,6 +472,9 @@ def _check_dot_config_against_defconfig_impl(
     tools = []
     outputs = []
 
+    # TODO(b/368119551): Also check pre_defconfig_fragments and defconfig, but allow them
+    #   to be overridden by post_defconfig_fragments.
+
     if post_defconfig_fragment_files:
         check_defconfig_step = config_utils.create_check_defconfig_step(
             post_defconfig_fragments = post_defconfig_fragment_files,
@@ -437,8 +516,25 @@ def _kernel_config_impl(ctx):
     out_dir = ctx.actions.declare_directory(ctx.attr.name + "/out_dir")
     outputs = [out_dir]
 
+    defconfig_info = None
+    if ctx.attr.defconfig:
+        if DefconfigInfo in ctx.attr.defconfig:
+            defconfig_info = ctx.attr.defconfig[DefconfigInfo]
+        elif len(ctx.files.defconfig) == 1:
+            defconfig_info = DefconfigInfo(file = ctx.files.defconfig[0])
+        else:
+            fail("{}: defconfig {} must provide exactly one file".format(ctx.label, ctx.attr.defconfig.label))
+
+    if ctx.attr.pre_defconfig_fragments and not ctx.attr.defconfig:
+        fail("{}: Must also set defconfig if using pre_defconfig_fragments".format(ctx.label.name.removesuffix("_config")))
+
     step_returns = [
-        _pre_defconfig(),
+        _set_up_defconfig(
+            defconfig_info = defconfig_info,
+        ),
+        _pre_defconfig(
+            pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
+        ),
         _make_defconfig(),
         _post_defconfig(
             lto_config_flag = ctx.attr.lto,
@@ -735,6 +831,7 @@ kernel_config = rule(
     executable = True,
     toolchains = [hermetic_toolchain.type],
     subrules = [
+        _set_up_defconfig,
         _pre_defconfig,
         _make_defconfig,
         _post_defconfig,

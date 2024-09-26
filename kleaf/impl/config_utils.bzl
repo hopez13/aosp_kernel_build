@@ -21,26 +21,30 @@ load(
 
 visibility("//build/kernel/kleaf/...")
 
-def _create_merge_dot_config_cmd(defconfig_fragments_paths_expr):
-    """Returns a command that merges defconfig fragments into `$OUT_DIR/.config`
+def _create_merge_config_cmd(base_expr, defconfig_fragments_paths_expr, quiet = None):
+    """Returns a command that merges defconfig fragments into the .config represented by `base_expr`
 
     Args:
+        base_expr: A shell expression that evaluates to the base config file.
         defconfig_fragments_paths_expr: A shell expression that evaluates
             to a list of paths to the defconfig fragments.
+        quiet: Whether to suppress warning messages for overridden values.
 
     Returns:
-        the command that merges defconfig fragments into `$OUT_DIR/.config`
+        the command that merges defconfig fragments into the .config represented by `base_expr`
     """
     cmd = """
         # Merge target defconfig into .config from kernel_build
-        KCONFIG_CONFIG=${{OUT_DIR}}/.config.tmp \\
+        KCONFIG_CONFIG={base_expr}.tmp \\
             ${{KERNEL_DIR}}/scripts/kconfig/merge_config.sh \\
-                -m -r \\
-                ${{OUT_DIR}}/.config \\
+                -m -r {quiet_arg} \\
+                {base_expr} \\
                 {defconfig_fragments_paths_expr} > /dev/null
-        mv ${{OUT_DIR}}/.config.tmp ${{OUT_DIR}}/.config
+        mv {base_expr}.tmp {base_expr}
     """.format(
+        base_expr = base_expr,
         defconfig_fragments_paths_expr = defconfig_fragments_paths_expr,
+        quiet_arg = "-Q" if quiet else "",
     )
     return cmd
 
@@ -87,6 +91,6 @@ _create_check_defconfig_step = subrule(
 )
 
 config_utils = struct(
-    create_merge_dot_config_cmd = _create_merge_dot_config_cmd,
+    create_merge_config_cmd = _create_merge_config_cmd,
     create_check_defconfig_step = _create_check_defconfig_step,
 )
