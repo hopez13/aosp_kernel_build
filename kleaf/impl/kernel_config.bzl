@@ -317,13 +317,81 @@ _reconfig = subrule(
     ],
 )
 
-def _pre_defconfig_impl(_subrule_ctx):
+def _set_up_defconfig_impl(subrule_ctx, defconfig_file):
+    """Puts defconfig in $OUT_DIR."""
+    if not defconfig_file:
+        return StepInfo(inputs = depset(), cmd = "", outputs = [], tools = [])
+
     cmd = """
+        if [[ -n "${{DEFCONFIG}}" ]]; then
+            echo "ERROR: DEFCONFIG cannot be set in build configs if kernel_build.defconfig is set." >&2
+            echo "  DEFCONFIG=${{DEFCONFIG}}" >&2
+            echo "  kernel_build.defconfig={defconfig_file}" >&2
+            exit 1
+        fi
+
+        DEFCONFIG=kleaf_internal_{kernel_build_name}_defconfig
+        (
+            if [ "$ARCH" = "x86_64" -o "$ARCH" = "i386" ]; then
+                ARCH=x86
+            fi
+            if [[ -f "${{KERNEL_DIR}}/arch/${{ARCH}}/configs/${{DEFCONFIG}}" ]]; then
+                echo "ERROR: Please delete ${{KERNEL_DIR}}/arch/${{ARCH}}/configs/${{DEFCONFIG}} and try again." >&2
+                exit 1
+            fi
+            mkdir -p "${{OUT_DIR}}/arch/${{ARCH}}/configs/"
+            cp -L {defconfig_file} "${{OUT_DIR}}/arch/${{ARCH}}/configs/${{DEFCONFIG}}"
+        )
+    """.format(
+        kernel_build_name = subrule_ctx.label.name.removesuffix("_config"),
+        defconfig_file = defconfig_file.path,
+    )
+    return StepInfo(
+        inputs = depset([defconfig_file]),
+        cmd = cmd,
+        outputs = [],
+        tools = [],
+    )
+
+_set_up_defconfig = subrule(
+    implementation = _set_up_defconfig_impl,
+)
+
+def _pre_defconfig_impl(_subrule_ctx, pre_defconfig_fragment_files):
+    cmd = ""
+    if pre_defconfig_fragment_files:
+        cmd += """
+            if [[ -n "${{PRE_DEFCONFIG_CMDS}}" ]]; then
+                echo "ERROR: PRE_DEFCONFIG_CMDS must not be set if kernel_build.pre_defconfig_fragments is set!" >&2
+                echo "  PRE_DEFCONFIG_CMDS=${{PRE_DEFCONFIG_CMDS}}" >&2
+                echo "  kernel_build.pre_defconfig_fragments={fragments}" >&2
+                exit 1
+            fi
+        """.format(
+            fragments = " ".join([file.path for file in pre_defconfig_fragment_files])
+        )
+    cmd += """
         # Pre-defconfig commands
         eval ${PRE_DEFCONFIG_CMDS}
     """
+    if pre_defconfig_fragment_files:
+        cmd += """
+            (
+                if [ "$ARCH" = "x86_64" -o "$ARCH" = "i386" ]; then
+                    ARCH=x86
+                fi
+                if ! [[ -f ${{OUT_DIR}}/arch/${{ARCH}}/configs/${{DEFCONFIG}} ]]; then
+                    echo "ERROR: No base defconfig to apply pre defconfig fragment on!" >&2
+                    exit 1
+                fi
+                # Apply pre_defconfig_fragments
+                ${{KERNEL_DIR}}/scripts/config --file "${{OUT_DIR}}/arch/${{ARCH}}/configs/${{DEFCONFIG}}" {fragments}
+            )
+        """.format(
+            fragments = " ".join([file.path for file in pre_defconfig_fragment_files])
+        )
     return StepInfo(
-        inputs = depset(),
+        inputs = depset(pre_defconfig_fragment_files),
         cmd = cmd,
         outputs = [],
         tools = [],
@@ -416,8 +484,16 @@ def _kernel_config_impl(ctx):
     out_dir = ctx.actions.declare_directory(ctx.attr.name + "/out_dir")
     outputs = [out_dir]
 
+    if ctx.attr.pre_defconfig_fragments and not ctx.attr.defconfig:
+        fail("{}: Must also set defconfig if using pre_defconfig_fragments".format(ctx.label.name.removesuffix("_config")))
+
     step_returns = [
-        _pre_defconfig(),
+        _set_up_defconfig(
+            defconfig_file = ctx.file.defconfig,
+        ),
+        _pre_defconfig(
+            pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
+        ),
         _make_defconfig(),
         _post_defconfig(
             lto_config_flag = ctx.attr.lto,
@@ -708,6 +784,7 @@ kernel_config = rule(
     executable = True,
     toolchains = [hermetic_toolchain.type],
     subrules = [
+        _set_up_defconfig,
         _pre_defconfig,
         _make_defconfig,
         _post_defconfig,
