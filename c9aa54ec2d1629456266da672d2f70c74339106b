@@ -1,0 +1,294 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8420d000_1cb7eefe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "ss",
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa4cef6_7e89c056",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "nit: Mark this non-configurable\n\n(note: we could make this configurable by using a real rule, but I don\u0027t think it is worth the engineering cost. This is good enough.)",
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec032b3_b314d1d8",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "producing",
+      "range": {
+        "startLine": 22,
+        "startChar": 31,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a5c857e_88df68d4",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "Question: This can technically be a kernel_module_group as well, right? And it can contain multiple files?\n\nMaybe `A label producing kernel module files`",
+      "range": {
+        "startLine": 22,
+        "startChar": 57,
+        "endLine": 22,
+        "endChar": 61
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6c2174e_001c7a58",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "nit: mark this nonconfigurable",
+      "range": {
+        "startLine": 23,
+        "startChar": 16,
+        "endLine": 23,
+        "endChar": 21
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03a983cd_2e86a9ca",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "Why require that? kernel_module_group, kernel_module() (which fails this test), ddk_module() with submodules, may all contain multiple modules.\n\nYou can use subTest to loop over all modules.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 61
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "71e6a0e0_683e316d",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+              "range": {
+                "startLine": 40,
+                "startChar": 0,
+                "endLine": 55,
+                "endChar": 0
+              },
+              "replacement": "        for modulePath in arguments.kernel_module:\n            with self.subTest(modulePath):\n                modinfo \u003d pathlib.Path(\"modinfo\")\n                modinfo.symlink_to(arguments.depmod)\n                out \u003d subprocess.check_output(\n                    [modinfo, \"-F\", \"built_with\", modulePath],  text\u003dTrue)\n                tag_count \u003d 0\n                for line in out.split(\"\\n\")[1:]:\n                    if line \u003d\u003d \"DDK\":\n                        tag_count +\u003d 1\n                self.assertTrue(\n                    tag_count \u003d\u003d 1,\n                    \"built with DDK tag should appear exactly once\")\n"
+            }
+          ]
+        }
+      ],
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "149306e6_2e053b69",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "https://bazel.build/reference/test-encyclopedia#test-interaction-filesystem\n\nOnly write files into `$TEST_TMPDIR`\n\nAlso:\n\n\u003e It follows that the initial working directory should not be writable.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 44
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c73eba22_72ad2ef3",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "Question: Why don\u0027t we want the first line?\n\nCould you please comment in the source code?",
+      "range": {
+        "startLine": 50,
+        "startChar": 35,
+        "endLine": 50,
+        "endChar": 39
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "df9c065f_a721b9db",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+              "range": {
+                "startLine": 50,
+                "startChar": 0,
+                "endLine": 50,
+                "endChar": 0
+              },
+              "replacement": "        # The first line is the header, so we skip it.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b768bc6_32817308",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "assertEqual",
+      "range": {
+        "startLine": 53,
+        "startChar": 13,
+        "endLine": 53,
+        "endChar": 23
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "5fab92ba_d710dce7",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+              "range": {
+                "startLine": 53,
+                "startChar": 0,
+                "endLine": 55,
+                "endChar": 0
+              },
+              "replacement": "        self.assertEqual(\n            tag_count, 1, \"built with DDK tag should appear exactly once\")\n"
+            }
+          ]
+        }
+      ],
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9037e951_7f4dacde",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:12:06Z",
+      "side": 1,
+      "message": "Do you need the unknown list for anything?",
+      "range": {
+        "startLine": 58,
+        "startChar": 15,
+        "endLine": 58,
+        "endChar": 22
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "61798b03_5d924334",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+              "range": {
+                "startLine": 58,
+                "startChar": 0,
+                "endLine": 60,
+                "endChar": 0
+              },
+              "replacement": "    arguments \u003d load_arguments()\n"
+            }
+          ]
+        }
+      ],
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
