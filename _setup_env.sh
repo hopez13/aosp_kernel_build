@@ -262,22 +262,30 @@ else
   RAMDISK_EXT="lz4"
 fi
 
-# verifies that defconfig matches the DEFCONFIG
-function check_defconfig() {
+# $1: source defconfig file
+function kleaf_internal_check_defconfig() {
+    local source_config="$1"
+
     (cd ${OUT_DIR} && \
      make ${TOOL_ARGS} O=${OUT_DIR} savedefconfig)
     [ "$ARCH" = "x86_64" -o "$ARCH" = "i386" ] && local ARCH=x86
     RES=0
-    if [[ -f ${KERNEL_DIR}/arch/${ARCH}/configs/${DEFCONFIG} ]]; then
-      diff -u ${KERNEL_DIR}/arch/${ARCH}/configs/${DEFCONFIG} ${OUT_DIR}/defconfig >&2 ||
-        RES=$?
+    if [[ -f "${source_config}" ]]; then
+        diff -u "${source_config}" ${OUT_DIR}/defconfig >&2 ||
+            RES=$?
     else
-      diff -u ${OUT_DIR}/arch/${ARCH}/configs/${DEFCONFIG} ${OUT_DIR}/defconfig >&2 ||
-        RES=$?
+        diff -u ${OUT_DIR}/arch/${ARCH}/configs/${DEFCONFIG} ${OUT_DIR}/defconfig >&2 ||
+            RES=$?
     fi
     if [ ${RES} -ne 0 ]; then
-        echo ERROR: savedefconfig does not match ${KERNEL_DIR}/arch/${ARCH}/configs/${DEFCONFIG} >&2
+        echo ERROR: savedefconfig does not match "${source_config}" >&2
     fi
     return ${RES}
+}
+export -f kleaf_internal_check_defconfig
+
+# verifies that defconfig matches the DEFCONFIG
+function check_defconfig() {
+    kleaf_internal_check_defconfig "${KERNEL_DIR}/arch/${ARCH}/configs/${DEFCONFIG}"
 }
 export -f check_defconfig
