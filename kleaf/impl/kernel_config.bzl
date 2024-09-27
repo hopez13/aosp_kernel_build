@@ -44,6 +44,52 @@ visibility("//build/kernel/kleaf/...")
 # Name of raw symbol list under $OUT_DIR
 _RAW_KMI_SYMBOL_LIST_BELOW_OUT_DIR = "abi_symbollist.raw"
 
+def _check_against_savedefconfig_impl(
+        subrule_ctx,
+        defconfig_file,
+        pre_defconfig_fragment_files,
+        post_defconfig_fragment_files,
+        check_defconfig):
+    """Checks that defconfig matches the result of savedefconfig. """
+    if not check_defconfig:
+        return StepInfo(
+            inputs = depset(),
+            cmd = "",
+            outputs = [],
+            tools = [],
+        )
+
+    if not defconfig_file or pre_defconfig_fragment_files or post_defconfig_fragment_files:
+        fail("""{kernel_build_label}: check_defconfig=True requires the following:
+- defconfig is set (but it is {defconfig})
+- pre_defconfig_fragments is not set (but it is {pre_defconfig_fragment_files})
+- post_defconfig_fragments is not set (but it is {post_defconfig_fragment_files})
+""".format(
+            kernel_build_label = subrule_ctx.label.name.removesuffix("_config"),
+            defconfig = defconfig_file.path,
+            pre_defconfig_fragment_files = [file.path for file in pre_defconfig_fragment_files],
+            post_defconfig_fragment_files = [file.path for file in post_defconfig_fragment_files],
+        ))
+
+    cmd = """
+        if [[ "${{POST_DEFCONFIG_CMDS}}" =~ check_defconfig ]]; then
+            echo "ERROR: Please delete check_defconfig from POST_DEFCONFIG_CMDS." >&2
+            exit 1
+        fi
+
+        kleaf_internal_check_against_savedefconfig {}
+    """.format(defconfig_file.path)
+    return StepInfo(
+        inputs = depset(),
+        cmd = cmd,
+        outputs = [],
+        tools = [],
+    )
+
+_check_against_savedefconfig = subrule(
+    implementation = _check_against_savedefconfig_impl,
+)
+
 def _config_lto_impl(_subrule_ctx, lto_config_flag):
     """Return configs for LTO.
 
@@ -420,6 +466,9 @@ def _post_defconfig_impl(
         raw_kmi_symbol_list_file,
         module_signing_key_file,
         system_trusted_key_file,
+        check_defconfig,
+        defconfig_file,
+        pre_defconfig_fragment_files,
         post_defconfig_fragment_files):
     """Handle post defconfig step
 
@@ -430,12 +479,23 @@ def _post_defconfig_impl(
         raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
         module_signing_key_file: file of module_signing_key
         system_trusted_key_file: file of system_trusted_key
+        check_defconfig: value of check_defconfig attr
+        defconfig_file: the file from attr defconfig
+        pre_defconfig_fragment_files: files of pre_defconfig_fragments
         post_defconfig_fragment_files: files of post_defconfig_fragments
     """
     cmd = """
         # Post-defconfig commands
         eval ${POST_DEFCONFIG_CMDS}
     """
+
+    check_against_savedefconfig_ret = _check_against_savedefconfig(
+        check_defconfig = check_defconfig,
+        defconfig_file = defconfig_file,
+        pre_defconfig_fragment_files = pre_defconfig_fragment_files,
+        post_defconfig_fragment_files = post_defconfig_fragment_files,
+    )
+    cmd += check_against_savedefconfig_ret.cmd
 
     reconfig_ret = _reconfig(
         lto_config_flag = lto_config_flag,
@@ -448,15 +508,18 @@ def _post_defconfig_impl(
     cmd += reconfig_ret.cmd
 
     return StepInfo(
-        inputs = reconfig_ret.inputs,
+        inputs = depset(transitive = [reconfig_ret.inputs, check_against_savedefconfig_ret.inputs]),
         cmd = cmd,
-        outputs = reconfig_ret.outputs,
-        tools = reconfig_ret.tools,
+        outputs = reconfig_ret.outputs + check_against_savedefconfig_ret.outputs,
+        tools = reconfig_ret.tools + check_against_savedefconfig_ret.tools,
     )
 
 _post_defconfig = subrule(
     implementation = _post_defconfig_impl,
-    subrules = [_reconfig],
+    subrules = [
+        _reconfig,
+        _check_against_savedefconfig,
+    ],
 )
 
 def _check_dot_config_against_defconfig_impl(
@@ -533,6 +596,9 @@ def _kernel_config_impl(ctx):
             raw_kmi_symbol_list_file = utils.optional_file(ctx.files.raw_kmi_symbol_list),
             module_signing_key_file = ctx.file.module_signing_key,
             system_trusted_key_file = ctx.file.system_trusted_key,
+            check_defconfig = ctx.attr.check_defconfig,
+            defconfig_file = ctx.file.defconfig,
+            pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
             post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
         ),
         _check_dot_config_against_defconfig(
@@ -914,6 +980,7 @@ kernel_config = rule(
             doc = "**post** defconfig fragments",
             allow_files = True,
         ),
+        "check_defconfig": attr.bool(doc = "Checks defconfig against savedefconfig"),
         "_config_is_stamp": attr.label(default = "//build/kernel/kleaf:config_stamp"),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
     } | _kernel_config_additional_attrs(),
