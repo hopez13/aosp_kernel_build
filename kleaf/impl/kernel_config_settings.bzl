@@ -281,7 +281,8 @@ def _get_progress_message_note(
 
     # Files under build/kernel/kleaf/impl/defconfig are named as *_defconfig.
     # For progress_messsage, we only care about the part before _defconfig.
-    # See kernel_build.defconfig_fragments documentation.
+    # See kernel_build.pre_defconfig_fragments and
+    # kernel_build.post_defconfig_fragments documentation.
     for file in pre_defconfig_fragments + post_defconfig_fragments:
         ret.append(file.basename.removesuffix("_defconfig"))
 
