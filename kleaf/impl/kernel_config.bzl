@@ -45,6 +45,54 @@ visibility("//build/kernel/kleaf/...")
 # Name of raw symbol list under $OUT_DIR
 _RAW_KMI_SYMBOL_LIST_BELOW_OUT_DIR = "abi_symbollist.raw"
 
+def _check_defconfig_minimized_impl(
+        subrule_ctx,
+        defconfig_info,
+        pre_defconfig_fragment_files,
+        attr_value):
+    """Checks that defconfig matches the result of savedefconfig. """
+    if not attr_value:
+        return StepInfo(
+            inputs = depset(),
+            cmd = "",
+            outputs = [],
+            tools = [],
+        )
+
+    if not defconfig_info or not defconfig_info.file or pre_defconfig_fragment_files:
+        # A good string repr of kernel_build.defconfig
+        defconfig = None
+        if defconfig_info:
+            defconfig = defconfig_info.file.path if defconfig_info.file else None
+
+        fail("""{kernel_build_label}: check_defconfig_minimized=True requires the following:
+- defconfig is set (but it is {defconfig})
+- pre_defconfig_fragments is not set (but it is {pre_defconfig_fragment_files})
+""".format(
+            kernel_build_label = subrule_ctx.label.name.removesuffix("_config"),
+            defconfig = defconfig,
+            pre_defconfig_fragment_files = [file.path for file in pre_defconfig_fragment_files],
+        ))
+
+    cmd = """
+        if [[ "${{POST_DEFCONFIG_CMDS}}" =~ check_defconfig_minimized ]]; then
+            echo "ERROR: Please delete check_defconfig_minimized from POST_DEFCONFIG_CMDS." >&2
+            exit 1
+        fi
+
+        kleaf_internal_check_defconfig_minimized {}
+    """.format(defconfig_info.file.path)
+    return StepInfo(
+        inputs = depset(),
+        cmd = cmd,
+        outputs = [],
+        tools = [],
+    )
+
+_check_defconfig_minimized = subrule(
+    implementation = _check_defconfig_minimized_impl,
+)
+
 def _config_lto_impl(_subrule_ctx, lto_config_flag):
     """Return configs for LTO.
 
@@ -541,13 +589,26 @@ def _kernel_config_impl(ctx):
         ),
         _make_defconfig(),
     ]
-    step_returns.append(
-        _check_dot_config_against_defconfig(
-            defconfig_info = defconfig_info,
-            pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
-            post_defconfig_fragment_files = [],
-        ),
+
+    check_defconfig_minimized_ret = _check_defconfig_minimized(
+        attr_value = ctx.attr.check_defconfig_minimized,
+        defconfig_info = defconfig_info,
+        pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
     )
+    step_returns.append(check_defconfig_minimized_ret)
+
+    # If we already checked .config against `make savedefconfig`, we don't need to check
+    # .config against defconfig/pre_defconfig_fragments again. Otherwise, check
+    # .config against defconfig/pre_defconfig_fragments before applying post_defconfig_fragments.
+    if not check_defconfig_minimized_ret.cmd:
+        step_returns.append(
+            _check_dot_config_against_defconfig(
+                defconfig_info = defconfig_info,
+                pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
+                post_defconfig_fragment_files = [],
+            ),
+        )
+
     step_returns += [
         _post_defconfig(
             lto_config_flag = ctx.attr.lto,
@@ -936,6 +997,7 @@ kernel_config = rule(
             doc = "**post** defconfig fragments",
             allow_files = True,
         ),
+        "check_defconfig_minimized": attr.bool(doc = "Checks defconfig against savedefconfig"),
         "_config_is_stamp": attr.label(default = "//build/kernel/kleaf:config_stamp"),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
     } | _kernel_config_additional_attrs(),
@@ -945,6 +1007,7 @@ kernel_config = rule(
         _set_up_defconfig,
         _pre_defconfig,
         _make_defconfig,
+        _check_defconfig_minimized,
         _post_defconfig,
         _check_dot_config_against_defconfig,
         _get_config_script,
