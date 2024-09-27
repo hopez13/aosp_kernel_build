@@ -98,6 +98,72 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eb35f7b_deeea2d5",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "For now it\u0027s main purpose is DDK, but I updated the docs so it can be reused later.",
+      "parentUuid": "4a5c857e_88df68d4",
+      "range": {
+        "startLine": 22,
+        "startChar": 57,
+        "endLine": 22,
+        "endChar": 61
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05bf5b23_07ee6fbd",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caa4cef6_7e89c056",
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d607b93b_9bbae2bc",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cec032b3_b314d1d8",
+      "range": {
+        "startLine": 22,
+        "startChar": 31,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6c2174e_001c7a58",
@@ -111,6 +177,30 @@
       "writtenOn": "2024-09-27T00:12:06Z",
       "side": 1,
       "message": "nit: mark this nonconfigurable",
+      "range": {
+        "startLine": 23,
+        "startChar": 16,
+        "endLine": 23,
+        "endChar": 21
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d723ac4_72e44d70",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6c2174e_001c7a58",
       "range": {
         "startLine": 23,
         "startChar": 16,
@@ -158,6 +248,30 @@
           ]
         }
       ],
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26da352f_1e75c3c1",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03a983cd_2e86a9ca",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 61
+      },
       "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -226,6 +340,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "977baac1_066b8f10",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "Ah this is a leftover from the previous use of `readelf`, thanks for catching it.",
+      "parentUuid": "c73eba22_72ad2ef3",
+      "range": {
+        "startLine": 50,
+        "startChar": 35,
+        "endLine": 50,
+        "endChar": 39
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b768bc6_32817308",
@@ -263,6 +401,30 @@
           ]
         }
       ],
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "098a2a5e_2ca989aa",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b768bc6_32817308",
+      "range": {
+        "startLine": 53,
+        "startChar": 13,
+        "endLine": 53,
+        "endChar": 23
+      },
       "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -322,6 +484,30 @@
       "side": 1,
       "message": "(the AI suggestion is bad but I guess you get the idea)",
       "parentUuid": "9037e951_7f4dacde",
+      "range": {
+        "startLine": 58,
+        "startChar": 15,
+        "endLine": 58,
+        "endChar": 22
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b480495d_2a12e720",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-27T22:12:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4624724d_17cbfe31",
       "range": {
         "startLine": 58,
         "startChar": 15,
