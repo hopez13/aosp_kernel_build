@@ -534,7 +534,16 @@ def _kernel_config_impl(ctx):
         ], transitive = transitive_inputs),
     )
 
-    config_script_ret = _get_config_script(ctx, inputs)
+    config_script_executable = _get_config_script(
+        run_env = ctx.attr.env[KernelEnvInfo].run_env,
+    )
+    config_script_runfiles = ctx.runfiles(
+        files = inputs,
+        transitive_files = depset(transitive = transitive_inputs + [
+            ctx.attr.env[KernelEnvInfo].run_env.inputs,
+            ctx.attr.env[KernelEnvInfo].run_env.tools,
+        ]),
+    )
 
     return [
         serialized_env_info,
@@ -546,19 +555,26 @@ def _kernel_config_impl(ctx):
         ),
         DefaultInfo(
             files = depset([out_dir]),
-            executable = config_script_ret.executable,
-            runfiles = config_script_ret.runfiles,
+            executable = config_script_executable,
+            runfiles = config_script_runfiles,
         ),
         KernelConfigInfo(
             env_setup_script = ctx.file.env,
         ),
     ]
 
-def _get_config_script(ctx, inputs):
-    """Handles config.sh."""
-    executable = ctx.actions.declare_file("{}/config.sh".format(ctx.attr.name))
+def _get_config_script_impl(
+        subrule_ctx,
+        run_env):
+    """Handles config.sh.
 
-    script = ctx.attr.env[KernelEnvInfo].run_env.setup
+    Args:
+        subrule_ctx: subrule_ctx
+        run_env: from kernel_env[KernelEnvInfo].run_env
+    """
+    executable = subrule_ctx.actions.declare_file("{}/config.sh".format(subrule_ctx.label.name))
+
+    script = run_env.setup
 
     # TODO(b/254348147): Support ncurses for hermetic tools
     script += """
@@ -591,24 +607,16 @@ def _get_config_script(ctx, inputs):
             set +x
     """
 
-    ctx.actions.write(
+    subrule_ctx.actions.write(
         output = executable,
         content = script,
         is_executable = True,
     )
+    return executable
 
-    runfiles = ctx.runfiles(
-        files = inputs,
-        transitive_files = depset(transitive = [
-            ctx.attr.env[KernelEnvInfo].run_env.inputs,
-            ctx.attr.env[KernelEnvInfo].run_env.tools,
-        ]),
-    )
-
-    return struct(
-        executable = executable,
-        runfiles = runfiles,
-    )
+_get_config_script = subrule(
+    implementation = _get_config_script_impl,
+)
 
 def get_config_setup_command(
         env_setup_command,
@@ -706,5 +714,6 @@ kernel_config = rule(
         _pre_defconfig,
         _make_defconfig,
         _post_defconfig,
+        _get_config_script,
     ],
 )
