@@ -376,6 +376,12 @@ See [documentation for all rules].
 kernel_build(post_defconfig_fragments = ...)
 ```
 
+If your `POST_DEFCONFIG_CMDS` contains `check_defconfig`, you may also set
+
+```python
+kernel_build(check_defconfig = True)
+```
+
 See [documentation for all rules].
 
 ## POST\_KERNEL\_BUILD\_CMDS
