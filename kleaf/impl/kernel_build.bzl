@@ -127,6 +127,7 @@ def kernel_build(
         pre_defconfig_fragments = None,
         post_defconfig_fragments = None,
         defconfig_fragments = None,
+        check_defconfig = None,
         page_size = None,
         pack_module_env = None,
         sanitizers = None,
@@ -526,6 +527,13 @@ def kernel_build(
             -   The line has a `# nocheck` comment. To attach a reason string, use the format
                 `# nocheck: (reason or bug number)`.
         defconfig_fragments: **Deprecated**. Same as `post_defconfig_fragments`.
+        check_defconfig: If `True`, runs `check_defconfig` after `make defconfig`.
+
+            This can only be set to true if `defconfig` is set, and `pre_defconfig_fragments`
+            and `post_defconfig_fragments` is not set.
+
+            If `True`, after `make defconfig`, also runs `make savedefconfig` and checks that
+            the result is exactly the same as `defconfig`.
         page_size: Default is `"default"`. Page size of the kernel build.
 
           Value may be one of `"default"`, `"4k"`, `"16k"` or `"64k"`. If
@@ -736,6 +744,7 @@ WARNING: {}: defconfig_fragments is deprecated; use post_defconfig_fragments ins
         defconfig = defconfig,
         pre_defconfig_fragments = pre_defconfig_fragments,
         post_defconfig_fragments = post_defconfig_fragments,
+        check_defconfig = check_defconfig,
         **internal_kwargs
     )
 
