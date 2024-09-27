@@ -471,6 +471,52 @@ _post_defconfig = subrule(
     subrules = [_reconfig],
 )
 
+def _check_defconfig_impl(
+        subrule_ctx,
+        defconfig_file,
+        pre_defconfig_fragment_files,
+        post_defconfig_fragment_files,
+        check_defconfig):
+    """Checks that defconfig matches the result of savedefconfig. """
+    if not check_defconfig:
+        return StepInfo(
+            inputs = depset(),
+            cmd = "",
+            outputs = [],
+            tools = [],
+        )
+
+    if not defconfig_file or pre_defconfig_fragment_files or post_defconfig_fragment_files:
+        fail("""{kernel_build_label}: check_defconfig=True requires the following:
+- defconfig is set (but it is {defconfig})
+- pre_defconfig_fragments is not set (but it is {pre_defconfig_fragment_files})
+- post_defconfig_fragments is not set (but it is {post_defconfig_fragment_files})
+""".format(
+            kernel_build_label = subrule_ctx.label.name.removesuffix("_config"),
+            defconfig = defconfig_file.path,
+            pre_defconfig_fragment_files = [file.path for file in pre_defconfig_fragment_files],
+            post_defconfig_fragment_files = [file.path for file in post_defconfig_fragment_files],
+        ))
+
+    cmd = """
+        if [[ "${{POST_DEFCONFIG_CMDS}}" =~ check_defconfig ]]; then
+            echo "ERROR: Please delete check_defconfig from POST_DEFCONFIG_CMDS." >&2
+            exit 1
+        fi
+
+        kleaf_internal_check_defconfig {}
+    """.format(defconfig_file.path)
+    return StepInfo(
+        inputs = depset(),
+        cmd = cmd,
+        outputs = [],
+        tools = [],
+    )
+
+_check_defconfig = subrule(
+    implementation = _check_defconfig_impl,
+)
+
 def _kernel_config_impl(ctx):
     localversion_file = stamp.write_localversion(ctx)
 
@@ -512,6 +558,12 @@ def _kernel_config_impl(ctx):
             module_signing_key_file = ctx.file.module_signing_key,
             system_trusted_key_file = ctx.file.system_trusted_key,
             post_defconfig_fragments_file = ctx.files.post_defconfig_fragments,
+        ),
+        _check_defconfig(
+            defconfig_file = ctx.file.defconfig,
+            pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
+            post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
+            check_defconfig = ctx.attr.check_defconfig,
         ),
     ]
     transitive_inputs += [step_return.inputs for step_return in step_returns]
@@ -797,7 +849,7 @@ _get_config_script = subrule(
         _set_up_defconfig,
         _pre_defconfig,
         _make_defconfig,
-    ]
+    ],
 )
 
 def get_config_setup_command(
@@ -887,6 +939,7 @@ kernel_config = rule(
             doc = "**post** defconfig fragments",
             allow_files = True,
         ),
+        "check_defconfig": attr.bool(doc = "Checks defconfig against savedefconfig"),
         "_config_is_stamp": attr.label(default = "//build/kernel/kleaf:config_stamp"),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
     } | _kernel_config_additional_attrs(),
@@ -897,6 +950,7 @@ kernel_config = rule(
         _pre_defconfig,
         _make_defconfig,
         _post_defconfig,
+        _check_defconfig,
         _get_config_script,
     ],
 )
