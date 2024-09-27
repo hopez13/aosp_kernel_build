@@ -15,6 +15,7 @@
 """Creates proper .config and others for kernel_build."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 load(":abi/trim_nonlisted_kmi_utils.bzl", "trim_nonlisted_kmi_utils")
 load(":cache_dir.bzl", "cache_dir")
@@ -318,7 +319,7 @@ _reconfig = subrule(
     ],
 )
 
-def _set_up_defconfig_impl(subrule_ctx, defconfig_file):
+def _set_up_defconfig_impl(subrule_ctx, defconfig_file, is_run_env):
     """Puts defconfig in $OUT_DIR."""
     if not defconfig_file:
         return StepInfo(inputs = depset(), cmd = "", outputs = [], tools = [])
@@ -344,7 +345,7 @@ def _set_up_defconfig_impl(subrule_ctx, defconfig_file):
     """.format(
         set_src_arch_cmd = kernel_utils.set_src_arch_cmd(),
         kernel_build_name = subrule_ctx.label.name.removesuffix("_config"),
-        defconfig_file = defconfig_file.path,
+        defconfig_file = defconfig_file.short_path if is_run_env else defconfig_file.path,
     )
     return StepInfo(
         inputs = depset([defconfig_file]),
@@ -357,7 +358,7 @@ _set_up_defconfig = subrule(
     implementation = _set_up_defconfig_impl,
 )
 
-def _pre_defconfig_impl(_subrule_ctx, pre_defconfig_fragment_files):
+def _pre_defconfig_impl(_subrule_ctx, pre_defconfig_fragment_files, is_run_env):
     cmd = ""
     if pre_defconfig_fragment_files:
         cmd += """
@@ -368,7 +369,7 @@ def _pre_defconfig_impl(_subrule_ctx, pre_defconfig_fragment_files):
                 exit 1
             fi
         """.format(
-            fragments = " ".join([file.path for file in pre_defconfig_fragment_files]),
+            fragments = " ".join([(file.short_path if is_run_env else file.path) for file in pre_defconfig_fragment_files]),
         )
     cmd += """
         # Pre-defconfig commands
@@ -377,7 +378,7 @@ def _pre_defconfig_impl(_subrule_ctx, pre_defconfig_fragment_files):
     if pre_defconfig_fragment_files:
         apply_pre_defconfig_fragments_cmd = config_utils.create_merge_config_cmd(
             base_expr = "${{OUT_DIR}}/arch/${{SRCARCH}}/configs/${{DEFCONFIG}}",
-            defconfig_fragments_paths_expr = " ".join([file.path for file in pre_defconfig_fragment_files]),
+            defconfig_fragments_paths_expr = " ".join([(file.short_path if is_run_env else file.path) for file in pre_defconfig_fragment_files]),
             quiet = True,
         )
         cmd += """
@@ -493,9 +494,11 @@ def _kernel_config_impl(ctx):
 
     step_returns = [
         _set_up_defconfig(
+            is_run_env = False,
             defconfig_file = ctx.file.defconfig,
         ),
         _pre_defconfig(
+            is_run_env = False,
             pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
         ),
         _make_defconfig(),
@@ -614,14 +617,17 @@ def _kernel_config_impl(ctx):
         ], transitive = transitive_inputs),
     )
 
-    config_script_executable = _get_config_script(
+    config_script_ret = _get_config_script(
         run_env = ctx.attr.env[KernelEnvInfo].run_env,
+        defconfig_file = ctx.file.defconfig,
+        pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
     )
     config_script_runfiles = ctx.runfiles(
         files = inputs,
         transitive_files = depset(transitive = transitive_inputs + [
             ctx.attr.env[KernelEnvInfo].run_env.inputs,
             ctx.attr.env[KernelEnvInfo].run_env.tools,
+            config_script_ret.inputs,
         ]),
     )
 
@@ -635,7 +641,7 @@ def _kernel_config_impl(ctx):
         ),
         DefaultInfo(
             files = depset([out_dir]),
-            executable = config_script_executable,
+            executable = config_script_ret.executable,
             runfiles = config_script_runfiles,
         ),
         KernelConfigInfo(
@@ -645,57 +651,150 @@ def _kernel_config_impl(ctx):
 
 def _get_config_script_impl(
         subrule_ctx,
-        run_env):
+        run_env,
+        defconfig_file,
+        pre_defconfig_fragment_files):
     """Handles config.sh.
 
     Args:
         subrule_ctx: subrule_ctx
         run_env: from kernel_env[KernelEnvInfo].run_env
+        defconfig_file: the file from attr defconfig
+        pre_defconfig_fragment_files: list of files of pre_defconfig_fragments
     """
     executable = subrule_ctx.actions.declare_file("{}/config.sh".format(subrule_ctx.label.name))
+
+    step_returns = [
+        _set_up_defconfig(
+            is_run_env = True,
+            defconfig_file = defconfig_file,
+        ),
+        _pre_defconfig(
+            is_run_env = True,
+            pre_defconfig_fragment_files = pre_defconfig_fragment_files,
+        ),
+        _make_defconfig(),
+    ]
+
+    # We can't handle outputs because this is a `run` command not a `build` command.
+    if [out for step_return in step_returns for out in step_return.outputs]:
+        fail("ERROR: None of the defconfig steps should produce outputs! {}".format(
+            [step_return.outputs for step_return in step_returns],
+        ))
+
+    # We can't handle tools yet because it may contain FilesToRunProvider, which can't be placed
+    # in runfiles directly.
+    if [tool for step_return in step_returns for tool in step_return.tools]:
+        fail("ERROR: None of the defconfig steps should require tools! {}".format(
+            [step_return.tools for step_return in step_returns],
+        ))
 
     script = run_env.setup
 
     # TODO(b/254348147): Support ncurses for hermetic tools
     script += """
-          export HOSTCFLAGS="${HOSTCFLAGS} --sysroot="
-          export HOSTLDFLAGS="${HOSTLDFLAGS} --sysroot="
+        export HOSTCFLAGS="${HOSTCFLAGS} --sysroot="
+        export HOSTLDFLAGS="${HOSTLDFLAGS} --sysroot="
     """
-
     script += kernel_utils.set_src_arch_cmd()
-
     script += """
-            menucommand="${1:-savedefconfig}"
-            if ! [[ "${menucommand}" =~ .*config ]]; then
-                echo "Invalid command $menucommand. Must be *config." >&2
-                exit 1
-            fi
+        menucommand="${1:-savedefconfig}"
+        if ! [[ "${menucommand}" =~ .*config ]]; then
+            echo "Invalid command $menucommand. Must be *config." >&2
+            exit 1
+        fi
+    """
+    script += "\n".join([step_return.cmd for step_return in step_returns])
 
-            # Pre-defconfig commands
-            set -x
-            eval ${PRE_DEFCONFIG_CMDS}
-            set +x
-            # Actual defconfig
-            make -C ${KERNEL_DIR} ${TOOL_ARGS} O=${OUT_DIR} ${DEFCONFIG}
+    inputs = []
 
+    if not defconfig_file:
+        # Legacy code path.
+        # TODO(b/368119551): Clean up once kernel_build.defconfig is required.
+        script += """
             # Show UI
             menuconfig ${menucommand}
+        """
+    else:
+        inputs.append(defconfig_file)
+        script += """
+            (
+                orig_config=$(mktemp)
+                changed_config=$(mktemp)
+                new_fragment=$(mktemp)
+                trap "rm -f ${orig_config} ${changed_config} ${new_fragment}" EXIT
+                new_config="${OUT_DIR}/.config"
 
-            # Post-defconfig commands
-            set -x
-            eval ${POST_DEFCONFIG_CMDS}
-            set +x
+                make M=${KERNEL_DIR} ${TOOL_ARGS} O=${OUT_DIR} ${MAKE_ARGS} ${{menucommand}}
+        """
+
+        if pre_defconfig_fragment_files:
+            script += """
+                ${{KERNEL_DIR}}/scripts/diffconfig -m ${{orig_config}} ${{new_config}} > ${{changed_config}}
+                KCONFIG_CONFIG=${{new_fragment}} ${{ROOT_DIR}}/${{KERNEL_DIR}}/scripts/kconfig/merge_config.sh -m {fragments} ${{changed_config}}
+            """.format(
+                fragments = " ".join([file.short_path for file in pre_defconfig_fragment_files]),
+            )
+            if len(pre_defconfig_fragment_files) == 1:
+                script += """
+                    sort_config ${{new_fragment}} > $(realpath {fragment})
+                    echo "Updated $(realpath {fragment})"
+                """.format(
+                    fragment = pre_defconfig_fragment_files[0].short_path,
+                )
+            else:
+                script += """
+                    sorted_new_fragment=$(mktemp)
+                    sort_config ${{new_fragment}} > ${{sorted_new_fragment}}
+                    echo "ERROR: Unable to update any file because there are multiple pre_defconfig_fragments." >&2
+                    echo "  Please manually update the following files:" >&2
+                    echo "    "{quoted_indented_fragments} >&2
+                    echo "  ... with the content of ..." >&2
+                    echo "    ${{sorted_new_fragment}}" >&2
+                    # Intentionally not delete sorted_new_fragment
+                    exit 1
+                """.format(
+                    quoted_indented_fragments = shell.quote("\n    ".join([file.short_path for file in pre_defconfig_fragment_files])),
+                )
+        else:
+            script += """
+                make M=${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{MAKE_ARGS}} savedefconfig
+                mv ${{OUT_DIR}}/defconfig $(realpath {defconfig})
+                echo "Updated $(realpath {defconfig})"
+            """.format(
+                defconfig = defconfig_file.short_path,
+            )
+
+        script += """
+            )
+        """
+
+    script += """
+        # Post-defconfig commands
+        eval ${POST_DEFCONFIG_CMDS}
     """
+    # Do not apply any post_defconfig_fragments because:
+    # - They have no effect; we already saved necessary defconfig and fragments.
+    # - They usually refer to variants of the build, controlled by attributes, flag values, etc.
+    #   See kernel_build.defconfig_fragments for details.
 
     subrule_ctx.actions.write(
         output = executable,
         content = script,
         is_executable = True,
     )
-    return executable
+    return struct(
+        executable = executable,
+        inputs = depset(inputs, transitive = [step_return.inputs for step_return in step_returns]),
+    )
 
 _get_config_script = subrule(
     implementation = _get_config_script_impl,
+    subrules = [
+        _set_up_defconfig,
+        _pre_defconfig,
+        _make_defconfig,
+    ]
 )
 
 def get_config_setup_command(

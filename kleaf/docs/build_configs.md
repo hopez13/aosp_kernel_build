@@ -46,6 +46,7 @@ _"Not supported"_ is displayed. Contact [owners](../OWNERS) if you need support.
 * [`SKIP_MRPROPER`](#skip_mrproper)
 * [`SKIP_DEFCONFIG`](#skip_defconfig)
 * [`SKIP_IF_VERSION_MATCHES`](#skip_if_version_matches)
+* [`DEFCONFIG`](#defconfig)
 * [`PRE_DEFCONFIG_CMDS`](#pre_defconfig_cmds)
 * [`POST_DEFCONFIG_CMDS`](#post_defconfig_cmds)
 * [`POST_KERNEL_BUILD_CMDS`](#post_kernel_build_cmds)
@@ -330,28 +331,19 @@ Not used in Bazel.
 
 Reason: Incremental builds are supported by default.
 
+## DEFCONFIG
+
+```python
+kernel_build(defconfig = ...)
+```
+
+See [documentation for all rules].
+
 ## PRE\_DEFCONFIG\_CMDS
 
-Specify in the build config.
-
-Or, remove from the build config, and use `kernel_build_config` and
-`hermetic_genrule`.
-
-In some cases, you may want to use `kernel_build.defconfig_fragments`. However,
-keep in mind that `kernel_build.defconfig_fragments` are applied **after**
-`make defconfig`, unlike `PRE_DEFCONFIG_CMDS`. Double check the resulting
-`.config` file if you are migrating from `PRE_DEFCONFIG_CMDS` to
-`kernel_build.defconfig_fragments` by building the `_config` target, for
-example:
-
+```python
+kernel_build(pre_defconfig_fragments = ...)
 ```
-$ tools/bazel build //common:kernel_aarch64_config
-$ find $(realpath bazel-bin) -name .config
-```
-
-To support `--config=local` builds, `PRE_DEFCONFIG_CMDS` must not write to the
-source tree, including `$ROOT_DIR/$KERNEL_DIR`. See
-[errors.md#defconfig-readonly](errors.md#defconfig-readonly) for details.
 
 See [documentation for all rules].
 
