@@ -33,7 +33,7 @@ $ tools/bazel run //common:kernel_x86_64_config -- nconfig
 When building a `kernel_build` target, the following list of defconfig
 fragments are applied on `.config`.
 
-*   `kernel_build.defconfig_fragments`
+*   `kernel_build.post_defconfig_fragments`
 *   `--defconfig_fragment`
 *   defconfig fragments from other command line flags and other `kernel_build`
     attributes
@@ -56,7 +56,7 @@ Example:
 # path/to/tuna/BUILD.bazel
 kernel_build(
     name = "tuna",
-    defconfig_fragments = ["tuna_defconfig"],
+    post_defconfig_fragments = ["tuna_defconfig"],
     ...
 )
 ```
@@ -148,7 +148,7 @@ own defconfig fragments to avoid fragmentation in the ecosystem (pun intended).
 
 ### User-defined flags
 
-To control `kernel_build.defconfig_fragments` with command line flags,
+To control `kernel_build.post_defconfig_fragments` with command line flags,
 you may use
 [configurable build attributes](https://bazel.build/docs/configurable-attributes)
 (sometimes referred to as `select()`).
@@ -168,7 +168,7 @@ config_setting(
 
 kernel_build(
     name = "tuna",
-    defconfig_fragments = select({
+    post_defconfig_fragments = select({
         ":khwasan_is_set": ["khwasan_defconfig"],
         "//conditions:default": []
     }) + [...],
