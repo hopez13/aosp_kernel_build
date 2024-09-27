@@ -306,6 +306,30 @@
       ],
       "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4624724d_17cbfe31",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-27T00:14:14Z",
+      "side": 1,
+      "message": "(the AI suggestion is bad but I guess you get the idea)",
+      "parentUuid": "9037e951_7f4dacde",
+      "range": {
+        "startLine": 58,
+        "startChar": 15,
+        "endLine": 58,
+        "endChar": 22
+      },
+      "revId": "c9aa54ec2d1629456266da672d2f70c74339106b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
