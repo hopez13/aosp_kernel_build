@@ -349,14 +349,9 @@ See [documentation for all rules].
 
 ## POST\_DEFCONFIG\_CMDS
 
-Specify in the build config.
-
-If the command only contains a single `merge_config.sh` invocation, you may
-also use `kernel_build.defconfig_fragments`. They are applied **after**
-`make defconfig`, just like `POST_DEFCONFIG_CMDS`.
-
-Or, remove from the build config, and use `kernel_build_config` and
-`hermetic_genrule`.
+```python
+kernel_build(post_defconfig_fragments = ...)
+```
 
 See [documentation for all rules].
 
