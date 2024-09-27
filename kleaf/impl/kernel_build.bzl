@@ -127,6 +127,7 @@ def kernel_build(
         pre_defconfig_fragments = None,
         post_defconfig_fragments = None,
         defconfig_fragments = None,
+        check_defconfig_minimized = None,
         page_size = None,
         pack_module_env = None,
         sanitizers = None,
@@ -530,6 +531,12 @@ def kernel_build(
             Items must be present in the final `.config`. See
             `build/kernel/kleaf/docs/kernel_config.md` for details.
         defconfig_fragments: **Deprecated**. Same as `post_defconfig_fragments`.
+        check_defconfig_minimized: If `True`, checks `.config` against the result of
+            `make savedefconfig` right after `make defconfig`, but before
+            `post_defconfig_fragments` are applied.
+
+            This can be set to true **only if** `defconfig` is set and `pre_defconfig_fragments`
+            is not set.
         page_size: Default is `"default"`. Page size of the kernel build.
 
           Value may be one of `"default"`, `"4k"`, `"16k"` or `"64k"`. If
@@ -741,6 +748,7 @@ WARNING: {}: defconfig_fragments is deprecated; use post_defconfig_fragments ins
         defconfig = defconfig,
         pre_defconfig_fragments = pre_defconfig_fragments,
         post_defconfig_fragments = post_defconfig_fragments,
+        check_defconfig_minimized = check_defconfig_minimized,
         **internal_kwargs
     )
 
