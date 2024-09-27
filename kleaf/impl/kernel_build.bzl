@@ -125,6 +125,7 @@ def kernel_build(
         modules_prepare_force_generate_headers = None,
         defconfig = None,
         pre_defconfig_fragments = None,
+        post_defconfig_fragments = None,
         defconfig_fragments = None,
         page_size = None,
         pack_module_env = None,
@@ -481,7 +482,7 @@ def kernel_build(
             For mixed builds (`base_kernel` is set), this is usually set to the `defconfig`
             of the `base_kernel`, e.g. `//common:arch/arm64/configs/gki_defconfig`.
 
-            Items must be present in the intermediate `.config` before `defconfig_fragments`
+            Items must be present in the intermediate `.config` before `post_defconfig_fragments`
             are applied. See `build/kernel/kleaf/docs/kernel_config.md` for details.
         pre_defconfig_fragments: A list of fragments that are applied to the defconfig
             **before** `make defconfig`.
@@ -502,14 +503,14 @@ def kernel_build(
 
             **NOTE**: `pre_defconfig_fragments` are applied **before** `make defconfig`, similar
             to `PRE_DEFCONFIG_CMDS`. If you had `POST_DEFCONFIG_CMDS` applying fragments in your
-            build configs, consider using `defconfig_fragments` instead.
+            build configs, consider using `post_defconfig_fragments` instead.
 
-            **NOTE**: **Order matters**, unlike `defconfig_fragments`. If there are conflicting
+            **NOTE**: **Order matters**, unlike `post_defconfig_fragments`. If there are conflicting
             items, later items overrides earlier items.
 
-            Items must be present in the intermediate `.config` before `defconfig_fragments`
+            Items must be present in the intermediate `.config` before `post_defconfig_fragments`
             are applied. See `build/kernel/kleaf/docs/kernel_config.md` for details.
-        defconfig_fragments: A list of fragments that are applied to the defconfig
+        post_defconfig_fragments: A list of fragments that are applied to the defconfig
             **after** `make defconfig`.
 
             As a convention, files should usually be named `<prop>_defconfig`
@@ -522,12 +523,13 @@ def kernel_build(
             Files usually contain debug options. If you want to build in-tree modules, adding them
             to `pre_defconfig_fragments` may be a better choice.
 
-            **NOTE**: `defconfig_fragments` are applied **after** `make defconfig`, similar
+            **NOTE**: `post_defconfig_fragments` are applied **after** `make defconfig`, similar
             to `POST_DEFCONFIG_CMDS`. If you had `PRE_DEFCONFIG_CMDS` applying fragments in your
             build configs, consider using `pre_defconfig_fragments` instead.
 
             Items must be present in the final `.config`. See
             `build/kernel/kleaf/docs/kernel_config.md` for details.
+        defconfig_fragments: **Deprecated**. Same as `post_defconfig_fragments`.
         page_size: Default is `"default"`. Page size of the kernel build.
 
           Value may be one of `"default"`, `"4k"`, `"16k"` or `"64k"`. If
@@ -547,7 +549,7 @@ def kernel_build(
             - `["kcsan"]`
         ddk_module_defconfig_fragments: A list of additional defconfigs, to be used
           in `ddk_module`s building against this kernel.
-          Unlike `defconfig_fragments`, `ddk_module_defconfig_fragments` is not applied
+          Unlike `post_defconfig_fragments`, `ddk_module_defconfig_fragments` is not applied
           to this `kernel_build` target, nor dependent legacy `kernel_module`s.
         ddk_module_headers: A list of `ddk_headers`, to be used in `ddk_module`s
           building against this kernel.
@@ -609,9 +611,24 @@ def kernel_build(
         Label("//build/kernel/kleaf:lto_is_default"): "default",
     })
 
+    if defconfig_fragments:
+        if post_defconfig_fragments:
+            fail("""{}: defconfig_fragments and post_defconfig_fragments cannot be set simultaneously.
+    Please merge defconfig_fragments into post_defconfig_fragments and delete defconfig_fragments.""".format(
+                native.package_relative_label(name),
+            ))
+
+        # buildifier: disable=print
+        print("""
+WARNING: {}: defconfig_fragments is deprecated; use post_defconfig_fragments instead.
+    If you want to apply defconfig fragments before `make defconfig`, use pre_defconfig_fragments instead.""".format(
+            native.package_relative_label(name),
+        ))
+        post_defconfig_fragments = defconfig_fragments
+
     post_defconfig_fragments = _get_post_defconfig_fragments(
         kernel_build_name = name,
-        kernel_build_defconfig_fragments = defconfig_fragments,
+        kernel_build_post_defconfig_fragments = post_defconfig_fragments,
         kernel_build_arch = arch,
         kernel_build_page_size = page_size,
         kernel_build_sanitizers = sanitizers,
@@ -881,14 +898,14 @@ IGNORED because kernel_build.sanitizers is set!".format(this_label = ctx.label, 
 
 def _get_post_defconfig_fragments(
         kernel_build_name,
-        kernel_build_defconfig_fragments,
+        kernel_build_post_defconfig_fragments,
         kernel_build_arch,
         kernel_build_page_size,
         kernel_build_sanitizers,
         kernel_build_trim_nonlisted_kmi,
         **internal_kwargs):
     # Use a separate list to avoid .append on the provided object directly.
-    # kernel_build_defconfig_fragments could be a list or a select() expression.
+    # kernel_build_post_defconfig_fragments could be a list or a select() expression.
     additional_fragments = [
         Label("//build/kernel/kleaf:defconfig_fragment"),
         Label("//build/kernel/kleaf/impl/defconfig:debug"),
@@ -992,13 +1009,12 @@ def _get_post_defconfig_fragments(
     )
     additional_fragments.append(sanitizer_target)
 
-    if kernel_build_defconfig_fragments == None:
-        kernel_build_defconfig_fragments = []
+    if kernel_build_post_defconfig_fragments == None:
+        kernel_build_post_defconfig_fragments = []
 
-    # Do not call kernel_build_defconfig_fragments += ... to avoid
-    # modifying the incoming object from kernel_build.defconfig_fragments.
-    defconfig_fragments = kernel_build_defconfig_fragments + additional_fragments
-    return defconfig_fragments
+    # Do not call kernel_build_post_defconfig_fragments += ... to avoid
+    # modifying the incoming object from kernel_build.post_defconfig_fragments.
+    return kernel_build_post_defconfig_fragments + additional_fragments
 
 def _uniq(lst):
     """Deduplicates items in lst."""
