@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ee9d1d_7fd24eb0",
+        "filename": "kleaf/impl/kernel_config.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-28T00:02:55Z",
+      "side": 1,
+      "message": "This needs to be fixed before releasing this feature.",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 0
+      },
+      "revId": "2b230e69beb8ab905383a134658bef3beaf54e50",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
