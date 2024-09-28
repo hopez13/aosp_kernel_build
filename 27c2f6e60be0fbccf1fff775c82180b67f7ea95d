@@ -1,0 +1,97 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec786585_c5bf0a42",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-28T00:17:15Z",
+      "side": 1,
+      "message": "just use parse_args(), and at L56 assign arguments to it",
+      "revId": "27c2f6e60be0fbccf1fff775c82180b67f7ea95d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e01e1001_5bbcd00c",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-28T00:17:15Z",
+      "side": 1,
+      "message": "spaces\n\nmaybe use a formatter?",
+      "range": {
+        "startLine": 46,
+        "startChar": 54,
+        "endLine": 46,
+        "endChar": 56
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "13465ba2_ce4a19ac",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+              "range": {
+                "startLine": 46,
+                "startChar": 0,
+                "endLine": 47,
+                "endChar": 0
+              },
+              "replacement": "                [modinfo, \"-F\", \"built_with\", module], text\u003dTrue)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "27c2f6e60be0fbccf1fff775c82180b67f7ea95d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18aecda3_19767833",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-28T00:17:15Z",
+      "side": 1,
+      "message": "Just delete this, unless you are using sys.argv later",
+      "fixSuggestions": [
+        {
+          "fixId": "38f4463c_94fcb678",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+              "range": {
+                "startLine": 57,
+                "startChar": 0,
+                "endLine": 58,
+                "endChar": 0
+              },
+              "replacement": ""
+            }
+          ]
+        }
+      ],
+      "revId": "27c2f6e60be0fbccf1fff775c82180b67f7ea95d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
