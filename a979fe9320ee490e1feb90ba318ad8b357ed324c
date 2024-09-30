@@ -1,0 +1,62 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a65e1a32_8400957d",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-30T18:33:33Z",
+      "side": 1,
+      "message": "nit: Use a subtest to wrap this so that assertEqual do not fail too early. That is, for a kernel_module_group/ddk_module with submodule, we check all ko files and always report all errors on all of the files.\n\n(just like expectEqual, but there are no expectX functions in Python unit test)",
+      "fixSuggestions": [
+        {
+          "fixId": "fc7711df_918359f4",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+              "range": {
+                "startLine": 60,
+                "startChar": 0,
+                "endLine": 65,
+                "endChar": 0
+              },
+              "replacement": "            self.assertEqual(\n                tag_count,\n                1,\n                \"built with DDK tag should appear exactly once\",\n            )\n"
+            }
+          ]
+        }
+      ],
+      "revId": "a979fe9320ee490e1feb90ba318ad8b357ed324c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99df3ebd_544a1e28",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-30T18:33:33Z",
+      "side": 1,
+      "message": "nit: Do you mean to dedent this?\n\nIf so L57 to L59 could also be\n\n`tag_count \u003d out.split(\"\\n\").count(\"DDK\")`",
+      "range": {
+        "startLine": 60,
+        "startChar": 16,
+        "endLine": 60,
+        "endChar": 33
+      },
+      "revId": "a979fe9320ee490e1feb90ba318ad8b357ed324c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
