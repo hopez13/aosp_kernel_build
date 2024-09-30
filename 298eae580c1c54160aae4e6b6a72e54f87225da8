@@ -22,6 +22,30 @@
       },
       "revId": "298eae580c1c54160aae4e6b6a72e54f87225da8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e054eb16_1c8e7a57",
+        "filename": "kleaf/impl/kgdb.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-30T22:27:18Z",
+      "side": 1,
+      "message": "yeah this is JUST _kgdb.\n\nThis is to have an SSOT of what _kgdb actually refers to. The cache_dir kleaf_config_tags.json needs the value. But yeah it is a bit overcomplicated. Maybe I will clean it up next time...",
+      "parentUuid": "169a9236_4df5c79d",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 61
+      },
+      "revId": "298eae580c1c54160aae4e6b6a72e54f87225da8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
