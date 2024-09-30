@@ -90,7 +90,15 @@ def kernel_abi_dist(
     """
 
     # TODO(b/231647455): Clean up hard-coded name "_abi_diff_executable".
-    # TODO(b/264710236): Set kernel_build_add_vmlinux by default
+
+    # buildifier: disable=print
+    print("""
+WARNING: {}: kernel_abi_dist is deprecated. use kernel_abi_wrapped_dist instead.
+    See build/kernel/kleaf/docs/impl.md for creating pkg_files/pkg_install targets.
+    See build/kernel/kleaf/docs/api_reference/kernel.md for using the
+    kernel_abi_wrapped_dist macro.""".format(
+        native.package_relative_label(name),
+    ))
 
     if kwargs.get("data") == None:
         kwargs["data"] = []
@@ -119,6 +127,107 @@ def kernel_abi_dist(
         enable_add_vmlinux = kernel_build_add_vmlinux,
         ignore_diff = ignore_diff,
         no_ignore_diff_target = no_ignore_diff_target,
+    )
+
+def kernel_abi_wrapped_dist(
+        name,
+        dist,
+        kernel_abi,
+        ignore_diff = None,
+        no_ignore_diff_target = None,
+        **kwargs):
+    """A wrapper over `dist` for [`kernel_abi`](#kernel_abi).
+
+    After calling the `dist`, return the exit code from `diff_abi`.
+
+    Example:
+
+    ```
+    kernel_build(
+        name = "tuna",
+        base_kernel = "//common:kernel_aarch64",
+        ...
+    )
+    kernel_abi(name = "tuna_abi", ...)
+    pkg_files(
+        name = "tuna_abi_dist_internal_files",
+        srcs = [
+            ":tuna",
+            # "//common:kernel_aarch64", # remove GKI
+            ":tuna_abi", ...             # Add kernel_abi to pkg_files
+        ],
+        strip_prefix = strip_prefix.files_only(),
+        visibility = ["//visibility:private"],
+    )
+    pkg_install(
+        name = "tuna_abi_dist_internal",
+        srcs = [":tuna_abi_dist_internal_files"],
+        visibility = ["//visibility:private"],
+    )
+    kernel_abi_wrapped_dist(
+        name = "tuna_abi_dist",
+        dist = ":tuna_abi_dist_internal",
+        kernel_abi = ":tuna_abi",
+    )
+    ```
+
+    **Implementation notes**:
+
+    `with_vmlinux_transition` is applied on all targets by default. In
+    particular, the `kernel_build` targets in `data` automatically builds
+    `vmlinux` regardless of whether `vmlinux` is specified in `outs`.
+
+    Args:
+        name: name of the ABI dist target
+        dist: The actual dist target (usually a `pkg_install`).
+
+            Note: This dist target should include `kernel_abi` in `pkg_files`
+            that the `pkg_install` installs, e.g.
+
+            ```
+            kernel_abi(name = "tuna_abi", ...)
+            pkg_files(
+                name = "tuna_abi_dist_files",
+                srcs = [":tuna_abi", ...], # Add kernel_abi to pkg_files()
+                # ...
+            )
+            pkg_install(
+                name = "tuna_abi_dist_internal",
+                srcs = [":tuna_abi_dist_files"],
+                # ...
+            )
+            kernel_abi_wrapped_dist(
+                name = "tuna_abi_dist",
+                dist = ":tuna_abi_dist_internal",
+                # ...
+            )
+            ```
+        kernel_abi: [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes).
+            name of the [`kernel_abi`](#kernel_abi) invocation.
+        ignore_diff: [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes).
+            If `True` and the return code of `stgdiff` signals the ABI difference,
+            then the result is ignored.
+        no_ignore_diff_target: [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes).
+            If `ignore_diff` is `True`, this need to be set to a name of the target
+            that doesn't have `ignore_diff`. This target will be recommended as an
+            alternative to a user. If `no_ignore_diff_target` is None, there will
+            be no alternative recommended.
+        **kwargs: Additional attributes to the internal rule, e.g.
+            [`visibility`](https://docs.bazel.build/versions/main/visibility.html).
+            See complete list
+            [here](https://docs.bazel.build/versions/main/be/common-definitions.html#common-attributes).
+    """
+
+    # TODO(b/231647455): Clean up hard-coded name "_abi_diff_executable".
+
+    kernel_abi_wrapped_dist_internal(
+        name = name,
+        dist = dist,
+        diff_stg = kernel_abi + "_diff_executable",
+        ignore_diff = ignore_diff,
+        no_ignore_diff_target = no_ignore_diff_target,
+        enable_add_vmlinux = True,
+        **kwargs
     )
 
 def _kernel_abi_wrapped_dist_internal_impl(ctx):

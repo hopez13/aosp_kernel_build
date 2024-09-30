@@ -1371,6 +1371,69 @@ particular, the `kernel_build` targets in `data` automatically builds
 | <a id="kernel_abi_dist-kwargs"></a>kwargs |  attributes to the `copy_to_dist_dir` macro.   |  none |
 
 
+<a id="kernel_abi_wrapped_dist"></a>
+
+## kernel_abi_wrapped_dist
+
+<pre>
+kernel_abi_wrapped_dist(<a href="#kernel_abi_wrapped_dist-name">name</a>, <a href="#kernel_abi_wrapped_dist-dist">dist</a>, <a href="#kernel_abi_wrapped_dist-kernel_abi">kernel_abi</a>, <a href="#kernel_abi_wrapped_dist-ignore_diff">ignore_diff</a>, <a href="#kernel_abi_wrapped_dist-no_ignore_diff_target">no_ignore_diff_target</a>, <a href="#kernel_abi_wrapped_dist-kwargs">kwargs</a>)
+</pre>
+
+A wrapper over `dist` for [`kernel_abi`](#kernel_abi).
+
+After calling the `dist`, return the exit code from `diff_abi`.
+
+Example:
+
+```
+kernel_build(
+    name = "tuna",
+    base_kernel = "//common:kernel_aarch64",
+    ...
+)
+kernel_abi(name = "tuna_abi", ...)
+pkg_files(
+    name = "tuna_abi_dist_internal_files",
+    srcs = [
+        ":tuna",
+        # "//common:kernel_aarch64", # remove GKI
+        ":tuna_abi", ...             # Add kernel_abi to pkg_files
+    ],
+    strip_prefix = strip_prefix.files_only(),
+    visibility = ["//visibility:private"],
+)
+pkg_install(
+    name = "tuna_abi_dist_internal",
+    srcs = [":tuna_abi_dist_internal_files"],
+    visibility = ["//visibility:private"],
+)
+kernel_abi_wrapped_dist(
+    name = "tuna_abi_dist",
+    dist = ":tuna_abi_dist_internal",
+    kernel_abi = ":tuna_abi",
+)
+```
+
+**Implementation notes**:
+
+`with_vmlinux_transition` is applied on all targets by default. In
+particular, the `kernel_build` targets in `data` automatically builds
+`vmlinux` regardless of whether `vmlinux` is specified in `outs`.
+
+
+**PARAMETERS**
+
+
+| Name  | Description | Default Value |
+| :------------- | :------------- | :------------- |
+| <a id="kernel_abi_wrapped_dist-name"></a>name |  name of the ABI dist target   |  none |
+| <a id="kernel_abi_wrapped_dist-dist"></a>dist |  The actual dist target (usually a `pkg_install`).<br><br>Note: This dist target should include `kernel_abi` in `pkg_files` that the `pkg_install` installs, e.g.<br><br><pre><code>kernel_abi(name = "tuna_abi", ...)&#10;pkg_files(&#10;    name = "tuna_abi_dist_files",&#10;    srcs = [":tuna_abi", ...], # Add kernel_abi to pkg_files()&#10;    # ...&#10;)&#10;pkg_install(&#10;    name = "tuna_abi_dist_internal",&#10;    srcs = [":tuna_abi_dist_files"],&#10;    # ...&#10;)&#10;kernel_abi_wrapped_dist(&#10;    name = "tuna_abi_dist",&#10;    dist = ":tuna_abi_dist_internal",&#10;    # ...&#10;)</code></pre>   |  none |
+| <a id="kernel_abi_wrapped_dist-kernel_abi"></a>kernel_abi |  [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes). name of the [`kernel_abi`](#kernel_abi) invocation.   |  none |
+| <a id="kernel_abi_wrapped_dist-ignore_diff"></a>ignore_diff |  [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes). If `True` and the return code of `stgdiff` signals the ABI difference, then the result is ignored.   |  `None` |
+| <a id="kernel_abi_wrapped_dist-no_ignore_diff_target"></a>no_ignore_diff_target |  [Nonconfigurable](https://bazel.build/reference/be/common-definitions#configurable-attributes). If `ignore_diff` is `True`, this need to be set to a name of the target that doesn't have `ignore_diff`. This target will be recommended as an alternative to a user. If `no_ignore_diff_target` is None, there will be no alternative recommended.   |  `None` |
+| <a id="kernel_abi_wrapped_dist-kwargs"></a>kwargs |  Additional attributes to the internal rule, e.g. [`visibility`](https://docs.bazel.build/versions/main/visibility.html). See complete list [here](https://docs.bazel.build/versions/main/be/common-definitions.html#common-attributes).   |  none |
+
+
 <a id="kernel_build"></a>
 
 ## kernel_build
