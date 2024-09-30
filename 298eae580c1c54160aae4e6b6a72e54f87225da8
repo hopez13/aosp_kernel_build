@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169a9236_4df5c79d",
+        "filename": "kleaf/impl/kgdb.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-30T20:59:33Z",
+      "side": 1,
+      "message": "nitty nit: this seems to be only `_kgdb` is this because it will be extended later?",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 61
+      },
+      "revId": "298eae580c1c54160aae4e6b6a72e54f87225da8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
