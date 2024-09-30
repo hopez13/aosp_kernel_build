@@ -17,7 +17,8 @@
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
-load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
+load("@rules_pkg//pkg:install.bzl", "pkg_install")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load("//build/kernel/kleaf/artifact_tests:device_modules_test.bzl", "device_modules_test")
 load("//build/kernel/kleaf/artifact_tests:kernel_test.bzl", "initramfs_modules_options_test")
 load("//build/kernel/kleaf/impl:gki_artifacts.bzl", "gki_artifacts", "gki_artifacts_prebuilts")
@@ -28,10 +29,10 @@ load(
 )
 load("//build/kernel/kleaf/impl:kernel_sbom.bzl", "kernel_sbom")
 load("//build/kernel/kleaf/impl:out_headers_allowlist_archive.bzl", "out_headers_allowlist_archive")
+load("//build/kernel/kleaf/impl:abi/kernel_abi_dist.bzl", "kernel_abi_wrapped_dist_internal")
 load(
     ":kernel.bzl",
     "kernel_abi",
-    "kernel_abi_dist",
     "kernel_build",
     "kernel_build_config",
     "kernel_images",
@@ -420,33 +421,29 @@ def common_kernel(
 
     dist_targets.append(name + "_sbom")
 
-    copy_to_dist_dir(
+    pkg_files(
+        name = name + "_dist_files",
+        srcs = dist_targets,
+        strip_prefix = strip_prefix.files_only(),
+        visibility = ["//visibility:private"],
+    )
+    pkg_install(
         name = name + "_dist",
-        data = dist_targets,
-        flat = True,
-        dist_dir = "out/{name}/dist".format(name = name),
-        log = "info",
+        srcs = [name + "_dist_files"],
+        destdir = "out/{name}/dist".format(name = name),
     )
 
     kernel_abi_dist_name = name + "_abi_dist"
-    kernel_abi_dist(
+    _common_kernel_abi_dist(
         name = kernel_abi_dist_name,
         kernel_abi = name + "_abi",
-        kernel_build_add_vmlinux = _GKI_ADD_VMLINUX,
-        data = dist_targets,
-        flat = True,
-        dist_dir = "out_abi/{name}/dist".format(name = name),
-        log = "info",
+        dist_targets = dist_targets,
     )
 
-    kernel_abi_dist(
+    _common_kernel_abi_dist(
         name = name + "_abi_ignore_diff_dist",
         kernel_abi = name + "_abi",
-        kernel_build_add_vmlinux = _GKI_ADD_VMLINUX,
-        data = dist_targets,
-        flat = True,
-        dist_dir = "out_abi/{name}/dist".format(name = name),
-        log = "info",
+        dist_targets = dist_targets,
         ignore_diff = True,
         no_ignore_diff_target = kernel_abi_dist_name,
     )
@@ -690,4 +687,32 @@ def _define_common_kernels_additional_tests(
             name + "_fake",
             name + "_device_modules_test",
         ],
+    )
+
+def _common_kernel_abi_dist(
+        name,
+        kernel_abi,
+        dist_targets,
+        ignore_diff = None,
+        no_ignore_diff_target = None,
+    ):
+    """Defines a `kernel_abi_wrapped_dist` for a common kernel."""
+    pkg_files(
+        name = name + "_internal_files",
+        srcs = dist_targets + [kernel_abi],
+        strip_prefix = strip_prefix.files_only(),
+        visibility = ["//visibility:private"],
+    )
+    pkg_install(
+        name = name + "_internal",
+        srcs = [name + "_internal_files"],
+        destdir = "out_abi/{name}/dist".format(name = name),
+    )
+    kernel_abi_wrapped_dist_internal(
+        name = name,
+        dist = name + "_internal",
+        kernel_abi = kernel_abi,
+        enable_add_vmlinux = _GKI_ADD_VMLINUX,
+        ignore_diff = ignore_diff,
+        no_ignore_diff_target = no_ignore_diff_target,
     )
