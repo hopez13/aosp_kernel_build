@@ -751,7 +751,7 @@ vendor_boot_image(<a href="#vendor_boot_image-name">name</a>, <a href="#vendor_b
                   <a href="#vendor_boot_image-vendor_ramdisk_dev_nodes">vendor_ramdisk_dev_nodes</a>)
 </pre>
 
-
+Build `vendor_boot` or `vendor_kernel_boot` image.
 
 **ATTRIBUTES**
 
@@ -767,7 +767,7 @@ vendor_boot_image(<a href="#vendor_boot_image-name">name</a>, <a href="#vendor_b
 | <a id="vendor_boot_image-ramdisk_compression"></a>ramdisk_compression |  If provided it specfies the format used for any ramdisks generated.If not provided a fallback value from build.config is used.   | String | optional |  `""`  |
 | <a id="vendor_boot_image-ramdisk_compression_args"></a>ramdisk_compression_args |  Command line arguments passed only to lz4 command to control compression level.   | String | optional |  `""`  |
 | <a id="vendor_boot_image-unpack_ramdisk"></a>unpack_ramdisk |  When false it skips unpacking the vendor ramdisk and copy it as is, without modifications, into the boot image. Also skip the mkbootfs step.<br><br>Unlike `kernel_images()`, `unpack_ramdisk` must be specified explicitly to clarify the intent.   | Boolean | required |  |
-| <a id="vendor_boot_image-vendor_boot_name"></a>vendor_boot_name |  Name of `vendor_boot` image.<br><br>* If `"vendor_boot"`, build `vendor_boot.img` * If `"vendor_kernel_boot"`, build `vendor_kernel_boot.img` * If `None`, skip building `vendor_boot`.   | String | optional |  `""`  |
+| <a id="vendor_boot_image-vendor_boot_name"></a>vendor_boot_name |  Name of `vendor_boot` image.<br><br>* If `"vendor_boot"`, build `vendor_boot.img` * If `"vendor_kernel_boot"`, build `vendor_kernel_boot.img`   | String | optional |  `"vendor_boot"`  |
 | <a id="vendor_boot_image-vendor_ramdisk_binaries"></a>vendor_ramdisk_binaries |  List of vendor ramdisk binaries which includes the device-specific components of ramdisk like the fstab file and the device-specific rc files. If specifying multiple vendor ramdisks and identical file paths exist in the ramdisks, the file from last ramdisk is used.<br><br>Note: **order matters**. To prevent buildifier from sorting the list, add the following: <pre><code># do not sort</code></pre>   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="vendor_boot_image-vendor_ramdisk_dev_nodes"></a>vendor_ramdisk_dev_nodes |  List of dev nodes description files which describes special device files to be added to the vendor ramdisk. File format is as accepted by mkbootfs.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 
