@@ -16,6 +16,24 @@
       "message": "nit: Update the docs to reflect the changes in `kernel_build`?",
       "revId": "193a01b16a1e235659096263872c25e67f2c2953",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ed9be79_2cfe8b4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-09-30T22:28:41Z",
+      "side": 1,
+      "message": "The docs will be updated in a CL at the very end. I don\u0027t plan to submit this without the other changes going in... otherwise this is an incomplete feature.\n\nI\u0027ll leave this comment open until the full feature is done.",
+      "parentUuid": "06be031f_908152e7",
+      "revId": "193a01b16a1e235659096263872c25e67f2c2953",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
