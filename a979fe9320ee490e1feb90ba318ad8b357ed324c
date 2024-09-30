@@ -36,6 +36,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "557a102b_509fbbdd",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-30T20:41:34Z",
+      "side": 1,
+      "message": "TIL. Thank you!",
+      "parentUuid": "a65e1a32_8400957d",
+      "revId": "a979fe9320ee490e1feb90ba318ad8b357ed324c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99df3ebd_544a1e28",
@@ -49,6 +67,30 @@
       "writtenOn": "2024-09-30T18:33:33Z",
       "side": 1,
       "message": "nit: Do you mean to dedent this?\n\nIf so L57 to L59 could also be\n\n`tag_count \u003d out.split(\"\\n\").count(\"DDK\")`",
+      "range": {
+        "startLine": 60,
+        "startChar": 16,
+        "endLine": 60,
+        "endChar": 33
+      },
+      "revId": "a979fe9320ee490e1feb90ba318ad8b357ed324c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82d3d79a_25931ca6",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-09-30T20:41:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99df3ebd_544a1e28",
       "range": {
         "startLine": 60,
         "startChar": 16,
