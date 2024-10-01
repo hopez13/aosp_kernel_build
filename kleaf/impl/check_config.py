@@ -49,6 +49,9 @@ class CheckConfig:
     """Kernel config checker."""
 
     dot_config: pathlib.Path
+    defconfig: pathlib.Path | None = None
+    pre_defconfig_fragments: list[pathlib.Path] = dataclasses.field(
+        default_factory=list)
     post_defconfig_fragments: list[pathlib.Path] = dataclasses.field(
         default_factory=list)
 
@@ -97,13 +100,37 @@ class CheckConfig:
     def _merge_defconfig(self) -> MergedDefconfig:
         """Merge a list of defconfig and fragments.
 
+        Pre overrides defconfig. Later fragments in pre overrides earlier ones.
+        Post overrides pre and defconfig.
+
         For post defconfig fragments, all requirements from all fragments
         are considered. No overriding is done.
         """
-        ret = MergedDefconfig()
+
+        defconfig_and_pre = ParsedConfig()
+        if self.defconfig is not None:
+            defconfig_and_pre.update(
+                self._parse_config(self.defconfig, is_dot_config=False))
+
+        # pre overrides defconfig. Later overrides former.
+        for path in self.pre_defconfig_fragments:
+            defconfig_and_pre.update(
+                self._parse_config(path, is_dot_config=False))
+
+        # No override for post
+        merged_post = MergedDefconfig()
         for path in self.post_defconfig_fragments:
             parsed = self._parse_config(path, is_dot_config=False)
-            ret.extend(parsed.items())
+            merged_post.extend(parsed.items())
+        post_keys = {key for key, _ in merged_post}
+
+        # Post overrides defconfig & pre
+        ret = MergedDefconfig()
+        for key, value in defconfig_and_pre.items():
+            if key not in post_keys:
+                ret.append((key, value))
+        ret += merged_post
+
         return ret
 
     @classmethod
@@ -190,6 +217,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--dot_config", type=pathlib.Path, required=True)
 
+    parser.add_argument("--defconfig", type=pathlib.Path)
+    parser.add_argument("--pre_defconfig_fragments",
+                        type=pathlib.Path, nargs="*", default=[])
     parser.add_argument("--post_defconfig_fragments",
                         type=pathlib.Path, nargs="*", default=[])
 
