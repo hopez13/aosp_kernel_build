@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62afc782_b74e0f21",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-01T12:41:40Z",
+      "side": 1,
+      "message": "nit: missing `configs` word?",
+      "range": {
+        "startLine": 15,
+        "startChar": 39,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b96a56fc_6b2cabc6",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-01T12:41:40Z",
+      "side": 1,
+      "message": "nit: Are all fragments `ParsedConfig`?",
+      "range": {
+        "startLine": 96,
+        "startChar": 40,
+        "endLine": 96,
+        "endChar": 49
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d41b685d_8320f4d9",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-01T12:41:40Z",
+      "side": 1,
+      "message": "blank lines maybe?",
+      "range": {
+        "startLine": 158,
+        "startChar": 22,
+        "endLine": 158,
+        "endChar": 70
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5d12aea_c3a9e281",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-01T12:41:40Z",
+      "side": 1,
+      "message": "just curious how does this work if 0 arguments (`nargs\u003d\"*\"`) are provided?",
+      "range": {
+        "startLine": 180,
+        "startChar": 43,
+        "endLine": 180,
+        "endChar": 56
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
