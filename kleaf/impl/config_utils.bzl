@@ -50,6 +50,8 @@ def _create_merge_config_cmd(base_expr, defconfig_fragments_paths_expr, quiet = 
 
 def _create_check_defconfig_step_impl(
         _subrule_ctx,
+        defconfig,
+        pre_defconfig_fragments,
         post_defconfig_fragments,
         *,
         _check_config):
@@ -57,6 +59,17 @@ def _create_check_defconfig_step_impl(
 
     Args:
         _subrule_ctx: subrule_ctx
+        defconfig: File of the base defconfig to be checked against.
+            Requirements in it may be overridden by pre_defconfig_fragments
+            or post_defconfig_fragments silently.
+        pre_defconfig_fragments: List of **pre** defconfig fragments applied
+            before `make defconfig`.
+
+            **Order matters.** Requirements in later fragments override earlier
+            fragments silently.
+
+            Requirements in post_defconfig_fragments overrides
+            pre_defconfig_fragments silently.
         post_defconfig_fragments: List of **post** defconfig fragments applied
             at the end.
 
@@ -64,13 +77,27 @@ def _create_check_defconfig_step_impl(
             matter.
         _check_config: FilesToRunProvider for `check_config.py`.
     """
+    defconfig_arg = ""
+    if defconfig:
+        defconfig_arg = "--defconfig {}".format(defconfig.path)
+    pre_arg = ""
+    if pre_defconfig_fragments:
+        pre_arg = "--pre_defconfig_fragments {}".format(" ".join([fragment.path for fragment in pre_defconfig_fragments]))
+    post_arg = ""
+    if post_defconfig_fragments:
+        post_arg = "--post_defconfig_fragments {}".format(" ".join([fragment.path for fragment in post_defconfig_fragments]))
+
     cmd = """
         {check_config} \\
             --dot_config ${{OUT_DIR}}/.config \\
-            --post_defconfig_fragments {post_defconfig_fragments_paths_expr}
+            {defconfig_arg} \\
+            {pre_arg} \\
+            {post_arg} \\
     """.format(
         check_config = _check_config.executable.path,
-        post_defconfig_fragments_paths_expr = " ".join([fragment.path for fragment in post_defconfig_fragments]),
+        defconfig_arg = defconfig_arg,
+        pre_arg = pre_arg,
+        post_arg = post_arg,
     )
     return StepInfo(
         inputs = depset(post_defconfig_fragments),

@@ -208,6 +208,39 @@ CONFIG_A=y
                          ConfigValue("y", self.dot_config))
             ])
 
+    def test_pre_overrides_defconfig(self):
+        self._test_check_common(
+            dot_config_content="CONFIG_A=y\n",
+            defconfig_content="# CONFIG_A is not set\n",
+            pre_defconfig_contents=["CONFIG_A=y\n"],
+            expected_errors=[],
+            expected_warnings=[])
+
+    def test_pre_later_overrides_earlier(self):
+        self._test_check_common(
+            dot_config_content="CONFIG_A=y\n",
+            pre_defconfig_contents=[
+                "# CONFIG_A is not set\n",
+                "CONFIG_A=y\n"],
+            expected_errors=[],
+            expected_warnings=[])
+
+    def test_post_overrides_pre(self):
+        self._test_check_common(
+            dot_config_content="CONFIG_A=y\n",
+            pre_defconfig_contents=["# CONFIG_A is not set\n"],
+            post_defconfig_contents=["CONFIG_A=y\n"],
+            expected_errors=[],
+            expected_warnings=[])
+
+    def test_post_overrides_defconfig(self):
+        self._test_check_common(
+            dot_config_content="CONFIG_A=y\n",
+            defconfig_content="# CONFIG_A is not set\n",
+            post_defconfig_contents=["CONFIG_A=y\n"],
+            expected_errors=[],
+            expected_warnings=[])
+
     def test_merge_conflicting_y(self):
         self._test_check_common(
             dot_config_content="CONFIG_A=y\n",
@@ -274,12 +307,16 @@ CONFIG_A=y
             defconfig_content: str,
             expected_errors: list[Mismatch],
             expected_warnings: list[Mismatch]):
-        for kwarg_key in ("post_defconfig_fragments",):
+        for kwarg_key in ("defconfig", "pre_defconfig_fragments",
+                          "post_defconfig_fragments",):
             with self.subTest(kwarg_key=kwarg_key):
                 self.dot_config.write_text(dot_config_content)
                 self.defconfig.write_text(defconfig_content)
 
-                kwarg_value = [self.defconfig]
+                if kwarg_key == "defconfig":
+                    kwarg_value = self.defconfig
+                else:
+                    kwarg_value = [self.defconfig]
 
                 check_config = CheckConfig(
                     dot_config=self.dot_config,
@@ -294,8 +331,19 @@ CONFIG_A=y
             dot_config_content: str,
             expected_errors: list[Mismatch],
             expected_warnings: list[Mismatch],
+            defconfig_content: str | None = None,
+            pre_defconfig_contents: Iterable[str] = (),
             post_defconfig_contents: Iterable[str] = ()):
         self.dot_config.write_text(dot_config_content)
+
+        if defconfig_content:
+            self.defconfig.write_text(defconfig_content)
+
+        pre_defconfig_fragment_paths = []
+        for index, content in enumerate(pre_defconfig_contents):
+            defconfig_path = self.tempdir_path / f"pre_defconfig{index}"
+            defconfig_path.write_text(content)
+            pre_defconfig_fragment_paths.append(defconfig_path)
 
         post_defconfig_fragment_paths = []
         for index, content in enumerate(post_defconfig_contents):
@@ -305,6 +353,8 @@ CONFIG_A=y
 
         check_config = CheckConfig(
             dot_config=self.dot_config,
+            defconfig=self.defconfig if defconfig_content else None,
+            pre_defconfig_fragments=pre_defconfig_fragment_paths,
             post_defconfig_fragments=post_defconfig_fragment_paths)
         # pylint: disable=protected-access
         check_config._check()
