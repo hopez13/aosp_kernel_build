@@ -18,6 +18,7 @@ load(
     ":common_providers.bzl",
     "KernelBuildExtModuleInfo",
     "KernelSerializedEnvInfo",
+    "StepInfo",
 )
 load(":config_utils.bzl", "config_utils")
 load(":ddk/ddk_config_subrule.bzl", "ddk_config_subrule")
@@ -60,9 +61,11 @@ def _create_merge_dot_config_step(defconfig_depset_written):
         ),
     )
 
-    return struct(
+    return StepInfo(
         inputs = defconfig_depset_written.depset,
         cmd = cmd,
+        tools = [],
+        outputs = [],
     )
 
 def _create_kconfig_ext_step(ctx, kconfig_depset_written):
@@ -93,9 +96,11 @@ def _create_kconfig_ext_step(ctx, kconfig_depset_written):
         kconfig_depset_file = kconfig_depset_written.depset_file.path,
     )
 
-    return struct(
+    return StepInfo(
         inputs = kconfig_depset_written.depset,
         cmd = cmd,
+        tools = [],
+        outputs = [],
     )
 
 def _create_oldconfig_step(ctx, defconfig_depset_written, kconfig_depset_written):
@@ -128,7 +133,7 @@ def _create_oldconfig_step(ctx, defconfig_depset_written, kconfig_depset_written
             check_defconfig_cmd = config_utils.create_check_defconfig_cmd(module_label, ctx.file.defconfig.path),
         )
 
-    return struct(
+    return StepInfo(
         inputs = depset(
             ctx.files.defconfig,
             transitive = [
@@ -137,6 +142,8 @@ def _create_oldconfig_step(ctx, defconfig_depset_written, kconfig_depset_written
             ],
         ),
         cmd = cmd,
+        tools = [],
+        outputs = [],
     )
 
 def _create_main_action(
@@ -154,7 +161,8 @@ def _create_main_action(
         ddk_config_env.inputs,
     ]
 
-    tools = ddk_config_env.tools
+    tools = [ddk_config_env.tools]
+    outputs = [out_dir]
 
     merge_dot_config_step = _create_merge_dot_config_step(
         defconfig_depset_written = defconfig_depset_written,
@@ -177,6 +185,8 @@ def _create_main_action(
 
     for step in steps:
         transitive_inputs.append(step.inputs)
+        tools += step.tools
+        outputs += step.outputs
 
     command = kernel_utils.setup_serialized_env_cmd(
         serialized_env_info = ddk_config_env,
@@ -201,7 +211,7 @@ def _create_main_action(
     ctx.actions.run_shell(
         inputs = depset(transitive = transitive_inputs),
         tools = tools,
-        outputs = [out_dir],
+        outputs = outputs,
         command = command,
         mnemonic = "DdkConfig",
         progress_message = "Creating DDK module configuration %{label}",
