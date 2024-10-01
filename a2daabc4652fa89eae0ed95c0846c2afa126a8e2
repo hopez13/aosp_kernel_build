@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb953cdf_f232e76a",
+        "filename": "kleaf/impl/BUILD.bazel",
+        "patchSetId": 12
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-01T12:44:16Z",
+      "side": 1,
+      "message": "nit: should this be added to the quick test maybe? or is it part of any suite as is?",
+      "range": {
+        "startLine": 405,
+        "startChar": 12,
+        "endLine": 405,
+        "endChar": 29
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62afc782_b74e0f21",
         "filename": "kleaf/impl/check_config.py",
         "patchSetId": 12
