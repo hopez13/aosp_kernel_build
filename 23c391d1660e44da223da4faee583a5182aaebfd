@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50444f30_a3546096",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-01T09:48:44Z",
+      "side": 1,
+      "message": "nit: The way I see `common_kernels.bzl` is a showcase for others on how to use Kleaf and how to define their targets, in that sense why not use `kernel_abi_dist`?",
+      "range": {
+        "startLine": 24,
+        "startChar": 59,
+        "endLine": 24,
+        "endChar": 91
+      },
+      "revId": "23c391d1660e44da223da4faee583a5182aaebfd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
