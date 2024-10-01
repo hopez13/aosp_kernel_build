@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09c45560_871fadca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T19:04:46Z",
+      "side": 1,
+      "message": "Thank you!",
+      "revId": "4ccb1d5d45c63d73d83f077746248157562b9b4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "756b1815_6a482295",
@@ -14,6 +31,30 @@
       "writtenOn": "2024-10-01T17:09:38Z",
       "side": 1,
       "message": "`if value`?",
+      "range": {
+        "startLine": 249,
+        "startChar": 19,
+        "endLine": 249,
+        "endChar": 32
+      },
+      "revId": "4ccb1d5d45c63d73d83f077746248157562b9b4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71a82e7a_28da48a9",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T19:04:46Z",
+      "side": 1,
+      "message": "This is intentional as the value could technically be a string, I think. Though we didn\u0027t actually open up the API to allow string values so far. But I\u0027d like to keep using `if value \u003d\u003d True`.",
+      "parentUuid": "756b1815_6a482295",
       "range": {
         "startLine": 249,
         "startChar": 19,
