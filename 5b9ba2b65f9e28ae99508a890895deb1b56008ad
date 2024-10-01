@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53e7fa7d_7f8b0e0a",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T19:07:42Z",
+      "side": 1,
+      "message": "TIL: https://stackoverflow.com/questions/3653298/concatenating-two-lists-difference-between-and-extend\n\nI\u0027ll stop using .extend() in the future",
+      "revId": "5b9ba2b65f9e28ae99508a890895deb1b56008ad",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
