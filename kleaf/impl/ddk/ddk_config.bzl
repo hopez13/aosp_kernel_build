@@ -104,7 +104,6 @@ def _create_kconfig_ext_step(ctx, kconfig_depset_written):
     )
 
 def _create_oldconfig_step(ctx, defconfig_depset_written, kconfig_depset_written):
-    module_label = Label(str(ctx.label).removesuffix("_config"))
     cmd = """
         if [[ -s {defconfig_depset_file} ]] || [[ -s {kconfig_depset_file} ]]; then
             # Regenerate include/.
@@ -123,27 +122,37 @@ def _create_oldconfig_step(ctx, defconfig_depset_written, kconfig_depset_written
         kconfig_depset_file = kconfig_depset_written.depset_file.path,
     )
 
+    transitive_inputs = [
+        defconfig_depset_written.depset,
+        kconfig_depset_written.depset,
+    ]
+    tools = []
+    outputs = []
+
     if ctx.file.defconfig:
+        check_defconfig_step = config_utils.create_check_defconfig_step(
+            post_defconfig_fragments = [ctx.file.defconfig],
+        )
+        transitive_inputs.append(check_defconfig_step.inputs)
+        tools += check_defconfig_step.tools
+        outputs += check_defconfig_step.outputs
         cmd += """
             # Check that configs in my defconfig are still there
             # This does not include defconfig from dependencies, because values from
             # dependencies could technically be overridden by this target.
             {check_defconfig_cmd}
         """.format(
-            check_defconfig_cmd = config_utils.create_check_defconfig_cmd(module_label, ctx.file.defconfig.path),
+            check_defconfig_cmd = check_defconfig_step.cmd,
         )
 
     return StepInfo(
         inputs = depset(
             ctx.files.defconfig,
-            transitive = [
-                defconfig_depset_written.depset,
-                kconfig_depset_written.depset,
-            ],
+            transitive = transitive_inputs,
         ),
         cmd = cmd,
-        tools = [],
-        outputs = [],
+        tools = tools,
+        outputs = outputs,
     )
 
 def _create_main_action(
@@ -292,5 +301,6 @@ for its format.
     subrules = [
         ddk_config_subrule,
         utils.write_depset,
+        config_utils.create_check_defconfig_step,
     ],
 )
