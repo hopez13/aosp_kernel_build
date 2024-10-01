@@ -216,7 +216,7 @@ _check_trimming_disabled = subrule(
 )
 
 def _reconfig_impl(
-        subrule_ctx,
+        _subrule_ctx,
         lto_config_flag,
         trim_attr_value,
         raw_kmi_symbol_list_file,
@@ -226,7 +226,7 @@ def _reconfig_impl(
     """Return a command and extra inputs to re-configure `.config` file.
 
     Args:
-        subrule_ctx: subrule_ctx
+        _subrule_ctx: subrule_ctx
         lto_config_flag: value of lto attr
         trim_attr_value: value of trim_nonlisted_kmi_utils.get_value(ctx)
         raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
@@ -237,9 +237,13 @@ def _reconfig_impl(
 
     _check_trimming_disabled(trim_attr_value = trim_attr_value)
 
+    transitive_inputs = []
+    tools = []
+    outputs = []
+
     configs = []
     apply_post_defconfig_fragments_cmd = ""
-    check_post_defconfig_fragments_cmd = ""
+    check_post_defconfig_fragments_step = None
 
     configs += _config_lto(
         lto_config_flag = lto_config_flag,
@@ -267,10 +271,12 @@ def _reconfig_impl(
             need_olddefconfig=1
         """
 
-        check_post_defconfig_fragments_cmd = config_utils.create_check_defconfig_cmd(
-            subrule_ctx.label,
-            " ".join(post_defconfig_fragments_paths),
+        check_post_defconfig_fragments_step = config_utils.create_check_defconfig_step(
+            post_defconfig_fragment_files,
         )
+        transitive_inputs.append(check_post_defconfig_fragments_step.inputs)
+        tools += check_post_defconfig_fragments_step.tools
+        outputs += check_post_defconfig_fragments_step.outputs
 
     cmd = """
         (
@@ -295,14 +301,14 @@ def _reconfig_impl(
     """.format(
         configs = " ".join(configs),
         apply_post_defconfig_fragments_cmd = apply_post_defconfig_fragments_cmd,
-        check_post_defconfig_fragments_cmd = check_post_defconfig_fragments_cmd,
+        check_post_defconfig_fragments_cmd = check_post_defconfig_fragments_step.cmd if check_post_defconfig_fragments_step else "",
     )
 
     return StepInfo(
         cmd = cmd,
-        inputs = depset(post_defconfig_fragment_files),
-        outputs = [],
-        tools = [],
+        inputs = depset(post_defconfig_fragment_files, transitive = transitive_inputs),
+        outputs = outputs,
+        tools = tools,
     )
 
 _reconfig = subrule(
@@ -314,6 +320,7 @@ _reconfig = subrule(
         _config_symbol_list,
         _config_keys,
         kgdb.get_scripts_config_args,
+        config_utils.create_check_defconfig_step,
     ],
 )
 

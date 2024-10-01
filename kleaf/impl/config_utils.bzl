@@ -14,6 +14,11 @@
 
 """Utilities for *_config.bzl."""
 
+load(
+    ":common_providers.bzl",
+    "StepInfo",
+)
+
 visibility("//build/kernel/kleaf/...")
 
 def _create_merge_dot_config_cmd(defconfig_fragments_paths_expr):
@@ -39,68 +44,38 @@ def _create_merge_dot_config_cmd(defconfig_fragments_paths_expr):
     )
     return cmd
 
-def _create_check_defconfig_cmd(label, defconfig_fragments_paths_expr):
-    """Returns a command that checks defconfig fragments are set in `$OUT_DIR/.config`
-
-    Args:
-        defconfig_fragments_paths_expr: A shell expression that evaluates
-            to a list of paths to the defconfig fragments.
-        label: label of the current target
-
-    Returns:
-        the command that checks defconfig fragments against `$OUT_DIR/.config`
-    """
+def _create_check_defconfig_step_impl(
+        _subrule_ctx,
+        post_defconfig_fragments,
+        *,
+        _check_config):
     cmd = """
-        (
-            for defconfig_path in {defconfig_fragments_paths_expr}; do
-                config_set='s/^(CONFIG_\\w*)=.*/\\1/p'
-                config_not_set='s/^# (CONFIG_\\w*) is not set$/\\1/p'
-                configs=$(sed -n -E -e "${{config_set}}" -e "${{config_not_set}}" ${{defconfig_path}})
-                error_msg=""
-                for config in ${{configs}}; do
-                    defconfig_line=$(grep -w -e "${{config}}" ${{defconfig_path}})
-                    defconfig_value=$(echo "${{defconfig_line}}" | sed -E -e 's/\\s*# nocheck.*$//g')
-                    nocheck_reason=$(echo ${{defconfig_line}} | sed -n -E -e 's/^.*# nocheck(:\\s*)?(.*)$/\\2/p')
-                    actual_value=$(grep -w -e "${{config}}" ${{OUT_DIR}}/.config || true)
-
-                    config_not_set_regexp='^# CONFIG_[A-Z_]+ is not set$'
-                    if [[ "${{defconfig_value}}" =~ ${{config_not_set_regexp}} ]]; then
-                        defconfig_value=""
-                    fi
-                    if [[ "${{actual_value}}" =~ ${{config_not_set_regexp}} ]]; then
-                        actual_value=""
-                    fi
-
-                    if [[ "${{defconfig_value}}" != "${{actual_value}}" ]] ; then
-                        my_msg="${{config}}: actual '${{actual_value}}', expected '${{defconfig_value}}' from ${{defconfig_path}}."
-                        if [[ "${{defconfig_line}}" == *#\\ nocheck* ]]; then
-                            warn_msg="${{warn_msg}}
-    ${{my_msg}}
-        (ignore reason: ${{nocheck_reason}})"
-                        else
-                            error_msg="${{error_msg}}
-    ${{my_msg}}"
-                            found_unexpected=1
-                        fi
-                    fi
-                done
-                if [[ -n "${{warn_msg}}" ]]; then
-                    echo "WARNING: {label}: ${{warn_msg}}" >&2
-                fi
-                if [[ -n "${{error_msg}}" ]]; then
-                    echo "ERROR: {label}: ${{error_msg}}
-    All entries need to be declared in Kconfig. Further, all dependencies must be met." >&2
-                    exit 1
-                fi
-            done
-        )
+        {check_config} \\
+            --dot_config ${{OUT_DIR}}/.config \\
+            --post_defconfig_fragments {post_defconfig_fragments_paths_expr}
     """.format(
-        label = label,
-        defconfig_fragments_paths_expr = defconfig_fragments_paths_expr,
+        check_config = _check_config.executable.path,
+        post_defconfig_fragments_paths_expr = " ".join([fragment.path for fragment in post_defconfig_fragments]),
     )
-    return cmd
+    return StepInfo(
+        inputs = depset(post_defconfig_fragments),
+        outputs = [],
+        tools = [_check_config],
+        cmd = cmd,
+    )
+
+_create_check_defconfig_step = subrule(
+    implementation = _create_check_defconfig_step_impl,
+    attrs = {
+        "_check_config": attr.label(
+            default = ":check_config",
+            executable = True,
+            cfg = "exec",
+        ),
+    },
+)
 
 config_utils = struct(
     create_merge_dot_config_cmd = _create_merge_dot_config_cmd,
-    create_check_defconfig_cmd = _create_check_defconfig_cmd,
+    create_check_defconfig_step = _create_check_defconfig_step,
 )
