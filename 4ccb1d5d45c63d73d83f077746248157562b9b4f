@@ -63,6 +63,30 @@
       },
       "revId": "4ccb1d5d45c63d73d83f077746248157562b9b4f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0843a888_ead95ac3",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T19:05:18Z",
+      "side": 1,
+      "message": "\u003e But I\u0027d like to keep using if value \u003d\u003d True\n\n... so if we do open up the API, this is still going to work properly.",
+      "parentUuid": "71a82e7a_28da48a9",
+      "range": {
+        "startLine": 249,
+        "startChar": 19,
+        "endLine": 249,
+        "endChar": 32
+      },
+      "revId": "4ccb1d5d45c63d73d83f077746248157562b9b4f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
