@@ -88,6 +88,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fd5cf67_c034b436",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T22:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62afc782_b74e0f21",
+      "range": {
+        "startLine": 15,
+        "startChar": 39,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b96a56fc_6b2cabc6",
@@ -111,6 +135,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8e014ac_0810113d",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T22:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b96a56fc_6b2cabc6",
+      "range": {
+        "startLine": 96,
+        "startChar": 40,
+        "endLine": 96,
+        "endChar": 49
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d41b685d_8320f4d9",
@@ -124,6 +172,30 @@
       "writtenOn": "2024-10-01T12:41:40Z",
       "side": 1,
       "message": "blank lines maybe?",
+      "range": {
+        "startLine": 158,
+        "startChar": 22,
+        "endLine": 158,
+        "endChar": 70
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6914829a_808b3ea4",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T22:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d41b685d_8320f4d9",
       "range": {
         "startLine": 158,
         "startChar": 22,
@@ -171,6 +243,30 @@
       "side": 1,
       "message": "So as the code stands as-is, this is okay:\n\n```\nbazel run //build/kernel/kleaf/impl:check_config -- --dot_config x --post_defconfig_fragments\n```\n\nThis is not:\n```\nbazel run //build/kernel/kleaf/impl:check_config -- --dot_config x\n```\n\nThat is, the flag must be set, but it can be empty.\n\nHowever, I agree that it doesn\u0027t make sense to have required\u003dTrue here; I\u0027ll drop this.",
       "parentUuid": "a5d12aea_c3a9e281",
+      "range": {
+        "startLine": 180,
+        "startChar": 43,
+        "endLine": 180,
+        "endChar": 56
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1987b76e_509a11b9",
+        "filename": "kleaf/impl/check_config.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T22:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34a9dc60_6272e6cf",
       "range": {
         "startLine": 180,
         "startChar": 43,
