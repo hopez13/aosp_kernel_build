@@ -237,13 +237,8 @@ def _reconfig_impl(
 
     _check_trimming_disabled(trim_attr_value = trim_attr_value)
 
-    transitive_inputs = []
-    tools = []
-    outputs = []
-
     configs = []
     apply_post_defconfig_fragments_cmd = ""
-    check_post_defconfig_fragments_step = None
 
     configs += _config_lto(
         lto_config_flag = lto_config_flag,
@@ -272,16 +267,6 @@ def _reconfig_impl(
             need_olddefconfig=1
         """
 
-        # TODO(b/368119551): Also check pre_defconfig_fragments and defconfig, but allow them
-        #   to be overridden by post_defconfig_fragments.
-
-        check_post_defconfig_fragments_step = config_utils.create_check_defconfig_step(
-            post_defconfig_fragments = post_defconfig_fragment_files,
-        )
-        transitive_inputs.append(check_post_defconfig_fragments_step.inputs)
-        tools += check_post_defconfig_fragments_step.tools
-        outputs += check_post_defconfig_fragments_step.outputs
-
     cmd = """
         (
             need_olddefconfig=
@@ -299,20 +284,17 @@ def _reconfig_impl(
             if [[ -n "${{need_olddefconfig}}" ]]; then
                 make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} olddefconfig
             fi
-
-            {check_post_defconfig_fragments_cmd}
         )
     """.format(
         configs = " ".join(configs),
         apply_post_defconfig_fragments_cmd = apply_post_defconfig_fragments_cmd,
-        check_post_defconfig_fragments_cmd = check_post_defconfig_fragments_step.cmd if check_post_defconfig_fragments_step else "",
     )
 
     return StepInfo(
         cmd = cmd,
-        inputs = depset(post_defconfig_fragment_files, transitive = transitive_inputs),
-        outputs = outputs,
-        tools = tools,
+        inputs = depset(post_defconfig_fragment_files),
+        outputs = [],
+        tools = [],
     )
 
 _reconfig = subrule(
@@ -324,7 +306,6 @@ _reconfig = subrule(
         _config_symbol_list,
         _config_keys,
         kgdb.get_scripts_config_args,
-        config_utils.create_check_defconfig_step,
     ],
 )
 
@@ -477,6 +458,39 @@ _post_defconfig = subrule(
     subrules = [_reconfig],
 )
 
+def _check_dot_config_against_defconfig_impl(
+        _subrule_ctx,
+        post_defconfig_fragment_files):
+    """Checks .config against defconfig and fragments."""
+
+    check_defconfig_step = None
+    transitive_inputs = []
+    tools = []
+    outputs = []
+
+    # TODO(b/368119551): Also check pre_defconfig_fragments and defconfig, but allow them
+    #   to be overridden by post_defconfig_fragments.
+
+    if post_defconfig_fragment_files:
+        check_defconfig_step = config_utils.create_check_defconfig_step(
+            post_defconfig_fragments = post_defconfig_fragment_files,
+        )
+        transitive_inputs.append(check_defconfig_step.inputs)
+        tools += check_defconfig_step.tools
+        outputs += check_defconfig_step.outputs
+
+    return StepInfo(
+        cmd = check_defconfig_step.cmd if check_defconfig_step else "",
+        inputs = depset(post_defconfig_fragment_files, transitive = transitive_inputs),
+        outputs = outputs,
+        tools = tools,
+    )
+
+_check_dot_config_against_defconfig = subrule(
+    implementation = _check_dot_config_against_defconfig_impl,
+    subrules = [config_utils.create_check_defconfig_step],
+)
+
 def _kernel_config_impl(ctx):
     localversion_file = stamp.write_localversion(ctx)
 
@@ -515,6 +529,9 @@ def _kernel_config_impl(ctx):
             raw_kmi_symbol_list_file = utils.optional_file(ctx.files.raw_kmi_symbol_list),
             module_signing_key_file = ctx.file.module_signing_key,
             system_trusted_key_file = ctx.file.system_trusted_key,
+            post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
+        ),
+        _check_dot_config_against_defconfig(
             post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
         ),
     ]
@@ -805,6 +822,7 @@ kernel_config = rule(
         _pre_defconfig,
         _make_defconfig,
         _post_defconfig,
+        _check_dot_config_against_defconfig,
         _get_config_script,
     ],
 )
