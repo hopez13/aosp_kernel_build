@@ -132,6 +132,8 @@ def _create_oldconfig_step(ctx, defconfig_depset_written, kconfig_depset_written
 
     if ctx.file.defconfig:
         check_defconfig_step = config_utils.create_check_defconfig_step(
+            defconfig = None,
+            pre_defconfig_fragments = [],
             post_defconfig_fragments = [ctx.file.defconfig],
         )
         transitive_inputs.append(check_defconfig_step.inputs)
