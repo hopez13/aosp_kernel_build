@@ -16,6 +16,24 @@
       "message": "This needs to be called right below POST_DEFCONFIG_CMDS",
       "revId": "30ad5f494f20a90ad55d94fd6d9aa558c054d460",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e39ebff5_b498e1ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T22:30:59Z",
+      "side": 1,
+      "message": "so that _reconfig does not mangle things",
+      "parentUuid": "752294e1_17ade6fb",
+      "revId": "30ad5f494f20a90ad55d94fd6d9aa558c054d460",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
