@@ -21,7 +21,12 @@ StepInfo = provider(
     fields = {
         "inputs": "depset of files",
         "outputs": "list of files",
-        "tools": "**list of depset** of files or FilesToRunProviders",
+        "tools": """list of any of the following
+
+            - File
+            - depset[File]
+            - FilesToRunProvider
+        """,
         "cmd": "command line",
     },
 )
