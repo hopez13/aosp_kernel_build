@@ -460,6 +460,8 @@ _post_defconfig = subrule(
 
 def _check_dot_config_against_defconfig_impl(
         _subrule_ctx,
+        defconfig_file,
+        pre_defconfig_fragment_files,
         post_defconfig_fragment_files):
     """Checks .config against defconfig and fragments."""
 
@@ -468,11 +470,10 @@ def _check_dot_config_against_defconfig_impl(
     tools = []
     outputs = []
 
-    # TODO(b/368119551): Also check pre_defconfig_fragments and defconfig, but allow them
-    #   to be overridden by post_defconfig_fragments.
-
-    if post_defconfig_fragment_files:
+    if defconfig_file or pre_defconfig_fragment_files or post_defconfig_fragment_files:
         check_defconfig_step = config_utils._create_check_defconfig_step_impl(
+            defconfig = defconfig_file,
+            pre_defconfig_fragments = pre_defconfig_fragment_files,
             post_defconfig_fragments = post_defconfig_fragment_files,
         )
         transitive_inputs.append(check_defconfig_step.inputs)
@@ -531,6 +532,8 @@ def _kernel_config_impl(ctx):
             post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
         ),
         _check_dot_config_against_defconfig(
+            defconfig_file = ctx.file.defconfig,
+            pre_defconfig_fragment_files = ctx.files.pre_defconfig_fragments,
             post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
         ),
     ]
