@@ -22,6 +22,30 @@
       },
       "revId": "23c391d1660e44da223da4faee583a5182aaebfd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dec53c1f_88a5eda5",
+        "filename": "kleaf/common_kernels.bzl",
+        "patchSetId": 10
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T19:23:22Z",
+      "side": 1,
+      "message": "We can\u0027t use kernel_abi_wrapped_dist here because GKI is special that it sets `enable_add_vmlinux \u003d False`, but I don\u0027t want to open up that API for partner ABI monitoring.\n\nBasically, for the public API, kernel_build_add_vmlinux is a fixed value True and is not allowed to be changed, as we planned in CL:2395435.",
+      "parentUuid": "50444f30_a3546096",
+      "range": {
+        "startLine": 24,
+        "startChar": 59,
+        "endLine": 24,
+        "endChar": 91
+      },
+      "revId": "23c391d1660e44da223da4faee583a5182aaebfd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
