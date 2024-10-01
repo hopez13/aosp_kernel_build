@@ -336,6 +336,12 @@ py_binary(
 )
 
 py_binary(
+    name = "check_config",
+    srcs = ["check_config.py"],
+    visibility = ["//visibility:public"],
+)
+
+py_binary(
     name = "get_kmi_string",
     srcs = ["get_kmi_string.py"],
     # All kernel_* / ddk_* from different packages can see this
@@ -391,6 +397,18 @@ py_test(
     main = "get_kmi_string_test.py",
     deps = [
         ":get_kmi_string",
+        "@io_abseil_py//absl/testing:absltest",
+    ],
+)
+
+py_test(
+    name = "check_config_test",
+    timeout = "short",
+    srcs = ["check_config_test.py"],
+    imports = ["."],
+    main = "check_config_test.py",
+    deps = [
+        ":check_config",
         "@io_abseil_py//absl/testing:absltest",
     ],
 )
