@@ -14,10 +14,8 @@
 
 import argparse
 import pathlib
-import re
 import subprocess
 import sys
-import tempfile
 import unittest
 
 from absl.testing import absltest
