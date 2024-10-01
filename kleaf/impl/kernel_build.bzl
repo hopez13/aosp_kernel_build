@@ -481,6 +481,11 @@ def kernel_build(
             For mixed builds (`base_kernel` is set), this is usually set to the `defconfig`
             of the `base_kernel`, e.g. `//common:arch/arm64/configs/gki_defconfig`.
 
+            Items must be present in the final `.config`, unless the following:
+
+            -   It is overridden by a value in pre_defconfig_fragments / defconfig_fragments
+            -   The line has a `# nocheck` comment. To attach a reason string, use the format
+                `# nocheck: (reason or bug number)`.
         pre_defconfig_fragments: A list of fragments that are applied to the defconfig
             **before** `make defconfig`.
 
@@ -497,6 +502,16 @@ def kernel_build(
             **NOTE**: `pre_defconfig_fragments` are applied **before** `make defconfig`, similar
             to `PRE_DEFCONFIG_CMDS`. If you had `POST_DEFCONFIG_CMDS` applying fragments in your
             build configs, consider using `defconfig_fragments` instead.
+
+            **NOTE**: **Order matters**, unlike `defconfig_fragments. If there are conflicting
+            items, later items overrides earlier items.
+
+            Items must be present in the final `.config`, unless the following:
+
+            -   A CONFIG_ item in an early fragment is overridden by that in a later fragment.
+            -   It is overridden by a value in defconfig_fragments
+            -   The line has a `# nocheck` comment. To attach a reason string, use the format
+                `# nocheck: (reason or bug number)`.
         defconfig_fragments: A list of fragments that are applied to the defconfig
             **after** `make defconfig`.
 
@@ -513,6 +528,11 @@ def kernel_build(
             **NOTE**: `defconfig_fragments` are applied **after** `make defconfig`, similar
             to `POST_DEFCONFIG_CMDS`. If you had `PRE_DEFCONFIG_CMDS` applying fragments in your
             build configs, consider using `pre_defconfig_fragments` instead.
+
+            Items must be present in the final `.config`, unless the following:
+
+            -   The line has a `# nocheck` comment. To attach a reason string, use the format
+                `# nocheck: (reason or bug number)`.
         page_size: Default is `"default"`. Page size of the kernel build.
 
           Value may be one of `"default"`, `"4k"`, `"16k"` or `"64k"`. If
