@@ -177,6 +177,18 @@ def gen_ddk_makefile(
                                          submodule_linux_include_dirs)
 
 
+def _get_ddk_marker(
+    output_makefiles: pathlib.Path,
+) -> pathlib.Path:
+    os.makedirs(output_makefiles, exist_ok=True)
+    ddk_marker = output_makefiles / "ddk_marker.c"
+    ddk_marker.write_text(textwrap.dedent("""\
+        #include <linux/module.h>
+        MODULE_INFO(built_with, "DDK");
+        """))
+    return ddk_marker
+
+
 def _gen_ddk_makefile_for_module(
         output_makefiles: pathlib.Path,
         package: pathlib.Path,
@@ -220,6 +232,15 @@ def _gen_ddk_makefile_for_module(
         die("Invalid output: %s; must end with .ko", kernel_module_out)
 
     _check_srcs_valid(rel_srcs, kernel_module_out)
+
+    ddk_marker = _get_ddk_marker(output_makefiles)
+    include_ddk_marker = False
+
+    # Just add an additional file, instead of forcing an include.
+    if len(_get_rel_srcs_flat(rel_srcs)) > 1:
+        rel_srcs.append({"files": [ddk_marker]})
+    else:
+        include_ddk_marker = True
 
     kbuild = output_makefiles / kernel_module_out.parent / "Kbuild"
     os.makedirs(kbuild.parent, exist_ok=True)
@@ -275,6 +296,9 @@ def _gen_ddk_makefile_for_module(
         _handle_includes(out_cflags, include_dirs)
         _handle_copts(out_cflags, copts)
 
+        if include_ddk_marker:
+            _handle_ddk_marker(out_cflags, ddk_marker)
+
         for src_item in rel_srcs:
             config = src_item.get("config")
             value = src_item.get("value")
@@ -308,6 +332,7 @@ def _gen_ddk_makefile_for_module(
                 obj-y += {kernel_module_out.parent}/
                 """))
 
+
 def _get_rel_srcs_flat(rel_srcs: list[dict[str, Any]]) -> list[pathlib.Path] :
     """List of source file paths(minus headers)."""
     rel_srcs_flat: list[pathlib.Path] = []
@@ -316,6 +341,7 @@ def _get_rel_srcs_flat(rel_srcs: list[dict[str, Any]]) -> list[pathlib.Path] :
         rel_srcs_flat.extend(
             file for file in files if file.suffix in _SOURCE_SUFFIXES)
     return rel_srcs_flat
+
 
 def _check_srcs_valid(rel_srcs: list[dict[str, Any]],
                       kernel_module_out: pathlib.Path):
@@ -338,6 +364,14 @@ def _check_srcs_valid(rel_srcs: list[dict[str, Any]],
             "Please change the name of the output file.",
             [str(e) for e in source_files_with_name_of_kernel_module],
             kernel_module_out)
+
+
+def _handle_ddk_marker(out_cflags: TextIO, ddk_marker: pathlib.Path):
+    out_cflags.write("\n")
+    out_cflags.write(textwrap.dedent(f"""\
+            -include $(ROOT_DIR)/{str(ddk_marker)}
+        """))
+
 
 
 def _handle_src(
