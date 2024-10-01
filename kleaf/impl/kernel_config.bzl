@@ -222,7 +222,7 @@ def _reconfig_impl(
         raw_kmi_symbol_list_file,
         module_signing_key_file,
         system_trusted_key_file,
-        post_defconfig_fragments_file):
+        post_defconfig_fragment_files):
     """Return a command and extra inputs to re-configure `.config` file.
 
     Args:
@@ -232,7 +232,7 @@ def _reconfig_impl(
         raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
         module_signing_key_file: file of module_signing_key
         system_trusted_key_file: file of system_trusted_key
-        post_defconfig_fragments_file: files of post_defconfig_fragments
+        post_defconfig_fragment_files: files of post_defconfig_fragments
     """
 
     _check_trimming_disabled(trim_attr_value = trim_attr_value)
@@ -257,8 +257,8 @@ def _reconfig_impl(
     )
     configs += kgdb.get_scripts_config_args()
 
-    if post_defconfig_fragments_file:
-        post_defconfig_fragments_paths = [f.path for f in post_defconfig_fragments_file]
+    if post_defconfig_fragment_files:
+        post_defconfig_fragments_paths = [f.path for f in post_defconfig_fragment_files]
 
         apply_post_defconfig_fragments_cmd = config_utils.create_merge_dot_config_cmd(
             " ".join(post_defconfig_fragments_paths),
@@ -300,7 +300,7 @@ def _reconfig_impl(
 
     return StepInfo(
         cmd = cmd,
-        inputs = depset(post_defconfig_fragments_file),
+        inputs = depset(post_defconfig_fragment_files),
         outputs = [],
         tools = [],
     )
@@ -356,7 +356,7 @@ def _post_defconfig_impl(
         raw_kmi_symbol_list_file,
         module_signing_key_file,
         system_trusted_key_file,
-        post_defconfig_fragments_file):
+        post_defconfig_fragment_files):
     """Handle post defconfig step
 
     Args:
@@ -366,7 +366,7 @@ def _post_defconfig_impl(
         raw_kmi_symbol_list_file: the raw_kmi_symbol_list file
         module_signing_key_file: file of module_signing_key
         system_trusted_key_file: file of system_trusted_key
-        post_defconfig_fragments_file: files of post_defconfig_fragments
+        post_defconfig_fragment_files: files of post_defconfig_fragments
     """
     cmd = """
         # Post-defconfig commands
@@ -379,7 +379,7 @@ def _post_defconfig_impl(
         raw_kmi_symbol_list_file = raw_kmi_symbol_list_file,
         module_signing_key_file = module_signing_key_file,
         system_trusted_key_file = system_trusted_key_file,
-        post_defconfig_fragments_file = post_defconfig_fragments_file,
+        post_defconfig_fragment_files = post_defconfig_fragment_files,
     )
     cmd += reconfig_ret.cmd
 
@@ -425,7 +425,7 @@ def _kernel_config_impl(ctx):
             raw_kmi_symbol_list_file = utils.optional_file(ctx.files.raw_kmi_symbol_list),
             module_signing_key_file = ctx.file.module_signing_key,
             system_trusted_key_file = ctx.file.system_trusted_key,
-            post_defconfig_fragments_file = ctx.files.post_defconfig_fragments,
+            post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
         ),
     ]
     transitive_inputs += [step_return.inputs for step_return in step_returns]
