@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "098b41ac_e3b6da27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T19:19:14Z",
+      "side": 1,
+      "message": "I\u0027ll address the other comments in the next PS",
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb953cdf_f232e76a",
@@ -14,6 +31,30 @@
       "writtenOn": "2024-10-01T12:44:16Z",
       "side": 1,
       "message": "nit: should this be added to the quick test maybe? or is it part of any suite as is?",
+      "range": {
+        "startLine": 405,
+        "startChar": 12,
+        "endLine": 405,
+        "endChar": 29
+      },
+      "revId": "a2daabc4652fa89eae0ed95c0846c2afa126a8e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d31c79_48ab2f04",
+        "filename": "kleaf/impl/BUILD.bazel",
+        "patchSetId": 12
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-01T19:19:14Z",
+      "side": 1,
+      "message": "yep\n\nhttps://android-review.git.corp.google.com/c/kernel/build/+/3288441/12/kleaf/BUILD.bazel",
+      "parentUuid": "fb953cdf_f232e76a",
       "range": {
         "startLine": 405,
         "startChar": 12,
