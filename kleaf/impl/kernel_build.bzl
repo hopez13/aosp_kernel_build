@@ -481,6 +481,8 @@ def kernel_build(
             For mixed builds (`base_kernel` is set), this is usually set to the `defconfig`
             of the `base_kernel`, e.g. `//common:arch/arm64/configs/gki_defconfig`.
 
+            Items must be present in the intermediate `.config` before `defconfig_fragments`
+            are applied. See `build/kernel/kleaf/docs/kernel_config.md` for details.
         pre_defconfig_fragments: A list of fragments that are applied to the defconfig
             **before** `make defconfig`.
 
@@ -497,6 +499,12 @@ def kernel_build(
             **NOTE**: `pre_defconfig_fragments` are applied **before** `make defconfig`, similar
             to `PRE_DEFCONFIG_CMDS`. If you had `POST_DEFCONFIG_CMDS` applying fragments in your
             build configs, consider using `defconfig_fragments` instead.
+
+            **NOTE**: **Order matters**, unlike `defconfig_fragments`. If there are conflicting
+            items, later items overrides earlier items.
+
+            Items must be present in the intermediate `.config` before `defconfig_fragments`
+            are applied. See `build/kernel/kleaf/docs/kernel_config.md` for details.
         defconfig_fragments: A list of fragments that are applied to the defconfig
             **after** `make defconfig`.
 
@@ -513,6 +521,9 @@ def kernel_build(
             **NOTE**: `defconfig_fragments` are applied **after** `make defconfig`, similar
             to `POST_DEFCONFIG_CMDS`. If you had `PRE_DEFCONFIG_CMDS` applying fragments in your
             build configs, consider using `pre_defconfig_fragments` instead.
+
+            Items must be present in the final `.config`. See
+            `build/kernel/kleaf/docs/kernel_config.md` for details.
         page_size: Default is `"default"`. Page size of the kernel build.
 
           Value may be one of `"default"`, `"4k"`, `"16k"` or `"64k"`. If
