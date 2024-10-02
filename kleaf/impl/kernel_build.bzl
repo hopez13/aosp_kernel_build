@@ -489,6 +489,8 @@ def kernel_build(
             As a special case, if this is evaluated to `//build/kernel/kleaf:allmodconfig`, Kleaf
             builds all modules except those exluded in `post_defconfig_fragments`. In this case,
             `pre_defconfig_fragments` must not be set.
+
+            See [`build/kernel/kleaf/docs/kernel_config.md`](../kernel_config.md) for details.
         pre_defconfig_fragments: A list of fragments that are applied to the defconfig
             **before** `make defconfig`.
 
