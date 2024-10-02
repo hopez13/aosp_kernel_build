@@ -492,6 +492,8 @@ def kernel_build(
             As a special case, if this is evaluated to `//build/kernel/kleaf:allmodconfig`, Kleaf
             builds all modules except those exluded in `post_defconfig_fragments`. In this case,
             `pre_defconfig_fragments` must not be set.
+
+            See [`build/kernel/kleaf/docs/kernel_config.md`](../kernel_config.md) for details.
         pre_defconfig_fragments: A list of fragments that are applied to the defconfig
             **before** `make defconfig`.
 
@@ -522,6 +524,8 @@ def kernel_build(
             -   It is overridden by a value in post_defconfig_fragments
             -   The line has a `# nocheck` comment. To attach a reason string, use the format
                 `# nocheck: (reason or bug number)`.
+
+            See [`build/kernel/kleaf/docs/kernel_config.md`](../kernel_config.md) for details.
         post_defconfig_fragments: A list of fragments that are applied to the defconfig
             **after** `make defconfig`.
 
@@ -543,6 +547,8 @@ def kernel_build(
 
             -   The line has a `# nocheck` comment. To attach a reason string, use the format
                 `# nocheck: (reason or bug number)`.
+
+            See [`build/kernel/kleaf/docs/kernel_config.md`](../kernel_config.md) for details.
         defconfig_fragments: **Deprecated**. Same as `post_defconfig_fragments`.
         check_defconfig: If `True`, checks `.config` against the result of
             `make savedefconfig` right after `make defconfig`, but before
