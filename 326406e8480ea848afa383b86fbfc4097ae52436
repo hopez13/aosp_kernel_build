@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ccd1819_6667967f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-02T17:35:33Z",
+      "side": 1,
+      "message": "This should not be submitted without the full implementation, so leaving a comment here to prevent submission.",
+      "revId": "326406e8480ea848afa383b86fbfc4097ae52436",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
