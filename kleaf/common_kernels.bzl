@@ -676,7 +676,7 @@ def _define_common_kernels_additional_tests(
     device_modules_test(
         name = name + "_device_modules_test",
         srcs = [kernel_build_name + "_sources"],
-        base_kernel_label = Label("{}//{}:{}".format(native.repository_name(), native.package_name(), kernel_build_name)),
+        base_kernel_label = native.package_relative_label(kernel_build_name),
         base_kernel_module = min(modules) if modules else None,
         arch = arch,
     )
