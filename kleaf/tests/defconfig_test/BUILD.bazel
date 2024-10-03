@@ -1,0 +1,5 @@
+exports_files([
+    "build.config.arm64",
+    "build.config.x86_64",
+    "pre_defconfig_fragment",
+])
