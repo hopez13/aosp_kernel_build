@@ -562,7 +562,7 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
         set_kernel_dir_cmd = set_kernel_dir_ret.run_cmd,
         setup_env = ctx.file.setup_env.short_path,
         run_additional_setup = hermetic_tools.run_additional_setup,
-        toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
+        toolchains_setup_env_var_cmd = toolchains.kernel_setup_env_var_cmd,
     )
     tools = [
         ctx.file.setup_env,

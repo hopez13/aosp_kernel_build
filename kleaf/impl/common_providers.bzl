@@ -92,7 +92,8 @@ KernelEnvToolchainsInfo = provider(
         "compiler_version": "A string representing compiler version",
         "all_files": "A [depset](https://bazel.build/extending/depsets) of all files of all toolchains",
         "target_arch": "arch of target platform",
-        "setup_env_var_cmd": "A command to set up environment variables",
+        "setup_env_var_cmd": "A command to set up simple environment variables",
+        "kernel_setup_env_var_cmd": "A command to set up environment variables for kernel build",
     },
 )
 
