@@ -20,6 +20,7 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("//build/bazel_common_rules/dist:dist.bzl", "copy_to_dist_dir")
 load("//build/kernel/kleaf/artifact_tests:device_modules_test.bzl", "device_modules_test")
 load("//build/kernel/kleaf/artifact_tests:kernel_test.bzl", "initramfs_modules_options_test")
+load("//build/kernel/kleaf/tests/defconfig_test:pre_defconfig_fragments_menuconfig_test.bzl", "pre_defconfig_fragments_menuconfig_test")
 load("//build/kernel/kleaf/impl:gki_artifacts.bzl", "gki_artifacts", "gki_artifacts_prebuilts")
 load("//build/kernel/kleaf/impl:image/initramfs.bzl", "initramfs")
 load("//build/kernel/kleaf/impl:image/kernel_images.bzl", "kernel_images_filegroup")
@@ -465,6 +466,8 @@ def common_kernel(
         kernel_modules_install = name + "_modules_install",
         modules = (module_implicit_outs or []),
         arch = arch,
+        makefile = makefile,
+        defconfig = defconfig,
     )
 
     native.test_suite(
@@ -646,6 +649,8 @@ def define_prebuilts(**kwargs):
 def _define_common_kernels_additional_tests(
         name,
         kernel_build_name,
+        makefile,
+        defconfig,
         kernel_modules_install,
         modules,
         arch):
@@ -689,11 +694,37 @@ def _define_common_kernels_additional_tests(
         arch = arch,
     )
 
+    kernel_build(
+        name = name + "_test_device_kernel",
+        arch = arch,
+        makefile = makefile,
+        defconfig = defconfig,
+        pre_defconfig_fragments = [Label("//build/kernel/kleaf/tests/defconfig_test:pre_defconfig_fragment")],
+        base_kernel = native.package_relative_label(kernel_build_name),
+        build_config = Label("//build/kernel/kleaf/tests/defconfig_test:build.config.{}".format(arch)),
+        make_goals = ["modules"],
+        # We don't actually build the kernel_build target, so we don't care about outputs
+        outs = [],
+        testonly = True,
+        tags = ["manual"],
+        visibility = ["//visibility:private"],
+    )
+
+    # Tests that, if the menuconfig command does not edit anything, the pre_defconfig_fragment
+    # should still stay the same.
+    pre_defconfig_fragments_menuconfig_test(
+        name = name + "_pre_defconfig_fragments_menuconfig_test",
+        kernel_build = name + "_test_device_kernel",
+        pre_defconfig_fragment = Label("//build/kernel/kleaf/tests/defconfig_test:pre_defconfig_fragment"),
+        visibility = ["//visibility:private"],
+    )
+
     native.test_suite(
         name = name,
         tests = [
             name + "_empty",
             name + "_fake",
             name + "_device_modules_test",
+            name + "_pre_defconfig_fragments_menuconfig_test",
         ],
     )
