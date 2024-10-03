@@ -16,6 +16,87 @@
       "message": "Sending this for early review, I need to add tests for subdirectories, but it should be pretty much close to the final version. PTAL",
       "revId": "c439ee752f2fb055117c7da331c2e36f13076a45",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "670e5f23_6ab37cb5",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-03T19:27:40Z",
+      "side": 1,
+      "message": "nitty nitty nit: maybe just `die` directly so you don\u0027t have to support the extra `suffix` trick\n\nThe name of the marker file has `ddk` in it so it is unlikely that partners will have a file name like this, but in case they do, there would have been mysterious errors without this check. So rather than supporting this `ddk_marker` source file, we could also just ban it for simplicity.\n\n(and you can drop the test cases as well)",
+      "range": {
+        "startLine": 372,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 39
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "d3a0e549_f9e6c24c",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/impl/ddk/gen_makefiles.py",
+              "range": {
+                "startLine": 182,
+                "startChar": 0,
+                "endLine": 183,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "kleaf/impl/ddk/gen_makefiles.py",
+              "range": {
+                "startLine": 185,
+                "startChar": 0,
+                "endLine": 187,
+                "endChar": 0
+              },
+              "replacement": "    ddk_marker \u003d output_dir / \"ddk_marker.c\"\n"
+            },
+            {
+              "path": "kleaf/impl/ddk/gen_makefiles.py",
+              "range": {
+                "startLine": 368,
+                "startChar": 0,
+                "endLine": 371,
+                "endChar": 0
+              },
+              "replacement": ""
+            },
+            {
+              "path": "kleaf/impl/ddk/gen_makefiles.py",
+              "range": {
+                "startLine": 372,
+                "startChar": 0,
+                "endLine": 373,
+                "endChar": 0
+              },
+              "replacement": "        die(\"ddk_marker.c is not allowed to be a source file\")\n"
+            },
+            {
+              "path": "kleaf/impl/ddk/gen_makefiles.py",
+              "range": {
+                "startLine": 374,
+                "startChar": 0,
+                "endLine": 376,
+                "endChar": 0
+              },
+              "replacement": "        die(\"ddk_marker.c is not allowed to be the output file\")\n    ddk_marker \u003d _get_ddk_marker(out_cflags_path.parent)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "c439ee752f2fb055117c7da331c2e36f13076a45",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
