@@ -292,7 +292,7 @@ def _kernel_env_impl(ctx):
         set_localversion_cmd = stamp.set_localversion_cmd(ctx),
         setup_env = setup_env.path,
         check_arch_cmd = _get_check_arch_cmd(ctx),
-        toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
+        toolchains_setup_env_var_cmd = toolchains.kernel_setup_env_var_cmd,
         make_goals_deprecation_warning = make_goals_deprecation_warning,
         kconfig_werror_setup = kconfig_werror_setup,
         out = out_file.path,
@@ -562,7 +562,7 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
         set_kernel_dir_cmd = set_kernel_dir_ret.run_cmd,
         setup_env = ctx.file.setup_env.short_path,
         run_additional_setup = hermetic_tools.run_additional_setup,
-        toolchains_setup_env_var_cmd = toolchains.setup_env_var_cmd,
+        toolchains_setup_env_var_cmd = toolchains.kernel_setup_env_var_cmd,
     )
     tools = [
         ctx.file.setup_env,

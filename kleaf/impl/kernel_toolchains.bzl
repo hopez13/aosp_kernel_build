@@ -155,13 +155,14 @@ def _kernel_toolchains_impl(ctx):
         quoted_bin_paths = ":".join(quoted_bin_paths),
     )
 
+    kernel_setup_env_var_cmd = setup_env_var_cmd
     if ctx.attr._kernel_use_resolved_toolchains[BuildSettingInfo].value:
         # RUNPATH_EXECROOT: A heuristic path to execroot expressed relative to $ORIGIN.
         # RUNPATH_EXECROOT assumes that all binaries built by Kbuild are 1~3 levels
         #   below OUT_DIR,
         #   e.g. $OUT_DIR/scripts/sign-file, $OUT_DIR/tools/bpf/resolve_btfids/resolve_btfids
         # If this ever changes, edit kleaf_internal_eval_ldflags and add more levels.
-        setup_env_var_cmd += """
+        kernel_setup_env_var_cmd += """
             export HOSTCFLAGS={quoted_hostcflags}
             export USERCFLAGS={quoted_usercflags}
             export HOSTLDFLAGS={quoted_hostldflags}
@@ -203,6 +204,7 @@ def _kernel_toolchains_impl(ctx):
         all_files = all_files,
         target_arch = target_arch,
         setup_env_var_cmd = setup_env_var_cmd,
+        kernel_setup_env_var_cmd = kernel_setup_env_var_cmd,
         compiler_version = actual_toolchain_version,
     )
 
