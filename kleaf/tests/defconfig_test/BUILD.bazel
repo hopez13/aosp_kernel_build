@@ -1,0 +1,14 @@
+exports_files([
+    "build.config.arm64",
+    "build.config.x86_64",
+    "pre_defconfig_fragment",
+])
+
+py_test(
+    name = "pre_defconfig_fragments_menuconfig_test",
+    srcs = ["pre_defconfig_fragments_menuconfig_test.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@io_abseil_py//absl/testing:absltest",
+    ],
+)
