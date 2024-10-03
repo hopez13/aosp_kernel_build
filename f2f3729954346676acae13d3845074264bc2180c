@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d45044a3_7ccf23ae",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-03T19:28:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e8bc719_7243d401",
+      "revId": "f2f3729954346676acae13d3845074264bc2180c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ef395c2_d59fdf6b",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-01T19:16:31Z",
       "side": 1,
       "message": "nit: Perhaps a bit more explanation here. IIUC (and please CMIIW):\n\nIf there is a single source file, it may be the same as the module name, so directly adding the generated ddk marker source file won\u0027t work. Instead, just `-include` the generated file.\n\nIf there are multiple source files, then adding the generated ddk_marker.c to `obj` will work as long as the module name isn\u0027t ddk_marker.ko.",
+      "revId": "f2f3729954346676acae13d3845074264bc2180c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cec7347c_ac0f9d6f",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-03T19:28:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ef395c2_d59fdf6b",
       "revId": "f2f3729954346676acae13d3845074264bc2180c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
