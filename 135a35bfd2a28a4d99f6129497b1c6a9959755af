@@ -16,6 +16,24 @@
       "message": "Unfortunately, the build system is unable to find the rustc compiler with this change.\n```\nUse --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging  \n--- common/arch/x86/configs/gki_defconfig       2024-10-04 08:22:10.745881629 +0000                                              \n+++ /usr/local/google/home/aliceryhl/android16-6.12/out/bazel/output_user_root/5922fab2e1cff42b366c1ffdbc91c357/sandbox/linux-sandbox/92/execroot/_main/out/android-mainline/common/defconfig   2024-10-04 09:58:05.748058612 +0000\n@@ -51,7 +51,6 @@                                                    \n # CONFIG_PCSPKR_PLATFORM is not set\n # CONFIG_RSEQ is not set                                                                                                                    \n CONFIG_PROFILING\u003dy                                                                                                                          \n-CONFIG_RUST\u003dy                                                                                                                               \n CONFIG_SMP\u003dy                                                        \n CONFIG_X86_X2APIC\u003dy              \n CONFIG_HYPERVISOR_GUEST\u003dy                                                                                                                   \nERROR: savedefconfig does not match common/arch/x86/configs/gki_defconfig                                                  \nTarget //common:kernel_x86_64_config failed to build                                                                                         \nUse --verbose_failures to see the command lines of failed build steps.\n```\nwhen running `rustavailable` I get:\n```\nINFO: Running command line: bazel-bin/common/kernel_x86_64_config/config.sh rustavailable\n+ eval\n+ set +x\n***\n*** Rust compiler \u0027rustc\u0027 could not be found.\n***\n***\n*** Please see Documentation/rust/quick-start.rst for details\n*** on how to set up the Rust support.\n***\n```",
       "revId": "135a35bfd2a28a4d99f6129497b1c6a9959755af",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ced4f256_a67eeee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-04T10:09:04Z",
+      "side": 1,
+      "message": "For local reproduction, pull in aosp/3290319 as well.",
+      "parentUuid": "6f244b76_a1e122c2",
+      "revId": "135a35bfd2a28a4d99f6129497b1c6a9959755af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
