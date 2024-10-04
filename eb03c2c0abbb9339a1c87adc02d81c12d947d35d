@@ -16,6 +16,24 @@
       "message": "Need https://github.com/bazelbuild/rules_pkg/pull/898",
       "revId": "eb03c2c0abbb9339a1c87adc02d81c12d947d35d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf715054_f9b3448e",
+        "filename": "kleaf/docs/BUILD.bazel",
+        "patchSetId": 11
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-04T19:16:22Z",
+      "side": 1,
+      "message": "bypassing for now. We\u0027ll leave docs broken: b/371596399",
+      "parentUuid": "2fd54f96_02252a5b",
+      "revId": "eb03c2c0abbb9339a1c87adc02d81c12d947d35d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
