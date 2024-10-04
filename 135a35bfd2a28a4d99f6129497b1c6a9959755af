@@ -34,6 +34,24 @@
       "parentUuid": "6f244b76_a1e122c2",
       "revId": "135a35bfd2a28a4d99f6129497b1c6a9959755af",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c577cab2_c6a9a675",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2024-10-04T10:34:21Z",
+      "side": 1,
+      "message": "I had to do this to be able to run `rustavailable`: aosp/3292367",
+      "parentUuid": "ced4f256_a67eeee0",
+      "revId": "135a35bfd2a28a4d99f6129497b1c6a9959755af",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
