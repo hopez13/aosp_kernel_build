@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd20e515_ce3af072",
+        "filename": "kleaf/tests/built_with_ddk_test/contains_mark_test.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-04T19:09:29Z",
+      "side": 1,
+      "message": "Sorry, now I remembered why we had parse_known_args() then keep the unknown list. It was for the list of test suite and test case names sent to absltest.main().\n\nCould you please add it back? (and possibly to other submitted CLs)",
+      "revId": "9458a70c33b57d0c9d6db7a5e7e2a525e378b9b3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
