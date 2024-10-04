@@ -593,7 +593,7 @@ def _get_config_script_impl(
 
     script += """
             menucommand="${1:-savedefconfig}"
-            if ! [[ "${menucommand}" =~ .*config ]]; then
+            if ! [[ "${menucommand}" =~ .*config ]] && [[ "${menucommand}" != "rustavailable" ]]; then
                 echo "Invalid command $menucommand. Must be *config." >&2
                 exit 1
             fi
