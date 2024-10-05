@@ -28,8 +28,8 @@ def load_arguments():
     parser.add_argument("--expected_modules_list")
     parser.add_argument("--expected_modules_recovery_list")
     parser.add_argument("--expected_modules_charger_list")
-    parser.add_argument("--build_vendor_boot")
-    parser.add_argument("--build_vendor_kernel_boot")
+    parser.add_argument("--build_vendor_boot", action="store_true")
+    parser.add_argument("--build_vendor_kernel_boot", action="store_true")
     parser.add_argument("files", nargs="*", default=[])
     return parser.parse_known_args()
 
