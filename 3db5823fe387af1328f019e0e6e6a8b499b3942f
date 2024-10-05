@@ -16,6 +16,23 @@
       "message": "That feels like a hack to run an unrelated target. While this is generally useful, I think it should not be put into the config rule. In particular, this rule does more than just run this target.",
       "revId": "3db5823fe387af1328f019e0e6e6a8b499b3942f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6244882_44942494",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-05T00:59:12Z",
+      "side": 1,
+      "message": "this is going to conflict with https://r.android.com/q/topic:%22kleaf_defconfig%22 soon",
+      "revId": "3db5823fe387af1328f019e0e6e6a8b499b3942f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
