@@ -485,6 +485,10 @@ def kernel_build(
             -   It is overridden by a value in pre_defconfig_fragments / post_defconfig_fragments
             -   The line has a `# nocheck` comment. To attach a reason string, use the format
                 `# nocheck: (reason or bug number)`.
+
+            As a special case, if this is evaluated to `//build/kernel/kleaf:allmodconfig`, Kleaf
+            builds all modules except those exluded in `post_defconfig_fragments`. In this case,
+            `pre_defconfig_fragments` must not be set.
         pre_defconfig_fragments: A list of fragments that are applied to the defconfig
             **before** `make defconfig`.
 
