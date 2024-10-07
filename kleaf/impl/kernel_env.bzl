@@ -72,6 +72,13 @@ def _get_set_arch_cmd(ctx):
             echo '{level}: {label} must specify arch = '"${{ARCH/riscv/riscv64}}"', but is {declared_arch}.' >&2
             {exit_cmd}
         fi
+        if [[ "${{ARCH}}" == "arm64" ]]; then
+            export NDK_TRIPLE="${{AARCH64_NDK_TRIPLE}}"
+        elif [[ "${{ARCH}}" == "x86_64" ]]; then
+            export NDK_TRIPLE="${{X86_64_NDK_TRIPLE}}"
+        elif [[ "${{ARCH}}" == "arm" ]]; then
+            export NDK_TRIPLE="${{ARM_NDK_TRIPLE}}"
+        fi
     """.format(
         level = level,
         label = ctx.label,
