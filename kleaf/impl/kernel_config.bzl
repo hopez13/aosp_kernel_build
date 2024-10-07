@@ -63,10 +63,10 @@ def _check_against_savedefconfig_impl(
         # A good string repr of kernel_build.defconfig
         defconfig = None
         if defconfig_info:
-            defconfig = defconfig_info.file.path if defconfig_info.file else None
+            defconfig = defconfig_info.file.path if defconfig_info.file else defconfig_info.make_target
 
         fail("""{kernel_build_label}: check_defconfig=True requires the following:
-- defconfig is set (but it is {defconfig})
+- defconfig is set and not phony_defconfig (but it is {defconfig})
 - pre_defconfig_fragments is not set (but it is {pre_defconfig_fragment_files})
 """.format(
             kernel_build_label = subrule_ctx.label.name.removesuffix("_config"),
@@ -364,8 +364,20 @@ def _set_up_defconfig_impl(subrule_ctx, defconfig_info, is_run_env):
     if not defconfig_info:
         return StepInfo(inputs = depset(), cmd = "", outputs = [], tools = [])
     if not defconfig_info.file:
-        # TODO(b/368119551): handle allmodconfig
-        return StepInfo(inputs = depset(), cmd = "", outputs = [], tools = [])
+        if not defconfig_info.make_target:
+            fail("{}: Unreconized defconfig!".format(subrule_ctx.label.name))
+        cmd = """
+            if [[ -n "${{DEFCONFIG}}" ]]; then
+                echo "ERROR: DEFCONFIG cannot be set in build configs if kernel_build.defconfig is set." >&2
+                echo "  DEFCONFIG=${{DEFCONFIG}}" >&2
+                echo "  kernel_build.defconfig={defconfig_make_target}" >&2
+                exit 1
+            fi
+            DEFCONFIG={defconfig_make_target}
+        """.format(
+            defconfig_make_target = defconfig_info.make_target,
+        )
+        return StepInfo(inputs = depset(), cmd = cmd, outputs = [], tools = [])
 
     cmd = """
         if [[ -n "${{DEFCONFIG}}" ]]; then
@@ -587,12 +599,12 @@ def _kernel_config_impl(ctx):
         if DefconfigInfo in ctx.attr.defconfig:
             defconfig_info = ctx.attr.defconfig[DefconfigInfo]
         elif len(ctx.files.defconfig) == 1:
-            defconfig_info = DefconfigInfo(file = ctx.files.defconfig[0])
+            defconfig_info = DefconfigInfo(file = ctx.files.defconfig[0], make_target = None)
         else:
             fail("{}: defconfig {} must provide exactly one file".format(ctx.label, ctx.attr.defconfig.label))
 
-    if ctx.attr.pre_defconfig_fragments and not ctx.attr.defconfig:
-        fail("{}: Must also set defconfig if using pre_defconfig_fragments".format(ctx.label.name.removesuffix("_config")))
+    if ctx.attr.pre_defconfig_fragments and (not defconfig_info or not defconfig_info.file):
+        fail("{}: Must also set defconfig to a non phony_defconfig target if using pre_defconfig_fragments".format(ctx.label.name.removesuffix("_config")))
 
     step_returns = [
         _set_up_defconfig(
@@ -818,7 +830,14 @@ def _get_config_script_impl(
 
     inputs = []
 
-    if not defconfig_info or not defconfig_info.file:
+    if defconfig_info and defconfig_info.make_target:
+        # defconfig = some phony_defconfig
+        script += """
+            echo "ERROR: With defconfig set to a phony_defconfig, menuconfig etc. is not supported." >&2
+            exit 1
+        """
+    elif not defconfig_info or not defconfig_info.file:
+        # defconfig = None
         # Legacy code path.
         # TODO(b/368119551): Clean up once kernel_build.defconfig is required.
         script += """
@@ -826,6 +845,7 @@ def _get_config_script_impl(
             menuconfig ${menucommand}
         """
     else:
+        # defconfig = some file
         inputs.append(defconfig_info.file)
         script += """
             (
