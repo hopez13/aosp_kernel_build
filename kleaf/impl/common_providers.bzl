@@ -35,6 +35,7 @@ DefconfigInfo = provider(
     "Describes the value of kernel_build.defconfig",
     fields = {
         "file": "a single defconfig file",
+        "make_target": "a phony make target",
     },
 )
 
