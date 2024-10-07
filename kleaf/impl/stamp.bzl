@@ -88,8 +88,12 @@ def _write_localversion(ctx):
             scmversion_prefix=
             if [[ -n "$android_release" ]] && [[ -n "$KMI_GENERATION" ]]; then
                 scmversion_prefix="-$android_release-$KMI_GENERATION"
-            elif [[ -n "$android_release" ]]; then
-                scmversion_prefix="-$android_release"
+            elif [[ -n "$android_release" ]] && [[ -z "$KMI_GENERATION" ]]; then
+                echo "KMI_GENERATION is not set but BRANCH is ${{BRANCH}}" >&2
+                exit 1
+            elif [[ -z "$android_release" ]] && [[ -n "$KMI_GENERATION" ]]; then
+                echo "No Android release can be extracted from BRANCH=${{BRANCH}} but KMI_GENERATION is ${{KMI_GENERATION}}" >&2
+                exit 1
             fi
             scmversion="${{scmversion_prefix}}${{stable_scmversion}}"
             echo $scmversion
