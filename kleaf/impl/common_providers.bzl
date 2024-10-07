@@ -32,9 +32,10 @@ StepInfo = provider(
 )
 
 DefconfigInfo = provider(
-    "Describes the value of kernel_build.defconfig",
+    "Describes the value of kernel_build.defconfig. At most one of the fields is not None.",
     fields = {
         "file": "a single defconfig file",
+        "make_target": "a phony make target",
     },
 )
 

@@ -117,6 +117,7 @@ bzl_library(
         "modules_prepare.bzl",
         "native_binary_with_arg.bzl",
         "out_headers_allowlist_archive.bzl",
+        "phony_defconfig.bzl",
         "platform_transition.bzl",
         "python.bzl",
         "raw_kmi_symbol_list.bzl",
