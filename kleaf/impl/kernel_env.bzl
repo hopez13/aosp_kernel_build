@@ -53,7 +53,7 @@ def _get_kbuild_symtypes(ctx):
     # Should not reach
     fail("{}: kernel_env has unknown value for kbuild_symtypes: {}".format(ctx.attr.label, ctx.attr.kbuild_symtypes))
 
-def _get_check_arch_cmd(ctx):
+def _get_set_arch_cmd(ctx):
     toolchains = kernel_toolchains_utils.get(ctx)
     declared_arch = toolchains.target_arch
 
@@ -64,6 +64,10 @@ def _get_check_arch_cmd(ctx):
         exit_cmd = "exit 1"
 
     return """
+        if [[ -z "${{ARCH}}" ]]; then
+            ARCH="{declared_arch}"
+            export ARCH="${{ARCH/riscv64/riscv}}"
+        fi
         if [[ "${{ARCH/riscv/riscv64}}" != "{declared_arch}" ]]; then
             echo '{level}: {label} must specify arch = '"${{ARCH/riscv/riscv64}}"', but is {declared_arch}.' >&2
             {exit_cmd}
@@ -244,7 +248,7 @@ def _kernel_env_impl(ctx):
           {set_kernel_dir_cmd}
           {set_localversion_cmd}
           source {setup_env}
-          {check_arch_cmd}
+          {set_arch_cmd}
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
         # TODO(b/236012223) Remove the warning after deprecation.
@@ -291,7 +295,7 @@ def _kernel_env_impl(ctx):
         set_kernel_dir_cmd = set_kernel_dir_ret.cmd,
         set_localversion_cmd = stamp.set_localversion_cmd(ctx),
         setup_env = setup_env.path,
-        check_arch_cmd = _get_check_arch_cmd(ctx),
+        set_arch_cmd = _get_set_arch_cmd(ctx),
         toolchains_setup_env_var_cmd = toolchains.kernel_setup_env_var_cmd,
         make_goals_deprecation_warning = make_goals_deprecation_warning,
         kconfig_werror_setup = kconfig_werror_setup,
