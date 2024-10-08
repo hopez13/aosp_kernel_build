@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77e14b6e_204d44de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:10:59Z",
+      "side": 1,
+      "message": "ny",
+      "revId": "1d6a82e841cf4f98c7f315f927d91a349120deda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7496fb6c_015509d6",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:10:59Z",
+      "side": 1,
+      "message": "any chance we can get rid of that riscv64 hack? Also, with this patch, we do the `${{ARCH/riscv64/riscv}}` substitution now 3 times in the code.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 49
+      },
+      "revId": "1d6a82e841cf4f98c7f315f927d91a349120deda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
