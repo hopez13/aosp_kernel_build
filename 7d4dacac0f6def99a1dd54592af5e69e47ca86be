@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06961d7e_9fad47ea",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:12:27Z",
+      "side": 1,
+      "message": "are we able to move this calculation into bazel? Or do we have to wait until ARCH is no longer available to build.config? If so, why not drop the support if it can be set via kernel_build attribute?",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 10
+      },
+      "revId": "7d4dacac0f6def99a1dd54592af5e69e47ca86be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
