@@ -22,6 +22,30 @@
       },
       "revId": "7d4dacac0f6def99a1dd54592af5e69e47ca86be",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e6b3567_8a1ca73f",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-08T22:54:33Z",
+      "side": 1,
+      "message": "Not yet. The only reason is because on the uboot branch, these aren\u0027t set.\n\nThese doesn\u0027t only affect kernel_build(), but also the clang toolchain. To build any cc_binary() targeting Android, the sysroot specified by the NDK_TRIPLE below prebuilts/ndk-r26 is used.\n\nIf partners have some custom kernel trees with these three variables (AARCH64_NDK_TRIPLE / X86_64_NDK_TRIPLE / ARM_NDK_TRIPLE) unset, then they are the same as the uboot set up; but I guess these are rare.\n\nThat\u0027s why in this change, I only dropped NDK_TRIPLE, but not AARCH64_NDK_TRIPLE / X86_64_NDK_TRIPLE / ARM_NDK_TRIPLE yet; they\u0027ll likely need more work.",
+      "parentUuid": "06961d7e_9fad47ea",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 10
+      },
+      "revId": "7d4dacac0f6def99a1dd54592af5e69e47ca86be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
