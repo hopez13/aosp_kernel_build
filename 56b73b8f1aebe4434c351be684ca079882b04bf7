@@ -16,6 +16,121 @@
       "message": "Please do this change on main and (if really necessary) backport then.",
       "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2398531e_61a19657",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:49:43Z",
+      "side": 1,
+      "message": "Use union type expressions `Optional[str] \u003d\u003d str | None`",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1105fed8_abbb0f7d",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:49:43Z",
+      "side": 1,
+      "message": "no need for this indirection, directly return.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 17
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488f81cb_4321503c",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:49:43Z",
+      "side": 1,
+      "message": "this is not a type annotation and hence should not be part of this change.",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 26
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c571c9_66264332",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:49:43Z",
+      "side": 1,
+      "message": "this is not a type annotation and hence should not be part of this change.",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 26
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "683691f9_883a2aa3",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-08T22:49:43Z",
+      "side": 1,
+      "message": "this is not a type annotation and hence should not be part of this change.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 60
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
