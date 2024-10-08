@@ -74,7 +74,7 @@ else
   # If kernel_build.makefile is not set, print a warning
   echo "WARNING: kernel_build.makefile is not set, and KERNEL_DIR=${KERNEL_DIR}. " >&2
   echo "  To suppress this warning, set:" >&2
-  echo '    kernel_build(makefiles = "//'"${KERNEL_DIR}"':Makefile")' >&2
+  echo '    kernel_build(makefile = "//'"${KERNEL_DIR}"':Makefile")' >&2
   echo "  and delete KERNEL_DIR from build config if it is set explicitly." >&2
 fi
 
