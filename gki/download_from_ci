@@ -97,6 +97,11 @@ def parse_args():
       action="store_true",
       help="update GKI kernel prebuilts in Android platform (set $ANDROID_BUILD_TOP)")
   update_group.add_argument(
+      "-s",
+      "--update-gki-signed",
+      action="store_true",
+      help="update signed GKI kernel prebuilts in Android platform (set $ANDROID_BUILD_TOP)")
+  update_group.add_argument(
       "--update-16k",
       action="store_true",
       help="update 16k kernel prebuilts in Android platform (set $ANDROID_BUILD_TOP)")
@@ -124,6 +129,7 @@ def parse_args():
 
   if any((
     _args.update_gki,
+    _args.update_gki_signed,
     _args.update_16k,
     _args.update_u_boot,
     _args.update_microdroid)):
@@ -200,7 +206,10 @@ def get_android_version(branch):
     raise Exception("Could not determine android version in branch " + branch)
   return int(result.group('android_version'))
 
-def commit_prebuilts(output_dir, gitlog, name="kernel"):
+def commit_prebuilts(output_dir, gitlog, name="kernel", signed=False):
+  if signed:
+    name = "Signed " + name
+
   commit_message = ("Update {} to builds {}\n"
                     "\n"
                     "{}"
@@ -381,11 +390,12 @@ def download_kernel_modules(target, output_dir, fetch_initramfs=False):
   _pool.map(func, files_to_fetch)
 
 def clean_download_dir(download_dir):
-  subprocess.run(["git", "rm", "-rf", "*"], cwd=download_dir)
   os.makedirs(download_dir, exist_ok=True)
+  subprocess.run(["git", "rm", "-rf", "*"], cwd=download_dir)
   subprocess.run(["git", "checkout", "HEAD", "Android.bp"], cwd=download_dir)
   subprocess.run(["git", "checkout", "HEAD", "16k"], cwd=download_dir)
   subprocess.run(["git", "checkout", "HEAD", "microdroid-gki"], cwd=download_dir)
+  subprocess.run(["git", "checkout", "HEAD", "signed"], cwd=download_dir)
 
 def update_android_4_1x_pq(output_dir, version):
   output_dir = os.path.join(output_dir, "device", "google", "cuttlefish_kernel")
@@ -467,12 +477,16 @@ def update_android11_5_4(output_dir):
   gitlog = get_git_log(old_sha, new_sha)
   commit_prebuilts(output_dir, gitlog)
 
-def update_androidx_virtual_device_modules(gitlog, output_dir, version):
+def update_androidx_virtual_device_modules(gitlog, output_dir, version, signed):
   mods_dir = os.path.join(output_dir, "kernel", "prebuilts", "common-modules",
                           "virtual-device")
   ver_mods_dir = os.path.join(mods_dir, version)
   arm64_mods_dir = os.path.join(ver_mods_dir, "arm64")
   x86_64_mods_dir = os.path.join(ver_mods_dir, "x86-64")
+
+  if signed:
+    arm64_mods_dir = os.path.join(arm64_mods_dir, "signed")
+    x86_64_mods_dir = os.path.join(x86_64_mods_dir, "signed")
 
   clean_download_dir(arm64_mods_dir)
   clean_download_dir(x86_64_mods_dir)
@@ -480,8 +494,8 @@ def update_androidx_virtual_device_modules(gitlog, output_dir, version):
   download_kernel_modules("kernel_virt_aarch64", arm64_mods_dir, fetch_initramfs=True)
   download_kernel_modules("kernel_virt_x86_64", x86_64_mods_dir, fetch_initramfs=True)
 
-  commit_prebuilts(arm64_mods_dir, gitlog)
-  commit_prebuilts(x86_64_mods_dir, gitlog)
+  commit_prebuilts(arm64_mods_dir, gitlog, signed=signed)
+  commit_prebuilts(x86_64_mods_dir, gitlog, signed=signed)
 
 def update_androidx_cf(gitlog, output_dir, version):
   i686_cf_dirname = version + "-i686"
@@ -505,10 +519,15 @@ def update_androidx_cf(gitlog, output_dir, version):
   if os.path.exists(i686_cf_dir) or os.path.exists(rockpi_cf_dir):
     commit_prebuilts(cf_dir, gitlog)
 
-def update_androidx(output_dir, version, android_version):
+def update_androidx(output_dir, version, android_version, signed=False):
   arm64_dir = os.path.join(output_dir, "kernel", "prebuilts", version, "arm64")
   x86_64_dir = os.path.join(output_dir, "kernel", "prebuilts", version,
                             "x86_64")
+
+  if signed:
+    arm64_dir = os.path.join(arm64_dir, "signed")
+    x86_64_dir = os.path.join(x86_64_dir, "signed")
+
   arm64_kernel = os.path.join(arm64_dir, "kernel-" + version)
   (old_version, old_sha) = get_binary_kernel_version(arm64_kernel)
 
@@ -524,7 +543,7 @@ def update_androidx(output_dir, version, android_version):
   write_prebuilt_info(arm64_dir)
   (new_version, new_sha) = get_binary_kernel_version(arm64_kernel)
   gitlog = get_git_log(old_sha, new_sha)
-  commit_prebuilts(arm64_dir, gitlog)
+  commit_prebuilts(arm64_dir, gitlog, signed=signed)
 
   # x86_64 GKI kernels and kernel modules
   clean_download_dir(x86_64_dir)
@@ -534,10 +553,11 @@ def update_androidx(output_dir, version, android_version):
   if android_version >= 15:
     get_abi_definition("kernel_x86_64", x86_64_dir)
   write_prebuilt_info(x86_64_dir)
-  commit_prebuilts(x86_64_dir, gitlog)
+  commit_prebuilts(x86_64_dir, gitlog, signed=signed)
 
-  update_androidx_virtual_device_modules(gitlog, output_dir, version)
-  update_androidx_cf(gitlog, output_dir, version)
+  update_androidx_virtual_device_modules(gitlog, output_dir, version, signed)
+  if not signed:
+    update_androidx_cf(gitlog, output_dir, version)
 
 def update_android_mainline_riscv64(output_dir):
   # Although we don't update the x86_64 kernel, we use it's path to compute the
@@ -624,7 +644,7 @@ def get_build_info(targets):
       pass
   raise json.decoder.JSONDecodeError("URL data did not contain BUILD_INFO.")
 
-def update_gki():
+def update_gki(signed=False):
   # The 'kernel_riscv64' target is on a separate branch that does not include
   # 'kernel_aarch64' as a target. If we fail to download the build information
   # from 'kernel_aarch64', try again with 'kernel_riscv64' as a fallback.
@@ -646,7 +666,7 @@ def update_gki():
   elif branch == "aosp_kernel-common-android-mainline-riscv64":
     update_android_mainline_riscv64(output_dir)
   else:
-    update_androidx(output_dir, get_build_kernel_version(data), get_android_version(branch))
+    update_androidx(output_dir, get_build_kernel_version(data), get_android_version(branch), signed)
 
 def download_u_boot(target, output_dir):
   if not os.path.isdir(output_dir):
@@ -789,7 +809,11 @@ def main():
   parse_args()
 
   if _args.update_gki:
-    update_gki()
+    update_gki(signed=False)
+    return
+
+  if _args.update_gki_signed:
+    update_gki(signed=True)
     return
 
   if _args.update_16k:
