@@ -21,6 +21,7 @@ import functools
 import glob
 import json
 import multiprocessing
+import multiprocessing.pool
 import os
 import pathlib
 import re
@@ -31,9 +32,8 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from typing import Optional
 import urllib.request
-
-from pathlib import Path
 
 BASE_URL = "https://ci.android.com/builds/submitted/{build_id}/{target}/latest/raw"
 ARM_TARGETS = ["u-boot_qemu_arm"]
@@ -56,12 +56,12 @@ X86_64_TARGETS = ["kernel_x86_64",
 GIT_COMMIT_LOG_LENGTH = 100
 
 # Arguments from argparse.
-_args = None
+_args: Optional[argparse.Namespace] = None
 
 # Multiprocessing pool. Pool creation must happen after the worker fn is defined.
-_pool = None
+_pool: Optional[multiprocessing.pool.Pool] = None
 
-def download(url_base, dest_dir, filename, dest_filename = None):
+def download(url_base: str, dest_dir: str, filename: str, dest_filename: Optional[str] = None) -> None:
   dest_filename = os.path.join(dest_dir, dest_filename or filename)
   if not os.path.exists(dest_filename):
     print("Downloading %s to %s" % (filename, dest_dir))
@@ -71,10 +71,10 @@ def download(url_base, dest_dir, filename, dest_filename = None):
     except urllib.error.HTTPError as e:
       print("Could not download %s: %s" % (filename, e))
 
-def parse_args():
+def parse_args() -> None:
   global _args
 
-  def build_id(id: str):
+  def build_id(id: str) -> str:
     if not (id.isdecimal() or (id[0] == "P" and id[1:].isdecimal())):
       raise argparse.ArgumentTypeError("Invalid build id value.")
     return id
@@ -134,14 +134,15 @@ def parse_args():
     if not _args.bug:
       raise Exception("A bug number must be provided when updating prebuilts")
 
-def list_artifacts(url_base):
+def list_artifacts(url_base: str) -> list[str]:
   # Download BUILD_INFO to get the file list
   url = os.path.join(url_base, "BUILD_INFO")
   response = urllib.request.urlopen(url)
   data = response.read().decode("utf-8")
-  return json.loads(data)["target"]["dir_list"]
+  dir_list: list[str] = json.loads(data)["target"]["dir_list"]
+  return dir_list
 
-def download_files(url_base, files):
+def download_files(url_base: str, files: list[str]) -> None:
   """Download multiple files in url_base using a multiprocessing pool."""
   for f in files:
     dirname = os.path.dirname(f)
@@ -149,19 +150,20 @@ def download_files(url_base, files):
       os.makedirs(dirname)
 
   func = functools.partial(download, url_base, "")
+  assert _pool is not None
   _pool.map(func, files)
 
-def get_kernel_dir():
+def get_kernel_dir() -> pathlib.Path:
   """ Return the path of the kernel source directory in the same repo as this script."""
   # download_from_ci lives in <ack manifest root>/build/kernel/gki
   return pathlib.Path(os.path.abspath(__file__)).parents[3].joinpath('common')
 
-def get_u_boot_dir():
+def get_u_boot_dir() -> pathlib.Path:
   """ Return the path of the u-boot source directory in the same repo as this script."""
   # download_from_ci lives in <ack manifest root>/build/kernel/gki
   return pathlib.Path(os.path.abspath(__file__)).parents[3].joinpath('u-boot')
 
-def get_build_kernel_version(data):
+def get_build_kernel_version(data: str) -> str:
   """Given a build's BUILD_INFO in json format, return the kernel version as a string."""
   branch = json.loads(data)["branch"]
   if branch == "aosp_kernel-common-android-mainline":
@@ -175,7 +177,7 @@ def get_build_kernel_version(data):
       raise Exception("Could not determine kernel version in branch " + branch)
     return result.group('version')
 
-def get_git_log(old_sha, new_sha, path=get_kernel_dir()):
+def get_git_log(old_sha: Optional[str], new_sha: str, path: pathlib.Path = get_kernel_dir()) -> str:
   """Return a string containing the git log between two commits.
 
   If |old_sha| is None, then git log until the |new_sha| commit is returned.
@@ -189,7 +191,7 @@ def get_git_log(old_sha, new_sha, path=get_kernel_dir()):
                                             cwd=path) + "\n"
   return gitlog
 
-def get_android_version(branch):
+def get_android_version(branch: str) -> int:
   """Given a branch name, return the android version as an int.
 
   Note: It does not handle aosp_kernel-common-android-mainline case.
@@ -200,7 +202,8 @@ def get_android_version(branch):
     raise Exception("Could not determine android version in branch " + branch)
   return int(result.group('android_version'))
 
-def commit_prebuilts(output_dir, gitlog, name="kernel"):
+def commit_prebuilts(output_dir: str, gitlog: str, name: str = "kernel") -> None:
+  assert _args is not None
   commit_message = ("Update {} to builds {}\n"
                     "\n"
                     "{}"
@@ -216,7 +219,7 @@ def commit_prebuilts(output_dir, gitlog, name="kernel"):
     print("Use the following command from your Android repository to upload your changes:")
     print(" repo upload -t --br {}".format(branch_name))
 
-def extract_version_from_kernel(path):
+def extract_version_from_kernel(path: str) -> str:
   """Extracts version string from kernel following https://www.kernel.org/doc/Documentation/x86/boot.txt"""
   # Note that this works only for x86 kernel image
   with open(path, mode='rb') as file:
@@ -242,7 +245,7 @@ def extract_version_from_kernel(path):
     # 6.1.25-android14-11-g34fde9ec08a3-ab10675345 (build-user@build-host) #1 SMP PREEMPT Thu Aug 17 19:23:24 UTC 2023
     return file.read(1024).split(b'\0')[0].decode()
 
-def get_binary_kernel_release(path):
+def get_binary_kernel_release(path: str) -> str:
   """Returns release name of the kernel (same as uname -r)."""
   version = extract_version_from_kernel(path)
   result = version.split()[0]
@@ -253,7 +256,7 @@ def get_binary_kernel_release(path):
   return result
 
 
-def get_binary_kernel_version(path):
+def get_binary_kernel_version(path: str) -> tuple[str, str]:
   """Returns a tuple of strings of the x.y.z (LTS) version and the SHA."""
   version = extract_version_from_kernel(path)
   pattern = "(?P<release>(?P<version>[0-9]+[.][0-9]+[.][0-9]+)(-rc\d+)?(-\w+(-\d+)?)?-\d+-g(?P<sha>\w+)-ab\d+)"
@@ -263,7 +266,7 @@ def get_binary_kernel_version(path):
     raise Exception("Could not determine version in kernel binary " + path)
   return (result.group("version"), result.group("sha"))
 
-def get_binary_u_boot_version(path):
+def get_binary_u_boot_version(path: str) -> tuple[str, str]:
   """Returns a tuple of strings of the YYYY.MM(-rcXX) version and the SHA."""
   rawdata = subprocess.check_output(["grep", "-a", "U-Boot\s[0-9]*.[0-9]*-.*", path])
   pattern = b"U-Boot (?P<release>(?P<version>[0-9]+[.][0-9]+)(-rc\d+)?(-\d+)?-g(?P<sha>\w+)(-dirty)?(-ab[0-9]+)?) .*"
@@ -273,12 +276,13 @@ def get_binary_u_boot_version(path):
   return (result.group("version").decode('ascii'),
           result.group("sha").decode('ascii'))
 
-def write_prebuilt_info(output_dir):
+def write_prebuilt_info(output_dir: str) -> None:
+  assert _args is not None
   with open(os.path.join(output_dir, "prebuilt-info.txt"), "w") as prebuilt_info:
     json.dump({"kernel-build-id": _args.build_id}, prebuilt_info, indent=4)
     prebuilt_info.write("\n")
 
-def repackage_kernels(build_is_x86_64, output_dir, version, suffix = ""):
+def repackage_kernels(build_is_x86_64: bool, output_dir: str, version: str, suffix: str = "") -> str:
   uncompressed_kernel = os.path.join(output_dir, "kernel-" + version + suffix)
   lz4_kernel = os.path.join(output_dir, "kernel-" + version + "-lz4" + suffix)
   if build_is_x86_64:
@@ -296,7 +300,8 @@ def repackage_kernels(build_is_x86_64, output_dir, version, suffix = ""):
                             uncompressed_kernel, lz4_kernel])
   return uncompressed_kernel
 
-def get_abi_definition(target, output_dir):
+def get_abi_definition(target: str, output_dir: str) -> None:
+  assert _args is not None
   os.makedirs(output_dir, exist_ok=True)
   url_base = BASE_URL.format(build_id=_args.build_id, target=target)
   files = list_artifacts(url_base)
@@ -304,10 +309,11 @@ def get_abi_definition(target, output_dir):
   # Only download relevant ABI files.
   files_to_fetch = [x for x in files if x.startswith("abi") and not "abi_stgdiff" in x]
   func = functools.partial(download, url_base, output_dir)
+  assert _pool is not None
   _pool.map(func, files_to_fetch)
 
 # Example return value: 6.1.25-android14-11-g34fde9ec08a3-ab10675345
-def parse_kernel_release_from_gki_info(path):
+def parse_kernel_release_from_gki_info(path: str) -> str:
   """Parse kernel release from gki-info.txt
   Args:
     path: Path to gki-info.txt
@@ -320,8 +326,9 @@ def parse_kernel_release_from_gki_info(path):
       line = ''.join(line.split())
       if line.startswith('kernel_release='):
         return line.partition('=')[-1]
+  raise ValueError(f"Did not find kernel_release in {path}")
 
-def download_kernel(target, version, output_dir, fetch_system_dlkm=False):
+def download_kernel(target: str, version: str, output_dir: str, fetch_system_dlkm: bool = False) -> None:
   if not os.path.isdir(output_dir):
     os.mkdir(output_dir)
 
@@ -334,8 +341,10 @@ def download_kernel(target, version, output_dir, fetch_system_dlkm=False):
     files.append("system_dlkm_staging_archive.tar.gz")
   files.append("gki-info.txt")
 
+  assert _args is not None
   url_base = BASE_URL.format(build_id=_args.build_id, target=target)
   func = functools.partial(download, url_base, output_dir)
+  assert _pool is not None
   _pool.map(func, files)
 
   if target.startswith("kernel_debug_"):
@@ -367,10 +376,11 @@ def download_kernel(target, version, output_dir, fetch_system_dlkm=False):
       system_dlkm_tar.extractall(system_dlkm_staging)
     os.remove(system_dlkm_tarball)
 
-def download_kernel_modules(target, output_dir, fetch_initramfs=False):
+def download_kernel_modules(target: str, output_dir: str, fetch_initramfs: bool = False) -> None:
   if not os.path.isdir(output_dir):
     os.mkdir(output_dir)
 
+  assert _args is not None
   url_base = BASE_URL.format(build_id=_args.build_id, target=target)
   files = list_artifacts(url_base)
   files_to_fetch = [x for x in files if x.endswith((".dtb", ".ko"))]
@@ -378,16 +388,17 @@ def download_kernel_modules(target, output_dir, fetch_initramfs=False):
     files_to_fetch.append("initramfs.img")
 
   func = functools.partial(download, url_base, output_dir)
+  assert _pool is not None
   _pool.map(func, files_to_fetch)
 
-def clean_download_dir(download_dir):
+def clean_download_dir(download_dir: str) -> None:
   subprocess.run(["git", "rm", "-rf", "*"], cwd=download_dir)
   os.makedirs(download_dir, exist_ok=True)
   subprocess.run(["git", "checkout", "HEAD", "Android.bp"], cwd=download_dir)
   subprocess.run(["git", "checkout", "HEAD", "16k"], cwd=download_dir)
   subprocess.run(["git", "checkout", "HEAD", "microdroid-gki"], cwd=download_dir)
 
-def update_android_4_1x_pq(output_dir, version):
+def update_android_4_1x_pq(output_dir: str, version: str) -> None:
   output_dir = os.path.join(output_dir, "device", "google", "cuttlefish_kernel")
 
   arm64_dirname = "%s-arm64" % version
@@ -409,13 +420,13 @@ def update_android_4_1x_pq(output_dir, version):
   gitlog = get_git_log(old_sha, new_sha)
   commit_prebuilts(output_dir, gitlog)
 
-def update_android_4_14_p(output_dir):
+def update_android_4_14_p(output_dir: str) -> None:
   return update_android_4_1x_pq(output_dir, "4.14")
 
-def update_android_4_19_q(output_dir):
+def update_android_4_19_q(output_dir: str) -> None:
   return update_android_4_1x_pq(output_dir, "4.19")
 
-def update_android_4_19_r(output_dir):
+def update_android_4_19_r(output_dir: str) -> None:
   old_sha = None
 
   arm64_dir = os.path.join(output_dir, "kernel", "prebuilts", "4.19", "arm64")
@@ -436,7 +447,7 @@ def update_android_4_19_r(output_dir):
       gitlog = "Initial prebuilts at commit {}\n".format(new_sha)
   commit_prebuilts(arm64_dir, gitlog)
 
-def update_android11_5_4(output_dir):
+def update_android11_5_4(output_dir: str) -> None:
   output_dir = os.path.join(output_dir, "device", "google", "cuttlefish_kernel")
 
   arm64_dirname = "5.4-arm64"
@@ -467,7 +478,7 @@ def update_android11_5_4(output_dir):
   gitlog = get_git_log(old_sha, new_sha)
   commit_prebuilts(output_dir, gitlog)
 
-def update_androidx_virtual_device_modules(gitlog, output_dir, version):
+def update_androidx_virtual_device_modules(gitlog: str, output_dir: str, version: str) -> None:
   mods_dir = os.path.join(output_dir, "kernel", "prebuilts", "common-modules",
                           "virtual-device")
   ver_mods_dir = os.path.join(mods_dir, version)
@@ -483,7 +494,7 @@ def update_androidx_virtual_device_modules(gitlog, output_dir, version):
   commit_prebuilts(arm64_mods_dir, gitlog)
   commit_prebuilts(x86_64_mods_dir, gitlog)
 
-def update_androidx_cf(gitlog, output_dir, version):
+def update_androidx_cf(gitlog: str, output_dir: str, version: str) -> None:
   i686_cf_dirname = version + "-i686"
   rockpi_cf_dirname = version + "-arm64-rockpi"
 
@@ -505,7 +516,7 @@ def update_androidx_cf(gitlog, output_dir, version):
   if os.path.exists(i686_cf_dir) or os.path.exists(rockpi_cf_dir):
     commit_prebuilts(cf_dir, gitlog)
 
-def update_androidx(output_dir, version, android_version):
+def update_androidx(output_dir: str, version: str, android_version: int) -> None:
   arm64_dir = os.path.join(output_dir, "kernel", "prebuilts", version, "arm64")
   x86_64_dir = os.path.join(output_dir, "kernel", "prebuilts", version,
                             "x86_64")
@@ -539,7 +550,7 @@ def update_androidx(output_dir, version, android_version):
   update_androidx_virtual_device_modules(gitlog, output_dir, version)
   update_androidx_cf(gitlog, output_dir, version)
 
-def update_android_mainline_riscv64(output_dir):
+def update_android_mainline_riscv64(output_dir: str) -> None:
   # Although we don't update the x86_64 kernel, we use it's path to compute the
   # binary kernel version, as the version parser only supports x86 images.
   x86_64_kernel = os.path.join(output_dir, "kernel", "prebuilts", "mainline",
@@ -560,7 +571,7 @@ def update_android_mainline_riscv64(output_dir):
 
   commit_prebuilts(cf_dir, gitlog)
 
-def update_android_mainline(output_dir):
+def update_android_mainline(output_dir: str) -> None:
   arm64_dir = os.path.join(output_dir, "kernel", "prebuilts", "mainline",
                            "arm64")
   arm64_kernel = os.path.join(arm64_dir, "kernel-mainline-allsyms")
@@ -582,7 +593,8 @@ def update_android_mainline(output_dir):
   gitlog = get_git_log(old_sha, new_sha)
   commit_prebuilts(arm64_dir, gitlog)
 
-def update_16k():
+def update_16k() -> None:
+  assert _args is not None
   url_base = BASE_URL.format(build_id=_args.build_id, target="kernel_aarch64")
   url = os.path.join(url_base, "BUILD_INFO")
   response = urllib.request.urlopen(url)
@@ -610,21 +622,23 @@ def update_16k():
   download_kernel_modules("kernel_virt_aarch64_16k", arm64_16k_mods_dir, fetch_initramfs=True)
   commit_prebuilts(arm64_16k_mods_dir, gitlog, "16KB page size kernel")
 
-def get_build_info(targets):
+def get_build_info(targets: list[str]) -> str:
+  assert _args is not None
   for target in targets:
+    url_base = BASE_URL.format(build_id=_args.build_id, target=target)
+    url = os.path.join(url_base, "BUILD_INFO")
+    response = urllib.request.urlopen(url)
+    data: str = response.read().decode("utf-8")
     try:
-      url_base = BASE_URL.format(build_id=_args.build_id, target=target)
-      url = os.path.join(url_base, "BUILD_INFO")
-      response = urllib.request.urlopen(url)
-      data = response.read().decode("utf-8")
       # Test if we can load an expected value in the response data.
       json.loads(data)["branch"]
-      return data
     except json.decoder.JSONDecodeError:
       pass
-  raise json.decoder.JSONDecodeError("URL data did not contain BUILD_INFO.")
+    else:
+      return data
+  raise ValueError("URL data did not contain BUILD_INFO.")
 
-def update_gki():
+def update_gki() -> None:
   # The 'kernel_riscv64' target is on a separate branch that does not include
   # 'kernel_aarch64' as a target. If we fail to download the build information
   # from 'kernel_aarch64', try again with 'kernel_riscv64' as a fallback.
@@ -648,7 +662,7 @@ def update_gki():
   else:
     update_androidx(output_dir, get_build_kernel_version(data), get_android_version(branch))
 
-def download_u_boot(target, output_dir):
+def download_u_boot(target: str, output_dir: str) -> None:
   if not os.path.isdir(output_dir):
     os.mkdir(output_dir)
 
@@ -664,23 +678,27 @@ def download_u_boot(target, output_dir):
   if target == "u-boot_rockpi4":
     files.append("idbloader.img")
 
+  assert _args is not None
   url_base = BASE_URL.format(build_id=_args.build_id, target=target)
   func = functools.partial(download, url_base, output_dir)
+  assert _pool is not None
   _pool.map(func, files)
 
-def download_u_boot_tools(target, output_dir):
+def download_u_boot_tools(target: str, output_dir: str) -> None:
   if not os.path.isdir(output_dir):
     os.mkdir(output_dir)
 
   files = ["mkenvimage", "mkimage"]
 
+  assert _args is not None
   url_base = BASE_URL.format(build_id=_args.build_id, target=target)
   func = functools.partial(download, url_base, output_dir)
+  assert _pool is not None
   _pool.map(func, files)
 
   subprocess.check_call(["chmod", "a+x"] + files, cwd=output_dir)
 
-def update_u_boot_mainline(output_dir):
+def update_u_boot_mainline(output_dir: str) -> None:
   cf_dir = os.path.join(output_dir, "device", "google", "cuttlefish_prebuilts")
   bootloader_dir = os.path.join(cf_dir, "bootloader")
 
@@ -736,7 +754,8 @@ def update_u_boot_mainline(output_dir):
   gitlog = get_git_log(old_sha, new_sha, get_u_boot_dir())
   commit_prebuilts(cf_dir, gitlog, "bootloader, u-boot tools")
 
-def update_u_boot():
+def update_u_boot() -> None:
+  assert _args is not None
   url_base = BASE_URL.format(build_id=_args.build_id, target="u-boot_crosvm_aarch64")
   url = os.path.join(url_base, "BUILD_INFO")
   response = urllib.request.urlopen(url)
@@ -751,7 +770,8 @@ def update_u_boot():
   else:
     print("Unknown u-boot branch %s for build" % branch)
 
-def update_microdroid_kernel():
+def update_microdroid_kernel() -> None:
+  assert _args is not None
   url_base = BASE_URL.format(build_id=_args.build_id, target="kernel_microdroid_aarch64")
   url = os.path.join(url_base, "BUILD_INFO")
   response = urllib.request.urlopen(url)
@@ -782,11 +802,12 @@ def update_microdroid_kernel():
   commit_prebuilts(base_dir, gitlog)
 
 
-def main():
+def main() -> None:
   global _pool
   _pool = multiprocessing.Pool(10)
 
   parse_args()
+  assert _args is not None
 
   if _args.update_gki:
     update_gki()
@@ -814,4 +835,4 @@ def main():
   download_files(url_base, files)
 
 if __name__ == "__main__":
-  sys.exit(main())
+  main()
