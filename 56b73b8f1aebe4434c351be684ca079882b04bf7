@@ -61,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b2e67db_e4410b57",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 3522211
+      },
+      "writtenOn": "2024-10-08T23:06:21Z",
+      "side": 1,
+      "message": "I\u0027ll do so, but out of curiosity is this prescribed by any style guide? I see both permitted in go/pystyle#none-type.",
+      "parentUuid": "2398531e_61a19657",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1105fed8_abbb0f7d",
         "filename": "gki/download_from_ci",
         "patchSetId": 2
@@ -72,6 +96,30 @@
       "writtenOn": "2024-10-08T22:49:43Z",
       "side": 1,
       "message": "no need for this indirection, directly return.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 17
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ef78d6_324abb35",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 3522211
+      },
+      "writtenOn": "2024-10-08T23:06:21Z",
+      "side": 1,
+      "message": "The reason I had done this is that `json.loads[...]` returns an ambiguous type, which causes `mypy --strict` to be unsure of the return value. If you know of a better way to work around this, or if you think that strict type-checking is not worth worrying about, I\u0027ll remove it.",
+      "parentUuid": "1105fed8_abbb0f7d",
       "range": {
         "startLine": 142,
         "startChar": 0,
@@ -107,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdd84f03_f14d31bb",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 3522211
+      },
+      "writtenOn": "2024-10-08T23:06:21Z",
+      "side": 1,
+      "message": "This is a type assertion. `_pool` is an `Optional[multithreading.pool.Pool]`, so without this assertion the type checker complains that `NoneType` has no attribute `map`.\n\nI think the \"proper\" fix is to stop using globals so that `_pool` doesn\u0027t need to be Optional, but that\u0027s a bigger refactor.",
+      "parentUuid": "488f81cb_4321503c",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 26
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1c571c9_66264332",
         "filename": "gki/download_from_ci",
         "patchSetId": 2
@@ -130,6 +202,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7cc1f40e_9385e99d",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 3522211
+      },
+      "writtenOn": "2024-10-08T23:06:21Z",
+      "side": 1,
+      "message": "Similar to the `assert _pool is not None` changes, `_args` is an `optional[argparse.Namespace]`, so without this assertion the type checker will complain that `NoneType` doesn\u0027t have the attributes we check for.\n\nAs with `_pool`, I think the \"proper\" fix is to stop using globals and instead pass the params directly into the functions, but that\u0027s a bigger refactor and out-of-scope.",
+      "parentUuid": "f1c571c9_66264332",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 26
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "683691f9_883a2aa3",
         "filename": "gki/download_from_ci",
         "patchSetId": 2
@@ -141,6 +237,30 @@
       "writtenOn": "2024-10-08T22:49:43Z",
       "side": 1,
       "message": "this is not a type annotation and hence should not be part of this change.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 60
+      },
+      "revId": "56b73b8f1aebe4434c351be684ca079882b04bf7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f100a87b_827721dd",
+        "filename": "gki/download_from_ci",
+        "patchSetId": 2
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 3522211
+      },
+      "writtenOn": "2024-10-08T23:06:21Z",
+      "side": 1,
+      "message": "This is relevant because `json.JSONDecodeError` takes three required args, so the existing line was a type violation (and a syntax error). If this needs to be pulled out of this change for the sake of atomic CLs, then we should fix this before adding type hints.\n\nI lumped it in because it was relevant, but if you prefer truly atomic CLs then sure, I\u0027ll pull it out into two CLs.",
+      "parentUuid": "683691f9_883a2aa3",
       "range": {
         "startLine": 329,
         "startChar": 0,
