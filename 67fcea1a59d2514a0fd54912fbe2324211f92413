@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb63e82_c0fafc87",
+        "filename": "kleaf/impl/config_utils.bzl",
+        "patchSetId": 26
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-08T19:43:31Z",
+      "side": 1,
+      "message": "From the script below (L43) the result goes to `base_expr`.",
+      "range": {
+        "startLine": 25,
+        "startChar": 62,
+        "endLine": 25,
+        "endChar": 80
+      },
+      "revId": "67fcea1a59d2514a0fd54912fbe2324211f92413",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
