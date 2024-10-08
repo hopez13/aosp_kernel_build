@@ -39,6 +39,30 @@
       },
       "revId": "1d6a82e841cf4f98c7f315f927d91a349120deda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bf2429a_b80a9d06",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-08T23:01:29Z",
+      "side": 1,
+      "message": "Likely not; the reason is that `declared_arch` (from @platforms) uses riscv64, but Kbuild uses riscv.\n\nThey are 2 different substitutions though; the first one does the reverse of the other two. I could also do:\n\n```\n    return \"\"\"\n        if [[ -z \"${{ARCH}}\" ]]; then\n            export ARCH\u003d\"{inferred_var_value}\"\n        fi\n        if [[ \"${{ARCH}}\" !\u003d \"{inferred_var_value}\" ]]; then\n            echo \u0027{level}: {label} must specify arch \u003d \u0027\"${{ARCH/riscv/riscv64}}\"\u0027, but is {declared_arch}.\u0027 \u003e\u00262\n            {exit_cmd}\n        fi\n    \"\"\".format(\n        level \u003d level,\n        label \u003d ctx.label,\n        inferred_var_value \u003d \"riscv\" if declared_arch \u003d\u003d \"riscv64\" else declared_arch,\n        declared_arch \u003d declared_arch,\n        exit_cmd \u003d exit_cmd,\n    )\n```\n\n... but I don\u0027t think it adds any more clarity. The one in the error message needs to stay 😞",
+      "parentUuid": "7496fb6c_015509d6",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 49
+      },
+      "revId": "1d6a82e841cf4f98c7f315f927d91a349120deda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
