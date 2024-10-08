@@ -22,6 +22,30 @@
       },
       "revId": "2d97950f2f0ee0e32bba890eb1da7ea3cc22b7be",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cbaa294_65a82151",
+        "filename": "gki/what_commits_per_release",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1125653
+      },
+      "writtenOn": "2024-10-08T16:44:03Z",
+      "side": 1,
+      "message": "For the shortstat, a bit, still needs to be parsed, let me see if that makes this any simpler...   And we might run into command line lengths if we attempt to put all of the file names at once",
+      "parentUuid": "f3a0c2e6_ec34aff2",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 26
+      },
+      "revId": "2d97950f2f0ee0e32bba890eb1da7ea3cc22b7be",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
