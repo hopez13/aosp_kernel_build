@@ -27,6 +27,8 @@ fail_rule = rule(
     attrs = {
         "message": attr.string(doc = "fail message"),
     },
+    # Mark it as an executable so we can use fail_rule() to replace executables as well.
+    executable = True,
 )
 
 def _fail_action_impl(ctx):
