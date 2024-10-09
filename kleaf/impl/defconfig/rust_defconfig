@@ -3,3 +3,5 @@
 # support for Rust and Rust drivers being tested.
 
 CONFIG_RUST=y
+CONFIG_ASHMEM_RUST=y
+# CONFIG_ASHMEM is not set
