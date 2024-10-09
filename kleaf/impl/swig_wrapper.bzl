@@ -32,7 +32,7 @@ def _swig_wrapper_impl(ctx):
 # We don't use any tools in this script. Prevent using host tools.
 PATH=
 
-if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ]; then
+if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ] || [ "${{BAZEL_TEST}}" = "1" ]; then
     export RUNFILES_DIR=${{RUNFILES_DIR:-${{0}}.runfiles}}
     SWIG_LIB="${{RUNFILES_DIR}}/{workspace_name}/{swig_lib_short}" exec "${{RUNFILES_DIR}}/{workspace_name}/{src_short}" $*
 else
