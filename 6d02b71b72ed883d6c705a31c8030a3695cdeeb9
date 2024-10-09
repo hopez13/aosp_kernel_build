@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8573e5dd_9647ca58",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T22:30:37Z",
+      "side": 1,
+      "message": "nit: For module with submodules, is `ddk_marker.c` always placed at the root (i.e. this is always `output_makefiles/\"ddk_marker.c\"`)?\n\nIf so, a more precise check might be `file_rel \u003d\u003d pathlib.Path(\"ddk_marker.c\")` to convey that this should only match `output_makefiles/\"Kbuild\"`, but not Kbuild in subdirectories. (But don\u0027t you need a `ddk_marker.c` for each `.ko` file?)\n\nIf not, then I think you need to keep a `set[Path]` of `ddk_marker.c` (instead of a single `list[bool]` with one item), if there is a `ddk_marker.c` in different sub directories\n\n---\n\nThat is, consider this:\n\n```\nddk_module(dep \u003d \u003csubmodules below\u003e)\nddk_submodule(\n    name \u003d \"foo1\",\n    out \u003d \"foo/mod1.ko\",\n    ...\n)\nddk_submodule(\n    name \u003d \"foo2\",\n    out \u003d \"foo/mod2.ko\",\n    ...\n)\nddk_submodule(\n    name \u003d \"bar\",\n    out \u003d \"bar/mod2.ko\",\n    ...\n)\n```\n\nThen, is the following true?\n\n```\n# foo/Kbuild\nobj-mod1 +\u003d ddk_marker.o\nobj-mod2 +\u003d ddk_marker.o\n\n# bar/Kbuild\nobj-mod3 +\u003d ddk_markder.o\n```\n\n... and there are also `foo/ddk_marker.c` and `bar/ddk_marker.c` generated.\n\nThen since there are two `ddk_marker.c` files, a single boolean isn\u0027t enough to indicate the states.",
+      "range": {
+        "startLine": 121,
+        "startChar": 41,
+        "endLine": 121,
+        "endChar": 53
+      },
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29baf7f2_8e75104f",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T22:30:37Z",
+      "side": 1,
+      "message": "I am not sure if this is a good style/practice to use out parameters, since Python already supports returning tuples.\n\nPerhaps let _merge_directories return a boolean or whatever states you need to persist instead",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 44
+      },
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eead2ea_96523584",
+        "filename": "kleaf/tests/built_with_ddk_test/ddk_made_test.bzl",
+        "patchSetId": 8
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T22:30:37Z",
+      "side": 1,
+      "message": "left over?",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ccbf14e_2519c6e2",
+        "filename": "kleaf/tests/built_with_ddk_test/dep.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T22:30:37Z",
+      "side": 1,
+      "message": "new line",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f8d935c_5ed133a6",
+        "filename": "kleaf/tests/built_with_ddk_test/subdir/dep.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T22:30:37Z",
+      "side": 1,
+      "message": "same",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f853cc77_f8d63485",
+        "filename": "kleaf/tests/built_with_ddk_test/subdir/lic.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T22:30:37Z",
+      "side": 1,
+      "message": "same",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
