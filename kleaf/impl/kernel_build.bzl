@@ -1558,12 +1558,14 @@ def _build_main_action(
                {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} dtbs
            fi
            make_subgoals=$(echo "{make_goals}" | sed "s:\\<dtbs\\>::" || true)
-           if grep -q -E -e "[.]ko\\b" <<< "${{make_subgoals}}" ; then
-               # TODO(b/359681021) Follow up with the upstream maintainer to
-               # see what needs to be done to drop KBUILD_MODPOST_WARN=1.
-               {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} KBUILD_MODPOST_WARN=1 ${{make_subgoals}}
-           else
-               {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{make_subgoals}}
+           if [[ -n "${{make_subgoals}}" ]]; then
+               if grep -q -E -e "[.]ko\\b" <<< "${{make_subgoals}}" ; then
+                   # TODO(b/359681021) Follow up with the upstream maintainer to
+                   # see what needs to be done to drop KBUILD_MODPOST_WARN=1.
+                   {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} KBUILD_MODPOST_WARN=1 ${{make_subgoals}}
+               else
+                   {interceptor_command_prefix} make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} ${{make_subgoals}}
+               fi
            fi
          # Install modules
            {modinst_cmd}
