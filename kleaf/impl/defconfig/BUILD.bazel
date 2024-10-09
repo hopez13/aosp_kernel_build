@@ -71,6 +71,15 @@ filegroup(
 )
 
 filegroup(
+    name = "rust_ashmem",
+    srcs = select({
+        "//build/kernel/kleaf:ashmem_is_rust": ["rust_ashmem_defconfig"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "zstd_dwarf_compression",
     srcs = select({
         "//build/kernel/kleaf:zstd_dwarf_compression_is_disabled": ["zstd_dwarf_compression_disabled_defconfig"],

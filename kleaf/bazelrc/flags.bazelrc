@@ -59,6 +59,8 @@ build --flag_alias=defconfig_fragment=//build/kernel/kleaf:defconfig_fragment
 build --flag_alias=page_size=//build/kernel/kleaf:page_size
 build --flag_alias=rust=//build/kernel/kleaf:rust
 build --flag_alias=norust=no//build/kernel/kleaf:rust
+build --flag_alias=rust_ashmem=//build/kernel/kleaf:rust_ashmem
+build --flag_alias=norust_ashmem=no//build/kernel/kleaf:rust_ashmem
 build --flag_alias=nozstd_dwarf_compression=no//build/kernel/kleaf:zstd_dwarf_compression
 build --flag_alias=kconfig_werror=//build/kernel/kleaf:kconfig_werror
 build --flag_alias=nokconfig_werror=no//build/kernel/kleaf:kconfig_werror
