@@ -32,7 +32,7 @@ def _bison_wrapper_impl(ctx):
 # We don't use any tools in this script. Prevent using host tools.
 PATH=
 
-if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ]; then
+if [ -n "${{BUILD_WORKSPACE_DIRECTORY}}" ] || [ "${{BAZEL_TEST}}" == "1" ]; then
     export RUNFILES_DIR=${{RUNFILES_DIR:-${{0}}.runfiles}}
     ACTUAL=${{RUNFILES_DIR}}/{workspace_name}/{actual_short}
     export BISON_PKGDATADIR=${{RUNFILES_DIR}}/{workspace_name}/{pkgdata_dir_short}
@@ -45,7 +45,7 @@ else
 fi
 
 if [ ! -x "${{M4}}" ]; then
-    echo "ERROR: m4 is not found!" >&2
+    echo "ERROR: m4 is not found at ${{M4}}" >&2
     exit 1
 fi
 
