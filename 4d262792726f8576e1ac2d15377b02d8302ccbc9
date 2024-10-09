@@ -34,6 +34,24 @@
       "parentUuid": "405ffcbc_0e2e30cb",
       "revId": "4d262792726f8576e1ac2d15377b02d8302ccbc9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55b1b431_7105fad8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-09T12:59:21Z",
+      "side": 1,
+      "message": "I would rather go with very explicit. `--rust-only` does not really speak what it does.\n\nI suppose `--rust` (default off) and `--rust-ashmem` (default off) can be two opt-ins right now.\n\nThen you can transition to `--rust` (default on) and then to to `--rust` implying `--rust-ashmem` (with still keeping the opt-outs)\n\nLastly you can drop all the flags one by one.\n\nHave a look at how we approach the musl transition in stages: \nhttps://docs.partner.android.com/partners/guides/gki/whatsnew#2024-august-29",
+      "parentUuid": "6f465c8c_9f861588",
+      "revId": "4d262792726f8576e1ac2d15377b02d8302ccbc9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
