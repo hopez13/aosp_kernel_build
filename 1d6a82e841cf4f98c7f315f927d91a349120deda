@@ -63,6 +63,30 @@
       },
       "revId": "1d6a82e841cf4f98c7f315f927d91a349120deda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45f97309_d41f003c",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-09T09:47:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5bf2429a_b80a9d06",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 49
+      },
+      "revId": "1d6a82e841cf4f98c7f315f927d91a349120deda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
