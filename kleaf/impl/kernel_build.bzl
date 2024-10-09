@@ -845,6 +845,7 @@ def _get_post_defconfig_fragments(
         Label("//build/kernel/kleaf/impl/defconfig:debug"),
         Label("//build/kernel/kleaf/impl/defconfig:gcov"),
         Label("//build/kernel/kleaf/impl/defconfig:rust"),
+        Label("//build/kernel/kleaf/impl/defconfig:rust_ashmem"),
         Label("//build/kernel/kleaf/impl/defconfig:zstd_dwarf_compression"),
     ]
 
