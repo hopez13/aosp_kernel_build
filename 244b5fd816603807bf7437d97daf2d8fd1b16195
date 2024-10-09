@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e33750f0_f99996d8",
+        "filename": "kleaf/impl/defconfig/rust_ashmem_defconfig",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2024-10-09T13:59:27Z",
+      "side": 1,
+      "message": "Hmm. Is this wrong? We don\u0027t want `--rust --norust_ashmem` to disable CONFIG_RUST. Can I make `--rust_ashmem` imply `--rust` somehow?",
+      "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
