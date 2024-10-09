@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efba01a1_9f9ebec1",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T23:26:35Z",
+      "side": 1,
+      "message": "nit: Would this `make` anything if `make_goals` itself is empty in the first place (though this doesn\u0027t happen in practice)?\n\nThat is, I think might be `[[ -n \"${{make_subgoals}}\" ]] || [[ -z \"${{make_goals}}\" ]]` with a comment explaining why `-z \"${{make_goals}}\"` is added",
+      "revId": "7c95a9c871bbe065f073b00be59b8350ac08aa08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
