@@ -34,6 +34,24 @@
       "parentUuid": "efba01a1_9f9ebec1",
       "revId": "7c95a9c871bbe065f073b00be59b8350ac08aa08",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e55fac47_ccfb6d4c",
+        "filename": "kleaf/impl/kernel_build.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-09T23:36:23Z",
+      "side": 1,
+      "message": "I think that matches a common expectation that if make_goals is empty, it is equivalent to not providing any GNUMake targets to `make`.\n\nIn other words, before this change, if `make_goals` is empty, then the behavior is to build the default targets (a bare `make`). I think we should keep this behavior.",
+      "parentUuid": "bb4dfc21_83b89bd9",
+      "revId": "7c95a9c871bbe065f073b00be59b8350ac08aa08",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
