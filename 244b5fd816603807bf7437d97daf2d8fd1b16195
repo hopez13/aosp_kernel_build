@@ -34,6 +34,24 @@
       "parentUuid": "e33750f0_f99996d8",
       "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc3e407_e61928cf",
+        "filename": "kleaf/impl/defconfig/rust_ashmem_defconfig",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2024-10-10T08:46:30Z",
+      "side": 1,
+      "message": "I added the duplicate `CONFIG_RUST\u003dy` so that `--rust_ashmem` works on its own. Can we remove it and then make `--rust_ashmem` imply `--rust`? I don\u0027t know kleaf well enough to know whether it\u0027s possible...\n\nI think I don\u0027t need a defconfig for the no case due to `kleaf/bazelrc/flags.bazelrc`, but I\u0027m not sure?",
+      "parentUuid": "1eda7d6d_470aadf1",
+      "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
