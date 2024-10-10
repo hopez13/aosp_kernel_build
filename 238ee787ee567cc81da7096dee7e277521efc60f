@@ -22,6 +22,30 @@
       },
       "revId": "238ee787ee567cc81da7096dee7e277521efc60f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3835943a_604dcd45",
+        "filename": "kleaf/impl/bison_wrapper.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-10T18:02:05Z",
+      "side": 1,
+      "message": "double brackets are not part of POSIX so we should avoid them in /bin/sh. On our machines it is fine to use [[, but we can\u0027t guarantee this on everyone\u0027s machines.",
+      "parentUuid": "5a7e87bb_2e4a98a0",
+      "range": {
+        "startLine": 35,
+        "startChar": 43,
+        "endLine": 35,
+        "endChar": 67
+      },
+      "revId": "238ee787ee567cc81da7096dee7e277521efc60f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
