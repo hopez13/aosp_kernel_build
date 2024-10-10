@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3872221_4c4988f0",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-10T20:55:34Z",
+      "side": 1,
+      "message": "Done. Thank you for catching the additional cases.",
+      "parentUuid": "8573e5dd_9647ca58",
+      "range": {
+        "startLine": 121,
+        "startChar": 41,
+        "endLine": 121,
+        "endChar": 53
+      },
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29baf7f2_8e75104f",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-09T22:30:37Z",
       "side": 1,
       "message": "I am not sure if this is a good style/practice to use out parameters, since Python already supports returning tuples.\n\nPerhaps let _merge_directories return a boolean or whatever states you need to persist instead",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 44
+      },
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a91b39e_208e2dfd",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-10T20:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29baf7f2_8e75104f",
       "range": {
         "startLine": 178,
         "startChar": 4,
@@ -64,6 +112,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81dcdf14_71fbbcc1",
+        "filename": "kleaf/tests/built_with_ddk_test/ddk_made_test.bzl",
+        "patchSetId": 8
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-10T20:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4eead2ea_96523584",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ccbf14e_2519c6e2",
@@ -77,6 +143,24 @@
       "writtenOn": "2024-10-09T22:30:37Z",
       "side": 1,
       "message": "new line",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2797ded_fbd39f11",
+        "filename": "kleaf/tests/built_with_ddk_test/dep.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-10T20:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ccbf14e_2519c6e2",
       "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -98,6 +182,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e1351a6_12d2775a",
+        "filename": "kleaf/tests/built_with_ddk_test/subdir/dep.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-10T20:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f8d935c_5ed133a6",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f853cc77_f8d63485",
@@ -111,6 +213,24 @@
       "writtenOn": "2024-10-09T22:30:37Z",
       "side": 1,
       "message": "same",
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95ca3685_b664713a",
+        "filename": "kleaf/tests/built_with_ddk_test/subdir/lic.c",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-10T20:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f853cc77_f8d63485",
       "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
