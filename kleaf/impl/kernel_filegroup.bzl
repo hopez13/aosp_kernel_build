@@ -15,6 +15,7 @@
 """A target that mimics [`kernel_build`](#kernel_build) from a list of prebuilt files."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:shell.bzl", "shell")
 load(
     ":common_providers.bzl",
     "GcovInfo",
@@ -110,9 +111,11 @@ def _get_config_env(ctx):
     env_setup_command = """
         KLEAF_REPO_WORKSPACE_ROOT={kleaf_repo_workspace_root}
         KLEAF_HERMETIC_BASE={hermetic_base}
+        KLEAF_SET_UP_KERNEL_TOOLCHAINS_CMD={quoted_toolchains_setup_env_var_cmd}
     """.format(
         kleaf_repo_workspace_root = Label(":kernel_filegroup.bzl").workspace_root,
         hermetic_base = hermetic_tools.internal_hermetic_base,
+        quoted_toolchains_setup_env_var_cmd = shell.quote(toolchains.kernel_setup_env_var_cmd),
     )
     env_setup_command += get_env_info_setup_command(
         hermetic_tools_setup = hermetic_tools.setup,

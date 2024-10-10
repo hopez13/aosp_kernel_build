@@ -245,8 +245,6 @@ def _kernel_env_impl(ctx):
           {set_localversion_cmd}
           source {setup_env}
           {check_arch_cmd}
-        # Variables from resolved toolchain
-          {toolchains_setup_env_var_cmd}
         # TODO(b/236012223) Remove the warning after deprecation.
           {make_goals_deprecation_warning}
         # Enforce check configs.
@@ -292,7 +290,6 @@ def _kernel_env_impl(ctx):
         set_localversion_cmd = stamp.set_localversion_cmd(ctx),
         setup_env = setup_env.path,
         check_arch_cmd = _get_check_arch_cmd(ctx),
-        toolchains_setup_env_var_cmd = toolchains.kernel_setup_env_var_cmd,
         make_goals_deprecation_warning = make_goals_deprecation_warning,
         kconfig_werror_setup = kconfig_werror_setup,
         out = out_file.path,
@@ -386,6 +383,7 @@ def get_env_info_setup_command(hermetic_tools_setup, build_utils_sh, env_setup_s
 
 def _get_env_setup_cmds(ctx):
     hermetic_tools = hermetic_toolchain.get(ctx)
+    toolchains = kernel_toolchains_utils.get(ctx)
 
     pre_env = ""
     if ctx.attr._debug_annotate_scripts[BuildSettingInfo].value:
@@ -426,6 +424,12 @@ def _get_env_setup_cmds(ctx):
     )
 
     post_env = """
+        if [[ -n "${{KLEAF_SET_UP_KERNEL_TOOLCHAINS_CMD}}" ]]; then
+            eval "${{KLEAF_SET_UP_KERNEL_TOOLCHAINS_CMD}}"
+        else
+            {toolchains_setup_env_var_cmd}
+        fi
+
         # Increase parallelism # TODO(b/192655643): do not use -j anymore
         export MAKEFLAGS="${{MAKEFLAGS}} -j$(
             make_jobs="$({get_make_jobs_cmd})"
@@ -481,6 +485,7 @@ def _get_env_setup_cmds(ctx):
         LIBCLANG_PATH=$(dirname $(which clang))/../lib
         export LIBCLANG_PATH
     """.format(
+        toolchains_setup_env_var_cmd = toolchains.kernel_setup_env_var_cmd,
         get_make_jobs_cmd = status.get_volatile_status_cmd(ctx, "MAKE_JOBS"),
         get_make_keep_going_cmd = status.get_volatile_status_cmd(ctx, "MAKE_KEEP_GOING"),
         kleaf_repo_workspace_root_slash = kleaf_repo_workspace_root_slash,
