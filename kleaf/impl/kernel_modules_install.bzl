@@ -252,7 +252,8 @@ kernel_modules_install = rule(
     implementation = _kernel_modules_install_impl,
     doc = """Generates a rule that runs depmod in the module installation directory.
 
-When including this rule to the `data` attribute of a `copy_to_dist_dir` rule,
+When including this rule to the `srcs` attribute of a `pkg_files` rule that is
+included in a `pkg_install` rule,
 all external kernel modules specified in `kernel_modules` are included in
 distribution.  This excludes `module_outs` in `kernel_build` to avoid conflicts.
 
@@ -269,12 +270,16 @@ kernel_build(
     outs = ["vmlinux"],
     module_outs = ["core_module.ko"],
 )
-copy_to_dist_dir(
-    name = "foo_dist",
-    data = [
+pkg_files(
+    name = "foo_dist_files",
+    srcs = [
         ":foo",                      # Includes core_module.ko and vmlinux
         ":foo_modules_install",      # Includes nfc_module
     ],
+)
+pkg_install(
+    name = "foo_dist",
+    srcs = [":foo_dist_files"],
 )
 ```
 In `foo_dist`, specifying `foo_modules_install` in `data` won't include

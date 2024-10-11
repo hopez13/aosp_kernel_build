@@ -114,7 +114,8 @@ super_image = rule(
 
 Optionally takes in a "system_dlkm" and "vendor_dlkm".
 
-When included in a `copy_to_dist_dir` rule, this rule copies a `super.img` to `DIST_DIR`.
+When included in a `pkg_files` target included by `pkg_install`, this rule copies `super.img` to
+`destdir`.
 """,
     attrs = {
         "system_dlkm_image": attr.label(
