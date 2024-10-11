@@ -17,6 +17,8 @@
 #
 # To bazel:
 #    --config=silent (See silent.bazelrc)
+# To pkg_install:
+#    -q
 # To copy_to_dist_dir:
 #    --log=warning
 #
