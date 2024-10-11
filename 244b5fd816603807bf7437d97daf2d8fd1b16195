@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc002c06_000f079a",
+        "filename": "kleaf/BUILD.bazel",
+        "patchSetId": 4
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-11T19:52:40Z",
+      "side": 1,
+      "message": "Here, instead of a single config_setting, use `selects.config_setting_group` so that, if either --rust or --rust_ashmem is set, then `rust_is_enabled` is a True value. You\u0027ll need a helper config_setting that is probably like:\n\n```\nconfig_setting(\n    name \u003d \"rust_is_set_to_enabled\",\n    flag_values \u003d {\":rust\": \"1\"},\n    visibility \u003d [\"//build/kernel/kleaf/impl/defconfig:__subpackages__\"],\n)\n```\n\nConsider moving it into kleaf/impl/BUILD.bazel just like the LTO ones.\n\nYou can refer to how LTO is handled for an example. See `lto_is_default` target in this file.",
+      "range": {
+        "startLine": 589,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 0
+      },
+      "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e33750f0_f99996d8",
         "filename": "kleaf/impl/defconfig/rust_ashmem_defconfig",
         "patchSetId": 4
@@ -50,6 +73,24 @@
       "side": 1,
       "message": "I added the duplicate `CONFIG_RUST\u003dy` so that `--rust_ashmem` works on its own. Can we remove it and then make `--rust_ashmem` imply `--rust`? I don\u0027t know kleaf well enough to know whether it\u0027s possible...\n\nI think I don\u0027t need a defconfig for the no case due to `kleaf/bazelrc/flags.bazelrc`, but I\u0027m not sure?",
       "parentUuid": "1eda7d6d_470aadf1",
+      "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6081fe0b_7deeba58",
+        "filename": "kleaf/impl/defconfig/rust_ashmem_defconfig",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-11T19:52:40Z",
+      "side": 1,
+      "message": "I think what you are doing is correct. When one specifies `--rust --norust_ashmem`:\n\n```\nfilegroup(\n    name \u003d \"rust_ashmem\",\n    srcs \u003d select({\n        \"//build/kernel/kleaf:ashmem_is_rust\": [\"rust_ashmem_defconfig\"],\n        \"//conditions:default\": [],\n    }),\n    visibility \u003d [\"//visibility:public\"],\n)\n```\n\nThis filegroup falls back to the \"//conditions:default\" case, which applies no config. Combined with gki_defconfig and `rust_defconfig`, the result would be\n\n```\nCONFIG_RUST\u003dy                   # From --rust\n# CONFIG_ASHMEM_RUST is not set # From gki_defconfig\nCONFIG_ASHMEM\u003dy                 # From gki_defconfig\n```\n\n----\n\nAlternatively, I agree that having --rust_ashmem to imply --rust is a cleaner approach from Kleaf\u0027s perspective (though violating the KISS principle). What you can do is (see other comment)",
+      "parentUuid": "2dc3e407_e61928cf",
       "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
