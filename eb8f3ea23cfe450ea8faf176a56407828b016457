@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0b835d3_3b96f1bc",
+        "filename": "kleaf/tests/built_with_ddk_test/ddk_made_test.bzl",
+        "patchSetId": 9
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-11T19:43:18Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "eb8f3ea23cfe450ea8faf176a56407828b016457",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
