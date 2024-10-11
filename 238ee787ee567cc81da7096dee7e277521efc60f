@@ -46,6 +46,30 @@
       },
       "revId": "238ee787ee567cc81da7096dee7e277521efc60f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36b865ea_c7e9b905",
+        "filename": "kleaf/impl/bison_wrapper.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-11T14:21:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3835943a_604dcd45",
+      "range": {
+        "startLine": 35,
+        "startChar": 43,
+        "endLine": 35,
+        "endChar": 67
+      },
+      "revId": "238ee787ee567cc81da7096dee7e277521efc60f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
