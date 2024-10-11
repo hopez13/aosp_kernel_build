@@ -83,6 +83,7 @@ KernelPlatformToolchainInfo = provider(
         "ldexpr": "Extra shell expression appended to ldflags",
         "bin_path": "`PATH` relative to execroot.",
         "runpaths": "RUNPATHs. Note this is already in ldexpr.",
+        "sysroot": "sysroot",
     },
 )
 
@@ -102,6 +103,7 @@ KernelEnvToolchainsInfo = provider(
         "setup_env_var_cmd": "A command to set up simple environment variables",
         "kernel_setup_env_var_cmd": "A command to set up environment variables for kernel build",
         "host_runpaths": "RUNPATHs for host progs.",
+        "host_sysroot": "sysroot for host progs",
     },
 )
 
