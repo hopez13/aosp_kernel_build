@@ -27,35 +27,57 @@ load(":utils.bzl", "kernel_utils")
 
 visibility("//build/kernel/kleaf/...")
 
-def _modules_prepare_impl(ctx):
+def _modules_prepare_subrule_impl(
+        subrule_ctx,
+        *,
+        srcs,
+        outdir_tar_gz,
+        kernel_serialized_env_info,
+        force_generate_headers,
+        execution_requirements,
+        setup_script_name,
+        cache_dir_step,
+        progress_message_note):
+    """Common implementation to prepare for module build.
+
+    Args:
+        subrule_ctx: subrule_ctx
+        srcs: depset of sources
+        outdir_tar_gz: declared output file
+        kernel_serialized_env_info: KernelSerializedEnvInfo that has kernel properly configured
+            (make defconfig is executed)
+        force_generate_headers: If True it forces generation of additional headers after make modules_prepare
+        execution_requirements: arg to run_shell
+        setup_script_name: Name of setup script to declare.
+        cache_dir_step: See cache_dir.get_step, or a stub step if caching is not needed.
+        progress_message_note: suffix to be added to progress_message.
+
+    Returns:
+        dict of infos. Keys are info type names, values are infos.
+    """
     inputs = []
     tools = []
     transitive_tools = []
     transitive_inputs = []
 
-    transitive_inputs += [target.files for target in ctx.attr.srcs]
+    transitive_inputs.append(srcs)
 
-    outputs = [ctx.outputs.outdir_tar_gz]
+    outputs = [outdir_tar_gz]
 
-    transitive_tools.append(ctx.attr.config[KernelSerializedEnvInfo].tools)
-    transitive_inputs.append(ctx.attr.config[KernelSerializedEnvInfo].inputs)
+    transitive_tools.append(kernel_serialized_env_info.tools)
+    transitive_inputs.append(kernel_serialized_env_info.inputs)
 
-    cache_dir_step = cache_dir.get_step(
-        ctx = ctx,
-        common_config_tags = ctx.attr.config[KernelEnvAttrInfo].common_config_tags,
-        symlink_name = "modules_prepare",
-    )
     inputs += cache_dir_step.inputs
     outputs += cache_dir_step.outputs
     tools += cache_dir_step.tools
 
     command = kernel_utils.setup_serialized_env_cmd(
-        serialized_env_info = ctx.attr.config[KernelSerializedEnvInfo],
+        serialized_env_info = kernel_serialized_env_info,
         restore_out_dir_cmd = cache_dir_step.cmd,
     )
 
     force_gen_headers_cmd = ""
-    if ctx.attr.force_generate_headers:
+    if force_generate_headers:
         force_gen_headers_cmd += """
         # Workaround to force the creation of these missing files.
            mkdir -p ${OUT_DIR}/security/selinux/
@@ -75,46 +97,69 @@ def _modules_prepare_impl(ctx):
            {cache_dir_post_cmd}
     """.format(
         force_gen_headers_cmd = force_gen_headers_cmd,
-        outdir_tar_gz = ctx.outputs.outdir_tar_gz.path,
+        outdir_tar_gz = outdir_tar_gz.path,
         cache_dir_post_cmd = cache_dir_step.post_cmd,
     )
 
-    debug.print_scripts(ctx, command)
-    ctx.actions.run_shell(
+    debug.print_scripts_subrule(command)
+    subrule_ctx.actions.run_shell(
         mnemonic = "ModulesPrepare",
         inputs = depset(inputs, transitive = transitive_inputs),
         outputs = outputs,
         tools = depset(tools, transitive = transitive_tools),
         progress_message = "Preparing for module build{} %{{label}}".format(
-            ctx.attr.config[KernelEnvAttrInfo].progress_message_note,
+            progress_message_note,
         ),
         command = command,
-        execution_requirements = kernel_utils.local_exec_requirements(ctx),
+        execution_requirements = execution_requirements,
     )
 
     setup_script_cmd = modules_prepare_setup_command(
-        config_setup_script = ctx.attr.config[KernelSerializedEnvInfo].setup_script,
-        modules_prepare_outdir_tar_gz = ctx.outputs.outdir_tar_gz,
+        config_setup_script = kernel_serialized_env_info.setup_script,
+        modules_prepare_outdir_tar_gz = outdir_tar_gz,
     )
 
     # <kernel_build>_modules_prepare_setup.sh
-    setup_script = ctx.actions.declare_file("{name}/{name}_setup.sh".format(name = ctx.attr.name))
-    ctx.actions.write(
+    setup_script = subrule_ctx.actions.declare_file(setup_script_name)
+    subrule_ctx.actions.write(
         output = setup_script,
         content = setup_script_cmd,
     )
 
-    return [
-        KernelSerializedEnvInfo(
+    return {
+        "KernelSerializedEnvInfo": KernelSerializedEnvInfo(
             setup_script = setup_script,
             inputs = depset(
-                [ctx.outputs.outdir_tar_gz, setup_script],
-                transitive = [ctx.attr.config[KernelSerializedEnvInfo].inputs],
+                [outdir_tar_gz, setup_script],
+                transitive = [kernel_serialized_env_info.inputs],
             ),
-            tools = ctx.attr.config[KernelSerializedEnvInfo].tools,
+            tools = kernel_serialized_env_info.tools,
         ),
-        DefaultInfo(files = depset([ctx.outputs.outdir_tar_gz, setup_script])),
-    ]
+        "DefaultInfo": DefaultInfo(files = depset([outdir_tar_gz, setup_script])),
+    }
+
+modules_prepare_subrule = subrule(
+    implementation = _modules_prepare_subrule_impl,
+    subrules = [debug.print_scripts_subrule],
+)
+
+def _modules_prepare_impl(ctx):
+    cache_dir_step = cache_dir.get_step(
+        ctx = ctx,
+        common_config_tags = ctx.attr.config[KernelEnvAttrInfo].common_config_tags,
+        symlink_name = "modules_prepare",
+    )
+
+    return modules_prepare_subrule(
+        srcs = depset(transitive = [target.files for target in ctx.attr.srcs]),
+        outdir_tar_gz = ctx.outputs.outdir_tar_gz,
+        kernel_serialized_env_info = ctx.attr.config[KernelSerializedEnvInfo],
+        force_generate_headers = ctx.attr.force_generate_headers,
+        setup_script_name = "{name}/{name}_setup.sh".format(name = ctx.label.name),
+        execution_requirements = kernel_utils.local_exec_requirements(ctx),
+        cache_dir_step = cache_dir_step,
+        progress_message_note = ctx.attr.config[KernelEnvAttrInfo].progress_message_note,
+    ).values()
 
 def modules_prepare_setup_command(
         config_setup_script,
@@ -183,4 +228,7 @@ modules_prepare = rule(
         ),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
     } | _modules_prepare_additional_attrs(),
+    subrules = [
+        modules_prepare_subrule,
+    ],
 )
