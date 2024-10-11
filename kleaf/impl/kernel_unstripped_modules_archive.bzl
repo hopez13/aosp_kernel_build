@@ -78,11 +78,7 @@ def _kernel_unstripped_modules_archive_impl(ctx):
 
 kernel_unstripped_modules_archive = rule(
     implementation = _kernel_unstripped_modules_archive_impl,
-    doc = """Compress the unstripped modules into a tarball.
-
-Add this target to a `copy_to_dist_dir` rule to copy it to the distribution
-directory, or `DIST_DIR`.
-""",
+    doc = """Compress the unstripped modules into a tarball.""",
     attrs = {
         "kernel_build": attr.label(
             doc = """A [`kernel_build`](#kernel_build) to retrieve unstripped in-tree modules from.

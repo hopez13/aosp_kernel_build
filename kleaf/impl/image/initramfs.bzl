@@ -201,7 +201,9 @@ initramfs = rule(
     implementation = _initramfs_impl,
     doc = """Build initramfs.
 
-When included in a `copy_to_dist_dir` rule, this rule copies the following to `DIST_DIR`:
+When included in a `pkg_files` target included by `pkg_install`, this rule copies the following to
+`destdir`:
+
 - `initramfs.img`
 - `modules.load`
 - `modules.load.recovery`
@@ -209,9 +211,6 @@ When included in a `copy_to_dist_dir` rule, this rule copies the following to `D
 - `vendor_boot.modules.load`
 - `vendor_boot.modules.load.recovery`
 - `vendor_boot.modules.load.charger`
-
-An additional label, `{name}/vendor_boot.modules.load`, is declared to point to the
-corresponding files.
 """,
     attrs = {
         "kernel_modules_install": attr.label(

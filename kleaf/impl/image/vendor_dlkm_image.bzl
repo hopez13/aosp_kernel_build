@@ -228,7 +228,9 @@ vendor_dlkm_image = rule(
 
 Execute `build_vendor_dlkm` in `build_utils.sh`.
 
-When included in a `copy_to_dist_dir` rule, this rule copies the following to `DIST_DIR`:
+When included in a `pkg_files` target included by `pkg_install`, this rule copies the following to
+`destdir`:
+
 - `vendor_dlkm.img`
 - `vendor_dlkm_flatten.img` if build_vendor_dlkm_flatten is True
 """,

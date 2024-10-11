@@ -210,7 +210,9 @@ system_dlkm_image = rule(
     implementation = _system_dlkm_image_impl,
     doc = """Build system_dlkm partition image with signed GKI modules.
 
-When included in a `copy_to_dist_dir` rule, this rule copies the following to `DIST_DIR`:
+When included in a `pkg_files` target included by `pkg_install`, this rule copies the following to
+`destdir`:
+
 - `system_dlkm.[erofs|ext4].img` if `fs_types` is specified
 - `system_dlkm.flatten.[erofs|ext4].img` if `build_flatten` is True
 - `system_dlkm.modules.load`

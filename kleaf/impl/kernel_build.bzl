@@ -271,7 +271,8 @@ def kernel_build(
           that this `kernel_build` returns. For example:
           ```
           kernel_build(name = "kernel", module_outs = ["foo.ko"], ...)
-          copy_to_dist_dir(name = "kernel_dist", data = [":kernel"])
+          pkg_files(name = "kernel_files", srcs = ["kernel"], ...)
+          pkg_install(name = "kernel_dist", srcs = [":kernel_files"])
           ```
           `foo.ko` will be included in the distribution.
 
@@ -329,7 +330,8 @@ def kernel_build(
           that this `kernel_build` returns. For example:
           ```
           kernel_build(name = "kernel", outs = ["vmlinux"], ...)
-          copy_to_dist_dir(name = "kernel_dist", data = [":kernel"])
+          pkg_files(name = "kernel_files", srcs = ["kernel"], ...)
+          pkg_install(name = "kernel_dist", srcs = [":kernel_files"])
           ```
           `vmlinux` will be included in the distribution.
 
