@@ -16,6 +16,7 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:shell.bzl", "shell")
+load(":cache_dir.bzl", "cache_dir")
 load(
     ":common_providers.bzl",
     "GcovInfo",
@@ -31,11 +32,7 @@ load(
     "KernelToolchainInfo",
     "KernelUnstrippedModulesInfo",
 )
-load(
-    ":constants.bzl",
-    "MODULES_STAGING_ARCHIVE",
-    "UNSTRIPPED_MODULES_ARCHIVE",
-)
+load(":constants.bzl", "GKI_MODULES_PREPARE_FORCE_GENERATE_HEADERS", "MODULES_STAGING_ARCHIVE", "UNSTRIPPED_MODULES_ARCHIVE")
 load(":ddk/ddk_headers.bzl", "DdkHeadersInfo", "ddk_headers_common_impl")
 load(":debug.bzl", "debug")
 load(":hermetic_toolchain.bzl", "hermetic_toolchain")
@@ -44,7 +41,7 @@ load(":kernel_config.bzl", "get_config_setup_command")
 load(":kernel_config_settings.bzl", "kernel_config_settings")
 load(":kernel_env.bzl", "get_env_info_setup_command")
 load(":kernel_toolchains_utils.bzl", "kernel_toolchains_utils")
-load(":modules_prepare.bzl", "modules_prepare_setup_command")
+load(":modules_prepare.bzl", "modules_prepare_subrule")
 load(
     ":utils.bzl",
     "utils",
@@ -212,29 +209,19 @@ def _get_modules_prepare_env(ctx, ddk_config_env):
     if not ddk_config_env:
         return None
 
-    if not ctx.file.modules_prepare_archive:
-        return None
-
-    modules_prepare_setup = modules_prepare_setup_command(
-        config_setup_script = ddk_config_env.setup_script,
-        modules_prepare_outdir_tar_gz = ctx.file.modules_prepare_archive,
+    outdir_tar_gz = ctx.actions.declare_file("{}/modules_prepare_outdir.tar.gz".format(ctx.attr.name))
+    modules_prepare_infos = modules_prepare_subrule(
+        srcs = depset(),
+        outdir_tar_gz = outdir_tar_gz,
+        kernel_serialized_env_info = ddk_config_env,
+        setup_script_name = "{name}/{name}_modules_prepare_setup.sh".format(name = ctx.attr.name),
+        force_generate_headers = GKI_MODULES_PREPARE_FORCE_GENERATE_HEADERS,
+        # Don't respect --config=local for modules_prepare invoked by kernel_filegroup
+        execution_requirements = None,
+        cache_dir_step = cache_dir.no_cache_dir_step(),
+        progress_message_note = "",
     )
-
-    module_prepare_env_setup_script = ctx.actions.declare_file(
-        "{name}/{name}_modules_prepare_setup.sh".format(name = ctx.attr.name),
-    )
-    ctx.actions.write(
-        output = module_prepare_env_setup_script,
-        content = modules_prepare_setup,
-    )
-    return KernelSerializedEnvInfo(
-        setup_script = module_prepare_env_setup_script,
-        inputs = depset([
-            module_prepare_env_setup_script,
-            ctx.file.modules_prepare_archive,
-        ], transitive = [ddk_config_env.inputs]),
-        tools = ddk_config_env.tools,
-    )
+    return modules_prepare_infos["KernelSerializedEnvInfo"]
 
 def _expect_single_file(target, what):
     """Returns a single file from the given Target."""
@@ -591,4 +578,7 @@ default, which in turn sets `collect_unstripped_modules` to `True` by default.
         ),
     } | _kernel_filegroup_additional_attrs(),
     toolchains = [hermetic_toolchain.type],
+    subrules = [
+        modules_prepare_subrule,
+    ],
 )

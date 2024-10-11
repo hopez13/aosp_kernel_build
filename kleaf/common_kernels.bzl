@@ -22,6 +22,10 @@ load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load("//build/kernel/kleaf/artifact_tests:device_modules_test.bzl", "device_modules_test")
 load("//build/kernel/kleaf/artifact_tests:kernel_test.bzl", "initramfs_modules_options_test")
 load("//build/kernel/kleaf/impl:abi/kernel_abi_dist.bzl", "kernel_abi_wrapped_dist_internal")
+load(
+    "//build/kernel/kleaf/impl:constants.bzl",
+    "GKI_MODULES_PREPARE_FORCE_GENERATE_HEADERS",
+)
 load("//build/kernel/kleaf/impl:gki_artifacts.bzl", "gki_artifacts", "gki_artifacts_prebuilts")
 load("//build/kernel/kleaf/impl:image/initramfs.bzl", "initramfs")
 load("//build/kernel/kleaf/impl:image/kernel_images.bzl", "kernel_images_filegroup")
@@ -252,6 +256,7 @@ def common_kernel(
             Label("//build/kernel/kleaf/impl/defconfig:signing_modules_disabled"),
         ],
         ddk_module_headers = ddk_module_headers,
+        modules_prepare_force_generate_headers = GKI_MODULES_PREPARE_FORCE_GENERATE_HEADERS,
     )
 
     kernel_abi(
