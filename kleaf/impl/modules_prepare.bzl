@@ -119,7 +119,17 @@ def _modules_prepare_impl(ctx):
 def modules_prepare_setup_command(
         config_setup_script,
         modules_prepare_outdir_tar_gz):
-    return """
+    """Set up environment for building modules.
+
+    Args:
+        config_setup_script: The script to set up environment after configuration
+        modules_prepare_outdir_tar_gz: the tarball of $OUT_DIR after make modules_prepare
+
+    Returns:
+        the command to set up environment
+    """
+
+    cmd = """
         source {config_setup_script}
         # Restore modules_prepare outputs. Assumes env setup.
         [ -z ${{OUT_DIR}} ] && echo "ERROR: modules_prepare setup run without OUT_DIR set!" >&2 && exit 1
@@ -129,6 +139,24 @@ def modules_prepare_setup_command(
         config_setup_script = config_setup_script.path,
         modules_prepare_outdir_tar_gz = modules_prepare_outdir_tar_gz.path,
     )
+
+    # HACK: The binaries in $OUT_DIR (e.g. fixdep) are built with @kleaf being the root Bazel module.
+    # But this is not necessarily the case when the archive is used, especially when using @kleaf
+    # as a dependent Bazel module to build kernel drivers. In that case, symlink
+    # prebuilts/kernel-build-tools so libc_musl.so etc. can be found properly.
+    # FIXME: port this from kernel_platform_toolchain/kernel_toolchains
+    kleaf_repo_workspace_root = Label(":modules_prepare.bzl").workspace_root
+    if kleaf_repo_workspace_root:
+        cmd += """
+            if [[ ! -d "${{ROOT_DIR}}/prebuilts/kernel-build-tools" ]]; then
+                mkdir -p "${{ROOT_DIR}}/prebuilts"
+                ln -s $(realpath "${{ROOT_DIR}}/{kleaf_repo_workspace_root}/prebuilts/kernel-build-tools" --relative-to "${{ROOT_DIR}}/prebuilts") ${{ROOT_DIR}}/prebuilts/kernel-build-tools
+            fi
+        """.format(
+            kleaf_repo_workspace_root = kleaf_repo_workspace_root,
+        )
+
+    return cmd
 
 def _modules_prepare_additional_attrs():
     return dicts.add(
