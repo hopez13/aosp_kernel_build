@@ -249,6 +249,13 @@ def _get_implicit_outs(ctx):
     return list(implicit_outs_to_srcs.keys())
 
 def _kernel_module_impl(ctx):
+    if not ctx.attr.internal_ddk_makefiles_dir:
+        # buildifier: disable=print
+        print("""
+WARNING: {}: kernel_module() is deprecated. Use ddk_module() instead. Refer to GMS-VSR-3.4.2-008.
+    See build/kernel/kleaf/docs/ddk/main.md for using the DDK.
+""".format(ctx.label))
+
     split_deps = kernel_utils.split_kernel_module_deps(ctx.attr.deps, ctx.label)
     kernel_module_deps = split_deps.kernel_modules
     kernel_module_deps = [kernel_utils.create_kernel_module_dep_info(target) for target in kernel_module_deps]
