@@ -157,6 +157,15 @@ def _get_step(ctx, common_config_tags, symlink_name):
         post_cmd = post_cmd,
     )
 
+def _no_cache_dir_step():
+    return struct(
+        inputs = [],
+        tools = [],
+        cmd = "",
+        outputs = [],
+        post_cmd = "",
+    )
+
 def _attrs():
     return {
         "_config_is_local": attr.label(default = "//build/kernel/kleaf:config_local"),
@@ -173,5 +182,6 @@ def _attrs():
 
 cache_dir = struct(
     get_step = _get_step,
+    no_cache_dir_step = _no_cache_dir_step,
     attrs = _attrs,
 )
