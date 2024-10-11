@@ -130,6 +130,7 @@ def _kernel_platform_toolchain_impl(ctx):
         ldflags = link_command_line,
         ldexpr = ldexpr,
         bin_path = bin_path,
+        runpaths = [runpath.path for runpath in ctx.files.runpaths],
     )
 
 kernel_platform_toolchain = rule(
