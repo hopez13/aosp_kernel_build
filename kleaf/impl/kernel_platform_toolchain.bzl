@@ -131,6 +131,7 @@ def _kernel_platform_toolchain_impl(ctx):
         ldexpr = ldexpr,
         bin_path = bin_path,
         runpaths = [runpath.path for runpath in ctx.files.runpaths],
+        sysroot = cc_toolchain.sysroot,
     )
 
 kernel_platform_toolchain = rule(

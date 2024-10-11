@@ -44,6 +44,7 @@ load(":abi/base_kernel_utils.bzl", "base_kernel_utils")
 load(":abi/force_add_vmlinux_utils.bzl", "force_add_vmlinux_utils")
 load(":abi/trim_nonlisted_kmi_utils.bzl", "TRIM_NONLISTED_KMI_ATTR_NAME")
 load(":compile_commands_utils.bzl", "compile_commands_utils")
+load(":kernel_toolchains_utils.bzl", "kernel_toolchains_utils")
 load(":kgdb.bzl", "kgdb")
 
 visibility("//build/kernel/kleaf/...")
@@ -196,6 +197,10 @@ def _kernel_env_get_base_config_tags(ctx):
     for attr_name in raw_attrs:
         attr_val = getattr(ctx.attr, attr_name)
         ret[attr_name] = attr_val
+
+    toolchains = kernel_toolchains_utils.get(ctx)
+    ret["toolchain_host_sysroot"] = toolchains.host_sysroot
+
     return ret
 
 # Map of config settings to shortened names

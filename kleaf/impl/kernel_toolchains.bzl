@@ -208,6 +208,7 @@ def _kernel_toolchains_impl(ctx):
         kernel_setup_env_var_cmd = kernel_setup_env_var_cmd,
         compiler_version = actual_toolchain_version,
         host_runpaths = exec.runpaths,
+        host_sysroot = exec.sysroot,
     )
 
 kernel_toolchains = rule(
