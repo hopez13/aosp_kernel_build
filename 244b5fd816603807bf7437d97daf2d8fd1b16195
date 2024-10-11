@@ -93,6 +93,24 @@
       "parentUuid": "2dc3e407_e61928cf",
       "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4118220_bb528e2c",
+        "filename": "kleaf/impl/defconfig/rust_ashmem_defconfig",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-11T21:36:26Z",
+      "side": 1,
+      "message": "but of course, if you want to keep it simple, the current set up is good. +2\u0027ed",
+      "parentUuid": "6081fe0b_7deeba58",
+      "revId": "244b5fd816603807bf7437d97daf2d8fd1b16195",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
