@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5779e06_d92aea44",
+        "filename": "kleaf/impl/ddk/gen_makefiles.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-11T19:43:03Z",
+      "side": 1,
+      "message": "Since you are using an out parameter, maybe explain that `ddk_markers is modified` in _merge_directories\u0027s doc strings",
+      "parentUuid": "2a91b39e_208e2dfd",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 44
+      },
+      "revId": "6d02b71b72ed883d6c705a31c8030a3695cdeeb9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4eead2ea_96523584",
         "filename": "kleaf/tests/built_with_ddk_test/ddk_made_test.bzl",
         "patchSetId": 8
