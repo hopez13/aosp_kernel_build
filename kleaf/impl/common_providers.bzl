@@ -61,6 +61,7 @@ KernelEnvInfo = provider(
 For `kernel_env`, the script only provides a bare-minimum environment after `source build.config`,
 without actually modifying any variables suitable for a proper kernel build.
 """,
+        "toolchains": "See KernelEnvToolchainsInfo",
     },
 )
 
@@ -81,6 +82,7 @@ KernelPlatformToolchainInfo = provider(
         "ldflags": "flags for C linking",
         "ldexpr": "Extra shell expression appended to ldflags",
         "bin_path": "`PATH` relative to execroot.",
+        "runpaths": "RUNPATHs. Note this is already in ldexpr.",
     },
 )
 
@@ -99,6 +101,7 @@ KernelEnvToolchainsInfo = provider(
         "target_arch": "arch of target platform",
         "setup_env_var_cmd": "A command to set up simple environment variables",
         "kernel_setup_env_var_cmd": "A command to set up environment variables for kernel build",
+        "host_runpaths": "RUNPATHs for host progs.",
     },
 )
 
