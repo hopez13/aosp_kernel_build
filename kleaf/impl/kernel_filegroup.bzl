@@ -215,9 +215,12 @@ def _get_modules_prepare_env(ctx, ddk_config_env):
     if not ctx.file.modules_prepare_archive:
         return None
 
+    toolchains = kernel_toolchains_utils.get(ctx)
+
     modules_prepare_setup = modules_prepare_setup_command(
         config_setup_script = ddk_config_env.setup_script,
         modules_prepare_outdir_tar_gz = ctx.file.modules_prepare_archive,
+        kernel_toolchains = toolchains,
     )
 
     module_prepare_env_setup_script = ctx.actions.declare_file(
