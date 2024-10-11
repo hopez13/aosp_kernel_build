@@ -350,6 +350,7 @@ def _kernel_env_impl(ctx):
         tools = depset(setup_tools, transitive = setup_transitive_tools),
         setup = setup,
         run_env = run_env,
+        toolchains = toolchains,
     )
     return [
         env_info,

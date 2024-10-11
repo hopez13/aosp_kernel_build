@@ -15,9 +15,11 @@
 """Runs `make modules_prepare` to prepare `$OUT_DIR` for modules."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:shell.bzl", "shell")
 load(":cache_dir.bzl", "cache_dir")
 load(
     ":common_providers.bzl",
+    "KernelBuildOriginalEnvInfo",
     "KernelEnvAttrInfo",
     "KernelSerializedEnvInfo",
 )
@@ -95,6 +97,7 @@ def _modules_prepare_impl(ctx):
     setup_script_cmd = modules_prepare_setup_command(
         config_setup_script = ctx.attr.config[KernelSerializedEnvInfo].setup_script,
         modules_prepare_outdir_tar_gz = ctx.outputs.outdir_tar_gz,
+        kernel_toolchains = ctx.attr.config[KernelBuildOriginalEnvInfo].env_info.toolchains,
     )
 
     # <kernel_build>_modules_prepare_setup.sh
@@ -118,8 +121,20 @@ def _modules_prepare_impl(ctx):
 
 def modules_prepare_setup_command(
         config_setup_script,
-        modules_prepare_outdir_tar_gz):
-    return """
+        modules_prepare_outdir_tar_gz,
+        kernel_toolchains):
+    """Set up environment for building modules.
+
+    Args:
+        config_setup_script: The script to set up environment after configuration
+        modules_prepare_outdir_tar_gz: the tarball of $OUT_DIR after make modules_prepare
+        kernel_toolchains: KernelEnvToolchainsInfo
+
+    Returns:
+        the command to set up environment
+    """
+
+    cmd = """
         source {config_setup_script}
         # Restore modules_prepare outputs. Assumes env setup.
         [ -z ${{OUT_DIR}} ] && echo "ERROR: modules_prepare setup run without OUT_DIR set!" >&2 && exit 1
@@ -129,6 +144,34 @@ def modules_prepare_setup_command(
         config_setup_script = config_setup_script.path,
         modules_prepare_outdir_tar_gz = modules_prepare_outdir_tar_gz.path,
     )
+
+    # HACK: The binaries in $OUT_DIR (e.g. fixdep) are built with @kleaf being the root Bazel module.
+    # But this is not necessarily the case when the archive is used, especially when using @kleaf
+    # as a dependent Bazel module to build kernel drivers. In that case, symlink
+    # prebuilts/kernel-build-tools so libc_musl.so etc. can be found properly.
+    # TODO(b/372807147): Clean this up by letting kernel_filegroup build modules_prepare after all
+    #   dependencies for modules_prepare is figured out.
+    kleaf_repo_workspace_root = Label(":modules_prepare.bzl").workspace_root
+    kleaf_repo_workspace_root_slash = kleaf_repo_workspace_root + "/"
+    if kleaf_repo_workspace_root:
+        for runpath in kernel_toolchains.host_runpaths:
+            if not runpath.startswith(kleaf_repo_workspace_root_slash):
+                continue
+            bare_runpath = runpath.removeprefix(kleaf_repo_workspace_root_slash)
+            cmd += """
+                if [[ ! -d {bare_runpath} ]]; then
+                    (
+                        linkdir="$(dirname {bare_runpath})"
+                        mkdir -p "${{linkdir}}"
+                        ln -s $(realpath {runpath} --relative-to "${{linkdir}}") {bare_runpath}
+                    )
+                fi
+            """.format(
+                runpath = runpath,
+                bare_runpath = bare_runpath,
+            )
+
+    return cmd
 
 def _modules_prepare_additional_attrs():
     return dicts.add(
@@ -142,7 +185,11 @@ modules_prepare = rule(
     attrs = {
         "config": attr.label(
             mandatory = True,
-            providers = [KernelEnvAttrInfo, KernelSerializedEnvInfo],
+            providers = [
+                KernelEnvAttrInfo,
+                KernelSerializedEnvInfo,
+                KernelBuildOriginalEnvInfo,
+            ],
             doc = "the kernel_config target",
         ),
         "srcs": attr.label_list(mandatory = True, doc = "kernel sources", allow_files = True),
