@@ -26,6 +26,41 @@ load(":utils.bzl", "kernel_utils", "utils")
 
 visibility("//build/kernel/kleaf/...")
 
+KernelModuleBinariesInfo = provider("Provides list of .ko files", fields = {
+    "files": "The srcs attribute of a rule.",
+})
+
+def _kernel_module_dep_aspect_impl(_target, ctx):
+    # Gather .ko files from the attribute kernel_modules.
+    ko_files = []
+    if ctx.rule.kind == "kernel_module":
+        for dep in ctx.rule.attr.deps:
+            if KernelModuleInfo in dep:
+                ko_files += [
+                    f
+                    for f in dep[KernelModuleInfo].files.to_list()
+                    if f.extension == "ko"
+                ]
+
+    if ctx.rule.kind == "kernel_module_group":
+        for src in ctx.rule.attr.srcs:
+            if KernelModuleInfo in src:
+                if KernelModuleInfo in src:
+                    ko_files += [
+                        f
+                        for f in src[KernelModuleInfo].files.to_list()
+                        if f.extension == "ko"
+                    ]
+    return [KernelModuleBinariesInfo(files = ko_files)]
+
+kernel_module_dep_aspect = aspect(
+    implementation = _kernel_module_dep_aspect_impl,
+    attr_aspects = [
+        "deps",  # for kernel_module
+        "srcs",  # for kernel_module_group
+    ],
+)
+
 def _dependency_graph_extractor_impl(ctx):
     out = ctx.actions.declare_file("{}/dependency_graph.json".format(ctx.attr.name))
     intermediates_dir = utils.intermediates_dir(ctx)
@@ -127,7 +162,11 @@ dependency_graph_extractor = rule(
     attrs = {
         "kernel_build": attr.label(providers = [KernelSerializedEnvInfo, KernelBuildAbiInfo]),
         # For label targets they should provide KernelModuleInfo.
-        "kernel_modules": attr.label_list(allow_files = True),
+        "kernel_modules": attr.label_list(
+            allow_files = True,
+            # TODO: Enable this aspect and remove the code duplicated code.
+            # aspects = [kernel_module_dep_aspect],
+        ),
         "exclude_base_kernel_modules": attr.bool(
             doc = "Whether the analysis should made for only external modules.",
         ),
