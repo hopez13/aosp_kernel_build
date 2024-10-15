@@ -56,6 +56,24 @@
       "message": "Same here",
       "revId": "6f7ef8421b6d7526207fcb10e7d86521e936987b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a63aaf7_0b384c08",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T21:13:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e2fe5fc_e93469e1",
+      "revId": "6f7ef8421b6d7526207fcb10e7d86521e936987b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
