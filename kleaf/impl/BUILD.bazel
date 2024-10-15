@@ -51,6 +51,7 @@ bzl_library(
         "cache_dir.bzl",
         "checkpatch.bzl",
         "common_providers.bzl",
+        "common_settings.bzl",
         "compile_commands_utils.bzl",
         "config_utils.bzl",
         "constants.bzl",
