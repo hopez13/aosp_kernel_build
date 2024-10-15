@@ -629,6 +629,7 @@ bool_flag(
     build_setting_default = False,
     # Visible to any package that calls define_common_kernels()
     visibility = ["//visibility:public"],
+    warn_if = True,
 )
 
 config_setting(
@@ -643,6 +644,7 @@ bool_flag(
     name = "use_signed_prebuilts",
     build_setting_default = False,
     visibility = ["//visibility:private"],
+    warn_if = True,
 )
 
 config_setting(
