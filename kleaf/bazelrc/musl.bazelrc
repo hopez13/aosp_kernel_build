@@ -25,4 +25,3 @@ common:musl --config=musl_platform
 # This is added temporarily and intentionally duplicated with the list above.
 build --musl_prebuilts
 build --musl_tools_from_sources
-build --musl_kbuild
