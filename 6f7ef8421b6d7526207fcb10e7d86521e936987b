@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b65161ab_f5ca373f",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2024-10-15T21:47:34Z",
+      "side": 1,
+      "message": "Re: `-n`, the contents of `HOSTRUSTFLAGS` don\u0027t matter if that variable is not set, they can contain garbage.\n\nRe: ${ROOT_DIR}, it\u0027s in use because we don\u0027t know where the built binary is going to be - host progs built by kbuild can live anywhere when executed. This one lives in scripts/, but that may not be the only place one will live. Without knowing exactly how deep in the hierarchy you are, you can\u0027t use ${ORIGIN} to solve things.\n\nCreated b/373703502 as requested.",
+      "parentUuid": "5dda67fa_208fb1b0",
+      "range": {
+        "startLine": 295,
+        "startChar": 68,
+        "endLine": 295,
+        "endChar": 96
+      },
+      "revId": "6f7ef8421b6d7526207fcb10e7d86521e936987b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e2fe5fc_e93469e1",
         "filename": "kleaf/impl/kernel_env.bzl",
         "patchSetId": 2
