@@ -516,6 +516,7 @@ string_flag(
         # to obscure errors.
         "none",
     ],
+    warn_message = "--debug_cache_dir_conflict will no longer be supported.",
     visibility = ["//visibility:public"],
 )
 
