@@ -627,6 +627,8 @@ config_setting(
 bool_flag(
     name = "use_prebuilt_gki",
     build_setting_default = False,
+    warn_message = """Use kernel_prebuilt_ext.declare_kernel_prebuilts instead.
+    See build/kernel/kleaf/docs/ddk/workspace.md for details.""",
     # Visible to any package that calls define_common_kernels()
     visibility = ["//visibility:public"],
 )
@@ -642,6 +644,8 @@ config_setting(
 bool_flag(
     name = "use_signed_prebuilts",
     build_setting_default = False,
+    warn_message = """Use kernel_prebuilt_ext.declare_kernel_prebuilts instead.
+    See build/kernel/kleaf/docs/ddk/workspace.md for details.""",
     visibility = ["//visibility:private"],
 )
 
