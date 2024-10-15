@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f53214_48ef1500",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-15T17:52:27Z",
+      "side": 1,
+      "message": "Are we sure we want to kill this feature entirely?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 12
+      },
+      "revId": "0d34838fe42b5f54303787d64e323ece96d55ce3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f68aefd_85ce42d3",
+        "filename": "kleaf/BUILD.bazel",
+        "patchSetId": 4
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-15T17:52:27Z",
+      "side": 1,
+      "message": "Perhaps this attribute should be called \"deprecation_warning\" with a string value and emitted if the value of the flag is the opposite of the default.\n\nOtherwise users will see a deprecation warning without actionable guidance.",
+      "range": {
+        "startLine": 632,
+        "startChar": 0,
+        "endLine": 632,
+        "endChar": 19
+      },
+      "revId": "0d34838fe42b5f54303787d64e323ece96d55ce3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
