@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "018c743c_818af8bf",
+        "filename": "kleaf/impl/common_settings.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T18:19:37Z",
+      "side": 1,
+      "message": "I think it is a pretty niche use case, and it is due to the fact that we are using command line flags as feature flags.\n\nThe `config.bool` etc. are public APIs, BTW. The only thing we have in common with skylib\u0027s implementation is `BuildSettingInfo`.",
+      "parentUuid": "8d601b4f_df3bb50c",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 56
+      },
+      "revId": "a99c11e620b7754e059fc96db9a9ffeeb5de5a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "546f9a5b_a88751e9",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-10-15T10:06:21Z",
       "side": 1,
       "message": "http://android-build/test_investigate/invocation/I27300010326282913/test/TR43929478892461358/?ttab\u003dproperties\u0026blocking\u003dblocking\u0026status\u003dnone\n\n```\nAssertionError: False is not true : build/kernel/kleaf/impl/common_settings.bzl should have visibility()\n```",
+      "revId": "a99c11e620b7754e059fc96db9a9ffeeb5de5a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77719273_42b4c5ea",
+        "filename": "kleaf/impl/common_settings.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T18:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "546f9a5b_a88751e9",
       "revId": "a99c11e620b7754e059fc96db9a9ffeeb5de5a80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
