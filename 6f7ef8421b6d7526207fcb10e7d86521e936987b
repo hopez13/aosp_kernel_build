@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5dda67fa_208fb1b0",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T21:17:26Z",
+      "side": 1,
+      "message": "Actually, I think using ${ROOT_DIR} here is problematic. The issue is that the runpath is embedded in the built binary, making the binary non-portable \u0026 non-reproducible.\n\nThe C toolchain resolved it with this trick:\n\nhttps://android-review.git.corp.google.com/c/kernel/build/+/3134393/9/kleaf/impl/kernel_toolchains.bzl\n\n(to avoid using $ROOT_DIR in runpaths).\n\nI am okay to submit this for now, but please file a bug so we clean up the `-Wl,-rpath,${ROOT_DIR}` here. We should use $ORIGIN instead to make the binaries reproducible.",
+      "parentUuid": "c4079160_6affc477",
+      "range": {
+        "startLine": 295,
+        "startChar": 68,
+        "endLine": 295,
+        "endChar": 96
+      },
+      "revId": "6f7ef8421b6d7526207fcb10e7d86521e936987b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e2fe5fc_e93469e1",
         "filename": "kleaf/impl/kernel_env.bzl",
         "patchSetId": 2
