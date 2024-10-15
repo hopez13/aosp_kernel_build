@@ -152,6 +152,7 @@ def _get_rust_env(ctx):
         return """
             KLEAF_INTERNAL_RUST_PREBUILT_BIN={quoted_rust_bin}
             KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
+            KLEAF_INTERNAL_RUST_LINK_DIR={quoted_rust_bin}/../lib64
         """.format(
             quoted_rust_bin = shell.quote(rustc.dirname),
             quoted_clangtools_bin = shell.quote(bindgen.dirname),
@@ -289,6 +290,9 @@ def _kernel_env_impl(ctx):
 
           cat {pre_env_script} >> {out}
           echo >> {out}
+
+        # Export Rust host runtime libraries
+          export HOSTRUSTFLAGS=-Clink-args=-Wl,-rpath,${ROOT_DIR}/${KLEAF_INTERNAL_RUST_LINK_DIR}
 
         # capture it as a file to be sourced in downstream rules
           ( export -p; export -f ) | \\
