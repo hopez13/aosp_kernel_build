@@ -517,6 +517,7 @@ string_flag(
         "none",
     ],
     visibility = ["//visibility:public"],
+    warn_message = "--debug_cache_dir_conflict will no longer be supported.",
 )
 
 config_setting(
