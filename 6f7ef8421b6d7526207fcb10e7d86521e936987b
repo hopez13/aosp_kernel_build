@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6734b19_3b2c49cb",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T21:13:33Z",
+      "side": 1,
+      "message": "Sorry for the misleading comment; could you please move it to here instead?\n\n`toolchains_setup_env_var_cmd` is where HOSTCFLAGS etc. are set.",
+      "revId": "6f7ef8421b6d7526207fcb10e7d86521e936987b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4079160_6affc477",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T21:13:33Z",
+      "side": 1,
+      "message": "Do you need to check if this variable is actually set?\n\nAlso, consider deleting L155 and change this to {quoted_rust_bin}/../lib64 directly, e.g.\n\n```\nif [[ -n \"$KLEAF_INTERNAL_RUST_PREBUILT_BIN\" ]];\n    export HOSTRUSTFLAGS\u003d...\nfi\n```",
+      "range": {
+        "startLine": 295,
+        "startChar": 68,
+        "endLine": 295,
+        "endChar": 96
+      },
+      "revId": "6f7ef8421b6d7526207fcb10e7d86521e936987b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e2fe5fc_e93469e1",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T21:13:33Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "6f7ef8421b6d7526207fcb10e7d86521e936987b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
