@@ -78,7 +78,6 @@ def bool_flag(
     )
 
 def _string_flag_impl(ctx):
-
     if ctx.attr.values and ctx.build_setting_value not in ctx.attr.values:
         fail("{} has invalid value {}. Valid values are {}".format(
             ctx.label,
