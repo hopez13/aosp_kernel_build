@@ -152,6 +152,7 @@ def _get_rust_env(ctx):
         return """
             KLEAF_INTERNAL_RUST_PREBUILT_BIN={quoted_rust_bin}
             KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
+            KLEAF_INTERNAL_RUST_LINK_DIR={quoted_rust_bin}/../lib64
         """.format(
             quoted_rust_bin = shell.quote(rustc.dirname),
             quoted_clangtools_bin = shell.quote(bindgen.dirname),
@@ -276,6 +277,8 @@ def _kernel_env_impl(ctx):
           {set_ndk_triple_cmd}
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
+        # Export Rust host runtime libraries
+          export HOSTRUSTFLAGS=-Clink-args=-Wl,-rpath,${{ROOT_DIR}}/${KLEAF_INTERNAL_RUST_LINK_DIR}
         # TODO(b/236012223) Remove the warning after deprecation.
           {make_goals_deprecation_warning}
         # Enforce check configs.
@@ -587,6 +590,8 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
           {set_ndk_triple_cmd}
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
+        # Export Rust host runtime libraries
+          export HOSTRUSTFLAGS=-Clink-args=-Wl,-rpath,${{ROOT_DIR}}/${KLEAF_INTERNAL_RUST_LINK_DIR}
     """.format(
         build_utils_sh = ctx.file._build_utils_sh.short_path,
         build_config = ctx.file.build_config.short_path,
