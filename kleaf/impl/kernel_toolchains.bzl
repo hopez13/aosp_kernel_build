@@ -16,12 +16,14 @@
 
 load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
+load("@kernel_toolchain_info//:dict.bzl", "VARS")
 load("//prebuilts/clang/host/linux-x86/kleaf:versions.bzl", _CLANG_VERSIONS = "VERSIONS")
 load(
     ":common_providers.bzl",
     "KernelEnvToolchainsInfo",
     "KernelPlatformToolchainInfo",
 )
+load(":utils.bzl", "utils")
 
 visibility("//build/kernel/kleaf/...")
 
@@ -141,7 +143,7 @@ def _kernel_toolchains_impl(ctx):
         ))
     actual_toolchain_version = target.compiler_version
 
-    all_files = depset(transitive = [exec.all_files, target.all_files])
+    all_files_transitive = [exec.all_files, target.all_files]
     target_arch = _get_target_arch(ctx)
 
     quoted_bin_paths = [
@@ -156,6 +158,7 @@ def _kernel_toolchains_impl(ctx):
     )
 
     kernel_setup_env_var_cmd = setup_env_var_cmd
+
     if ctx.attr._kernel_use_resolved_toolchains[BuildSettingInfo].value:
         # RUNPATH_EXECROOT: A heuristic path to execroot expressed relative to $ORIGIN.
         # RUNPATH_EXECROOT assumes that all binaries built by Kbuild are 1~3 levels
@@ -198,11 +201,15 @@ def _kernel_toolchains_impl(ctx):
             userldexpr = target.ldexpr,
         )
 
+        if ctx.attr._rust_tools:
+            kernel_setup_env_var_cmd += _get_rust_env_setup(ctx.files._rust_tools)
+            all_files_transitive += [target.files for target in ctx.attr._rust_tools]
+
     # Kleaf clang bins are under kleaf/parent, so CLANG_PREBUILT_BIN in
     # build.config.common is incorrect. Manually set additional PATH's.
 
     return KernelEnvToolchainsInfo(
-        all_files = all_files,
+        all_files = depset(transitive = all_files_transitive),
         target_arch = target_arch,
         setup_env_var_cmd = setup_env_var_cmd,
         kernel_setup_env_var_cmd = kernel_setup_env_var_cmd,
@@ -210,6 +217,30 @@ def _kernel_toolchains_impl(ctx):
         host_runpaths = exec.runpaths,
         host_sysroot = exec.sysroot,
     )
+
+def _get_rust_env_setup_impl(_subrule_ctx, rust_files):
+    rustc = utils.find_file("rustc", rust_files, "rust tools", required = True)
+    bindgen = utils.find_file("bindgen", rust_files, "rust tools", required = True)
+    return """
+        export PATH="${{PATH}}:${{ROOT_DIR}}/"{quoted_rust_bin}":${{ROOT_DIR}}/"{quoted_clangtools_bin}
+        export HOSTRUSTFLAGS=-Clink-args=-Wl,-rpath,${{ROOT_DIR}}/{quoted_rust_bin}/../lib64
+    """.format(
+        quoted_rust_bin = shell.quote(rustc.dirname),
+        quoted_clangtools_bin = shell.quote(bindgen.dirname),
+    )
+
+_get_rust_env_setup = subrule(
+    implementation = _get_rust_env_setup_impl,
+)
+
+def _get_rust_tools(rust_toolchain_version):
+    if not rust_toolchain_version:
+        return []
+    rust_binaries = "//prebuilts/rust/linux-x86/%s:binaries" % rust_toolchain_version
+
+    bindgen = "//prebuilts/clang-tools:linux-x86/bin/bindgen"
+
+    return [Label(rust_binaries), Label(bindgen)]
 
 kernel_toolchains = rule(
     doc = """Helper for `kernel_env` to get toolchains for different platforms.""",
@@ -222,6 +253,12 @@ kernel_toolchains = rule(
         "target_toolchain": attr.label(
             providers = [KernelPlatformToolchainInfo],
         ),
+        # TODO(b/284390729): Use toolchain resolution
+        "rust_toolchain_version": attr.string(
+            doc = "the version of the rust toolchain to use for this environment",
+            default = VARS.get("RUSTC_VERSION", ""),
+        ),
+        "_rust_tools": attr.label_list(default = _get_rust_tools, allow_files = True),
         "_kernel_use_resolved_toolchains": attr.label(
             default = "//build/kernel/kleaf:incompatible_kernel_use_resolved_toolchains",
         ),
@@ -234,4 +271,5 @@ kernel_toolchains = rule(
         "_clang_version_{}".format(version): attr.label(default = "//prebuilts/clang/host/linux-x86/kleaf:{}".format(version))
         for version in _CLANG_VERSIONS
     },
+    subrules = [_get_rust_env_setup],
 )
