@@ -16,6 +16,24 @@
       "message": "It seems that even with this revert the builds from b/373554783 fail, so it could be not the cause of the failures.",
       "revId": "a5be28ddc073398dd89f862c75f7ff2fc381b9b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68bb1fd0_5a1095c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054468
+      },
+      "writtenOn": "2024-10-15T10:31:46Z",
+      "side": 1,
+      "message": "agreed.",
+      "parentUuid": "3a9cfa00_8e109012",
+      "revId": "a5be28ddc073398dd89f862c75f7ff2fc381b9b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
