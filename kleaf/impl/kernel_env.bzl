@@ -152,6 +152,7 @@ def _get_rust_env(ctx):
         return """
             KLEAF_INTERNAL_RUST_PREBUILT_BIN={quoted_rust_bin}
             KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
+	    KLEAF_INTERNAL_RUST_LINK_DIR={quoted_rust_bin}/../lib64
         """.format(
             quoted_rust_bin = shell.quote(rustc.dirname),
             quoted_clangtools_bin = shell.quote(bindgen.dirname),

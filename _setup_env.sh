@@ -160,6 +160,9 @@ for prebuilt_bin in "${prebuilts_paths[@]}"; do
         PATH=${ROOT_DIR}/${prebuilt_bin}:${PATH}
     fi
 done
+
+HOSTRUSTFLAGS=-Clink-args=-Wl,-rpath,${ROOT_DIR}/${KLEAF_INTERNAL_RUST_LINK_DIR}
+
 export PATH
 
 unset PYTHONPATH
@@ -167,6 +170,7 @@ unset PYTHONHOME
 unset PYTHONSTARTUP
 
 export HOSTCC HOSTCXX CC LD AR NM OBJCOPY OBJDUMP OBJSIZE READELF STRIP AS
+export HOSTRUSTFLAGS
 
 tool_args=()
 
