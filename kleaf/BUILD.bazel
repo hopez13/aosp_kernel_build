@@ -83,6 +83,7 @@ bool_flag(
     name = "set_ext_modules",
     build_setting_default = True,
     visibility = ["//visibility:public"],
+    warn_message = "--noset_ext_modules will no longer be supported.",
 )
 
 string_flag(
@@ -384,6 +385,7 @@ bool_flag(
     name = "incompatible_kernel_use_resolved_toolchains",
     build_setting_default = True,
     visibility = ["//visibility:public"],
+    warn_message = "--noincompatible_kernel_use_resolved_toolchains will no longer be supported.",
 )
 
 # Default is true.
@@ -391,10 +393,9 @@ bool_flag(
 # If false, keys of hermetic_tools.symlinks are added to the sandboxes.
 bool_flag(
     name = "incompatible_disable_hermetic_tools_symlink_source",
-    # TODO(b/291816237): Set this to true once build.config.common no longer
-    #   hardcodes DTC.
     build_setting_default = True,
     visibility = ["//build/kernel:__pkg__"],
+    warn_message = "--noincompatible_disable_hermetic_tools_symlink_source will no longer be supported.",
 )
 
 # Default is false.
@@ -420,6 +421,7 @@ bool_flag(
     name = "toolchain_from_sources",
     build_setting_default = True,
     visibility = ["//visibility:private"],
+    warn_message = "--notoolchain_from_sources will no longer be supported.",
 )
 
 config_setting(
@@ -434,6 +436,7 @@ bool_flag(
     name = "gzip_is_pigz",
     build_setting_default = True,
     visibility = ["//visibility:private"],
+    warn_message = "--nogzip_is_pigz will no longer be supported.",
 )
 
 config_setting(
