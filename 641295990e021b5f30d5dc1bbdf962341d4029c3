@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd434cd3_4d06349f",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T21:18:07Z",
+      "side": 1,
+      "message": "{{",
+      "range": {
+        "startLine": 281,
+        "startChar": 69,
+        "endLine": 281,
+        "endChar": 70
+      },
+      "revId": "641295990e021b5f30d5dc1bbdf962341d4029c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a037c52a_ff4bf344",
+        "filename": "kleaf/impl/kernel_env.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T21:18:07Z",
+      "side": 1,
+      "message": "{{",
+      "range": {
+        "startLine": 594,
+        "startChar": 69,
+        "endLine": 594,
+        "endChar": 70
+      },
+      "revId": "641295990e021b5f30d5dc1bbdf962341d4029c3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
