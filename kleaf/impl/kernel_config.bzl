@@ -945,7 +945,6 @@ kernel_config = rule(
         _set_up_defconfig,
         _pre_defconfig,
         _make_defconfig,
-        _check_defconfig_minimized,
         _post_defconfig,
         _check_dot_config_against_defconfig,
         _get_config_script,
