@@ -1,5 +1,29 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a008e027_3c86aa0a",
+        "filename": "kleaf/impl/abi/dependency_graph.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-15T20:13:42Z",
+      "side": 1,
+      "message": "avoid to_list and let `KernelModuleBinariesInfo` store a depset instead. Then you can chain the depsets",
+      "range": {
+        "startLine": 41,
+        "startChar": 57,
+        "endLine": 41,
+        "endChar": 64
+      },
+      "revId": "93beaef8f7143b2a00e0e2865b93e9ba0145ef2c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
