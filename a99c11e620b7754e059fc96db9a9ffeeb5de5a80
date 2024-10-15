@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d601b4f_df3bb50c",
+        "filename": "kleaf/impl/common_settings.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1402878
+      },
+      "writtenOn": "2024-10-15T17:49:55Z",
+      "side": 1,
+      "message": "Have you considered adding this to skylib directly?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 56
+      },
+      "revId": "a99c11e620b7754e059fc96db9a9ffeeb5de5a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "546f9a5b_a88751e9",
         "filename": "kleaf/impl/common_settings.bzl",
         "patchSetId": 4
