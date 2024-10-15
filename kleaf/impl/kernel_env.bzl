@@ -16,9 +16,7 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@bazel_skylib//lib:shell.bzl", "shell")
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
-load("@kernel_toolchain_info//:dict.bzl", "VARS")
 load(":abi/force_add_vmlinux_utils.bzl", "force_add_vmlinux_utils")
 load(
     ":common_providers.bzl",
@@ -38,7 +36,6 @@ load(":kgdb.bzl", "kgdb")
 load(":set_kernel_dir.bzl", "set_kernel_dir")
 load(":stamp.bzl", "stamp")
 load(":status.bzl", "status")
-load(":utils.bzl", "utils")
 
 visibility("//build/kernel/kleaf/...")
 
@@ -145,21 +142,6 @@ def _get_kconfig_werror_setup(ctx):
         return ""
     return "export KCONFIG_WERROR=1"
 
-def _get_rust_env(ctx):
-    if ctx.attr._rust_tools:
-        rustc = utils.find_file("rustc", ctx.files._rust_tools, "rust tools", required = True)
-        bindgen = utils.find_file("bindgen", ctx.files._rust_tools, "rust tools", required = True)
-        return """
-            KLEAF_INTERNAL_RUST_PREBUILT_BIN={quoted_rust_bin}
-            KLEAF_INTERNAL_CLANGTOOLS_PREBUILT_BIN={quoted_clangtools_bin}
-            KLEAF_INTERNAL_RUST_LINK_DIR={quoted_rust_bin}/../lib64
-        """.format(
-            quoted_rust_bin = shell.quote(rustc.dirname),
-            quoted_clangtools_bin = shell.quote(bindgen.dirname),
-        )
-    else:
-        return ""
-
 def _kernel_env_impl(ctx):
     srcs = [
         s
@@ -250,8 +232,6 @@ def _kernel_env_impl(ctx):
 
     kconfig_werror_setup = _get_kconfig_werror_setup(ctx)
 
-    command += _get_rust_env(ctx)
-
     env_setup_cmds = _get_env_setup_cmds(ctx)
     pre_env_script = ctx.actions.declare_file("{}/pre_env.sh".format(ctx.attr.name))
     ctx.actions.write(pre_env_script, env_setup_cmds.pre_env)
@@ -277,8 +257,6 @@ def _kernel_env_impl(ctx):
           {set_ndk_triple_cmd}
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
-        # Export Rust host runtime libraries
-          export HOSTRUSTFLAGS=-Clink-args=-Wl,-rpath,${{ROOT_DIR}}/${{KLEAF_INTERNAL_RUST_LINK_DIR}}
         # TODO(b/236012223) Remove the warning after deprecation.
           {make_goals_deprecation_warning}
         # Enforce check configs.
@@ -361,7 +339,6 @@ def _kernel_env_impl(ctx):
     setup_tools = [
         ctx.file._build_utils_sh,
     ]
-    setup_tools += ctx.files._rust_tools
     setup_transitive_tools = [
         toolchains.all_files,
         hermetic_tools.deps,
@@ -575,7 +552,6 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
     if ctx.attr._debug_annotate_scripts[BuildSettingInfo].value:
         setup += debug.trap()
     setup += _get_make_verbosity_command(ctx)
-    setup += _get_rust_env(ctx)
 
     setup += """
         # create a build environment
@@ -590,8 +566,6 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
           {set_ndk_triple_cmd}
         # Variables from resolved toolchain
           {toolchains_setup_env_var_cmd}
-        # Export Rust host runtime libraries
-          export HOSTRUSTFLAGS=-Clink-args=-Wl,-rpath,${{ROOT_DIR}}/${{KLEAF_INTERNAL_RUST_LINK_DIR}}
     """.format(
         build_utils_sh = ctx.file._build_utils_sh.short_path,
         build_config = ctx.file.build_config.short_path,
@@ -605,7 +579,6 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
         ctx.file.setup_env,
         ctx.file._build_utils_sh,
     ]
-    tools += ctx.files._rust_tools
     transitive_tools = [
         toolchains.all_files,
         hermetic_tools.deps,
@@ -619,16 +592,6 @@ def _get_run_env(ctx, srcs, toolchains, set_kernel_dir_ret):
         inputs = depset(inputs),
         tools = depset(tools, transitive = transitive_tools),
     )
-
-def _get_rust_tools(rust_toolchain_version):
-    if not rust_toolchain_version:
-        return []
-
-    rust_binaries = "//prebuilts/rust/linux-x86/%s:binaries" % rust_toolchain_version
-
-    bindgen = "//prebuilts/clang-tools:linux-x86/bin/bindgen"
-
-    return [Label(rust_binaries), Label(bindgen)]
 
 def _kernel_env_additional_attrs():
     return dicts.add(
@@ -675,10 +638,6 @@ kernel_env = rule(
             doc = "label referring to _setup_env.sh",
             cfg = "exec",
         ),
-        "rust_toolchain_version": attr.string(
-            doc = "the version of the rust toolchain to use for this environment",
-            default = VARS.get("RUSTC_VERSION", ""),
-        ),
         "kconfig_ext": attr.label(
             allow_single_file = True,
             doc = "an external Kconfig.ext file sourced by the base kernel",
@@ -693,7 +652,6 @@ kernel_env = rule(
             values = ["true", "false", "auto"],
         ),
         "make_goals": attr.string_list(doc = "`MAKE_GOALS`"),
-        "_rust_tools": attr.label_list(default = _get_rust_tools, allow_files = True),
         "_build_utils_sh": attr.label(
             allow_single_file = True,
             default = Label("//build/kernel:build_utils"),
