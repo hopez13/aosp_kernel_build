@@ -128,9 +128,10 @@ def _get_step(ctx, common_config_tags, symlink_name):
             rm -f "${{KLEAF_CONFIG_TAGS_TMP}}"
             unset KLEAF_CONFIG_TAGS_TMP
 
-            # Append more HOSTLDFLAGS now that OUT_DIR changes. Binaries built with these flags
+            # Append more HOSTLDFLAGS/HOSTRUSTFLAGS now that OUT_DIR changes. Binaries built with these flags
             # can be executed with or without the sandbox.
             kleaf_internal_eval_ldflags
+            kleaf_internal_eval_rust_flags
 
             {flock_pre_cmd}
         """.format(
