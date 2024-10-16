@@ -211,6 +211,7 @@ def _kernel_toolchains_impl(ctx):
 
         rust_env = _get_rust_env(
             rust_tools = ctx.attr._rust_tools,
+            host_libc = exec.libc,
         )
         kernel_setup_env_var_cmd += rust_env.cmd
         all_files_transitive.append(rust_env.inputs)
@@ -228,7 +229,7 @@ def _kernel_toolchains_impl(ctx):
         host_sysroot = exec.sysroot,
     )
 
-def _get_rust_env_impl(_subrule_ctx, rust_tools):
+def _get_rust_env_impl(_subrule_ctx, rust_tools, host_libc):
     if not rust_tools:
         return _RustEnvInfo(
             inputs = depset(),
@@ -247,6 +248,13 @@ def _get_rust_env_impl(_subrule_ctx, rust_tools):
     rustc = utils.find_file("rustc", rust_files_list, "rust tools", required = True)
     bindgen = utils.find_file("bindgen", rust_files_list, "rust tools", required = True)
 
+    if host_libc == "musl":
+        target = "x86_64-unknown-linux-musl"
+    elif host_libc == "glibc":
+        target = "x86_64-unknown-linux-gnu"
+    else:
+        fail("Unknown libc {}".format(target))
+
     # RUNPATH_EXECROOT: A heuristic path to execroot expressed relative to $ORIGIN.
     # RUNPATH_EXECROOT assumes that all binaries built by Kbuild are several levels
     #   below OUT_DIR,
@@ -254,6 +262,7 @@ def _get_rust_env_impl(_subrule_ctx, rust_tools):
     # If this ever changes, edit kleaf_internal_eval_rust_flags and add more levels.
     cmd = """
         export PATH="${{PATH}}:${{ROOT_DIR}}/"{quoted_rust_bin}":${{ROOT_DIR}}/"{quoted_clangtools_bin}
+        export HOSTRUSTFLAGS="--target {target}"
 
         function kleaf_internal_append_one_rust_flags() {{
             local backtrack_relative=$1
@@ -268,6 +277,7 @@ def _get_rust_env_impl(_subrule_ctx, rust_tools):
 
         kleaf_internal_eval_rust_flags
     """.format(
+        target = target,
         quoted_rust_bin = shell.quote(rustc.dirname),
         quoted_clangtools_bin = shell.quote(bindgen.dirname),
     )

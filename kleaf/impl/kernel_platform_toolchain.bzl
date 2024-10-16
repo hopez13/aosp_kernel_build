@@ -132,7 +132,15 @@ def _kernel_platform_toolchain_impl(ctx):
         bin_path = bin_path,
         runpaths = [runpath.path for runpath in ctx.files.runpaths],
         sysroot = cc_toolchain.sysroot,
+        libc = _get_libc(ctx),
     )
+
+def _get_libc(ctx):
+    if ctx.target_platform_has_constraint(ctx.attr._glibc[platform_common.ConstraintValueInfo]):
+        return "glibc"
+    if ctx.target_platform_has_constraint(ctx.attr._musl[platform_common.ConstraintValueInfo]):
+        return "musl"
+    fail("{}: Cannot determine platform.".format(ctx.label))
 
 kernel_platform_toolchain = rule(
     doc = """Helper to resolve toolchain for a single platform.""",
@@ -140,6 +148,8 @@ kernel_platform_toolchain = rule(
     attrs = {
         "deps": attr.label_list(providers = [CcInfo]),
         "runpaths": attr.label_list(allow_files = True),
+        "_musl": attr.label(default = "//build/kernel/kleaf/platforms/libc:musl"),
+        "_glibc": attr.label(default = "//build/kernel/kleaf/platforms/libc:glibc"),
         # For using mandatory = False
         "_cc_toolchain": attr.label(default = "@bazel_tools//tools/cpp:optional_current_cc_toolchain"),
     },

@@ -84,6 +84,7 @@ KernelPlatformToolchainInfo = provider(
         "bin_path": "`PATH` relative to execroot.",
         "runpaths": "RUNPATHs. Note this is already in ldexpr.",
         "sysroot": "sysroot",
+        "libc": "The libc, one of musl or glibc.",
     },
 )
 
