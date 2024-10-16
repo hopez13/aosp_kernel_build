@@ -233,7 +233,7 @@ def _get_rust_env_impl(_subrule_ctx, rust_tools, host_libc):
     if not rust_tools:
         return _RustEnvInfo(
             inputs = depset(),
-            # Always decare this function so we can use it unconditionally when handling --cache_dir
+            # Always declare this function so we can use it unconditionally when handling --cache_dir
             cmd = """
                 function kleaf_internal_eval_rust_flags() { :; }
                 export -f kleaf_internal_eval_rust_flags
