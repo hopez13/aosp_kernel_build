@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "446ae589_2ca8452a",
+        "filename": "kleaf/impl/kernel_toolchains.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-16T19:51:54Z",
+      "side": 1,
+      "message": "nit: typo?",
+      "range": {
+        "startLine": 235,
+        "startChar": 21,
+        "endLine": 235,
+        "endChar": 27
+      },
+      "revId": "2367e99be86eefd0731e93c6550fe1908057bf75",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
