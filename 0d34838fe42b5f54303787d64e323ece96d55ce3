@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a4fa708_a751f997",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-16T00:20:53Z",
+      "side": 1,
+      "message": "Also, this is already not supported. If one uses --use_gki_prebuilts \u0026 relies on //common:kernel_aarch64_downloaded, the `@gki_prebuilts` repository still cannot be resolved. We can actually safely set this to `error_message`.",
+      "parentUuid": "3e424728_04556ff3",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 12
+      },
+      "revId": "0d34838fe42b5f54303787d64e323ece96d55ce3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f68aefd_85ce42d3",
