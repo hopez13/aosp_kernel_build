@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b005053_70bc274c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1279898
+      },
+      "writtenOn": "2024-10-16T16:19:54Z",
+      "side": 1,
+      "message": "LGTM, will defer to Matthias, I think the context of why we removed this was we wanted to isolate RISC-V u-boot and kernel uploads to the other branch. If we need u-boot specifically to be updated in close coordination, this seems fine to me.",
+      "revId": "acb637286317181b27f4c98921ca6bf49e843f6a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
