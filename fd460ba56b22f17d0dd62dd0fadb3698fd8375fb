@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14950b0c_471448ed",
+        "filename": "kleaf/impl/cache_dir.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-16T12:25:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure if the test failure is related to this, but should this be conditional to whether the branch has support for Rust?",
+      "range": {
+        "startLine": 134,
+        "startChar": 12,
+        "endLine": 134,
+        "endChar": 42
+      },
+      "revId": "fd460ba56b22f17d0dd62dd0fadb3698fd8375fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
