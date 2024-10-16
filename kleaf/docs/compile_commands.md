@@ -29,6 +29,9 @@ then `tools/bazel run` the target.
 See `kernel_compile_commands` in
 [documentation for all rules](api_reference.md) for details.
 
+**NOTE:** For out-of-tree modules built with the `kernel_module` macro, make
+sure your `Makefile`s supports the `compile_commands.json` target.
+
 ## See also
 
 See also the following links to incorporate clangd to your editor.
