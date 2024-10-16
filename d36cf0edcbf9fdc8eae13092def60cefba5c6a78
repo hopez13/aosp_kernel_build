@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd4ed436_2db551ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-16T18:46:44Z",
+      "side": 1,
+      "message": "Please cherry-pick to 2024 too if you are doing it on 2023",
+      "revId": "d36cf0edcbf9fdc8eae13092def60cefba5c6a78",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
