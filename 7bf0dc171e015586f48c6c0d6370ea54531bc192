@@ -16,6 +16,24 @@
       "message": "diff: Can\u0027t stat \u003cexecroot\u003e/_main/out/android-mainline/common/arch/x86_64/configs/gki_defconfig: No such file or directory\nERROR: savedefconfig does not match \u003cexecroot\u003e/_main/out/android-mainline/common/arch/x86_64/configs/gki_defconfig",
       "revId": "7bf0dc171e015586f48c6c0d6370ea54531bc192",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82729320_e2c76e3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-17T21:58:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5649b7_67bf1fc2",
+      "revId": "7bf0dc171e015586f48c6c0d6370ea54531bc192",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
