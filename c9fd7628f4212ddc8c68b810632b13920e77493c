@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d9dae61_b24260ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1892347
+      },
+      "writtenOn": "2024-10-17T08:44:07Z",
+      "side": 1,
+      "message": "I have verified that I can build Rust Ashmem + musl with these changes and that it boots on cuttlefish.",
+      "revId": "c9fd7628f4212ddc8c68b810632b13920e77493c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
