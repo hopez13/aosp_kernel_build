@@ -16,6 +16,24 @@
       "message": "The integration test failure is probably due to an inconsistent merge of the previous topic. I\u0027ll try it again tomorrow.",
       "revId": "5ae5bec6bfff859a1409bfcdb47045c6727c4716",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "797cf707_5d81366e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-17T09:26:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1786c16a_a735c659",
+      "revId": "5ae5bec6bfff859a1409bfcdb47045c6727c4716",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
