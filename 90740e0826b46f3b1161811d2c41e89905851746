@@ -16,6 +16,24 @@
       "message": "Please cherry-pick to 2024 too if you are doing it on 2023",
       "revId": "90740e0826b46f3b1161811d2c41e89905851746",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "896ed390_2e57a257",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-17T09:53:37Z",
+      "side": 1,
+      "message": "Done CL:3311075",
+      "parentUuid": "036c9799_501313c9",
+      "revId": "90740e0826b46f3b1161811d2c41e89905851746",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
