@@ -22,6 +22,30 @@
       },
       "revId": "f2a40b277472621d3fad76fabab2bcb1ae62497b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b5bb44d_6e734e47",
+        "filename": "kleaf/impl/ddk/ddk_module.bzl",
+        "patchSetId": 7
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-18T23:08:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11808d86_bad02943",
+      "range": {
+        "startLine": 486,
+        "startChar": 43,
+        "endLine": 488,
+        "endChar": 29
+      },
+      "revId": "f2a40b277472621d3fad76fabab2bcb1ae62497b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }

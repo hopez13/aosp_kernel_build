@@ -34,6 +34,24 @@
       "parentUuid": "67b9e70a_ca028e67",
       "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1b05eee_64ad7158",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-18T23:08:01Z",
+      "side": 1,
+      "message": "\u003e Clang accepts an empty file, so that should suffice for a smoke test:\n\nThis is actually not what I see:\n\nerror: /mnt/sdc/android/kernel/out/bazel/output_user_root/1b6b21355d7d8de5177bf0bcb725bd7f/sandbox/linux-sandbox/905/execroot/_main/common-modules/virtual-device/profile: Could not open profile: Unrecognized sample profile encoding format",
+      "parentUuid": "1b950f55_516789d8",
+      "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
