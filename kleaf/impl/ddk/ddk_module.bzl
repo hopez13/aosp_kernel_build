@@ -37,6 +37,8 @@ def ddk_module(
         kconfig = None,
         defconfig = None,
         generate_btf = None,
+        autofdo_profile = None,
+        debug_info_for_profiling = None,
         **kwargs):
     """
     Defines a DDK (Driver Development Kit) module.
@@ -480,6 +482,10 @@ def ddk_module(
           uses default value specified in `kconfig`.
         generate_btf: Allows generation of BTF type information for the module.
           See [kernel_module.generate_btf](#kernel_module-generate_btf)
+        autofdo_profile: Label to an AutoFDO profile.
+        debug_info_for_profiling: If true, enables AutoFDO so that debug information may be
+            collected at runtime. The debug information can later be post-processed into
+            `autofdo_profile`.
         **kwargs: Additional attributes to the internal rule.
           See complete list
           [here](https://docs.bazel.build/versions/main/be/common-definitions.html#common-attributes).
@@ -534,6 +540,8 @@ def ddk_module(
         module_deps = deps,
         module_local_defines = local_defines,
         module_copts = copts,
+        module_autofdo_profile = autofdo_profile,
+        module_debug_info_for_profiling = debug_info_for_profiling,
         top_level_makefile = True,
         kbuild_has_linux_include = True,
         **private_kwargs
