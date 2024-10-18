@@ -29,6 +29,8 @@ def ddk_submodule(
         local_defines = None,
         copts = None,
         conditional_srcs = None,
+        autofdo_profile = None,
+        debug_info_for_profiling = None,
         **kwargs):
     """Declares a DDK (Driver Development Kit) submodule.
 
@@ -155,6 +157,14 @@ def ddk_submodule(
 
             These are not exported to downstream targets that depends on the
             `ddk_module` that includes the current target.
+        autofdo_profile: See [`ddk_module.autofdo_profile`](#ddk_module-autofdo_profile).
+
+            These are only effective in the current submodule, not other submodules declared in the
+            same [`ddk_module.deps`](#ddk_module-deps).
+        debug_info_for_profiling: See [`ddk_module.debug_info_for_profiling`](#ddk_module-debug_info_for_profiling).
+
+            These are only effective in the current submodule, not other submodules declared in the
+            same [`ddk_module.deps`](#ddk_module-deps).
         **kwargs: Additional attributes to the internal rule, e.g.
           [`visibility`](https://docs.bazel.build/versions/main/visibility.html).
           See complete list
@@ -179,6 +189,8 @@ def ddk_submodule(
         module_deps = deps,
         module_local_defines = local_defines,
         module_copts = copts,
+        module_autofdo_profile = autofdo_profile,
+        module_debug_info_for_profiling = debug_info_for_profiling,
         top_level_makefile = False,
         kbuild_has_linux_include = False,
         **kwargs
