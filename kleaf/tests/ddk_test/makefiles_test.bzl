@@ -832,32 +832,42 @@ def makefiles_test_suite(name):
     _makefiles_subdir_test(name = name + "_subdir_test")
     tests.append(name + "_subdir_test")
 
-    _bad_test_make(
-        name = name + "_bad_copt_location_not_one_token",
-        error_message = "An $(location) expression must be its own item",
-        module_srcs = ["dep.h"],
-        module_out = "dep.ko",
-        module_copts = ["-include $(location dep.h)"],
+    _create_makefiles_artifact_test(
+        name = name + "_good_copt_location_with_space",
+        srcs = ["dep.h"],
+        out = "dep.ko",
+        copts = ["-include $(location dep.h)"],
+        expected_cflags_lines = [
+            "-include $(ROOT_DIR)/build/kernel/kleaf/tests/ddk_test/dep.h",
+        ],
     )
-    tests.append(name + "_bad_copt_location_not_one_token")
+    tests.append(name + "_good_copt_location_with_space")
 
-    _bad_test_make(
-        name = name + "_bad_copt_location_not_its_own_token",
-        error_message = "An $(location) expression must be its own item",
-        module_srcs = ["dep.h"],
-        module_out = "dep.ko",
-        module_copts = ["-include=$(location dep.h)"],
+    _create_makefiles_artifact_test(
+        name = name + "_good_copt_location_with_equal",
+        srcs = ["dep.h"],
+        out = "dep.ko",
+        copts = ["-include=$(location dep.h)"],
+        expected_cflags_lines = [
+            "-include=$(ROOT_DIR)/build/kernel/kleaf/tests/ddk_test/dep.h",
+        ],
     )
-    tests.append(name + "_bad_copt_location_not_its_own_token")
+    tests.append(name + "_good_copt_location_with_equal")
 
-    _bad_test_make(
+    makefiles(
         name = name + "_bad_copt_multiple_location_in_one_token",
-        error_message = "An $(location) expression must be its own item",
+        internal_target_fail_message = "Invalid copt: $(location dep.h) $(location dep.h). $(location) expressions must be its own token, or part of -key=$(location target)",
         module_srcs = ["dep.h"],
         module_out = "dep.ko",
         module_copts = ["$(location dep.h) $(location dep.h)"],
     )
-    tests.append(name + "_bad_copt_multiple_location_in_one_token")
+    build_test(
+        name = name + "_bad_copt_location_tests",
+        targets = [
+            name + "_bad_copt_multiple_location_in_one_token",
+        ],
+    )
+    tests.append(name + "_bad_copt_location_tests")
 
     _makefiles_test_make(
         name = name + "_include_ordering",
