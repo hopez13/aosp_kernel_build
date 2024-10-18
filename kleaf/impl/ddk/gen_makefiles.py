@@ -23,6 +23,7 @@ import json
 import logging
 import os
 import pathlib
+import re
 import shlex
 import shutil
 import sys
@@ -35,6 +36,11 @@ _SOURCE_SUFFIXES = (
     ".S",
 )
 
+# Example:
+# -key=$(execpath thing)
+_KEY_VALUE_COPT_RE = re.compile(r"^(?P<key>[^$]+)(?P<sep>=)(?P<value>\$\([^)]+\))$")
+# $(execpath thing)
+_VALUE_COPT_RE = re.compile(r"^\$\([^)]+\)$")
 
 class DieException(SystemExit):
     def __init__(self, *args, **kwargs):
@@ -463,16 +469,31 @@ def _handle_copts(out_cflags: TextIO,
 
     for d in copts:
         expanded: str = d["expanded"]
-        is_path: bool = d["is_path"]
+        orig: str = d["orig"]
 
-        if is_path:
-            out_cflags.write(textwrap.dedent(f"""\
-                $(ROOT_DIR)/{shlex.quote(expanded)}
-                """))
-        else:
-            out_cflags.write(textwrap.dedent(f"""\
-                {shlex.quote(expanded)}
-                """))
+        out_cflags.write(textwrap.dedent(f"""\
+            {_quote_transform_copt(orig, expanded)}
+            """))
+
+
+def _quote_transform_copt(orig: str, expanded: str):
+    if expanded == orig:
+        return shlex.quote(expanded)
+
+    mo = _VALUE_COPT_RE.match(orig)
+    if mo:
+        return f"$(ROOT_DIR)/{shlex.quote(expanded)}"
+
+    mo = _KEY_VALUE_COPT_RE.match(orig)
+    if mo:
+        prefix = f"{mo.group('key')}{mo.group('sep')}"
+        if not expanded.startswith(prefix):
+            die("Invalid copt: %s. Expected %s to start with %s", orig, expanded, prefix)
+        expanded_value = expanded.removeprefix(prefix)
+        return f"{prefix}$(ROOT_DIR)/{shlex.quote(expanded_value)}"
+
+    die("Invalid copt: %s. $(location) expressions must be its own token, or "
+        "part of -key=$(location target)", orig)
 
 
 class SubmoduleLinuxIncludeDirAction(argparse.Action):

@@ -75,24 +75,9 @@ def _handle_copt(ctx):
     copt_content = []
     for copt in ctx.attr.module_copts:
         expanded = ctx.expand_location(copt, targets = expand_targets)
-
-        if copt != expanded:
-            if not copt.startswith("$(") or not copt.endswith(")") or \
-               copt.count("$(") > 1:
-                # This may be an item like "-include=$(location X)", which is
-                # not allowed. "$(location X) $(location Y)" is also not allowed.
-                # The predicate here may not be accurate, but it is a good heuristic.
-                fail(
-                    """{}: {} is not allowed. An $(location) expression must be its own item.
-                       For example, Instead of specifying "-include=$(location X)",
-                       specify two items ["-include", "$(location X)"] instead.""",
-                    ctx.label,
-                    copt,
-                )
-
         copt_content.append({
             "expanded": expanded,
-            "is_path": copt != expanded,
+            "orig": copt,
         })
     out = ctx.actions.declare_file("{}/copts.json".format(ctx.attr.name))
     ctx.actions.write(
