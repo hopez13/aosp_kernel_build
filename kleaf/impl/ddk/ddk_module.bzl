@@ -395,17 +395,24 @@ def ddk_module(
           [`$(location)` substitution](https://bazel.build/reference/be/make-variables#predefined_label_variables).
           See "Implementation detail" section below.
 
-          Each `$(location)` expression should occupy its own token. For example:
+          Each `$(location)` expression should occupy its own token; optional argument key is
+          allowed as a prefix. For example:
 
           ```
           # Good
           copts = ["-include", "$(location //other:header.h)"]
 
-          # BAD -- DON'T DO THIS!
+          # Good
           copts = ["-include $(location //other:header.h)"]
 
-          # BAD -- DON'T DO THIS!
+          # Good
           copts = ["-include=$(location //other:header.h)"]
+
+          # BAD - Don't do this! Split into two tokens.
+          copts = ["$(location //other:header.h) -Werror"]
+
+          # BAD - Don't do this! Split into two tokens.
+          copts = ["$(location //other:header.h) $(location //other:header2.h)"]
           ```
 
           Unlike
