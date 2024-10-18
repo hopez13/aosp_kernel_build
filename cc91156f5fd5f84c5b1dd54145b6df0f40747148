@@ -16,6 +16,24 @@
       "message": "Note: this is tested by CL:3313425. We can add a simpler test if @yabinc@google.com can provide me a smaller profile (the one for the test was 4MB)",
       "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b950f55_516789d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1058860
+      },
+      "writtenOn": "2024-10-18T21:34:53Z",
+      "side": 1,
+      "message": "Clang accepts an empty file, so that should suffice for a smoke test:\n\n```\n$ touch file.profdata\n$ clang++ -fprofile-sample-use\u003dfile.profdata test.cpp -fuse-ld\u003dlld\n```",
+      "parentUuid": "67b9e70a_ca028e67",
+      "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
