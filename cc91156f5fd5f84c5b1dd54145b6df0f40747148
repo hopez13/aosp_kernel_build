@@ -52,6 +52,24 @@
       "parentUuid": "1b950f55_516789d8",
       "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73a11247_17e7b2f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1058860
+      },
+      "writtenOn": "2024-10-18T23:20:02Z",
+      "side": 1,
+      "message": "Can you share the exact command passed to clang?\n\nThere is also a textual format that is recognized by llvm-profdata: https://github.com/llvm/llvm-project/blob/6d347fdfbd018b6555a754219fda461e166f2a64/llvm/test/tools/llvm-profdata/Inputs/sample-profile.proftext#L4\n\nBut I am not sure if clang also recognizes this.  We can try if something similar works.",
+      "parentUuid": "b1b05eee_64ad7158",
+      "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
