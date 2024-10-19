@@ -70,6 +70,24 @@
       "parentUuid": "b1b05eee_64ad7158",
       "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd18fc43_7d72dd54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1058860
+      },
+      "writtenOn": "2024-10-19T00:11:27Z",
+      "side": 1,
+      "message": "I was able to reproduce it with `-O2`.  I guess the AutoFDO pipeline is not run at lower optimization levels.\n\nClang accepts the textual profile file I linked above at -O2.",
+      "parentUuid": "73a11247_17e7b2f4",
+      "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
