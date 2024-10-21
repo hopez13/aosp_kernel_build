@@ -88,6 +88,24 @@
       "parentUuid": "73a11247_17e7b2f4",
       "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b31dfb31_eb01f972",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-21T23:27:45Z",
+      "side": 1,
+      "message": "This is the build command (for the good profile): https://paste.googleplex.com/6591685105811456. It does have -O2.\n\nThe smallest profile I can achieve is a string like `sample_profile:0:0`. I\u0027ll use it in my tests.",
+      "parentUuid": "dd18fc43_7d72dd54",
+      "revId": "cc91156f5fd5f84c5b1dd54145b6df0f40747148",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
