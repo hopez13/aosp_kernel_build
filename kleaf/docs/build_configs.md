@@ -96,6 +96,7 @@ _"Not supported"_ is displayed. Contact [owners](../OWNERS) if you need support.
 * [`BUILD_GKI_ARTIFACTS`](#build_gki_artifacts)
 * [`GKI_KERNEL_CMDLINE`](#gki_kernel_cmdline)
 * [`KMI_SYMBOL_LIST_ADD_ONLY`](#kmi_symbol_list_add_only)
+* [`VENDOR_BOOTCONFIG`](#vendor_bootconfig)
 
 ## BUILD\_CONFIG
 
@@ -854,6 +855,14 @@ kernel_abi(kmi_symbol_list_add_only=...)
 See [documentation for all rules].
 
 See [documentation for ABI monitoring].
+
+## VENDOR\_BOOTCONFIG
+
+```python
+vendor_boot_image(vendor_bootconfig = [...])
+```
+
+See [vendor_boot_image](api_reference/kernel.md#vendor_boot_image).
 
 [documentation for all rules]: api_reference.md
 
