@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b81b9d0_4bd7096a",
+        "filename": "kleaf/impl/modules_prepare.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-21T21:05:05Z",
+      "side": 1,
+      "message": "nit: Not a CL blocker, but consider adding a comment about the decision to return a Map here, from looking at the child CL it seems to give the caller flexibility about what providers re-use?",
+      "range": {
+        "startLine": 133,
+        "startChar": 11,
+        "endLine": 133,
+        "endChar": 12
+      },
+      "revId": "7aa560a979e0292202e838347987608581d98965",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
