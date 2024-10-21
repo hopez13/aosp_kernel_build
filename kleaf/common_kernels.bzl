@@ -40,6 +40,7 @@ load(
     "kernel_modules_install",
     "kernel_unstripped_modules_archive",
     "system_dlkm_image",
+    "vendor_boot_image",
 )
 load(":print_debug.bzl", "print_debug")
 
