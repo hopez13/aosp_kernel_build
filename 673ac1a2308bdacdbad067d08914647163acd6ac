@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1de76b7e_6e45777a",
+        "filename": "kleaf/impl/common_providers.bzl",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-21T21:36:22Z",
+      "side": 1,
+      "message": "could a `DefconfigInfo` hold both?",
+      "range": {
+        "startLine": 35,
+        "startChar": 50,
+        "endLine": 35,
+        "endChar": 51
+      },
+      "revId": "673ac1a2308bdacdbad067d08914647163acd6ac",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
