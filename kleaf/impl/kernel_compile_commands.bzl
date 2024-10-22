@@ -53,7 +53,7 @@ def _kernel_compile_commands_impl(ctx):
     script = ctx.actions.declare_file(ctx.attr.name + ".sh")
     script_content = hermetic_tools.run_setup + """
         OUTPUT=${1:-${BUILD_WORKSPACE_DIRECTORY}/compile_commands.json}
-        echo '[' > ${OUTPUT}
+        : > ${OUTPUT}.tmp
     """
 
     direct_runfiles = []
@@ -70,13 +70,13 @@ def _kernel_compile_commands_impl(ctx):
             # But this is good enough for now, and more efficient because you
             # don't need to load the whole JSON list to memory.
             script_content += """
-                if [[ -s ${{OUTPUT}} ]]; then
-                    echo ',' >> ${{OUTPUT}}
+                if [[ -s ${{OUTPUT}}.tmp ]]; then
+                    echo ',' >> ${{OUTPUT}}.tmp
                 fi
                 sed -e '1d;$d' \\
                     -e "s:\\${{COMMON_OUT_DIR}}:${{BUILD_WORKSPACE_DIRECTORY}}/{compile_commands_common_out_dir}:g" \\
                     -e "s:\\${{ROOT_DIR}}:${{BUILD_WORKSPACE_DIRECTORY}}:g" \\
-                    {compile_commands_with_vars} >> ${{OUTPUT}}
+                    {compile_commands_with_vars} >> ${{OUTPUT}}.tmp
             """.format(
                 compile_commands_with_vars = info.compile_commands_with_vars.short_path,
                 compile_commands_common_out_dir = info.compile_commands_common_out_dir.path,
@@ -84,7 +84,10 @@ def _kernel_compile_commands_impl(ctx):
             direct_runfiles.append(info.compile_commands_with_vars)
 
     script_content += """
+        echo '[' > ${OUTPUT}
+        cat ${OUTPUT}.tmp >> ${OUTPUT}
         echo ']' >> ${OUTPUT}
+        rm -f ${OUTPUT}.tmp
         echo "Written to ${OUTPUT}"
     """
     ctx.actions.write(script, script_content, is_executable = True)
