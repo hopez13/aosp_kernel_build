@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d2c734_7e116bbb",
+        "filename": "kleaf/impl/kernel_config.bzl",
+        "patchSetId": 35
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-22T15:51:20Z",
+      "side": 1,
+      "message": "why `None` why not `defconfig_info`?\n\nupd: It seems the expectation here is a file path?",
+      "range": {
+        "startLine": 66,
+        "startChar": 77,
+        "endLine": 66,
+        "endChar": 81
+      },
+      "revId": "9ab964002c593f179254fd5157856db4283ed1f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
