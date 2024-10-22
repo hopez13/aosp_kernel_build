@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb4b005b_99afccf9",
+        "filename": "kleaf/impl/ddk/ddk_module.bzl",
+        "patchSetId": 8
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-22T15:37:15Z",
+      "side": 1,
+      "message": "Are these independent from the other? or one has to be set if the other is?",
+      "range": {
+        "startLine": 486,
+        "startChar": 8,
+        "endLine": 486,
+        "endChar": 9
+      },
+      "revId": "4fd4063691973be530e713cef964d5a92b01c053",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
