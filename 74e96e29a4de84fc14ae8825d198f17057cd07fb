@@ -1,0 +1,114 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af748bfa_dbcf09c8",
+        "filename": "kleaf/tests/defconfig_test/BUILD.bazel",
+        "patchSetId": 19
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-22T16:21:37Z",
+      "side": 1,
+      "message": "nit: Not sure if this needs a license header, probably not, but in any case.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b2192e_bd45b3c8",
+        "filename": "kleaf/tests/defconfig_test/pre_defconfig_fragments_menuconfig_test.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-22T16:21:37Z",
+      "side": 1,
+      "message": "It seems this specific test script only accepts 1 file.",
+      "range": {
+        "startLine": 35,
+        "startChar": 26,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5c478e8_a110de74",
+        "filename": "kleaf/tests/defconfig_test/pre_defconfig_fragments_menuconfig_test.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-22T16:21:37Z",
+      "side": 1,
+      "message": "is this symlinked outside of this test?",
+      "range": {
+        "startLine": 48,
+        "startChar": 41,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e45efed_2740406c",
+        "filename": "kleaf/tests/defconfig_test/pre_defconfig_fragments_menuconfig_test.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-22T16:21:37Z",
+      "side": 1,
+      "message": "nit: `config_is_updated` maybe?",
+      "range": {
+        "startLine": 51,
+        "startChar": 13,
+        "endLine": 51,
+        "endChar": 15
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "6fb4c261_5af9d14a",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/tests/defconfig_test/pre_defconfig_fragments_menuconfig_test.py",
+              "range": {
+                "startLine": 51,
+                "startChar": 0,
+                "endLine": 52,
+                "endChar": 0
+              },
+              "replacement": "    def test_pre_defconfig_fragment_is_updated(self):\n"
+            }
+          ]
+        }
+      ],
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
