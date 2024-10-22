@@ -22,6 +22,30 @@
       },
       "revId": "9ab964002c593f179254fd5157856db4283ed1f8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4071f2b4_7c0fd25e",
+        "filename": "kleaf/impl/kernel_config.bzl",
+        "patchSetId": 35
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-22T22:43:35Z",
+      "side": 1,
+      "message": "This is just a \"string repr of kernel_build.defconfig\" for the error message. defconfig_info itself is a provider.\n\nIf it is `defconfig` then L69 becomes\n\n```\n- defconfig is set (but it is DefconfigInfo(file \u003d None))\n```\n\nwhich may not make sense to the user.",
+      "parentUuid": "08d2c734_7e116bbb",
+      "range": {
+        "startLine": 66,
+        "startChar": 77,
+        "endLine": 66,
+        "endChar": 81
+      },
+      "revId": "9ab964002c593f179254fd5157856db4283ed1f8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
