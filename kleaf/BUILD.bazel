@@ -398,6 +398,14 @@ bool_flag(
     warn_message = "--noincompatible_disable_hermetic_tools_symlink_source will no longer be supported.",
 )
 
+# If true, kernel_module() cannot be used. Use ddk_module() instead.
+# This will be true by default in the future.
+bool_flag(
+    name = "incompatible_kernel_module_fail",
+    build_setting_default = False,
+    visibility = ["//visibility:public"],
+)
+
 # Default is false.
 # If true, workaround known issues when building on btrfs, sacrificing
 # hermeticity.
