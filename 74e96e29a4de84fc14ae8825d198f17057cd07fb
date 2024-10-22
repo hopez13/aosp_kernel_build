@@ -24,6 +24,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e99af01_53daa538",
+        "filename": "kleaf/tests/defconfig_test/BUILD.bazel",
+        "patchSetId": 19
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-22T23:06:49Z",
+      "side": 1,
+      "message": "The convention should have been that license headers don\u0027t go into BUILD files (they are config files, not source code); but we already put it in all of our BUILD files, so I put it in this one too.",
+      "parentUuid": "af748bfa_dbcf09c8",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6b2192e_bd45b3c8",
@@ -47,6 +71,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2419fc5_fda17de5",
+        "filename": "kleaf/tests/defconfig_test/pre_defconfig_fragments_menuconfig_test.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-22T23:06:49Z",
+      "side": 1,
+      "message": "I use plural here because it is to test the kernel_build.pre_defconfig_fragments attribute.",
+      "parentUuid": "e6b2192e_bd45b3c8",
+      "range": {
+        "startLine": 35,
+        "startChar": 26,
+        "endLine": 35,
+        "endChar": 27
+      },
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5c478e8_a110de74",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-10-22T16:21:37Z",
       "side": 1,
       "message": "is this symlinked outside of this test?",
+      "range": {
+        "startLine": 48,
+        "startChar": 41,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1261dcb5_4fe85b5e",
+        "filename": "kleaf/tests/defconfig_test/pre_defconfig_fragments_menuconfig_test.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-22T23:06:49Z",
+      "side": 1,
+      "message": "No, but if I don\u0027t restore the symlink, future tests may break (creates recursive symlinks).\n\nIt would be more ideal if the test runs in a sandbox...",
+      "parentUuid": "f5c478e8_a110de74",
       "range": {
         "startLine": 48,
         "startChar": 41,
@@ -107,6 +179,30 @@
           ]
         }
       ],
+      "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1ca497_73641c60",
+        "filename": "kleaf/tests/defconfig_test/pre_defconfig_fragments_menuconfig_test.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-22T23:06:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e45efed_2740406c",
+      "range": {
+        "startLine": 51,
+        "startChar": 13,
+        "endLine": 51,
+        "endChar": 15
+      },
       "revId": "74e96e29a4de84fc14ae8825d198f17057cd07fb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
