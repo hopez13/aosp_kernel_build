@@ -250,11 +250,15 @@ def _get_implicit_outs(ctx):
 
 def _kernel_module_impl(ctx):
     if not ctx.attr.internal_ddk_makefiles_dir:
-        # buildifier: disable=print
-        print("""
-WARNING: {}: kernel_module() is deprecated. Use ddk_module() instead.
+        message = """{}: kernel_module() is deprecated. Use ddk_module() instead.
     See build/kernel/kleaf/docs/ddk/main.md for using the DDK.
-""".format(ctx.label))
+""".format(ctx.label)
+
+        if ctx.attr._kernel_module_fail[BuildSettingInfo].value:
+            fail(message)
+
+        # buildifier: disable=print
+        print("\nWARNING: {}".format(message))
 
     split_deps = kernel_utils.split_kernel_module_deps(ctx.attr.deps, ctx.label)
     kernel_module_deps = split_deps.kernel_modules
@@ -757,6 +761,7 @@ _kernel_module = rule(
         "_preserve_cmd": attr.label(default = "//build/kernel/kleaf/impl:preserve_cmd"),
         "_debug_print_scripts": attr.label(default = "//build/kernel/kleaf:debug_print_scripts"),
         "_debug_modpost_warn": attr.label(default = "//build/kernel/kleaf:debug_modpost_warn"),
+        "_kernel_module_fail": attr.label(default = "//build/kernel/kleaf:incompatible_kernel_module_fail"),
     } | _kernel_module_additional_attrs() | gcov_attrs(),
     toolchains = [hermetic_toolchain.type],
 )
