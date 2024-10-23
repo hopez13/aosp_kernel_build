@@ -24,12 +24,11 @@ def _compile_commands_config_settings_raw():
         "_build_compile_commands": "//build/kernel/kleaf/impl:build_compile_commands",
     }
 
-def _get_step(ctx, compile_commands_parent):
+def _kernel_build_step(ctx):
     """Returns a step for grabbing required files for `compile_commands.json`
 
     Args:
-        ctx: ctx
-        compile_commands_parent: where to find compile_commands.json built by Kbuild
+        ctx: `kernel_build` ctx
 
     Returns:
         A struct with these fields:
@@ -41,26 +40,25 @@ def _get_step(ctx, compile_commands_parent):
     """
     cmd = ""
     compile_commands_with_vars = None
-    common_out_dir = None
+    out_dir = None
     outputs = []
     if ctx.attr._build_compile_commands[BuildSettingInfo].value:
-        common_out_dir = ctx.actions.declare_directory("{name}/compile_commands_common_out_dir".format(name = ctx.label.name))
+        out_dir = ctx.actions.declare_directory("{name}/compile_commands_out_dir".format(name = ctx.label.name))
         compile_commands_with_vars = ctx.actions.declare_file(
             "{name}/compile_commands_with_vars.json".format(name = ctx.label.name),
         )
-        outputs += [common_out_dir, compile_commands_with_vars]
+        outputs += [out_dir, compile_commands_with_vars]
         cmd = """
             rsync -a --prune-empty-dirs \\
                 --include '*/' \\
                 --include '*.c' \\
                 --include '*.h' \\
-                --exclude '*' ${{COMMON_OUT_DIR}}/ {common_out_dir}/
-            sed -e "s:${{COMMON_OUT_DIR}}:\\${{COMMON_OUT_DIR}}:g;s:${{ROOT_DIR}}:\\${{ROOT_DIR}}:g" \\
-                {compile_commands_parent}/compile_commands.json > {compile_commands_with_vars}
+                --exclude '*' ${{OUT_DIR}}/ {out_dir}/
+            sed -e "s:${{OUT_DIR}}:\\${{OUT_DIR}}:g;s:${{ROOT_DIR}}:\\${{ROOT_DIR}}:g" \\
+                ${{OUT_DIR}}/compile_commands.json > {compile_commands_with_vars}
         """.format(
-            common_out_dir = common_out_dir.path,
+            out_dir = out_dir.path,
             compile_commands_with_vars = compile_commands_with_vars.path,
-            compile_commands_parent = compile_commands_parent,
         )
     return struct(
         inputs = [],
@@ -68,7 +66,7 @@ def _get_step(ctx, compile_commands_parent):
         cmd = cmd,
         outputs = outputs,
         compile_commands_with_vars = compile_commands_with_vars,
-        compile_commands_common_out_dir = common_out_dir,
+        compile_commands_out_dir = out_dir,
     )
 
 def _additional_make_goals(ctx):
@@ -82,7 +80,7 @@ def _additional_make_goals(ctx):
     return []
 
 compile_commands_utils = struct(
-    get_step = _get_step,
+    kernel_build_step = _kernel_build_step,
     config_settings_raw = _compile_commands_config_settings_raw,
     additional_make_goals = _additional_make_goals,
 )

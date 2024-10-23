@@ -80,7 +80,7 @@ def _gen_makefile(
             """)
 
     content += textwrap.dedent("""\
-        modules modules_install clean compile_commands.json:
+        modules modules_install clean:
         \t$(MAKE) -C $(KERNEL_SRC) M=$(M) $(KBUILD_OPTIONS) KBUILD_EXTRA_SYMBOLS="$(EXTRA_SYMBOLS)" $(@)
         """)
 
