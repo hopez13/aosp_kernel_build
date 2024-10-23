@@ -49,6 +49,7 @@ load(
     "KernelEnvMakeGoalsInfo",
     "KernelImagesInfo",
     "KernelSerializedEnvInfo",
+    "KernelSerializedRunEnvInfo",
     "KernelToolchainInfo",
     "KernelUnstrippedModulesInfo",
 )
@@ -1995,6 +1996,10 @@ def _create_infos(
     )
 
     # For ddk_config()
+    ddk_config_env_extra_inputs = depset(transitive = [
+            module_srcs.module_scripts,
+            module_srcs.module_kconfig,
+        ])
     ddk_config_env = create_serialized_env_info(
         ctx = ctx,
         setup_script_name = "{name}/{name}_ddk_config_setup.sh".format(name = ctx.attr.name),
@@ -2002,10 +2007,16 @@ def _create_infos(
         outputs = {},
         fake_system_map = False,
         extra_restore_outputs_cmd = "",
-        extra_inputs = depset(transitive = [
-            module_srcs.module_scripts,
-            module_srcs.module_kconfig,
-        ]),
+        extra_inputs = ddk_config_env_extra_inputs,
+    )
+    ddk_config_run_env = create_serialized_env_info(
+        ctx = ctx,
+        setup_script_name = "{name}/{name}_ddk_config_run_setup.sh".format(name = ctx.attr.name),
+        pre_info = ctx.attr.config[KernelSerializedRunEnvInfo].run_env,
+        outputs = {},
+        fake_system_map = False,
+        extra_restore_outputs_cmd = "",
+        extra_inputs = ddk_config_env_extra_inputs,
     )
 
     ddk_module_defconfig_fragments = depset(transitive = [
@@ -2017,6 +2028,7 @@ def _create_infos(
         modules_staging_archive = modules_staging_archive,
         module_hdrs = module_srcs.module_hdrs,
         ddk_config_env = ddk_config_env,
+        ddk_config_run_env = ddk_config_run_env,
         mod_min_env = mod_min_env,
         mod_full_env = mod_full_env,
         modinst_env = mod_full_env,

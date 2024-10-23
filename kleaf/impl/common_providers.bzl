@@ -141,7 +141,7 @@ serialized_env_info = KernelSerializedEnvInfo(
 )
 ```
 
-It is expected to use these infos in the following way:
+It is expected to use these infos in the following way (see utils.setup_serialized_env_cmd):
 
 ```
 command = \"""
@@ -165,6 +165,13 @@ command = \"""
         "tools": """A [depset](https://bazel.build/extending/depsets) containing tools used
                    by `setup_script`. Note that dependencies of `restore_out_dir_cmd` is not
                    included. `tools` are compiled against the execution platform.""",
+    },
+)
+
+KernelSerializedRunEnvInfo = provider(
+    "Wrapper of KernelSerializedEnvInfo for run_env",
+    fields = {
+        "run_env": "The KernelSerializedEnvInfo but for run_env (i.e. a script executed by bazel run)"
     },
 )
 
@@ -220,6 +227,7 @@ KernelBuildExtModuleInfo = provider(
                                    "Does not contain the lib/modules/* suffix.",
         "module_hdrs": "A [depset](https://bazel.build/extending/depsets) containing headers for this `kernel_build` for building external modules",
         "ddk_config_env": "`KernelSerializedEnvInfo` for configuring DDK modules (excl. legacy `kernel_module`).",
+        "ddk_config_run_env": "`KernelSerializedEnvInfo` for configuring DDK modules with `menuconfig` (excl. legacy `kernel_module`).",
         "ddk_module_defconfig_fragments": "A [depset](https://bazel.build/extending/depsets) containing additional defconfig fragments for DDK modules.",
         "mod_min_env": "`KernelSerializedEnvInfo` for building external modules, including minimal needed `kernel_build` outputs.",
         "mod_full_env": "`KernelSerializedEnvInfo` for building external modules, including all `kernel_build` outputs.",
