@@ -96,7 +96,6 @@ ddk_module(
 
 ```c
 // tuna/graphics/tuna-graphics.c
-#include <linux/kconfig.h>
 
 #if IS_ENABLED(CONFIG_TUNA_GRAPHICS_DEBUG)
 // You may check configs declared in this module
@@ -136,7 +135,6 @@ ddk_module(
 
 ```c
 // tuna/display/tuna-display.c
-#include <linux/kconfig.h>
 
 #if IS_ENABLED(CONFIG_TUNA_HAS_SECONDARY_DISPLAY)
 // You may check configs declared in this module
