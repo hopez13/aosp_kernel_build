@@ -65,6 +65,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccaa43a4_751d6b6a",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d26b213b_75b066bf",
+      "range": {
+        "startLine": 74,
+        "startChar": 10,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e20ede2_30ca7b6b",
@@ -102,6 +126,30 @@
           ]
         }
       ],
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a413b48_3a9b5adf",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e20ede2_30ca7b6b",
+      "range": {
+        "startLine": 81,
+        "startChar": 28,
+        "endLine": 81,
+        "endChar": 29
+      },
       "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -147,6 +195,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a7fd521_c5ea3c19",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a21b59f_11fd6550",
+      "range": {
+        "startLine": 82,
+        "startChar": 18,
+        "endLine": 82,
+        "endChar": 22
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4396bf40_13f219f7",
@@ -188,6 +260,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b08fb6_a8712fa5",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4396bf40_13f219f7",
+      "range": {
+        "startLine": 101,
+        "startChar": 60,
+        "endLine": 101,
+        "endChar": 62
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3bed402_4e7404ee",
@@ -201,6 +297,30 @@
       "writtenOn": "2024-10-23T17:20:03Z",
       "side": 1,
       "message": "nit: are",
+      "range": {
+        "startLine": 105,
+        "startChar": 12,
+        "endLine": 105,
+        "endChar": 14
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "692327b4_9992c829",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3bed402_4e7404ee",
       "range": {
         "startLine": 105,
         "startChar": 12,
@@ -234,6 +354,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bdac822_22d78afe",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7eb0821a_21562e88",
+      "range": {
+        "startLine": 105,
+        "startChar": 59,
+        "endLine": 106,
+        "endChar": 67
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "550ce550_840e961b",
@@ -247,6 +391,30 @@
       "writtenOn": "2024-10-23T17:20:03Z",
       "side": 1,
       "message": "nit: are",
+      "range": {
+        "startLine": 164,
+        "startChar": 42,
+        "endLine": 164,
+        "endChar": 44
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5253cc4_c35271e4",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "550ce550_840e961b",
       "range": {
         "startLine": 164,
         "startChar": 42,
@@ -304,6 +472,30 @@
           ]
         }
       ],
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32217177_b78ab0b4",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2024-10-23T17:25:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b6e1878_a48a7038",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 17
+      },
       "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
