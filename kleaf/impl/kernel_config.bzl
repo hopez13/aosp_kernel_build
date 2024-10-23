@@ -28,6 +28,7 @@ load(
     "KernelEnvInfo",
     "KernelEnvMakeGoalsInfo",
     "KernelSerializedEnvInfo",
+    "KernelSerializedRunEnvInfo",
     "KernelToolchainInfo",
     "StepInfo",
 )
@@ -557,6 +558,51 @@ _check_dot_config_against_defconfig = subrule(
     subrules = [config_utils.create_check_defconfig_step],
 )
 
+def _create_serialized_env_info_impl(
+        subrule_ctx,
+        *,
+        env_info,
+        script_name,
+        out_dir,
+        extra_restore_outputs_cmd,
+        extra_inputs,
+        is_run_env):
+    """Creates a KernelSerializedEnvInfo.
+
+    Args:
+        subrule_ctx: subrule_ctx
+        env_info: base environment from kernel_env
+        script_name: decared script file name
+        out_dir: the out_dir of kernel_config
+        extra_restore_outputs_cmd: Extra CMD to restore outputs
+        extra_inputs: depset of extra inputs
+        is_run_env: whether this is for `bazel run`
+    """
+    serialized_env_info_setup_script = subrule_ctx.actions.declare_file(script_name)
+    subrule_ctx.actions.write(
+        output = serialized_env_info_setup_script,
+        content = get_config_setup_command(
+            env_setup_command = env_info.setup,
+            out_dir = out_dir,
+            extra_restore_outputs_cmd = extra_restore_outputs_cmd,
+            is_run_env = is_run_env,
+        ),
+    )
+
+    serialized_env_info = KernelSerializedEnvInfo(
+        setup_script = serialized_env_info_setup_script,
+        tools = env_info.tools,
+        inputs = depset([
+            serialized_env_info_setup_script,
+        ], transitive = [
+            env_info.inputs,
+            extra_inputs,
+        ]),
+    )
+    return serialized_env_info
+
+_create_serialized_env_info = subrule(implementation = _create_serialized_env_info_impl)
+
 def _kernel_config_impl(ctx):
     localversion_file = stamp.write_localversion(ctx)
 
@@ -572,7 +618,6 @@ def _kernel_config_impl(ctx):
             ".fragment",
         ]])
     ]
-    transitive_inputs = []
     tools = []
 
     out_dir = ctx.actions.declare_directory(ctx.attr.name + "/out_dir")
@@ -636,12 +681,13 @@ def _kernel_config_impl(ctx):
             post_defconfig_fragment_files = ctx.files.post_defconfig_fragments,
         ),
     ]
-    transitive_inputs += [step_return.inputs for step_return in step_returns]
+    step_transitive_inputs = [step_return.inputs for step_return in step_returns]
     outputs += [out for step_return in step_returns for out in step_return.outputs]
     tools += [tool for step_return in step_returns for tool in step_return.tools]
 
-    transitive_inputs.append(ctx.attr.env[KernelEnvInfo].inputs)
-    transitive_tools = [ctx.attr.env[KernelEnvInfo].tools]
+    main_action_transitive_inputs = list(step_transitive_inputs)
+    main_action_transitive_inputs.append(ctx.attr.env[KernelEnvInfo].inputs)
+    main_action_transitive_tools = [ctx.attr.env[KernelEnvInfo].tools]
 
     cache_dir_step = cache_dir.get_step(
         ctx = ctx,
@@ -699,9 +745,9 @@ def _kernel_config_impl(ctx):
     debug.print_scripts(ctx, command)
     ctx.actions.run_shell(
         mnemonic = "KernelConfig",
-        inputs = depset(inputs, transitive = transitive_inputs),
+        inputs = depset(inputs, transitive = main_action_transitive_inputs),
         outputs = outputs,
-        tools = tools + [depset(transitive = transitive_tools)],
+        tools = tools + [depset(transitive = main_action_transitive_tools)],
         progress_message = "Creating kernel config{} %{{label}}".format(
             ctx.attr.env[KernelEnvAttrInfo].progress_message_note,
         ),
@@ -724,22 +770,21 @@ def _kernel_config_impl(ctx):
         post_setup_deps.append(file)
 
     # <kernel_build>_config_setup.sh
-    serialized_env_info_setup_script = ctx.actions.declare_file("{name}/{name}_setup.sh".format(name = ctx.attr.name))
-    ctx.actions.write(
-        output = serialized_env_info_setup_script,
-        content = get_config_setup_command(
-            env_setup_command = ctx.attr.env[KernelEnvInfo].setup,
-            out_dir = out_dir,
-            extra_restore_outputs_cmd = extra_restore_outputs_cmd,
-        ),
+    serialized_env_info = _create_serialized_env_info(
+        env_info = ctx.attr.env[KernelEnvInfo],
+        script_name = "{name}/{name}_setup.sh".format(name = ctx.attr.name),
+        out_dir = out_dir,
+        extra_restore_outputs_cmd = extra_restore_outputs_cmd,
+        extra_inputs = depset(post_setup_deps),
+        is_run_env = False,
     )
-
-    serialized_env_info = KernelSerializedEnvInfo(
-        setup_script = serialized_env_info_setup_script,
-        tools = ctx.attr.env[KernelEnvInfo].tools,
-        inputs = depset(post_setup_deps + [
-            serialized_env_info_setup_script,
-        ], transitive = transitive_inputs),
+    serialized_run_env_info = _create_serialized_env_info(
+        env_info = ctx.attr.env[KernelEnvInfo].run_env,
+        script_name = "{name}/{name}_run_setup.sh".format(name = ctx.attr.name),
+        out_dir = out_dir,
+        extra_restore_outputs_cmd = extra_restore_outputs_cmd,
+        extra_inputs = depset(post_setup_deps),
+        is_run_env = True,
     )
 
     config_script_ret = _get_config_script(
@@ -749,7 +794,7 @@ def _kernel_config_impl(ctx):
     )
     config_script_runfiles = ctx.runfiles(
         files = inputs,
-        transitive_files = depset(transitive = transitive_inputs + [
+        transitive_files = depset(transitive = step_transitive_inputs + [
             ctx.attr.env[KernelEnvInfo].run_env.inputs,
             ctx.attr.env[KernelEnvInfo].run_env.tools,
             config_script_ret.inputs,
@@ -758,6 +803,7 @@ def _kernel_config_impl(ctx):
 
     return [
         serialized_env_info,
+        KernelSerializedRunEnvInfo(run_env = serialized_run_env_info),
         ctx.attr.env[KernelEnvAttrInfo],
         ctx.attr.env[KernelEnvMakeGoalsInfo],
         ctx.attr.env[KernelToolchainInfo],
@@ -933,13 +979,15 @@ _get_config_script = subrule(
 def get_config_setup_command(
         env_setup_command,
         out_dir,
-        extra_restore_outputs_cmd):
+        extra_restore_outputs_cmd,
+        is_run_env = None):
     """Returns the content of `<kernel_build>_config_setup.sh`, given the parameters.
 
     Args:
         env_setup_command: command to set up environment from `kernel_env`
         out_dir: output directory from `kernel_config`
         extra_restore_outputs_cmd: Extra CMD to restore outputs
+        is_run_env: Whether this is for `bazel run`
     Returns:
         the command to setup the environment like after `make defconfig`.
     """
@@ -964,7 +1012,7 @@ def get_config_setup_command(
     """.format(
         env_setup_command = env_setup_command,
         eval_restore_out_dir_cmd = kernel_utils.eval_restore_out_dir_cmd(),
-        out_dir = out_dir.path,
+        out_dir = out_dir.short_path if is_run_env else out_dir.path,
         raw_kmi_symbol_list_below_out_dir = _RAW_KMI_SYMBOL_LIST_BELOW_OUT_DIR,
     )
     cmd += extra_restore_outputs_cmd
@@ -1031,5 +1079,6 @@ kernel_config = rule(
         _post_defconfig,
         _check_dot_config_against_defconfig,
         _get_config_script,
+        _create_serialized_env_info,
     ],
 )
