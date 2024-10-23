@@ -1,0 +1,311 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c402573_7eccd5ab",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "`\u003e.\u003c`",
+      "range": {
+        "startLine": 58,
+        "startChar": 46,
+        "endLine": 58,
+        "endChar": 54
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d26b213b_75b066bf",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 74,
+        "startChar": 10,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "150653e8_49bb8655",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/kernel_config.md",
+              "range": {
+                "startLine": 74,
+                "startChar": 0,
+                "endLine": 75,
+                "endChar": 0
+              },
+              "replacement": "    compares it with `kernel_build.defconfig`. (Note: `check_defconfig`\n"
+            }
+          ]
+        }
+      ],
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e20ede2_30ca7b6b",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 81,
+        "startChar": 28,
+        "endLine": 81,
+        "endChar": 29
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "9976ff04_528ae383",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/kernel_config.md",
+              "range": {
+                "startLine": 81,
+                "startChar": 0,
+                "endLine": 82,
+                "endChar": 0
+              },
+              "replacement": "    anything is applied, calls `make olddefconfig`.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a21b59f_11fd6550",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "nit: delete",
+      "range": {
+        "startLine": 82,
+        "startChar": 18,
+        "endLine": 82,
+        "endChar": 22
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "a7b2de56_7f2298b5",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/kernel_config.md",
+              "range": {
+                "startLine": 82,
+                "startChar": 0,
+                "endLine": 83,
+                "endChar": 0
+              },
+              "replacement": "7.  Enforces that `.config` contains all\n"
+            }
+          ]
+        }
+      ],
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4396bf40_13f219f7",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "nit: are",
+      "range": {
+        "startLine": 101,
+        "startChar": 60,
+        "endLine": 101,
+        "endChar": 62
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "9384b868_00fa5bf7",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/kernel_config.md",
+              "range": {
+                "startLine": 101,
+                "startChar": 0,
+                "endLine": 102,
+                "endChar": 0
+              },
+              "replacement": "This usually contains configs to build in-tree modules that are not built in\n"
+            }
+          ]
+        }
+      ],
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3bed402_4e7404ee",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "nit: are",
+      "range": {
+        "startLine": 105,
+        "startChar": 12,
+        "endLine": 105,
+        "endChar": 14
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb0821a_21562e88",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "```suggestion\n`defconfig` is overridden. In addition, **order matters**; items appearing later in\nthe `pre_defconfig_fragments` list override items appearing earlier.\n```",
+      "range": {
+        "startLine": 105,
+        "startChar": 59,
+        "endLine": 106,
+        "endChar": 67
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "550ce550_840e961b",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "nit: are",
+      "range": {
+        "startLine": 164,
+        "startChar": 42,
+        "endLine": 164,
+        "endChar": 44
+      },
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b6e1878_a48a7038",
+        "filename": "kleaf/docs/kernel_config.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1961395
+      },
+      "writtenOn": "2024-10-23T17:20:03Z",
+      "side": 1,
+      "message": "nit: Same as above.",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 17
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "582dd867_6f5cbfca",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "kleaf/docs/kernel_config.md",
+              "range": {
+                "startLine": 105,
+                "startChar": 0,
+                "endLine": 107,
+                "endChar": 0
+              },
+              "replacement": "`defconfig` is overridden. In addition, **order matters**; items that appear\nlater in the `pre_defconfig_fragments` list overrides items that appear earlier.\n"
+            },
+            {
+              "path": "kleaf/docs/kernel_config.md",
+              "range": {
+                "startLine": 171,
+                "startChar": 0,
+                "endLine": 173,
+                "endChar": 0
+              },
+              "replacement": "Items that appear later in the post defconfig fragments list overrides items\nthat appear earlier. However, at step 7,\n"
+            }
+          ]
+        }
+      ],
+      "revId": "10133bb0942547415fae297e8fddddbe50971cd8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
