@@ -98,6 +98,7 @@ def kernel_build(
         outs,
         makefile = None,
         keep_module_symvers = None,
+        keep_dot_config = None,
         srcs = None,
         module_outs = None,
         implicit_outs = None,
@@ -206,6 +207,10 @@ def kernel_build(
         keep_module_symvers: If set to True, a copy of the default output `Module.symvers` is kept.
           * To avoid collisions in mixed build distribution packages, the file is renamed
             as `$(name)_Module.symvers`.
+          * Default is False.
+        keep_dot_config: If set to True, a copy of the default output `.config` is kept.
+          * To avoid collisions in mixed build distribution packages, the file is renamed
+            as `$(name)_dot_config`.
           * Default is False.
         srcs: The kernel sources (a `glob()`). If unspecified or `None`, it is the following:
           ```
@@ -694,6 +699,7 @@ def kernel_build(
         name = name,
         config = config_target_name,
         keep_module_symvers = keep_module_symvers,
+        keep_dot_config = keep_dot_config,
         srcs = srcs,
         outs = kernel_utils.transform_kernel_build_outs(name, "outs", outs),
         module_outs = kernel_utils.transform_kernel_build_outs(name, "module_outs", module_outs),
@@ -1370,6 +1376,37 @@ def _get_copy_module_symvers_step(ctx):
         cmd = copy_module_symvers_cmd,
         outputs = outputs,
     )
+
+def _get_dot_config_impl(subrule_ctx, config_out_dir, hermetic_tools):
+    """Gets .config from kernel_config's out_dir.
+
+    Args:
+        subrule_ctx: subrule_ctx
+        config_out_dir: out_dir from kernel_config()
+        hermetic_tools: the hermetic toolchain
+    """
+    # Automatic Exec Groups needs to be enabled in kernel_build() so the subrule can use toolchain
+    # resolution. For now, just let kernel_build gives us the hermetic tools.
+    output = subrule_ctx.actions.declare_file("{name}/{name}_dot_config".format(name = subrule_ctx.label.name))
+    command = hermetic_tools.setup + """
+        cp {config_out_dir}/.config {output}
+    """.format(
+        config_out_dir = config_out_dir.path,
+        output = output.path,
+    )
+    subrule_ctx.actions.run_shell(
+        inputs = [config_out_dir],
+        outputs = [output],
+        tools = hermetic_tools.deps,
+        command = command,
+        mnemonic = "KernelBuildDotConfig",
+        progress_message = "Copying .config %{label}",
+    )
+    return output
+
+_get_dot_config = subrule(
+    implementation = _get_dot_config_impl,
+)
 
 def _get_modinst_step(ctx, modules_staging_dir):
     module_strip_flag = "INSTALL_MOD_STRIP="
@@ -2069,6 +2106,11 @@ def _create_infos(
     if kmi_strict_mode_out:
         default_info_files.append(kmi_strict_mode_out)
     default_info_files.extend(main_action_ret.module_symvers_outputs)
+    if ctx.attr.keep_dot_config:
+        default_info_files.append(_get_dot_config(
+            config_out_dir = ctx.file.config,
+            hermetic_tools = hermetic_toolchain.get(ctx),
+        ))
     default_info_files.extend(main_action_ret.gcno_outputs)
     if kmi_symbol_list_violations_check_out:
         default_info_files.append(kmi_symbol_list_violations_check_out)
@@ -2182,6 +2224,9 @@ _kernel_build = rule(
         "keep_module_symvers": attr.bool(
             doc = "If true, a copy of `Module.symvers` is kept, with the name `{name}_Module.symvers`",
         ),
+        "keep_dot_config": attr.bool(
+            doc = "If true, a copy of `.config` is kept, with the name `{name}_dot_config`",
+        ),
         "srcs": attr.label_list(mandatory = True, doc = "kernel sources", allow_files = True),
         "outs": attr.string_list(),
         "module_outs": attr.string_list(doc = "output *.ko files"),
@@ -2261,6 +2306,9 @@ _kernel_build = rule(
         "arch": attr.string(),
     } | _kernel_build_additional_attrs() | gcov_attrs(),
     toolchains = [hermetic_toolchain.type],
+    subrules = [
+        _get_dot_config,
+    ],
 )
 
 def _kernel_build_check_toolchain(ctx):
