@@ -49,8 +49,9 @@ _COLLECT_UNSTRIPPED_MODULES = True
 # Always strip modules for common kernels.
 _STRIP_MODULES = True
 
-# Always keep a copy of Module.symvers for common kernels.
+# Always keep a copy of Module.symvers and .config for common kernels.
 _KEEP_MODULE_SYMVERS = True
+_KEEP_DOT_CONFIG = True
 
 # This transition is not needed for GKI
 _GKI_ADD_VMLINUX = False
@@ -237,6 +238,7 @@ def common_kernel(
         strip_modules = _STRIP_MODULES,
         toolchain_version = toolchain_version,
         keep_module_symvers = _KEEP_MODULE_SYMVERS,
+        keep_dot_config = _KEEP_DOT_CONFIG,
         kmi_symbol_list = kmi_symbol_list,
         additional_kmi_symbol_lists = additional_kmi_symbol_lists,
         trim_nonlisted_kmi = trim_nonlisted_kmi,
