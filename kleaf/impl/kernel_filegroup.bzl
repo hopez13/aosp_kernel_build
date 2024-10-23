@@ -97,8 +97,12 @@ def _get_kernel_release(ctx):
     )
     return kernel_release
 
-def _get_config_env(ctx):
+def _get_config_env(ctx, is_run_env):
     """Returns a KernelSerializedEnvInfo analogous to that returned by kernel_config().
+
+    Args:
+        ctx: ctx
+        is_run_env: If true, return environment is for `bazel run`.
     """
 
     if not ctx.file.config_out_dir or not ctx.file.env_setup_script:
@@ -115,8 +119,9 @@ def _get_config_env(ctx):
         hermetic_base = hermetic_tools.internal_hermetic_base,
     )
     env_setup_command += get_env_info_setup_command(
-        hermetic_tools_setup = hermetic_tools.setup,
+        hermetic_tools_setup = hermetic_tools.run_setup if is_run_env else hermetic_tools.setup,
         build_utils_sh = ctx.file._build_utils_sh,
+        # FIXME maybe we need the run_env setup script
         env_setup_script = ctx.file.env_setup_script,
     )
     env_setup_command += """
@@ -133,7 +138,10 @@ def _get_config_env(ctx):
     )
 
     config_env_setup_script = ctx.actions.declare_file(
-        "{name}/{name}_config_setup.sh".format(name = ctx.attr.name),
+        "{name}/{name}_config_{filename}.sh".format(
+            name = ctx.attr.name,
+            filename = "run_setup" if is_run_env else "setup",
+        ),
     )
 
     ctx.actions.write(
@@ -177,7 +185,7 @@ def _get_serialized_env(ctx, config_env, outs_mapping, internal_outs_mapping):
         extra_inputs = depset(),
     )
 
-def _get_ddk_config_env(ctx, config_env):
+def _get_ddk_config_env(ctx, config_env, script_name):
     """Returns `KernelBuildExtModuleInfo.ddk_config_env`."""
 
     if not config_env:
@@ -197,7 +205,7 @@ def _get_ddk_config_env(ctx, config_env):
 
     return create_serialized_env_info(
         ctx = ctx,
-        setup_script_name = "{name}/{name}_ddk_config_setup.sh".format(name = ctx.attr.name),
+        setup_script_name = script_name,
         pre_info = config_env,
         outputs = {},
         fake_system_map = False,
@@ -302,14 +310,24 @@ def _kernel_filegroup_impl(ctx):
         for target, relpath in ctx.attr.internal_outs.items()
     }
 
-    config_env = _get_config_env(ctx)
+    config_env = _get_config_env(ctx, is_run_env = False)
+    config_run_env = _get_config_env(ctx, is_run_env = True)
     serialized_env = _get_serialized_env(
         ctx = ctx,
         config_env = config_env,
         outs_mapping = outs_mapping,
         internal_outs_mapping = internal_outs_mapping,
     )
-    ddk_config_env = _get_ddk_config_env(ctx, config_env)
+    ddk_config_env = _get_ddk_config_env(
+        ctx = ctx,
+        config_env = config_env,
+        script_name = "{name}/{name}_ddk_config_setup.sh".format(name = ctx.attr.name),
+    )
+    ddk_config_run_env = _get_ddk_config_env(
+        ctx = ctx,
+        config_env = config_run_env,
+        script_name = "{name}/{name}_ddk_config_run_setup.sh".format(name = ctx.attr.name),
+    )
     modules_prepare_env = _get_modules_prepare_env(ctx, ddk_config_env)
     mod_envs = _get_mod_envs(
         ctx = ctx,
@@ -323,6 +341,7 @@ def _kernel_filegroup_impl(ctx):
         # Building kernel_module (excluding ddk_module) on top of kernel_filegroup is unsupported.
         # module_hdrs = None,
         ddk_config_env = ddk_config_env,
+        ddk_config_run_env = ddk_config_run_env,
         mod_min_env = mod_envs.mod_min_env,
         mod_full_env = mod_envs.mod_full_env,
         modinst_env = mod_envs.modinst_env,

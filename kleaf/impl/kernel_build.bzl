@@ -49,6 +49,7 @@ load(
     "KernelEnvMakeGoalsInfo",
     "KernelImagesInfo",
     "KernelSerializedEnvInfo",
+    "KernelSerializedRunEnvInfo",
     "KernelToolchainInfo",
     "KernelUnstrippedModulesInfo",
 )
@@ -1794,7 +1795,8 @@ def create_serialized_env_info(
         outputs,
         fake_system_map,
         extra_restore_outputs_cmd,
-        extra_inputs):
+        extra_inputs,
+        is_run_env = None):
     """Creates an KernelSerializedEnvInfo.
 
     Args:
@@ -1807,6 +1809,7 @@ def create_serialized_env_info(
         fake_system_map: Whether to create a fake `$OUT_DIR/System.map`
         extra_restore_outputs_cmd: Extra CMD to restore outputs
         extra_inputs: a depset attached to `inputs` of returned object
+        is_run_env: Whether the info is for the `bazel run` environment
 
     Returns:
         A KernelSerializedEnvInfo that runs pre_info, then restore outputs given the list of
@@ -1819,12 +1822,17 @@ def create_serialized_env_info(
         )
     restore_outputs_cmd += extra_restore_outputs_cmd
 
+    if is_run_env:
+        pre_setup_script = pre_info.setup_script.short_path
+    else:
+        pre_setup_script = pre_info.setup_script.path
+
     setup_script = ctx.actions.declare_file(setup_script_name)
     setup_script_cmd = """
         . {pre_setup_script}
         {restore_outputs_cmd}
     """.format(
-        pre_setup_script = pre_info.setup_script.path,
+        pre_setup_script = pre_setup_script,
         restore_outputs_cmd = restore_outputs_cmd,
     )
     ctx.actions.write(
@@ -1995,6 +2003,10 @@ def _create_infos(
     )
 
     # For ddk_config()
+    ddk_config_env_extra_inputs = depset(transitive = [
+            module_srcs.module_scripts,
+            module_srcs.module_kconfig,
+        ])
     ddk_config_env = create_serialized_env_info(
         ctx = ctx,
         setup_script_name = "{name}/{name}_ddk_config_setup.sh".format(name = ctx.attr.name),
@@ -2002,10 +2014,17 @@ def _create_infos(
         outputs = {},
         fake_system_map = False,
         extra_restore_outputs_cmd = "",
-        extra_inputs = depset(transitive = [
-            module_srcs.module_scripts,
-            module_srcs.module_kconfig,
-        ]),
+        extra_inputs = ddk_config_env_extra_inputs,
+    )
+    ddk_config_run_env = create_serialized_env_info(
+        ctx = ctx,
+        setup_script_name = "{name}/{name}_ddk_config_run_setup.sh".format(name = ctx.attr.name),
+        pre_info = ctx.attr.config[KernelSerializedRunEnvInfo].run_env,
+        outputs = {},
+        fake_system_map = False,
+        extra_restore_outputs_cmd = "",
+        extra_inputs = ddk_config_env_extra_inputs,
+        is_run_env = True,
     )
 
     ddk_module_defconfig_fragments = depset(transitive = [
@@ -2017,6 +2036,7 @@ def _create_infos(
         modules_staging_archive = modules_staging_archive,
         module_hdrs = module_srcs.module_hdrs,
         ddk_config_env = ddk_config_env,
+        ddk_config_run_env = ddk_config_run_env,
         mod_min_env = mod_min_env,
         mod_full_env = mod_full_env,
         modinst_env = mod_full_env,
