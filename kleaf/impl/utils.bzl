@@ -473,16 +473,22 @@ def _eval_restore_out_dir_cmd():
         eval "${KLEAF_RESTORE_OUT_DIR_CMD}"
     """
 
-def _setup_serialized_env_cmd(serialized_env_info, restore_out_dir_cmd):
+def _setup_serialized_env_cmd(serialized_env_info, restore_out_dir_cmd, is_run_env = None):
     """Returns a command that sets up `KernelSerializedEnvInfo`.
 
     Args:
         serialized_env_info: `KernelSerializedEnvInfo`
         restore_out_dir_cmd: The command to restore value of `OUT_DIR`.
+        is_run_env: Whether the command is executed by `bazel run`
     """
 
     if not restore_out_dir_cmd:
         restore_out_dir_cmd = ":"
+
+    if is_run_env:
+        setup_script = serialized_env_info.setup_script.short_path
+    else:
+        setup_script = serialized_env_info.setup_script.path
 
     return """
         KLEAF_RESTORE_OUT_DIR_CMD={quoted_restore_out_dir_cmd}
@@ -490,7 +496,7 @@ def _setup_serialized_env_cmd(serialized_env_info, restore_out_dir_cmd):
         unset KLEAF_RESTORE_OUT_DIR_CMD
     """.format(
         quoted_restore_out_dir_cmd = shell.quote(restore_out_dir_cmd),
-        setup_script = serialized_env_info.setup_script.path,
+        setup_script = setup_script,
     )
 
 kernel_utils = struct(
