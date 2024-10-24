@@ -14,6 +14,7 @@
 
 """A target that configures a [`ddk_module`](#ddk_module)."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load(
     ":common_providers.bzl",
     "KernelBuildExtModuleInfo",
@@ -31,7 +32,7 @@ def _ddk_config_impl(ctx):
     out_dir = ctx.actions.declare_directory(ctx.attr.name + "/out_dir")
     ddk_config_info = _create_ddk_config_info(ctx)
 
-    _create_main_action(
+    kconfig_depset_written = _create_main_action(
         ctx = ctx,
         out_dir = out_dir,
         ddk_config_info = ddk_config_info,
@@ -42,8 +43,19 @@ def _ddk_config_impl(ctx):
         out_dir = out_dir,
     )
 
+    _menuconfig_ret = _get_config_script(
+        serialized_env_info = ctx.attr.kernel_build[KernelBuildExtModuleInfo].ddk_config_run_env,
+        out_dir = out_dir,
+        kconfig_depset_written = kconfig_depset_written,
+        src_defconfig = ctx.file.defconfig,
+    )
+
     return [
-        DefaultInfo(files = depset([out_dir])),
+        DefaultInfo(
+            files = depset([out_dir]),
+            executable = _menuconfig_ret.executable,
+            runfiles = ctx.runfiles(transitive_files = _menuconfig_ret.runfiles_depset),
+        ),
         serialized_env_info,
         ddk_config_info,
     ]
@@ -69,8 +81,17 @@ def _create_merge_dot_config_step(defconfig_depset_written):
         outputs = [],
     )
 
-def _create_kconfig_ext_step(ctx, kconfig_depset_written):
-    intermediates_dir = utils.intermediates_dir(ctx)
+def _create_kconfig_ext_step(ctx, kconfig_depset_written, is_run_env):
+    if is_run_env:
+        kconfig_depset_file = kconfig_depset_written.depset_file.short_path
+        intermediates_dir = paths.join(
+            ctx.label.workspace_root,
+            ctx.label.package,
+            ctx.label.name + "_intermediates",
+        )
+    else:
+        kconfig_depset_file = kconfig_depset_written.depset_file.path
+        intermediates_dir = utils.intermediates_dir(ctx)
     cmd = """
         mkdir -p {intermediates_dir}
 
@@ -94,7 +115,7 @@ def _create_kconfig_ext_step(ctx, kconfig_depset_written):
         fi
     """.format(
         intermediates_dir = intermediates_dir,
-        kconfig_depset_file = kconfig_depset_written.depset_file.path,
+        kconfig_depset_file = kconfig_depset_file,
     )
 
     return StepInfo(
@@ -182,6 +203,7 @@ def _create_main_action(
     kconfig_ext_step = _create_kconfig_ext_step(
         ctx = ctx,
         kconfig_depset_written = kconfig_depset_written,
+        is_run_env = False,
     )
     oldconfig_step = _create_oldconfig_step(
         ctx = ctx,
@@ -229,6 +251,9 @@ def _create_main_action(
         progress_message = "Creating DDK module configuration %{label}",
     )
 
+    # FIXME
+    return kconfig_depset_written
+
 def _create_serialized_env_info(ctx, out_dir):
     """Creates info for module build."""
 
@@ -266,6 +291,102 @@ def _create_ddk_config_info(ctx):
         deps = ctx.attr.module_deps + ctx.attr.module_hdrs + ctx.attr.module_textual_hdrs,
         extra_defconfigs = ctx.attr.kernel_build[KernelBuildExtModuleInfo].ddk_module_defconfig_fragments,
     )
+
+def _get_config_script_impl(
+        subrule_ctx,
+        serialized_env_info,
+        out_dir,
+        kconfig_depset_written,
+        src_defconfig):
+    kconfig_ext_step = _create_kconfig_ext_step(
+        ctx = subrule_ctx,
+        kconfig_depset_written = kconfig_depset_written,
+        is_run_env = True,
+    )
+
+    executable = subrule_ctx.actions.declare_file("{}/config.sh".format(subrule_ctx.label.name))
+    script = kernel_utils.setup_serialized_env_cmd(
+        serialized_env_info = serialized_env_info,
+        # Not running in a sandbox or in a cache_dir when in `bazel run`.
+        restore_out_dir_cmd = "",
+        is_run_env = True,
+    )
+    script += """
+        # TODO(b/254348147): Support ncurses for hermetic tools
+        export HOSTCFLAGS="${{HOSTCFLAGS}} --sysroot="
+        export HOSTLDFLAGS="${{HOSTLDFLAGS}} --sysroot="
+
+        menucommand="${{1:-savedefconfig}}"
+        if ! [[ "${{menucommand}}" =~ .*config ]]; then
+            echo "Invalid command $menucommand. Must be *config." >&2
+            exit 1
+        fi
+        mkdir -p ${{OUT_DIR}}
+        rsync -L {out_dir}/.config ${{OUT_DIR}}/.config
+        rsync -L --chmod=D+w {out_dir}/include/ ${{OUT_DIR}}/include/
+
+        (
+            orig_config=$(mktemp)
+            changed_config=$(mktemp)
+            new_config=$(mktemp)
+            trap "rm -f ${{orig_config}} ${{changed_config}} ${{new_config}}" EXIT
+            cp "${{OUT_DIR}}/.config" ${{orig_config}}
+
+            {kconfig_ext_cmd}
+
+            make -C ${{KERNEL_DIR}} ${{TOOL_ARGS}} O=${{OUT_DIR}} \\
+                KCONFIG_EXT_PREFIX=${{KCONFIG_EXT_PREFIX}} \\
+                ${{menucommand}}
+
+            ${{KERNEL_DIR}}/scripts/diffconfig -m ${{orig_config}} ${{OUT_DIR}}/.config > ${{changed_config}}
+    """.format(
+        out_dir = out_dir.short_path,
+        kconfig_ext_cmd = kconfig_ext_step.cmd,
+    )
+    if src_defconfig:
+        script += """
+            KCONFIG_CONFIG=${{new_config}} ${{KERNEL_DIR}}/scripts/kconfig/merge_config.sh -m {src_defconfig} ${{changed_config}}
+            sort_config ${{new_config}} > $(realpath {src_defconfig})
+            echo "Updated $(realpath {src_defconfig})"
+        """.format(
+            src_defconfig = src_defconfig.short_path,
+        )
+    else:
+        script += """
+            sorted_new_fragment=$(mktemp)
+            sort_config ${{new_fragment}} > ${{sorted_new_fragment}}
+            echo "ERROR: Unable to update any file because defconfig is not set." >&2
+            echo "    Please manually set the defconfig attribute of {} to a file containing" >&2
+            echo "    ${{sorted_new_fragment}}" >&2
+            # Intentionally not delete sorted_new_fragment
+        """
+
+    script += """
+        )
+    """
+
+    subrule_ctx.actions.write(executable, script, is_executable = True)
+    runfiles_depset = depset(
+        [
+            serialized_env_info.setup_script,
+            out_dir,
+            src_defconfig,
+        ],
+        transitive = [
+            serialized_env_info.inputs,
+            serialized_env_info.tools,
+            kconfig_ext_step.inputs,
+            depset(kconfig_ext_step.tools),
+        ],
+    )
+    return struct(
+        executable = executable,
+        runfiles_depset = runfiles_depset,
+    )
+
+_get_config_script = subrule(
+    implementation = _get_config_script_impl,
+)
 
 ddk_config = rule(
     implementation = _ddk_config_impl,
@@ -305,5 +426,7 @@ for its format.
         ddk_config_subrule,
         utils.write_depset,
         config_utils.create_check_defconfig_step,
+        _get_config_script,
     ],
+    executable = True,
 )
