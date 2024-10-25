@@ -64,7 +64,15 @@ def _get_check_arch_cmd(ctx):
         exit_cmd = "exit 1"
 
     return """
-        if [[ "${{ARCH/riscv/riscv64}}" != "{declared_arch}" ]]; then
+        # TODO(368119551): implement proper support for uml
+        if [[ "${{ARCH}} == um" ]]; then
+            if [[ "{declared_arch}" == x86_64 ]]; then
+                :
+            else
+                echo '{level}: {label} um currently only supports x86_64.' >&2
+                {exit_cmd}
+            fi
+        elif [[ "${{ARCH/riscv/riscv64}}" != "{declared_arch}" ]]; then
             echo '{level}: {label} must specify arch = '"${{ARCH/riscv/riscv64}}"', but is {declared_arch}.' >&2
             {exit_cmd}
         fi
